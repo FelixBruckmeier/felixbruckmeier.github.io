@@ -7,7 +7,9 @@
   <meta name="description" content="UX Research Director — turning insights into strategies with measurable ROI." />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Source+Serif+4:wght@600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css" />
+  <!-- ✔ korrekt: Assets-Ordner -->
+  <link rel="stylesheet" href="assets/css/style.css" type="text/css">
+  <script src="assets/js/main.js" defer></script>
 </head>
 <body>
   <!-- Sticky Header -->
@@ -21,10 +23,10 @@
       <nav class="nav" aria-label="Primary">
         <ul>
           <li><a class="nav__link" href="#expertise" data-i18n="nav.expertise">Expertise</a></li>
-          <li><a class="nav__link" href="#projects" data-i18n="nav.projects">Projects</a></li>
+          <li><a class="nav__link" href="#projects" data-i18n="nav.projects">Projekte</a></li>
           <li><a class="nav__link" href="#cv" data-i18n="nav.cv">CV</a></li>
           <li><a class="nav__link" href="#craft" data-i18n="nav.craft">Craft</a></li>
-          <li><a class="nav__link" href="#contact" data-i18n="nav.contact">Contact</a></li>
+          <li><a class="nav__link" href="#contact" data-i18n="nav.contact">Kontakt</a></li>
         </ul>
       </nav>
 
@@ -32,7 +34,7 @@
         <!-- Language toggle -->
         <div class="dropdown">
           <button class="btn btn--ghost dropdown__toggle" id="langToggle" aria-haspopup="listbox" aria-expanded="false">
-            <span class="icon">🌐</span>
+            <span class="icon" aria-hidden="true">🌐</span>
             <span id="currentLang">DE</span>
           </button>
           <ul class="dropdown__menu" role="listbox" aria-label="Language">
@@ -68,10 +70,9 @@
         </div>
       </div>
 
-      <!-- Hero photo placeholder (replace with your image if you want) -->
+      <!-- Hero-Foto: ersetze die Platzhalterfläche durch <img src="assets/img/felix.jpg" alt="Felix Bruckmeier"> -->
       <figure class="hero__photo reveal" aria-label="Portrait von Felix">
         <div class="photo-frame">
-          <!-- Decorative gradient ring -->
           <svg width="100%" height="100%" viewBox="0 0 300 300" aria-hidden="true">
             <defs>
               <linearGradient id="ring" x1="0" y1="0" x2="1" y2="1">
@@ -81,7 +82,6 @@
             </defs>
             <circle cx="150" cy="150" r="145" fill="none" stroke="url(#ring)" stroke-width="6"/>
           </svg>
-          <!-- Replace the div below with <img src="dein-bild.jpg" alt="Felix Bruckmeier" /> -->
           <div class="photo" role="img" aria-label="Felix Bruckmeier"></div>
         </div>
       </figure>
@@ -89,7 +89,7 @@
     <a href="#expertise" class="scroll-hint" aria-label="Nach unten scrollen">▾</a>
   </section>
 
-  <!-- Expertise (2x2 tiles with inline SVG illustrations) -->
+  <!-- Expertise -->
   <section class="section section--tinted" id="expertise" data-section>
     <div class="container">
       <header class="section__header">
@@ -100,7 +100,6 @@
         <!-- UX Strategy -->
         <a class="tile reveal" href="#strategy" aria-describedby="ux-strategy-desc">
           <div class="tile__art">
-            <!-- Whiteboard / Flow SVG -->
             <svg viewBox="0 0 160 100" role="img" aria-label="UX Strategy illustration">
               <rect x="10" y="12" width="140" height="76" rx="6" class="svg-panel"/>
               <line x1="26" y1="32" x2="70" y2="32" class="svg-line"/>
@@ -175,15 +174,14 @@
     </div>
   </section>
 
-  <!-- Projects (2x2 tiles) -->
+  <!-- Projects -->
   <section class="section" id="projects" data-section>
     <div class="container">
       <header class="section__header">
-        <h2 data-i18n="projects.title">Projects</h2>
+        <h2 data-i18n="projects.title">Projekte</h2>
       </header>
 
       <div class="tile-grid">
-        <!-- Car Insurance Onboarding -->
         <a class="tile tile--accent reveal" href="#projects" aria-describedby="car-desc">
           <div class="tile__art">
             <svg viewBox="0 0 160 100" role="img" aria-label="Car insurance onboarding illustration">
@@ -202,7 +200,6 @@
           </div>
         </a>
 
-        <!-- Pricing Component Usability -->
         <a class="tile reveal" href="#projects" aria-describedby="pricing-desc">
           <div class="tile__art">
             <svg viewBox="0 0 160 100" role="img" aria-label="Pricing component illustration">
@@ -219,7 +216,6 @@
           </div>
         </a>
 
-        <!-- Winning UX Strategy -->
         <a class="tile reveal" href="#projects" aria-describedby="strategy-desc">
           <div class="tile__art">
             <svg viewBox="0 0 160 100" role="img" aria-label="Winning strategy illustration">
@@ -237,7 +233,6 @@
           </div>
         </a>
 
-        <!-- UX Method Cards -->
         <a class="tile reveal" href="#projects" aria-describedby="cards-desc">
           <div class="tile__art">
             <svg viewBox="0 0 160 100" role="img" aria-label="UX method cards illustration">
@@ -258,7 +253,7 @@
     </div>
   </section>
 
-  <!-- CV (teaser only on homepage) -->
+  <!-- CV -->
   <section class="section section--alt" id="cv" data-section>
     <div class="container">
       <header class="section__header">
@@ -290,11 +285,11 @@
   <section class="section section--tinted" id="contact" data-section>
     <div class="container">
       <header class="section__header">
-        <h2 data-i18n="contact.title">Contact</h2>
+        <h2 data-i18n="contact.title">Kontakt</h2>
       </header>
       <div class="contact-cta reveal">
-        <a class="btn btn--primary" href="mailto:hello@felixbruckmeier.com" data-i18n="contact.email">Email me</a>
-        <a class="btn btn--outline" href="#" data-i18n="contact.call">Book a call</a>
+        <a class="btn btn--primary" href="mailto:hello@felixbruckmeier.com" data-i18n="contact.email">E-Mail senden</a>
+        <a class="btn btn--outline" href="#" data-i18n="contact.call">Call buchen</a>
         <a class="btn btn--ghost" href="https://www.linkedin.com/" target="_blank" rel="noopener">LinkedIn</a>
       </div>
     </div>
@@ -305,13 +300,11 @@
     <div class="container footer-inner">
       <p>© <span id="year"></span> Felix Bruckmeier</p>
       <nav class="footer-nav" aria-label="Footer">
-        <a href="#top" data-i18n="nav.top">Back to top</a>
+        <a href="#top" data-i18n="nav.top">Nach oben</a>
         <a href="#" rel="nofollow">Impressum</a>
         <a href="#" rel="nofollow">Privacy</a>
       </nav>
     </div>
   </footer>
-
-  <script src="main.js"></script>
 </body>
 </html>
