@@ -3,10 +3,12 @@
   --fg: #111827;
   --muted: #6b7280;
   --primary: #2563eb;
+  --accent: #f97316;
   --border: #e5e7eb;
   --radius: 12px;
   --maxw: 1200px;
   --font-body: 'Inter', system-ui, sans-serif;
+  --font-title: 'Source Serif 4', Georgia, serif;
 }
 
 body {
@@ -19,7 +21,6 @@ body {
 }
 
 .container { max-width: var(--maxw); margin: 0 auto; padding: 2rem; }
-
 h1,h2,h3 { margin: 0 0 1rem; font-weight: 600; }
 a { color: inherit; text-decoration: none; }
 
@@ -37,38 +38,19 @@ a { color: inherit; text-decoration: none; }
 .nav a { margin:0 1rem; font-weight:500; position:relative; }
 .nav a::after {
   content:""; position:absolute; bottom:-6px; left:0;
-  width:0; height:2px; background:var(--primary);
-  transition:width 0.3s;
+  width:0; height:2px; background:var(--primary); transition:width 0.3s;
 }
 .nav a:hover::after { width:100%; }
 
-/* Toggles */
-.toggles { position: relative; }
-.toggle-btn { background:none; border:none; font-size:1.2rem; cursor:pointer; }
-.toggle-menu {
-  display:none; position:absolute; right:0; top:100%; margin-top:8px;
-  background:var(--bg); border:1px solid var(--border);
-  border-radius:var(--radius); box-shadow:0 4px 12px rgba(0,0,0,0.08); padding:1rem;
-}
-.toggle-menu.active { display:block; }
-.toggle-section { margin-bottom:1rem; }
-.toggle-section:last-child{margin-bottom:0;}
-.toggle-section span { font-size:0.9rem; color:var(--muted); display:block; margin-bottom:0.25rem; }
-.toggle-section button {
-  margin-right:0.5rem; padding:0.4rem 0.8rem;
-  border:1px solid var(--border); border-radius:6px;
-  cursor:pointer; background:transparent; transition: all 0.2s;
-}
-.toggle-section button:hover { background:var(--primary); color:#fff; }
-
 /* Hero */
-.hero { padding:6rem 0 4rem; text-align:center; }
-.title { font-size:clamp(2rem,6vw,3rem); font-weight:700; }
+.hero { background:#f9fafb; padding:6rem 2rem; text-align:center; }
+.title { font-family:var(--font-title); font-size:clamp(2.5rem,6vw,3.5rem); font-weight:700; }
+.title .highlight { color: var(--accent); }
 .tagline { margin-top:1rem; font-size:1.2rem; color:var(--muted); max-width:700px; margin-inline:auto; }
 
 /* Sections */
 section { padding:4rem 0; }
-h2 { font-size:1.8rem; margin-bottom:1rem; }
+h2 { font-size:1.8rem; margin-bottom:2rem; text-align:center; }
 
 /* Cards */
 .grid { display:grid; gap:2rem; }
@@ -77,15 +59,18 @@ h2 { font-size:1.8rem; margin-bottom:1rem; }
   background:#fff; border:1px solid var(--border); border-radius:var(--radius);
   padding:2rem; transition:transform 0.2s, box-shadow 0.2s;
 }
-.card:hover { transform:translateY(-4px); box-shadow:0 8px 16px rgba(0,0,0,0.06); }
+.card:hover { transform:translateY(-4px); box-shadow:0 8px 16px rgba(0,0,0,0.08); }
 
-/* Chips */
-.chips { display:flex; flex-wrap:wrap; gap:0.5rem; }
-.chip {
-  padding:0.4rem 0.8rem; border-radius:999px;
-  border:1px solid var(--primary); background:var(--primary + '10');
-  color:var(--primary); font-size:0.85rem;
+/* Buttons */
+.btn {
+  display:inline-block; margin:0.5rem;
+  padding:0.8rem 1.4rem; border-radius:var(--radius);
+  font-weight:500; cursor:pointer; transition:all 0.3s;
 }
+.btn.primary { background:var(--primary); color:#fff; border:none; }
+.btn.primary:hover { background:#1d4ed8; }
+.btn.secondary { border:1px solid var(--primary); color:var(--primary); background:transparent; }
+.btn.secondary:hover { background:var(--primary); color:#fff; }
 
 /* Carousel */
 .carousel { position:relative; overflow:hidden; }
@@ -98,15 +83,6 @@ h2 { font-size:1.8rem; margin-bottom:1rem; }
 }
 .carousel-btn.prev{left:10px;} .carousel-btn.next{right:10px;}
 
-/* Buttons */
-.btn {
-  display:inline-block; margin:0.5rem;
-  padding:0.6rem 1.2rem; border-radius:var(--radius);
-  border:1px solid var(--primary); color:var(--primary); background:transparent;
-  font-weight:500; cursor:pointer; transition:all 0.3s;
-}
-.btn:hover { background:var(--primary); color:#fff; }
-
 /* Footer */
 .footer { border-top:1px solid var(--border); padding:2rem 0; text-align:center; color:var(--muted); }
 
@@ -115,5 +91,5 @@ h2 { font-size:1.8rem; margin-bottom:1rem; }
 .visible { opacity:1; transform: translateY(0); }
 
 /* Dark mode */
-.theme-dark { --bg:#0f1116; --fg:#f3f4f6; --muted:#9ca3af; --border:#1f2937; --primary:#3b82f6; }
+.theme-dark { --bg:#0f1116; --fg:#f3f4f6; --muted:#9ca3af; --border:#1f2937; --primary:#3b82f6; --accent:#f59e0b; }
 .theme-dark .card { background:#1a1f2a; }
