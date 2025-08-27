@@ -3,74 +3,84 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Home — Felix Bruckmeier</title>
-  <meta name="description" content="Senior UX Researcher & UXR Director — Driving product vision, scaling ResearchOps, proving ROI.">
+  <title>Felix Bruckmeier — UX Research Director</title>
+  <meta name="description" content="Portfolio of Felix Bruckmeier, UX Research Director.">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Source+Serif+4:wght@600&display=swap" rel="stylesheet">
-
-  <!-- CSS aus assets/css -->
-  <link rel="stylesheet" href="assets/css/style.css?v=1">
+  <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
 <header class="header">
-  <div class="container inner">
+  <div class="container header-inner">
     <a class="brand" href="index.html">Felix Bruckmeier</a>
-    <nav aria-label="Main">
-      <a href="index.html" aria-current="page" data-en="Home" data-de="Start">Home</a>
-      <a href="expertise/index.html" data-en="Expertise" data-de="Expertise">Expertise</a>
-      <a href="strategy.html" data-en="Strategy" data-de="Strategie">Strategy</a>
-      <a href="projects/index.html" data-en="Projects" data-de="Projekte">Projects</a>
-      <a href="my-cv.html" data-en="My CV" data-de="Mein CV">My CV</a>
-      <a href="craft.html" data-en="Craft & Research" data-de="Craft & Research">Craft & Research</a>
-      <a href="contact.html" data-en="Contact" data-de="Kontakt">Contact</a>
+    <nav class="nav" aria-label="Main navigation">
+      <a href="index.html" aria-current="page">Home</a>
+      <a href="expertise/index.html">Expertise</a>
+      <a href="strategy.html">Strategy</a>
+      <a href="projects/index.html">Projects</a>
+      <a href="my-cv.html">My CV</a>
+      <a href="craft.html">Craft</a>
+      <a href="contact.html">Contact</a>
     </nav>
-    <div class="controls">
-      <div class="lang-toggle" role="group" aria-label="Language toggle">
-        <button class="btn active" data-lang="en" aria-pressed="true">EN</button>
-        <button class="btn" data-lang="de" aria-pressed="false">DE</button>
+    <div class="toggles">
+      <!-- Combined language + theme dropdown -->
+      <button class="toggle-btn" id="toggleMenu" aria-label="Settings">
+        ⚙
+      </button>
+      <div class="toggle-menu" id="toggleMenuContent">
+        <div class="toggle-section">
+          <span>Language</span>
+          <button class="lang-btn" data-lang="en">EN</button>
+          <button class="lang-btn" data-lang="de">DE</button>
+        </div>
+        <div class="toggle-section">
+          <span>Theme</span>
+          <button class="theme-btn" data-theme="light">☀ Light</button>
+          <button class="theme-btn" data-theme="dark">🌙 Dark</button>
+        </div>
       </div>
-      <button class="btn ghost" data-theme-toggle title="Toggle theme">☼/☾</button>
     </div>
   </div>
 </header>
 
-<main class="container">
-  <section class="hero">
-    <h1 class="title" data-en="Senior UX Researcher / UXR Director" data-de="Senior UX Researcher / UXR Leitung">Senior UX Researcher / UXR Director</h1>
-    <p class="tagline" data-en="Turning deep user insights into strategy that drives product vision, scale & measurable ROI."
-       data-de="Tiefgehende Nutzer-Insights in Strategien übersetzen, die Produktvision, Skalierung und messbaren ROI vorantreiben.">
-      Turning deep user insights into strategy that drives product vision, scale & measurable ROI.
-    </p>
+<main>
+  <section class="hero fade-in">
+    <div class="container">
+      <h1 class="title">Senior UX Researcher / UXR Director</h1>
+      <p class="tagline">Turning deep user insights into strategy that drives product vision, scale & measurable ROI.</p>
+    </div>
   </section>
 
-  <div class="grid">
-    <article class="card">
-      <h3 data-en="How I Create Value" data-de="Wie ich Wert schaffe">How I Create Value</h3>
-      <ul class="meta">
-        <li data-en="Accelerate decisions & improve product quality" data-de="Entscheidungen beschleunigen & Produktqualität steigern">Accelerate decisions & improve product quality</li>
-        <li data-en="UX strategies & research roadmaps" data-de="UX-Strategien & Research-Roadmaps">UX strategies & research roadmaps</li>
-        <li data-en="Scale ResearchOps/DesignOps" data-de="ResearchOps/DesignOps skalieren">Scale ResearchOps/DesignOps</li>
-        <li data-en="Mentor teams; embed research mindset" data-de="Teams coachen; Research-Mindset verankern">Mentor teams; embed research mindset</li>
-        <li data-en="Partner with C-level as business driver" data-de="Partner der Führungsebene als Business-Treiber">Partner with C-level as business driver</li>
-      </ul>
-    </article>
+  <section class="about slide-up">
+    <div class="container">
+      <h2>About Me</h2>
+      <p>I bridge research, strategy, and design to accelerate decision-making and create measurable business impact.</p>
+    </div>
+  </section>
 
-    <aside class="card">
-      <h3 data-en="Focus Areas" data-de="Fokusbereiche">Focus Areas</h3>
-      <div class="chips">
-        <span class="chip">UX Strategy</span>
-        <span class="chip">ResearchOps</span>
-        <span class="chip">Impact (HEART/CLTV)</span>
-        <span class="chip" data-en="Leadership & Coaching" data-de="Leadership & Coaching">Leadership & Coaching</span>
-        <span class="chip">E-Commerce</span>
-        <span class="chip">Finance</span>
-        <span class="chip">Insurance</span>
+  <section class="projects fade-in">
+    <div class="container">
+      <h2>Highlighted Projects</h2>
+      <div class="carousel" id="projectCarousel">
+        <div class="carousel-track">
+          <div class="card">Car Insurance Onboarding</div>
+          <div class="card">Winning UX Strategy</div>
+          <div class="card">Pricing Component Usability</div>
+          <div class="card">UX Method Cards</div>
+        </div>
+        <button class="carousel-btn prev">‹</button>
+        <button class="carousel-btn next">›</button>
       </div>
-    </aside>
-  </div>
+    </div>
+  </section>
 </main>
 
-<footer class="footer container"><span>© Felix Bruckmeier.</span></footer>
-<script defer src="assets/js/main.js?v=1"></script>
+<footer class="footer">
+  <div class="container">
+    <span>© Felix Bruckmeier</span>
+  </div>
+</footer>
+
+<script defer src="assets/js/main.js"></script>
 </body>
 </html>
