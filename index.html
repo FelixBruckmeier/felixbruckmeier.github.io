@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Felix Bruckmeier — Research Narrative Forge</title>
-  <meta name="description" content="Research Narrative Forge — Portfolio of Felix Bruckmeier, UX Research Director">
+  <title>Felix Bruckmeier — UX Research Director</title>
+  <meta name="description" content="Portfolio of Felix Bruckmeier, UX Research Director.">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/style.css">
@@ -14,9 +14,10 @@
   <div class="container header-inner">
     <a class="brand" href="index.html">Felix Bruckmeier</a>
     <nav class="nav">
-      <a href="#about">About</a>
-      <a href="#projects">Projects</a>
-      <a href="#contact">Contact</a>
+      <a href="#about" data-en="About" data-de="Über mich">About</a>
+      <a href="#expertise" data-en="Expertise" data-de="Expertise">Expertise</a>
+      <a href="#projects" data-en="Projects" data-de="Projekte">Projects</a>
+      <a href="#contact" data-en="Contact" data-de="Kontakt">Contact</a>
     </nav>
     <div class="toggles">
       <button class="toggle-btn" id="toggleMenu">⚙</button>
@@ -37,46 +38,80 @@
 </header>
 
 <main>
+  <!-- Hero -->
   <section class="hero fade-in">
     <div class="container">
-      <h1 class="title">Research Narrative Forge</h1>
-      <p class="tagline">Shaping stories from insights — modern UX strategy & research impact.</p>
+      <h1 class="title" data-en="Senior UX Researcher / UXR Director" data-de="Senior UX Researcher / UXR Leitung">
+        Senior UX Researcher / UXR Director
+      </h1>
+      <p class="tagline" data-en="Turning deep user insights into strategy that drives product vision, scale & measurable ROI."
+         data-de="Nutzer-Insights in Strategien übersetzen, die Produktvision, Skalierung und messbaren ROI vorantreiben.">
+        Turning deep user insights into strategy that drives product vision, scale & measurable ROI.
+      </p>
     </div>
   </section>
 
-  <section id="about" class="about slide-up">
-    <div class="container">
-      <h2>About</h2>
-      <p>I create narratives that transform deep user insights into strategies that guide design, align stakeholders, and drive measurable ROI.</p>
+  <!-- About / Expertise -->
+  <section id="expertise" class="slide-up">
+    <div class="container grid">
+      <article class="card">
+        <h2 data-en="How I Create Value" data-de="Wie ich Wert schaffe">How I Create Value</h2>
+        <ul class="meta">
+          <li data-en="Accelerate decisions & improve product quality" data-de="Entscheidungen beschleunigen & Produktqualität steigern">Accelerate decisions & improve product quality</li>
+          <li data-en="UX strategies & research roadmaps" data-de="UX-Strategien & Research-Roadmaps">UX strategies & research roadmaps</li>
+          <li data-en="Scale ResearchOps/DesignOps" data-de="ResearchOps/DesignOps skalieren">Scale ResearchOps/DesignOps</li>
+          <li data-en="Mentor teams; embed research mindset" data-de="Teams coachen; Research-Mindset verankern">Mentor teams; embed research mindset</li>
+          <li data-en="Partner with C-level as business driver" data-de="Partner der Führungsebene als Business-Treiber">Partner with C-level as business driver</li>
+        </ul>
+      </article>
+      <aside class="card">
+        <h2 data-en="Focus Areas" data-de="Fokusbereiche">Focus Areas</h2>
+        <div class="chips">
+          <span class="chip">UX Strategy</span>
+          <span class="chip">ResearchOps</span>
+          <span class="chip">Impact (HEART/CLTV)</span>
+          <span class="chip" data-en="Leadership & Coaching" data-de="Führung & Coaching">Leadership & Coaching</span>
+          <span class="chip">E-Commerce</span>
+          <span class="chip">Finance</span>
+          <span class="chip">Insurance</span>
+        </div>
+      </aside>
     </div>
   </section>
 
+  <!-- Projects -->
   <section id="projects" class="projects fade-in">
     <div class="container">
-      <h2>Projects</h2>
-      <div class="grid">
-        <article class="card">Car Insurance Onboarding</article>
-        <article class="card">Winning UX Strategy</article>
-        <article class="card">Pricing Component Usability</article>
-        <article class="card">UX Method Cards</article>
+      <h2 data-en="Projects" data-de="Projekte">Projects</h2>
+      <div class="carousel" id="projectCarousel">
+        <div class="carousel-track">
+          <div class="card">Car Insurance Onboarding</div>
+          <div class="card">Winning UX Strategy</div>
+          <div class="card">Pricing Component Usability</div>
+          <div class="card">UX Method Cards</div>
+        </div>
+        <button class="carousel-btn prev">‹</button>
+        <button class="carousel-btn next">›</button>
       </div>
     </div>
   </section>
 
+  <!-- Contact -->
   <section id="contact" class="contact slide-up">
     <div class="container">
-      <h2>Contact</h2>
-      <p>Interested in working together? Reach out via email or connect on LinkedIn.</p>
-      <a class="btn" href="mailto:felix.bruckmeier@example.com">Email me</a>
+      <h2 data-en="Contact" data-de="Kontakt">Contact</h2>
+      <p class="meta" data-en="Let’s get in touch — I’d be happy to hear from you."
+         data-de="Lassen Sie uns in Kontakt treten — ich freue mich von Ihnen zu hören.">
+        Let’s get in touch — I’d be happy to hear from you.
+      </p>
+      <a class="btn" href="mailto:felix.bruckmeier@example.com">Email</a>
       <a class="btn" href="https://www.linkedin.com/in/felixbruckmeier/" target="_blank">LinkedIn</a>
     </div>
   </section>
 </main>
 
 <footer class="footer">
-  <div class="container">
-    <span>© Felix Bruckmeier</span>
-  </div>
+  <div class="container"><span>© Felix Bruckmeier</span></div>
 </footer>
 
 <script defer src="assets/js/main.js"></script>
