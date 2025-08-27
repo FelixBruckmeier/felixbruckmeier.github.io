@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Felix Bruckmeier — UX Research Director</title>
-  <meta name="description" content="Portfolio of Felix Bruckmeier, UX Research Director.">
+  <title>Felix Bruckmeier — Research Narrative Forge</title>
+  <meta name="description" content="Research Narrative Forge — Portfolio of Felix Bruckmeier, UX Research Director">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/style.css">
@@ -13,17 +13,13 @@
 <header class="header">
   <div class="container header-inner">
     <a class="brand" href="index.html">Felix Bruckmeier</a>
-    <nav class="nav" aria-label="Main navigation">
-      <a href="index.html" aria-current="page" data-en="Home" data-de="Start">Home</a>
-      <a href="expertise/index.html" data-en="Expertise" data-de="Expertise">Expertise</a>
-      <a href="strategy.html" data-en="Strategy" data-de="Strategie">Strategy</a>
-      <a href="projects/index.html" data-en="Projects" data-de="Projekte">Projects</a>
-      <a href="my-cv.html" data-en="My CV" data-de="Mein CV">My CV</a>
-      <a href="craft.html" data-en="Craft" data-de="Handwerk">Craft</a>
-      <a href="contact.html" data-en="Contact" data-de="Kontakt">Contact</a>
+    <nav class="nav">
+      <a href="#about">About</a>
+      <a href="#projects">Projects</a>
+      <a href="#contact">Contact</a>
     </nav>
     <div class="toggles">
-      <button class="toggle-btn" id="toggleMenu" aria-label="Settings">⚙</button>
+      <button class="toggle-btn" id="toggleMenu">⚙</button>
       <div class="toggle-menu" id="toggleMenuContent">
         <div class="toggle-section">
           <span>Language</span>
@@ -41,45 +37,38 @@
 </header>
 
 <main>
-  <!-- Hero -->
   <section class="hero fade-in">
     <div class="container">
-      <h1 class="title" data-en="Senior UX Researcher / UXR Director" data-de="Senior UX Researcher / UXR Leitung">
-        Senior UX Researcher / UXR Director
-      </h1>
-      <p class="tagline" data-en="Turning deep user insights into strategy that drives product vision, scale & measurable ROI."
-         data-de="Nutzer-Insights in Strategien übersetzen, die Produktvision, Skalierung und messbaren ROI vorantreiben.">
-        Turning deep user insights into strategy that drives product vision, scale & measurable ROI.
-      </p>
+      <h1 class="title">Research Narrative Forge</h1>
+      <p class="tagline">Shaping stories from insights — modern UX strategy & research impact.</p>
     </div>
   </section>
 
-  <!-- Value Proposition -->
-  <section class="slide-up">
-    <div class="container grid">
-      <article class="card">
-        <h2 data-en="How I Create Value" data-de="Wie ich Wert schaffe">How I Create Value</h2>
-        <ul class="meta">
-          <li data-en="Accelerate decisions & improve product quality" data-de="Entscheidungen beschleunigen & Produktqualität steigern">Accelerate decisions & improve product quality</li>
-          <li data-en="UX strategies & research roadmaps" data-de="UX-Strategien & Research-Roadmaps">UX strategies & research roadmaps</li>
-          <li data-en="Scale ResearchOps/DesignOps" data-de="ResearchOps/DesignOps skalieren">Scale ResearchOps/DesignOps</li>
-          <li data-en="Mentor teams; embed research mindset" data-de="Teams coachen; Research-Mindset verankern">Mentor teams; embed research mindset</li>
-          <li data-en="Partner with C-level as business driver" data-de="Partner der Führungsebene als Business-Treiber">Partner with C-level as business driver</li>
-        </ul>
-      </article>
+  <section id="about" class="about slide-up">
+    <div class="container">
+      <h2>About</h2>
+      <p>I create narratives that transform deep user insights into strategies that guide design, align stakeholders, and drive measurable ROI.</p>
+    </div>
+  </section>
 
-      <aside class="card">
-        <h2 data-en="Focus Areas" data-de="Fokusbereiche">Focus Areas</h2>
-        <div class="chips">
-          <span class="chip">UX Strategy</span>
-          <span class="chip">ResearchOps</span>
-          <span class="chip">Impact (HEART/CLTV)</span>
-          <span class="chip" data-en="Leadership & Coaching" data-de="Führung & Coaching">Leadership & Coaching</span>
-          <span class="chip">E-Commerce</span>
-          <span class="chip">Finance</span>
-          <span class="chip">Insurance</span>
-        </div>
-      </aside>
+  <section id="projects" class="projects fade-in">
+    <div class="container">
+      <h2>Projects</h2>
+      <div class="grid">
+        <article class="card">Car Insurance Onboarding</article>
+        <article class="card">Winning UX Strategy</article>
+        <article class="card">Pricing Component Usability</article>
+        <article class="card">UX Method Cards</article>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="contact slide-up">
+    <div class="container">
+      <h2>Contact</h2>
+      <p>Interested in working together? Reach out via email or connect on LinkedIn.</p>
+      <a class="btn" href="mailto:felix.bruckmeier@example.com">Email me</a>
+      <a class="btn" href="https://www.linkedin.com/in/felixbruckmeier/" target="_blank">LinkedIn</a>
     </div>
   </section>
 </main>
