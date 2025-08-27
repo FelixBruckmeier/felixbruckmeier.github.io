@@ -4,10 +4,9 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Felix Bruckmeier — UX Research Director</title>
-  <meta name="description" content="UX Research Director — turning insights into strategies with measurable ROI." />
+  <meta name="description" content="Turning insights into strategies with measurable ROI." />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Source+Serif+4:wght@600;700&display=swap" rel="stylesheet">
-  <!-- ✔ korrekt: Assets-Ordner -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/style.css" type="text/css">
   <script src="assets/js/main.js" defer></script>
 </head>
@@ -16,7 +15,8 @@
   <header class="site-header" id="top">
     <div class="container header-inner">
       <a href="#top" class="brand" aria-label="Home">
-        <span class="brand__logo" aria-hidden="true">FB</span>
+        <!-- LOGO: einfach Datei ersetzen -->
+        <img id="brandMark" src="assets/img/logo.svg" alt="" class="brand__logo" />
         <span class="brand__name">Felix Bruckmeier</span>
       </a>
 
@@ -45,8 +45,7 @@
 
         <!-- Theme toggle -->
         <button class="btn btn--ghost toggle-theme" id="themeToggle" aria-pressed="false" title="Toggle dark/light">
-          <span class="theme-icon theme-icon--sun" aria-hidden="true">☀️</span>
-          <span class="theme-icon theme-icon--moon" aria-hidden="true">🌙</span>
+          <span class="theme-icon" aria-hidden="true">☀️/🌙</span>
           <span class="sr-only" data-i18n="ui.toggleTheme">Theme umschalten</span>
         </button>
       </div>
@@ -58,38 +57,30 @@
     <div class="container hero__grid">
       <div class="hero__copy reveal">
         <h1 class="hero__title">
-          <span class="serif">Felix Bruckmeier</span>
+          <span class="h-display">Felix Bruckmeier</span>
           <span class="subtitle" data-i18n="hero.role">UX Research Director</span>
         </h1>
         <p class="tagline" data-i18n="hero.tagline">
           turning insights into strategies with measurable ROI
         </p>
         <div class="hero__cta">
-          <a href="#projects" class="btn btn--primary" data-i18n="cta.viewProjects">View Projects</a>
-          <a href="#expertise" class="btn btn--outline" data-i18n="cta.viewExpertise">View Expertise</a>
+          <a href="#projects" class="btn btn--primary btn--xl" data-i18n="cta.viewProjects">View Projects</a>
+          <a href="#expertise" class="btn btn--outline btn--xl" data-i18n="cta.viewExpertise">View Expertise</a>
         </div>
       </div>
 
-      <!-- Hero-Foto: ersetze die Platzhalterfläche durch <img src="assets/img/felix.jpg" alt="Felix Bruckmeier"> -->
+      <!-- Hero-Foto: ersetze die Platzhalterfläche durch ein echtes Bild -->
       <figure class="hero__photo reveal" aria-label="Portrait von Felix">
         <div class="photo-frame">
-          <svg width="100%" height="100%" viewBox="0 0 300 300" aria-hidden="true">
-            <defs>
-              <linearGradient id="ring" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stop-color="var(--accent)" />
-                <stop offset="100%" stop-color="var(--accent-2)" />
-              </linearGradient>
-            </defs>
-            <circle cx="150" cy="150" r="145" fill="none" stroke="url(#ring)" stroke-width="6"/>
-          </svg>
-          <div class="photo" role="img" aria-label="Felix Bruckmeier"></div>
+          <!-- einfach austauschen -->
+          <img src="assets/img/hero-felix.png" alt="Felix Bruckmeier" class="photo" />
         </div>
       </figure>
     </div>
     <a href="#expertise" class="scroll-hint" aria-label="Nach unten scrollen">▾</a>
   </section>
 
-  <!-- Expertise -->
+  <!-- Expertise: große, quadratische Kacheln -->
   <section class="section section--tinted" id="expertise" data-section>
     <div class="container">
       <header class="section__header">
@@ -97,74 +88,32 @@
       </header>
 
       <div class="tile-grid">
-        <!-- UX Strategy -->
-        <a class="tile reveal" href="#strategy" aria-describedby="ux-strategy-desc">
-          <div class="tile__art">
-            <svg viewBox="0 0 160 100" role="img" aria-label="UX Strategy illustration">
-              <rect x="10" y="12" width="140" height="76" rx="6" class="svg-panel"/>
-              <line x1="26" y1="32" x2="70" y2="32" class="svg-line"/>
-              <rect x="26" y="42" width="18" height="12" rx="3" class="svg-node"/>
-              <circle cx="60" cy="48" r="6" class="svg-node"/>
-              <path d="M44 48 H54" class="svg-line"/>
-              <rect x="86" y="30" width="24" height="18" rx="4" class="svg-node"/>
-              <path d="M66 48 C78 42, 92 42, 98 38" class="svg-line"/>
-            </svg>
-          </div>
+        <a class="tile tile--square reveal" href="#strategy" aria-describedby="ux-strategy-desc">
+          <img src="assets/img/expertise-ux-strategy.svg" alt="" class="tile__img">
           <div class="tile__meta">
             <h3>UX Strategy</h3>
             <p id="ux-strategy-desc" data-i18n="expertise.strategy">From insights to product strategy & roadmaps.</p>
           </div>
         </a>
 
-        <!-- ResearchOps -->
-        <a class="tile reveal" href="#expertise" aria-describedby="reops-desc">
-          <div class="tile__art">
-            <svg viewBox="0 0 160 100" role="img" aria-label="ResearchOps illustration">
-              <rect x="18" y="22" width="124" height="56" rx="6" class="svg-panel"/>
-              <rect x="26" y="30" width="36" height="12" rx="3" class="svg-node"/>
-              <rect x="26" y="48" width="76" height="14" rx="3" class="svg-node"/>
-              <circle cx="116" cy="56" r="10" class="svg-gear"/>
-              <circle cx="116" cy="56" r="6" class="svg-gear-hole"/>
-              <circle cx="98" cy="40" r="7" class="svg-gear"/>
-              <circle cx="98" cy="40" r="3" class="svg-gear-hole"/>
-            </svg>
-          </div>
+        <a class="tile tile--square reveal" href="#expertise" aria-describedby="reops-desc">
+          <img src="assets/img/expertise-researchops.svg" alt="" class="tile__img">
           <div class="tile__meta">
             <h3>ResearchOps</h3>
             <p id="reops-desc" data-i18n="expertise.reops">Governance, tooling, processes, enablement.</p>
           </div>
         </a>
 
-        <!-- Impact Measurement -->
-        <a class="tile reveal" href="#expertise" aria-describedby="impact-desc">
-          <div class="tile__art">
-            <svg viewBox="0 0 160 100" role="img" aria-label="Impact measurement illustration">
-              <rect x="18" y="18" width="124" height="64" rx="6" class="svg-panel"/>
-              <rect x="34" y="58" width="14" height="18" rx="2" class="svg-bar"/>
-              <rect x="60" y="52" width="14" height="24" rx="2" class="svg-bar"/>
-              <rect x="86" y="46" width="14" height="30" rx="2" class="svg-bar"/>
-              <rect x="112" y="40" width="14" height="36" rx="2" class="svg-bar"/>
-              <path d="M32 68 C58 50, 78 40, 126 34" class="svg-line-strong"/>
-            </svg>
-          </div>
+        <a class="tile tile--square reveal" href="#expertise" aria-describedby="impact-desc">
+          <img src="assets/img/expertise-impact.svg" alt="" class="tile__img">
           <div class="tile__meta">
             <h3 data-i18n="expertise.impactTitle">Impact Measurement</h3>
             <p id="impact-desc" data-i18n="expertise.impact">HEART, ROI models (e.g., churn reduction).</p>
           </div>
         </a>
 
-        <!-- Team Leadership & Mentoring -->
-        <a class="tile reveal" href="#expertise" aria-describedby="lead-desc">
-          <div class="tile__art">
-            <svg viewBox="0 0 160 100" role="img" aria-label="Team leadership illustration">
-              <circle cx="48" cy="44" r="12" class="svg-avatar"/>
-              <rect x="36" y="58" width="24" height="14" rx="6" class="svg-avatar"/>
-              <circle cx="88" cy="48" r="10" class="svg-avatar"/>
-              <rect x="78" y="60" width="20" height="12" rx="6" class="svg-avatar"/>
-              <rect x="102" y="30" width="28" height="12" rx="6" class="svg-speech"/>
-              <rect x="106" y="48" width="22" height="10" rx="5" class="svg-speech"/>
-            </svg>
-          </div>
+        <a class="tile tile--square reveal" href="#expertise" aria-describedby="lead-desc">
+          <img src="assets/img/expertise-leadership.svg" alt="" class="tile__img">
           <div class="tile__meta">
             <h3 data-i18n="expertise.leadTitle">Team Leadership & Mentoring</h3>
             <p id="lead-desc" data-i18n="expertise.lead">Coaching, skill frameworks, hiring, culture.</p>
@@ -174,7 +123,7 @@
     </div>
   </section>
 
-  <!-- Projects -->
+  <!-- Projects: ebenfalls groß & quadratisch -->
   <section class="section" id="projects" data-section>
     <div class="container">
       <header class="section__header">
@@ -182,68 +131,32 @@
       </header>
 
       <div class="tile-grid">
-        <a class="tile tile--accent reveal" href="#projects" aria-describedby="car-desc">
-          <div class="tile__art">
-            <svg viewBox="0 0 160 100" role="img" aria-label="Car insurance onboarding illustration">
-              <rect x="18" y="54" width="124" height="26" rx="6" class="svg-road"/>
-              <rect x="30" y="46" width="56" height="26" rx="6" class="svg-car"/>
-              <rect x="44" y="50" width="18" height="10" rx="2" class="svg-car-window"/>
-              <rect x="36" y="66" width="12" height="6" rx="3" class="svg-wheel"/>
-              <rect x="68" y="66" width="12" height="6" rx="3" class="svg-wheel"/>
-              <rect x="98" y="30" width="38" height="46" rx="8" class="svg-card"/>
-              <path d="M104 50 l6 6 14 -14" class="svg-check"/>
-            </svg>
-          </div>
+        <a class="tile tile--square tile--accent reveal" href="#projects" aria-describedby="car-desc">
+          <img src="assets/img/project-car-onboarding.svg" alt="" class="tile__img">
           <div class="tile__meta">
             <h3>Car Insurance Onboarding</h3>
             <p id="car-desc" data-i18n="projects.car">Reducing drop-off with clarified mental models.</p>
           </div>
         </a>
 
-        <a class="tile reveal" href="#projects" aria-describedby="pricing-desc">
-          <div class="tile__art">
-            <svg viewBox="0 0 160 100" role="img" aria-label="Pricing component illustration">
-              <rect x="26" y="24" width="108" height="52" rx="6" class="svg-panel"/>
-              <rect x="36" y="34" width="40" height="14" rx="4" class="svg-chip"/>
-              <rect x="36" y="56" width="32" height="10" rx="3" class="svg-input"/>
-              <rect x="86" y="44" width="36" height="20" rx="5" class="svg-price"/>
-              <text x="92" y="58" class="svg-price-text">€49</text>
-            </svg>
-          </div>
+        <a class="tile tile--square reveal" href="#projects" aria-describedby="pricing-desc">
+          <img src="assets/img/project-pricing.svg" alt="" class="tile__img">
           <div class="tile__meta">
             <h3 data-i18n="projects.pricingTitle">Pricing Component Usability</h3>
             <p id="pricing-desc" data-i18n="projects.pricing">RITE testing to improve PDP comprehension.</p>
           </div>
         </a>
 
-        <a class="tile reveal" href="#projects" aria-describedby="strategy-desc">
-          <div class="tile__art">
-            <svg viewBox="0 0 160 100" role="img" aria-label="Winning strategy illustration">
-              <path d="M24 74 C48 54, 72 44, 136 32" class="svg-line-strong"/>
-              <rect x="28" y="68" width="10" height="6" rx="2" class="svg-bar"/>
-              <rect x="54" y="60" width="10" height="14" rx="2" class="svg-bar"/>
-              <rect x="80" y="52" width="10" height="22" rx="2" class="svg-bar"/>
-              <rect x="106" y="44" width="10" height="30" rx="2" class="svg-bar"/>
-              <polygon points="128,28 140,32 136,44" class="svg-flag"/>
-            </svg>
-          </div>
+        <a class="tile tile--square reveal" href="#projects" aria-describedby="strategy-desc">
+          <img src="assets/img/project-winning-strategy.svg" alt="" class="tile__img">
           <div class="tile__meta">
             <h3>Winning UX Strategy</h3>
             <p id="strategy-desc" data-i18n="projects.winning">From discovery → roadmap with executive buy-in.</p>
           </div>
         </a>
 
-        <a class="tile reveal" href="#projects" aria-describedby="cards-desc">
-          <div class="tile__art">
-            <svg viewBox="0 0 160 100" role="img" aria-label="UX method cards illustration">
-              <rect x="34" y="26" width="44" height="60" rx="6" class="svg-card"/>
-              <rect x="58" y="20" width="44" height="60" rx="6" class="svg-card"/>
-              <rect x="82" y="26" width="44" height="60" rx="6" class="svg-card"/>
-              <circle cx="96" cy="50" r="10" class="svg-chip"/>
-              <line x1="52" y1="44" x2="72" y2="44" class="svg-line"/>
-              <line x1="52" y1="56" x2="72" y2="56" class="svg-line"/>
-            </svg>
-          </div>
+        <a class="tile tile--square reveal" href="#projects" aria-describedby="cards-desc">
+          <img src="assets/img/project-method-cards.svg" alt="" class="tile__img">
           <div class="tile__meta">
             <h3>UX Method Cards</h3>
             <p id="cards-desc" data-i18n="projects.cards">Teaching teams faster method selection.</p>
@@ -288,9 +201,9 @@
         <h2 data-i18n="contact.title">Kontakt</h2>
       </header>
       <div class="contact-cta reveal">
-        <a class="btn btn--primary" href="mailto:hello@felixbruckmeier.com" data-i18n="contact.email">E-Mail senden</a>
-        <a class="btn btn--outline" href="#" data-i18n="contact.call">Call buchen</a>
-        <a class="btn btn--ghost" href="https://www.linkedin.com/" target="_blank" rel="noopener">LinkedIn</a>
+        <a class="btn btn--primary btn--xl" href="mailto:hello@felixbruckmeier.com" data-i18n="contact.email">E-Mail senden</a>
+        <a class="btn btn--outline btn--xl" href="#" data-i18n="contact.call">Call buchen</a>
+        <a class="btn btn--ghost btn--xl" href="https://www.linkedin.com/" target="_blank" rel="noopener">LinkedIn</a>
       </div>
     </div>
   </section>
