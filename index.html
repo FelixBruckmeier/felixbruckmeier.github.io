@@ -1,109 +1,317 @@
 <!doctype html>
-<html lang="en">
+<html lang="de" data-theme="auto">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Felix Bruckmeier — UX Research Portfolio</title>
-  <meta name="description" content="UX Research Director — Turning insights into impactful strategies.">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Felix Bruckmeier — UX Research Director</title>
+  <meta name="description" content="UX Research Director — turning insights into strategies with measurable ROI." />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Source+Serif+4:wght@600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Source+Serif+4:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-<header class="header">
-  <div class="container header-inner">
-    <a class="brand" href="index.html">Felix Bruckmeier</a>
-    <nav class="nav">
-      <a href="#about" data-en="About" data-de="Über mich">About</a>
-      <a href="#expertise" data-en="Expertise" data-de="Expertise">Expertise</a>
-      <a href="#projects" data-en="Projects" data-de="Projekte">Projects</a>
-      <a href="#contact" data-en="Contact" data-de="Kontakt">Contact</a>
-    </nav>
-    <div class="toggles">
-      <button class="toggle-btn" id="toggleMenu">⚙</button>
-      <div class="toggle-menu" id="toggleMenuContent">
-        <div class="toggle-section">
-          <span>Language</span>
-          <button class="lang-btn" data-lang="en">EN</button>
-          <button class="lang-btn" data-lang="de">DE</button>
+  <!-- Sticky Header -->
+  <header class="site-header" id="top">
+    <div class="container header-inner">
+      <a href="#top" class="brand" aria-label="Home">
+        <span class="brand__logo" aria-hidden="true">FB</span>
+        <span class="brand__name">Felix Bruckmeier</span>
+      </a>
+
+      <nav class="nav" aria-label="Primary">
+        <ul>
+          <li><a class="nav__link" href="#expertise" data-i18n="nav.expertise">Expertise</a></li>
+          <li><a class="nav__link" href="#projects" data-i18n="nav.projects">Projects</a></li>
+          <li><a class="nav__link" href="#cv" data-i18n="nav.cv">CV</a></li>
+          <li><a class="nav__link" href="#craft" data-i18n="nav.craft">Craft</a></li>
+          <li><a class="nav__link" href="#contact" data-i18n="nav.contact">Contact</a></li>
+        </ul>
+      </nav>
+
+      <div class="header-actions">
+        <!-- Language toggle -->
+        <div class="dropdown">
+          <button class="btn btn--ghost dropdown__toggle" id="langToggle" aria-haspopup="listbox" aria-expanded="false">
+            <span class="icon">🌐</span>
+            <span id="currentLang">DE</span>
+          </button>
+          <ul class="dropdown__menu" role="listbox" aria-label="Language">
+            <li role="option" data-lang="de" aria-selected="true">DE</li>
+            <li role="option" data-lang="en">EN</li>
+          </ul>
         </div>
-        <div class="toggle-section">
-          <span>Theme</span>
-          <button class="theme-btn" data-theme="light">☀ Light</button>
-          <button class="theme-btn" data-theme="dark">🌙 Dark</button>
-        </div>
+
+        <!-- Theme toggle -->
+        <button class="btn btn--ghost toggle-theme" id="themeToggle" aria-pressed="false" title="Toggle dark/light">
+          <span class="theme-icon theme-icon--sun" aria-hidden="true">☀️</span>
+          <span class="theme-icon theme-icon--moon" aria-hidden="true">🌙</span>
+          <span class="sr-only" data-i18n="ui.toggleTheme">Theme umschalten</span>
+        </button>
       </div>
     </div>
-  </div>
-</header>
+  </header>
 
-<main>
   <!-- Hero -->
-  <section class="hero fade-in">
-    <div class="container hero-inner">
-      <h1 class="title">Research that Drives <span class="highlight">Impact</span></h1>
-      <p class="tagline">I turn deep user insights into strategies that accelerate product vision and deliver measurable ROI.</p>
-      <a href="#projects" class="btn primary">View Projects</a>
-    </div>
-  </section>
-
-  <!-- Expertise -->
-  <section id="expertise" class="slide-up">
-    <div class="container">
-      <h2>Expertise</h2>
-      <div class="grid">
-        <article class="card">
-          <h3>UX Strategy</h3>
-          <p>From discovery to delivery, I align research with product roadmaps.</p>
-        </article>
-        <article class="card">
-          <h3>ResearchOps</h3>
-          <p>Scaling processes, governance, and insights activation across teams.</p>
-        </article>
-        <article class="card">
-          <h3>Impact Measurement</h3>
-          <p>Connecting UX to KPIs using CLTV, churn models, and HEART metrics.</p>
-        </article>
-        <article class="card">
-          <h3>Leadership</h3>
-          <p>Mentoring teams and embedding research mindsets at scale.</p>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <!-- Projects -->
-  <section id="projects" class="projects fade-in">
-    <div class="container">
-      <h2>Projects</h2>
-      <div class="carousel" id="projectCarousel">
-        <div class="carousel-track">
-          <div class="card">Car Insurance Onboarding</div>
-          <div class="card">Winning UX Strategy</div>
-          <div class="card">Pricing Component Usability</div>
-          <div class="card">UX Method Cards</div>
+  <section class="section hero" id="hero" data-section>
+    <div class="container hero__grid">
+      <div class="hero__copy reveal">
+        <h1 class="hero__title">
+          <span class="serif">Felix Bruckmeier</span>
+          <span class="subtitle" data-i18n="hero.role">UX Research Director</span>
+        </h1>
+        <p class="tagline" data-i18n="hero.tagline">
+          turning insights into strategies with measurable ROI
+        </p>
+        <div class="hero__cta">
+          <a href="#projects" class="btn btn--primary" data-i18n="cta.viewProjects">View Projects</a>
+          <a href="#expertise" class="btn btn--outline" data-i18n="cta.viewExpertise">View Expertise</a>
         </div>
-        <button class="carousel-btn prev">‹</button>
-        <button class="carousel-btn next">›</button>
       </div>
+
+      <!-- Hero photo placeholder (replace with your image if you want) -->
+      <figure class="hero__photo reveal" aria-label="Portrait von Felix">
+        <div class="photo-frame">
+          <!-- Decorative gradient ring -->
+          <svg width="100%" height="100%" viewBox="0 0 300 300" aria-hidden="true">
+            <defs>
+              <linearGradient id="ring" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="var(--accent)" />
+                <stop offset="100%" stop-color="var(--accent-2)" />
+              </linearGradient>
+            </defs>
+            <circle cx="150" cy="150" r="145" fill="none" stroke="url(#ring)" stroke-width="6"/>
+          </svg>
+          <!-- Replace the div below with <img src="dein-bild.jpg" alt="Felix Bruckmeier" /> -->
+          <div class="photo" role="img" aria-label="Felix Bruckmeier"></div>
+        </div>
+      </figure>
+    </div>
+    <a href="#expertise" class="scroll-hint" aria-label="Nach unten scrollen">▾</a>
+  </section>
+
+  <!-- Expertise (2x2 tiles with inline SVG illustrations) -->
+  <section class="section section--tinted" id="expertise" data-section>
+    <div class="container">
+      <header class="section__header">
+        <h2 data-i18n="expertise.title">Expertise</h2>
+      </header>
+
+      <div class="tile-grid">
+        <!-- UX Strategy -->
+        <a class="tile reveal" href="#strategy" aria-describedby="ux-strategy-desc">
+          <div class="tile__art">
+            <!-- Whiteboard / Flow SVG -->
+            <svg viewBox="0 0 160 100" role="img" aria-label="UX Strategy illustration">
+              <rect x="10" y="12" width="140" height="76" rx="6" class="svg-panel"/>
+              <line x1="26" y1="32" x2="70" y2="32" class="svg-line"/>
+              <rect x="26" y="42" width="18" height="12" rx="3" class="svg-node"/>
+              <circle cx="60" cy="48" r="6" class="svg-node"/>
+              <path d="M44 48 H54" class="svg-line"/>
+              <rect x="86" y="30" width="24" height="18" rx="4" class="svg-node"/>
+              <path d="M66 48 C78 42, 92 42, 98 38" class="svg-line"/>
+            </svg>
+          </div>
+          <div class="tile__meta">
+            <h3>UX Strategy</h3>
+            <p id="ux-strategy-desc" data-i18n="expertise.strategy">From insights to product strategy & roadmaps.</p>
+          </div>
+        </a>
+
+        <!-- ResearchOps -->
+        <a class="tile reveal" href="#expertise" aria-describedby="reops-desc">
+          <div class="tile__art">
+            <svg viewBox="0 0 160 100" role="img" aria-label="ResearchOps illustration">
+              <rect x="18" y="22" width="124" height="56" rx="6" class="svg-panel"/>
+              <rect x="26" y="30" width="36" height="12" rx="3" class="svg-node"/>
+              <rect x="26" y="48" width="76" height="14" rx="3" class="svg-node"/>
+              <circle cx="116" cy="56" r="10" class="svg-gear"/>
+              <circle cx="116" cy="56" r="6" class="svg-gear-hole"/>
+              <circle cx="98" cy="40" r="7" class="svg-gear"/>
+              <circle cx="98" cy="40" r="3" class="svg-gear-hole"/>
+            </svg>
+          </div>
+          <div class="tile__meta">
+            <h3>ResearchOps</h3>
+            <p id="reops-desc" data-i18n="expertise.reops">Governance, tooling, processes, enablement.</p>
+          </div>
+        </a>
+
+        <!-- Impact Measurement -->
+        <a class="tile reveal" href="#expertise" aria-describedby="impact-desc">
+          <div class="tile__art">
+            <svg viewBox="0 0 160 100" role="img" aria-label="Impact measurement illustration">
+              <rect x="18" y="18" width="124" height="64" rx="6" class="svg-panel"/>
+              <rect x="34" y="58" width="14" height="18" rx="2" class="svg-bar"/>
+              <rect x="60" y="52" width="14" height="24" rx="2" class="svg-bar"/>
+              <rect x="86" y="46" width="14" height="30" rx="2" class="svg-bar"/>
+              <rect x="112" y="40" width="14" height="36" rx="2" class="svg-bar"/>
+              <path d="M32 68 C58 50, 78 40, 126 34" class="svg-line-strong"/>
+            </svg>
+          </div>
+          <div class="tile__meta">
+            <h3 data-i18n="expertise.impactTitle">Impact Measurement</h3>
+            <p id="impact-desc" data-i18n="expertise.impact">HEART, ROI models (e.g., churn reduction).</p>
+          </div>
+        </a>
+
+        <!-- Team Leadership & Mentoring -->
+        <a class="tile reveal" href="#expertise" aria-describedby="lead-desc">
+          <div class="tile__art">
+            <svg viewBox="0 0 160 100" role="img" aria-label="Team leadership illustration">
+              <circle cx="48" cy="44" r="12" class="svg-avatar"/>
+              <rect x="36" y="58" width="24" height="14" rx="6" class="svg-avatar"/>
+              <circle cx="88" cy="48" r="10" class="svg-avatar"/>
+              <rect x="78" y="60" width="20" height="12" rx="6" class="svg-avatar"/>
+              <rect x="102" y="30" width="28" height="12" rx="6" class="svg-speech"/>
+              <rect x="106" y="48" width="22" height="10" rx="5" class="svg-speech"/>
+            </svg>
+          </div>
+          <div class="tile__meta">
+            <h3 data-i18n="expertise.leadTitle">Team Leadership & Mentoring</h3>
+            <p id="lead-desc" data-i18n="expertise.lead">Coaching, skill frameworks, hiring, culture.</p>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects (2x2 tiles) -->
+  <section class="section" id="projects" data-section>
+    <div class="container">
+      <header class="section__header">
+        <h2 data-i18n="projects.title">Projects</h2>
+      </header>
+
+      <div class="tile-grid">
+        <!-- Car Insurance Onboarding -->
+        <a class="tile tile--accent reveal" href="#projects" aria-describedby="car-desc">
+          <div class="tile__art">
+            <svg viewBox="0 0 160 100" role="img" aria-label="Car insurance onboarding illustration">
+              <rect x="18" y="54" width="124" height="26" rx="6" class="svg-road"/>
+              <rect x="30" y="46" width="56" height="26" rx="6" class="svg-car"/>
+              <rect x="44" y="50" width="18" height="10" rx="2" class="svg-car-window"/>
+              <rect x="36" y="66" width="12" height="6" rx="3" class="svg-wheel"/>
+              <rect x="68" y="66" width="12" height="6" rx="3" class="svg-wheel"/>
+              <rect x="98" y="30" width="38" height="46" rx="8" class="svg-card"/>
+              <path d="M104 50 l6 6 14 -14" class="svg-check"/>
+            </svg>
+          </div>
+          <div class="tile__meta">
+            <h3>Car Insurance Onboarding</h3>
+            <p id="car-desc" data-i18n="projects.car">Reducing drop-off with clarified mental models.</p>
+          </div>
+        </a>
+
+        <!-- Pricing Component Usability -->
+        <a class="tile reveal" href="#projects" aria-describedby="pricing-desc">
+          <div class="tile__art">
+            <svg viewBox="0 0 160 100" role="img" aria-label="Pricing component illustration">
+              <rect x="26" y="24" width="108" height="52" rx="6" class="svg-panel"/>
+              <rect x="36" y="34" width="40" height="14" rx="4" class="svg-chip"/>
+              <rect x="36" y="56" width="32" height="10" rx="3" class="svg-input"/>
+              <rect x="86" y="44" width="36" height="20" rx="5" class="svg-price"/>
+              <text x="92" y="58" class="svg-price-text">€49</text>
+            </svg>
+          </div>
+          <div class="tile__meta">
+            <h3 data-i18n="projects.pricingTitle">Pricing Component Usability</h3>
+            <p id="pricing-desc" data-i18n="projects.pricing">RITE testing to improve PDP comprehension.</p>
+          </div>
+        </a>
+
+        <!-- Winning UX Strategy -->
+        <a class="tile reveal" href="#projects" aria-describedby="strategy-desc">
+          <div class="tile__art">
+            <svg viewBox="0 0 160 100" role="img" aria-label="Winning strategy illustration">
+              <path d="M24 74 C48 54, 72 44, 136 32" class="svg-line-strong"/>
+              <rect x="28" y="68" width="10" height="6" rx="2" class="svg-bar"/>
+              <rect x="54" y="60" width="10" height="14" rx="2" class="svg-bar"/>
+              <rect x="80" y="52" width="10" height="22" rx="2" class="svg-bar"/>
+              <rect x="106" y="44" width="10" height="30" rx="2" class="svg-bar"/>
+              <polygon points="128,28 140,32 136,44" class="svg-flag"/>
+            </svg>
+          </div>
+          <div class="tile__meta">
+            <h3>Winning UX Strategy</h3>
+            <p id="strategy-desc" data-i18n="projects.winning">From discovery → roadmap with executive buy-in.</p>
+          </div>
+        </a>
+
+        <!-- UX Method Cards -->
+        <a class="tile reveal" href="#projects" aria-describedby="cards-desc">
+          <div class="tile__art">
+            <svg viewBox="0 0 160 100" role="img" aria-label="UX method cards illustration">
+              <rect x="34" y="26" width="44" height="60" rx="6" class="svg-card"/>
+              <rect x="58" y="20" width="44" height="60" rx="6" class="svg-card"/>
+              <rect x="82" y="26" width="44" height="60" rx="6" class="svg-card"/>
+              <circle cx="96" cy="50" r="10" class="svg-chip"/>
+              <line x1="52" y1="44" x2="72" y2="44" class="svg-line"/>
+              <line x1="52" y1="56" x2="72" y2="56" class="svg-line"/>
+            </svg>
+          </div>
+          <div class="tile__meta">
+            <h3>UX Method Cards</h3>
+            <p id="cards-desc" data-i18n="projects.cards">Teaching teams faster method selection.</p>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CV (teaser only on homepage) -->
+  <section class="section section--alt" id="cv" data-section>
+    <div class="container">
+      <header class="section__header">
+        <h2>CV</h2>
+      </header>
+      <ul class="timeline reveal">
+        <li><strong>ATOSS</strong> — UXR Lead (2025–Present)</li>
+        <li><strong>zooplus</strong> — UXR Lead (2022–2024)</li>
+        <li><strong>Swiss Life</strong> — Senior UXR (2020–2022)</li>
+        <li><strong>Kaiser X Labs</strong> — UXR (2018–2020)</li>
+        <li><strong>empiriecom</strong> — UXR (2016–2018)</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Craft -->
+  <section class="section" id="craft" data-section>
+    <div class="container">
+      <header class="section__header">
+        <h2>Craft</h2>
+      </header>
+      <p class="reveal" data-i18n="craft.copy">
+        Like woodworking, great UX needs the right tools, patience and attention to detail.
+      </p>
     </div>
   </section>
 
   <!-- Contact -->
-  <section id="contact" class="contact slide-up">
-    <div class="container contact-inner">
-      <h2>Contact</h2>
-      <p>Let’s connect and create impact together.</p>
-      <a class="btn primary" href="mailto:felix.bruckmeier@example.com">Email</a>
-      <a class="btn secondary" href="https://www.linkedin.com/in/felixbruckmeier/" target="_blank">LinkedIn</a>
+  <section class="section section--tinted" id="contact" data-section>
+    <div class="container">
+      <header class="section__header">
+        <h2 data-i18n="contact.title">Contact</h2>
+      </header>
+      <div class="contact-cta reveal">
+        <a class="btn btn--primary" href="mailto:hello@felixbruckmeier.com" data-i18n="contact.email">Email me</a>
+        <a class="btn btn--outline" href="#" data-i18n="contact.call">Book a call</a>
+        <a class="btn btn--ghost" href="https://www.linkedin.com/" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
     </div>
   </section>
-</main>
 
-<footer class="footer">
-  <div class="container"><span>© Felix Bruckmeier</span></div>
-</footer>
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>© <span id="year"></span> Felix Bruckmeier</p>
+      <nav class="footer-nav" aria-label="Footer">
+        <a href="#top" data-i18n="nav.top">Back to top</a>
+        <a href="#" rel="nofollow">Impressum</a>
+        <a href="#" rel="nofollow">Privacy</a>
+      </nav>
+    </div>
+  </footer>
 
-<script defer src="assets/js/main.js"></script>
+  <script src="main.js"></script>
 </body>
 </html>
