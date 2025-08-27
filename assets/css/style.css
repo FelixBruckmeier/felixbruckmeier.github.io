@@ -177,3 +177,40 @@ body{
 @media (max-width:720px){
   .tile-grid{grid-template-columns:1fr}
 }
+/* ===== CV page specifics ===== */
+.cv-hero{
+  display:flex; align-items:center; justify-content:space-between; gap:24px; flex-wrap:wrap;
+}
+
+/* Calendar card ~ half a project tile (visually) */
+.call-card{
+  display:flex; align-items:center; gap:14px; text-decoration:none;
+  border:1px solid var(--btn-border); background:var(--btn-bg); color:var(--btn-text);
+  border-radius:16px; padding:16px 18px; box-shadow:var(--shadow);
+  transition:filter .15s ease, transform .15s ease;
+  min-width: min(420px, 100%);
+  max-width: 520px;          /* ca. halbe Kachelbreite */
+}
+.call-card:hover{ filter:brightness(.94); transform:translateY(-2px) }
+.call-card__icon{ display:grid; place-items:center; width:64px; height:64px; border-radius:14px; border:1px solid var(--btn-border) }
+.call-card__label{ display:flex; flex-direction:column; font-family:Poppins, Inter, sans-serif }
+.call-card__label span{ font-weight:700; font-size:1.05rem }
+.call-card__label small{ color:var(--muted) }
+
+.under-call{ margin-top:14px }
+.downloads{ margin-top:18px; display:flex; gap:12px; flex-wrap:wrap }
+
+.cv-h2{ font-family:Poppins, Inter, sans-serif; font-size:clamp(22px,2.6vw,26px); margin:0 0 10px }
+.cv-item{ padding:16px 0; border-bottom:1px dashed var(--line) }
+.cv-item header{ font-weight:600; margin-bottom:6px }
+.cv-item ul{ margin:0; padding-left:1.1rem }
+.cv-item li{ margin:6px 0 }
+
+.cv-columns{ display:grid; grid-template-columns: 1fr 1fr; gap:min(4vw,32px) }
+.cv-list{ margin:0; padding-left:1.1rem }
+.cv-list li{ margin:6px 0 }
+
+@media (max-width: 860px){
+  .cv-columns{ grid-template-columns:1fr; }
+  .call-card{ max-width:100%; }
+}
