@@ -1,12 +1,18 @@
 (function(){
-  // ---- Toggles menu ----
+  // Sticky header shadow
+  const header = document.querySelector('.header');
+  window.addEventListener('scroll', ()=>{
+    header.classList.toggle('scrolled', window.scrollY > 10);
+  });
+
+  // Toggle menu
   const toggleBtn = document.getElementById('toggleMenu');
   const toggleMenu = document.getElementById('toggleMenuContent');
-  toggleBtn.addEventListener('click', () => toggleMenu.classList.toggle('active'));
+  toggleBtn.addEventListener('click', ()=>toggleMenu.classList.toggle('active'));
 
-  // ---- Theme ----
-  const body = document.body;
+  // Theme toggle
   const LS_THEME = 'theme';
+  const body = document.body;
   const storedTheme = localStorage.getItem(LS_THEME);
   if(storedTheme){ setTheme(storedTheme); }
   document.querySelectorAll('.theme-btn').forEach(btn=>{
@@ -17,7 +23,7 @@
   });
   function setTheme(mode){ body.classList.toggle('theme-dark', mode === 'dark'); }
 
-  // ---- Language ----
+  // Language toggle
   const LS_LANG = 'lang';
   const storedLang = localStorage.getItem(LS_LANG) || (navigator.language.startsWith('de')?'de':'en');
   setLang(storedLang);
@@ -35,22 +41,11 @@
     });
   }
 
-  // ---- Scroll Animations ----
+  // Scroll animations
   const observer = new IntersectionObserver(entries=>{
     entries.forEach(entry=>{
       if(entry.isIntersecting){ entry.target.classList.add('visible'); }
     });
   }, {threshold:0.2});
   document.querySelectorAll('.fade-in, .slide-up').forEach(el=>observer.observe(el));
-
-  // ---- Carousel ----
-  const track = document.querySelector('#projectCarousel .carousel-track');
-  const slides = Array.from(track.children);
-  let index = 0;
-  function showSlide(i){
-    index = (i+slides.length) % slides.length;
-    track.style.transform = `translateX(-${index*100}%)`;
-  }
-  document.querySelector('#projectCarousel .prev').addEventListener('click', ()=>showSlide(index-1));
-  document.querySelector('#projectCarousel .next').addEventListener('click', ()=>showSlide(index+1));
 })();
