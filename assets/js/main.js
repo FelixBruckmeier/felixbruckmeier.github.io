@@ -1,45 +1,56 @@
 (function(){
-  const LS_THEME = 'theme';
-  const LS_LANG  = 'lang';
+  // ---- Toggles menu ----
+  const toggleBtn = document.getElementById('toggleMenu');
+  const toggleMenu = document.getElementById('toggleMenuContent');
+  toggleBtn.addEventListener('click', () => toggleMenu.classList.toggle('active'));
 
+  // ---- Theme ----
   const body = document.body;
-  const btnTheme = document.querySelector('[data-theme-toggle]');
-  const btnsLang = document.querySelectorAll('[data-lang]');
-
-  // Theme
-  const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const LS_THEME = 'theme';
   const storedTheme = localStorage.getItem(LS_THEME);
-  setTheme(storedTheme || (prefersDark ? 'dark' : 'light'));
-
-  btnTheme && btnTheme.addEventListener('click', () => {
-    const next = body.classList.contains('theme-dark') ? 'light' : 'dark';
-    setTheme(next);
-    localStorage.setItem(LS_THEME, next);
+  if(storedTheme){ setTheme(storedTheme); }
+  document.querySelectorAll('.theme-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      setTheme(btn.dataset.theme);
+      localStorage.setItem(LS_THEME, btn.dataset.theme);
+    });
   });
+  function setTheme(mode){ body.classList.toggle('theme-dark', mode === 'dark'); }
 
-  function setTheme(mode){
-    body.classList.toggle('theme-dark', mode === 'dark');
-  }
-
-  // Language
-  const storedLang = localStorage.getItem(LS_LANG) || 'en';
+  // ---- Language ----
+  const LS_LANG = 'lang';
+  const storedLang = localStorage.getItem(LS_LANG) || (navigator.language.startsWith('de')?'de':'en');
   setLang(storedLang);
-
-  btnsLang.forEach(b => b.addEventListener('click', () => {
-    const lang = b.getAttribute('data-lang');
-    setLang(lang); localStorage.setItem(LS_LANG, lang);
-  }));
-
+  document.querySelectorAll('.lang-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const lang = btn.dataset.lang;
+      setLang(lang);
+      localStorage.setItem(LS_LANG, lang);
+    });
+  });
   function setLang(lang){
-    btnsLang.forEach(b => {
-      const active = b.getAttribute('data-lang') === lang;
-      b.classList.toggle('active', active);
-      b.setAttribute('aria-pressed', String(active));
-    });
-    document.querySelectorAll('[data-en]').forEach(el => {
-      const txt = el.getAttribute(`data-${lang}`);
-      if(txt) el.textContent = txt;
-    });
     document.documentElement.setAttribute('lang', lang);
+    document.querySelectorAll('[data-'+lang+']').forEach(el=>{
+      el.textContent = el.getAttribute('data-'+lang);
+    });
   }
+
+  // ---- Scroll Animations ----
+  const observer = new IntersectionObserver(entries=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){ entry.target.classList.add('visible'); }
+    });
+  }, {threshold:0.2});
+  document.querySelectorAll('.fade-in, .slide-up').forEach(el=>observer.observe(el));
+
+  // ---- Carousel ----
+  const track = document.querySelector('#projectCarousel .carousel-track');
+  const slides = Array.from(track.children);
+  let index = 0;
+  function showSlide(i){
+    index = (i+slides.length) % slides.length;
+    track.style.transform = `translateX(-${index*100}%)`;
+  }
+  document.querySelector('#projectCarousel .prev').addEventListener('click', ()=>showSlide(index-1));
+  document.querySelector('#projectCarousel .next').addEventListener('click', ()=>showSlide(index+1));
 })();
