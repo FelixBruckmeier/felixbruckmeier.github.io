@@ -6,92 +6,271 @@
   <title>Detail-CV — Felix Bruckmeier</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/style.css">
+  <script defer src="../assets/js/main.js"></script>
 </head>
 <body>
+  <!-- Header -->
   <header class="site-header">
     <div class="container header-inner">
-      <a href="../index.html" class="brand">
+      <a href="../index.html" class="brand" aria-label="Home">
         <img src="../assets/img/logo.svg" alt="" class="brand__logo" />
         <span class="brand__name">Felix Bruckmeier</span>
       </a>
-      <nav class="nav"><ul>
-        <li><a class="nav__link" href="../index.html#expertise">Expertise</a></li>
-        <li><a class="nav__link" href="../index.html#projects">Projekte</a></li>
-        <li><a class="nav__link is-active" href="#">CV</a></li>
-        <li><a class="nav__link" href="../index.html#contact">Kontakt</a></li>
-      </ul></nav>
+
+      <nav class="nav" aria-label="Primary">
+        <ul>
+          <li><a class="nav__link" href="../index.html#expertise" data-i18n="nav.expertise">Expertise</a></li>
+          <li><a class="nav__link" href="../index.html#projects" data-i18n="nav.projects">Projekte</a></li>
+          <li><a class="nav__link is-active" href="#" data-i18n="nav.cv">CV</a></li>
+          <li><a class="nav__link" href="../index.html#contact" data-i18n="nav.contact">Kontakt</a></li>
+        </ul>
+      </nav>
+
+      <div class="header-actions">
+        <!-- Language toggle -->
+        <div class="dropdown">
+          <button class="btn btn--ghost dropdown__toggle" id="langToggle" aria-haspopup="listbox" aria-expanded="false">
+            <span class="icon" aria-hidden="true">🌐</span>
+            <span id="currentLang">DE</span>
+          </button>
+          <ul class="dropdown__menu" role="listbox" aria-label="Language">
+            <li role="option" data-lang="de" aria-selected="true">DE</li>
+            <li role="option" data-lang="en">EN</li>
+          </ul>
+        </div>
+
+        <!-- Theme toggle -->
+        <button class="btn btn--ghost toggle-theme" id="themeToggle" aria-pressed="false" title="Toggle dark/light">
+          <span class="theme-icon" aria-hidden="true">☀️/🌙</span>
+          <span class="sr-only" data-i18n="ui.toggleTheme">Theme umschalten</span>
+        </button>
+      </div>
     </div>
   </header>
 
   <main>
+    <!-- Hero + Call -->
     <section class="section section--sand">
-      <div class="container">
-        <h1 class="h-display" style="margin:0 0 8px">Detail-CV</h1>
-        <p class="tagline">UX Research Lead — turning insights into strategies with measurable ROI</p>
+      <div class="container cv-hero">
+        <div>
+          <h1 class="h-display" style="margin:0 0 6px">Felix Bruckmeier</h1>
+          <p class="tagline" data-i18n="cv.role">UX Research Lead</p>
+        </div>
+
+        <!-- Large schedule call tile (~half tile) -->
+        <div class="call-block">
+          <a class="tile call-tile" href="https://calendar.app.google/tYZppmZFM32vaisj6" target="_blank" rel="noopener" aria-label="Schedule a Call">
+            <div class="tile__inner">
+              <div class="tile__icon">
+                <!-- Calendar icon -->
+                <svg viewBox="0 0 48 48" width="96" height="96" aria-hidden="true">
+                  <rect x="6" y="10" width="36" height="28" rx="6" fill="currentColor" opacity=".12"/>
+                  <rect x="10" y="18" width="28" height="16" rx="4" fill="none" stroke="currentColor" stroke-width="2"/>
+                  <line x1="16" y1="6" x2="16" y2="14" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+                  <line x1="32" y1="6" x2="32" y2="14" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <div class="tile__label">
+                <span data-i18n="cv.discovery">Jetzt ein Gespräch vereinbaren</span>
+              </div>
+            </div>
+          </a>
+
+          <!-- Contact icons under tile -->
+          <div class="contact-icons">
+            <a class="icon-link" href="mailto:felixbruckmeier@googlemail.com" aria-label="E-Mail">
+              <svg viewBox="0 0 24 24" width="28" height="28"><path fill="currentColor" d="M2 6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v.5l-10 6-10-6V6Zm0 2.8V18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8.8l-9.4 5.64a2 2 0 0 1-2.1 0L2 8.8Z"/></svg>
+            </a>
+            <a class="icon-link" href="https://www.linkedin.com/in/felix-bruckmeier-89a00a1bb/" target="_blank" rel="noopener" aria-label="LinkedIn">
+              <svg viewBox="0 0 24 24" width="28" height="28"><path fill="currentColor" d="M4.98 3.5C4.98 4.88 3.86 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8.5h4V23h-4V8.5zm7.5 0h3.84v1.98h.05c.53-1 1.84-2.05 3.79-2.05 4.06 0 4.81 2.67 4.81 6.14V23h-4v-6.53c0-1.56-.03-3.57-2.18-3.57-2.18 0-2.52 1.7-2.52 3.46V23h-4V8.5z"/></svg>
+            </a>
+            <a class="icon-link" href="https://researchops-community.slack.com/team/U040NGFE3NU" target="_blank" rel="noopener" aria-label="Slack">
+              <svg viewBox="0 0 24 24" width="28" height="28"><path fill="currentColor" d="M5.2 14.4a1.9 1.9 0 1 1-1.9-1.9h1.9v1.9Zm.9 0a1.9 1.9 0 1 1 3.8 0v4.7a1.9 1.9 0 1 1-3.8 0v-4.7ZM9.9 5.2a1.9 1.9 0 1 1 1.9-1.9v1.9H9.9Zm0 .9c0-1.05.85-1.9 1.9-1.9h4.7a1.9 1.9 0 1 1 0 3.8H11.8c-1.05 0-1.9-.85-1.9-1.9Zm8.9 3.8a1.9 1.9 0 1 1 1.9 1.9h-1.9V9.9Zm-.9 0a1.9 1.9 0 1 1-3.8 0V5.2a1.9 1.9 0 1 1 3.8 0v4.7ZM14.1 18.8c0 1.05-.85 1.9-1.9 1.9H7.5a1.9 1.9 0 1 1 0-3.8h4.7c1.05 0 1.9.85 1.9 1.9Z"/></svg>
+            </a>
+          </div>
+
+          <!-- Downloads -->
+          <div class="downloads">
+            <a class="btn btn--neutral btn--xl" href="../assets/cv/Felix_Bruckmeier_CV_DE.pdf" download data-i18n="cv.dl.de">Download CV (Deutsch)</a>
+            <a class="btn btn--neutral btn--xl" href="../assets/cv/Felix_Bruckmeier_CV_EN.pdf" download data-i18n="cv.dl.en">Download CV (English)</a>
+          </div>
+        </div>
       </div>
     </section>
 
+    <!-- Experience -->
     <section class="section">
       <div class="container">
-        <h2>Berufserfahrung</h2>
-        <ul class="timeline">
-          <li><strong>ATOSS</strong> — UX Research Lead (01/2025–Heute)  
-            <div>Leitung UXR; Strategie, ReOps-Skalierung, Insights Activation, Mentoring.</div>
-          </li>
-          <li><strong>zooplus</strong> — UX Research Lead (07/2022–12/2024)  
-            <div>Fokus: ResearchOps, RITE, Baymard-Benchmarking, AI Eye-Tracking, ROI-Modelle.</div>
-          </li>
-          <li><strong>Swiss Life</strong> — Senior UX Researcher (05/2020–06/2022)  
-            <div>Quant/Qual-Mix (Conjoint, MaxDiff), UXR-Roadmaps, Stakeholder Alignment.</div>
-          </li>
-          <li><strong>Kaiser X Labs</strong> — UX Researcher (08/2018–04/2020)  
-            <div>Design Thinking Vorhaben (z. B. Car Insurance Onboarding bei ADAC).</div>
-          </li>
-          <li><strong>empiriecom</strong> — UX Researcher (02/2016–07/2018)  
-            <div>E-Commerce UXR, Analytics-Kooperation, Usability-Optimierung.</div>
-          </li>
-        </ul>
+        <h2 class="cv-h2" data-i18n="cv.exp">Berufserfahrung</h2>
 
-        <h2>Schwerpunkte</h2>
-        <ul>
-          <li>UX Strategy &amp; Strategic UX Research</li>
-          <li>ResearchOps (Governance, Tools, Enablement, Insights Activation)</li>
-          <li>Impact Measurement (HEART, ROI-/Churn-Modelle)</li>
-          <li>Team Leadership &amp; Mentoring</li>
-        </ul>
+        <article class="cv-item">
+          <header><strong>ATOSS</strong> — <span data-i18n="cv.role">UX Research Lead</span> · 2025–Present</header>
+          <ul>
+            <li data-i18n="cv.atoss.1">Lead UXR strategy, team mentoring, and ResearchOps scaling across product lines.</li>
+            <li data-i18n="cv.atoss.2">Build ROI storytelling & insight activation with executive stakeholders.</li>
+            <li data-i18n="cv.atoss.3">Define metrics (HEART, adoption) and close loop with delivery teams.</li>
+          </ul>
+        </article>
 
-        <h2>Methoden</h2>
-        <p>Kano, Conjoint, MaxDiff, RITE, Contextual Inquiry, Diary Studies, Card Sorting, Tree Testing, Benchmarking, Analytics-Triangulation.</p>
+        <article class="cv-item">
+          <header><strong>zooplus</strong> — <span data-i18n="cv.role">UX Research Lead</span> · 2022–2024</header>
+          <ul>
+            <li data-i18n="cv.zooplus.1">Established ResearchOps: repository, panel, templates, and playbooks.</li>
+            <li data-i18n="cv.zooplus.2">RITE testing & Baymard-informed UX improvements; analytics triangulation.</li>
+            <li data-i18n="cv.zooplus.3">AI eye-tracking experiments; evangelized insight-to-action loops.</li>
+          </ul>
+        </article>
 
-        <h2>Ausbildung</h2>
-        <p>Kommunikationswissenschaften &amp; zweites Studium in Kunst (Kunststudium).</p>
+        <article class="cv-item">
+          <header><strong>Swiss Life</strong> — Senior UX Researcher · 2020–2022</header>
+          <ul>
+            <li data-i18n="cv.sl.1">Planned and delivered quant/qual programs (Conjoint, MaxDiff, CI).</li>
+            <li data-i18n="cv.sl.2">Partnered with product leadership to shape roadmaps from research.</li>
+            <li data-i18n="cv.sl.3">Drove stakeholder alignment through evidence-based narratives.</li>
+          </ul>
+        </article>
 
-        <h2>Download / Kontakt</h2>
-        <div class="contact-cta">
-          <a class="btn btn--neutral btn--xl" href="../index.html#contact">Call buchen</a>
-          <a class="icon-link" href="mailto:felixbruckmeier@googlemail.com" aria-label="E-Mail">
-            <svg viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M2 6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v.5l-10 6-10-6V6Zm0 2.8V18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8.8l-9.4 5.64a2 2 0 0 1-2.1 0L2 8.8Z"/></svg>
-          </a>
-          <a class="icon-link" href="https://www.linkedin.com/" target="_blank" rel="noopener" aria-label="LinkedIn">
-            <svg viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M4.98 3.5C4.98 4.88 3.86 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8.5h4V23h-4V8.5zm7.5 0h3.84v1.98h.05c.53-1 1.84-2.05 3.79-2.05 4.06 0 4.81 2.67 4.81 6.14V23h-4v-6.53c0-1.56-.03-3.57-2.18-3.57-2.18 0-2.52 1.7-2.52 3.46V23h-4V8.5z"/></svg>
-          </a>
-          <a class="icon-link" href="https://researchops-community.slack.com/team/U040NGFE3NU" target="_blank" rel="noopener" aria-label="Slack">
-            <svg viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M5.2 14.4a1.9 1.9 0 1 1-1.9-1.9h1.9v1.9Zm.9 0a1.9 1.9 0 1 1 3.8 0v4.7a1.9 1.9 0 1 1-3.8 0v-4.7ZM9.9 5.2a1.9 1.9 0 1 1 1.9-1.9v1.9H9.9Zm0 .9c0-1.05.85-1.9 1.9-1.9h4.7a1.9 1.9 0 1 1 0 3.8H11.8c-1.05 0-1.9-.85-1.9-1.9Zm8.9 3.8a1.9 1.9 0 1 1 1.9 1.9h-1.9V9.9Zm-.9 0a1.9 1.9 0 1 1-3.8 0V5.2a1.9 1.9 0 1 1 3.8 0v4.7ZM14.1 18.8c0 1.05-.85 1.9-1.9 1.9H7.5a1.9 1.9 0 1 1 0-3.8h4.7c1.05 0 1.9.85 1.9 1.9Z"/></svg>
-          </a>
+        <article class="cv-item">
+          <header><strong>Kaiser X Labs</strong> — UX Researcher · 2018–2020</header>
+          <ul>
+            <li data-i18n="cv.kxl.1">Design Thinking initiatives (e.g., ADAC car insurance onboarding).</li>
+            <li data-i18n="cv.kxl.2">Field studies with agents/customers; prototyping & iterative tests.</li>
+            <li data-i18n="cv.kxl.3">Delivered service blueprints & mental model maps.</li>
+          </ul>
+        </article>
+
+        <article class="cv-item">
+          <header><strong>empiriecom</strong> — UX Researcher · 2016–2018</header>
+          <ul>
+            <li data-i18n="cv.emp.1">E-commerce research; checkout & PDP usability improvements.</li>
+            <li data-i18n="cv.emp.2">Analytics partnership for impact measurement.</li>
+            <li data-i18n="cv.emp.3">Introduced research method cards to cross-functional teams.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <!-- Education / Skills -->
+    <section class="section section--tinted">
+      <div class="container cv-columns">
+        <div>
+          <h2 class="cv-h2" data-i18n="cv.edu">Ausbildung</h2>
+          <ul class="cv-list">
+            <li data-i18n="cv.edu.1"><strong>M.A.</strong> (Communication / Media) — focus on user behavior & methods</li>
+            <li data-i18n="cv.edu.2"><strong>Art Studies</strong> — visual storytelling & craft</li>
+          </ul>
+        </div>
+        <div>
+          <h2 class="cv-h2" data-i18n="cv.skills">Fähigkeiten & Schwerpunkte</h2>
+          <ul class="cv-list">
+            <li data-i18n="cv.skills.1">Strategic UX Research, UX Strategy, ResearchOps</li>
+            <li data-i18n="cv.skills.2">Kano, RITE, Conjoint, MaxDiff, CI, Diary, Card Sorting, Tree Testing</li>
+            <li data-i18n="cv.skills.3">Impact measurement: HEART, ROI models, adoption</li>
+            <li data-i18n="cv.skills.4">Leadership, mentoring, hiring, coaching frameworks</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Approach / Communities -->
+    <section class="section">
+      <div class="container cv-columns">
+        <div>
+          <h2 class="cv-h2" data-i18n="cv.approach">Arbeitsweise</h2>
+          <ul class="cv-list">
+            <li data-i18n="cv.approach.1">Active listening & facilitation to align diverse stakeholders</li>
+            <li data-i18n="cv.approach.2">Evidence-driven narratives; clear, actionable insights</li>
+            <li data-i18n="cv.approach.3">Lean & pragmatic; outcome-oriented, not method-driven</li>
+          </ul>
+        </div>
+        <div>
+          <h2 class="cv-h2" data-i18n="cv.comm">Communities</h2>
+          <ul class="cv-list">
+            <li data-i18n="cv.comm.1">ResearchOps Community</li>
+            <li data-i18n="cv.comm.2">UX Research & Strategy groups</li>
+          </ul>
         </div>
       </div>
     </section>
   </main>
 
+  <!-- Footer -->
   <footer class="site-footer">
     <div class="container footer-inner">
       <p>© <span id="year"></span> Felix Bruckmeier</p>
       <nav class="footer-nav">
         <a href="../impressum/index.html">Impressum</a>
-        <a href="../index.html#top">Nach oben</a>
+        <a href="../index.html#top" data-i18n="nav.top">Nach oben</a>
       </nav>
     </div>
   </footer>
-  <script src="../assets/js/main.js"></script>
+
+  <!-- Page-specific i18n: merges into main.js i18n -->
+  <script>
+    window.I18N_EXTRA = {
+      de: {
+        "cv.role": "UX Research Lead",
+        "cv.discovery": "Jetzt ein Gespräch vereinbaren",
+        "cv.dl.de": "Download CV (Deutsch)",
+        "cv.dl.en": "Download CV (English)",
+        "cv.exp": "Berufserfahrung",
+        "cv.edu": "Ausbildung",
+        "cv.skills": "Fähigkeiten & Schwerpunkte",
+        "cv.approach": "Arbeitsweise",
+        "cv.comm": "Communities",
+
+        "cv.atoss.1": "UXR-Strategie, Team-Mentoring und ResearchOps über mehrere Produktlinien skalieren.",
+        "cv.atoss.2": "ROI-Storytelling & Insights Activation mit Führungsgremien aufbauen.",
+        "cv.atoss.3": "Metriken (HEART, Adoption) definieren und mit Delivery-Teams rückkoppeln.",
+
+        "cv.zooplus.1": "ResearchOps aufgebaut: Repository, Panel, Templates und Playbooks.",
+        "cv.zooplus.2": "RITE-Tests & Baymard-basierte UX-Verbesserungen; Analytics-Triangulation.",
+        "cv.zooplus.3": "AI Eye-Tracking erprobt; Insight-to-Action-Loops etabliert.",
+
+        "cv.sl.1": "Quant/Qual-Programme geplant & durchgeführt (Conjoint, MaxDiff, CI).",
+        "cv.sl.2": "Mit Product Leadership Roadmaps aus Research abgeleitet.",
+        "cv.sl.3": "Stakeholder-Alignment via evidenzbasierte Narrative erreicht.",
+
+        "cv.kxl.1": "Design-Thinking-Initiativen (z. B. ADAC Kfz-Versicherungs-Onboarding).",
+        "cv.kxl.2": "Feldstudien mit Agent:innen/Kund:innen; Prototyping & iterative Tests.",
+        "cv.kxl.3": "Service Blueprints & Mental-Model-Maps geliefert.",
+
+        "cv.emp.1": "E-Commerce-Research; Usability-Optimierungen für Checkout & PDP.",
+        "cv.emp.2": "Analytics-Partnerschaft zur Wirkungs­messung.",
+        "cv.emp.3": "Research-Methoden-Karten in cross-funktionalen Teams eingeführt."
+      },
+      en: {
+        "cv.role": "UX Research Lead",
+        "cv.discovery": "Schedule a Call Now",
+        "cv.dl.de": "Download CV (German)",
+        "cv.dl.en": "Download CV (English)",
+        "cv.exp": "Experience",
+        "cv.edu": "Education",
+        "cv.skills": "Capabilities & Skills",
+        "cv.approach": "Approach",
+        "cv.comm": "Communities",
+
+        "cv.atoss.1": "Lead UXR strategy, team mentoring, and ResearchOps scaling across product lines.",
+        "cv.atoss.2": "Build ROI storytelling & insight activation with executive stakeholders.",
+        "cv.atoss.3": "Define metrics (HEART, adoption) and close the loop with delivery teams.",
+
+        "cv.zooplus.1": "Established ResearchOps: repository, panel, templates, and playbooks.",
+        "cv.zooplus.2": "RITE testing & Baymard-informed UX improvements; analytics triangulation.",
+        "cv.zooplus.3": "Ran AI eye-tracking experiments; evangelized insight-to-action loops.",
+
+        "cv.sl.1": "Planned and delivered quant/qual programs (Conjoint, MaxDiff, CI).",
+        "cv.sl.2": "Partnered with product leadership to shape roadmaps from research.",
+        "cv.sl.3": "Drove stakeholder alignment through evidence-based narratives.",
+
+        "cv.kxl.1": "Design Thinking initiatives (e.g., ADAC car insurance onboarding).",
+        "cv.kxl.2": "Field studies with agents/customers; prototyping & iterative tests.",
+        "cv.kxl.3": "Delivered service blueprints & mental model maps.",
+
+        "cv.emp.1": "E-commerce research; checkout and PDP usability improvements.",
+        "cv.emp.2": "Analytics partnership for impact measurement.",
+        "cv.emp.3": "Introduced research method cards to cross-functional teams."
+      }
+    };
+  </script>
 </body>
 </html>
