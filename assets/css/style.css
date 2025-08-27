@@ -1,50 +1,91 @@
 :root {
-  --bg:#ffffff;
-  --fg:#161616;
-  --muted:#5f6063;
-  --primary:#0a66c2;
-  --chip:#eef5ff;
-  --border:#e7e7ea;
-  --maxw:960px;
+  --bg: #ffffff;
+  --fg: #1a1a1a;
+  --muted: #6b7280;
+  --primary: #2563eb;
+  --border: #e5e7eb;
+  --radius: 12px;
+  --maxw: 1100px;
+  --font-body: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  --font-title: "Source Serif 4", Georgia, serif;
 }
-*{box-sizing:border-box}
-html,body{height:100%}
-body{margin:0;background:var(--bg);color:var(--fg);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,"Noto Sans";line-height:1.6}
-a{color:inherit}
-.container{max-width:var(--maxw);margin:0 auto;padding:20px}
-.header{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.92);backdrop-filter:saturate(1.1) blur(8px);border-bottom:1px solid var(--border)}
-.header .inner{display:flex;align-items:center;justify-content:space-between;gap:16px}
-.brand{font-weight:700;letter-spacing:.2px;text-decoration:none}
-nav a{margin:0 10px;text-decoration:none;border-bottom:1px dashed transparent;padding-bottom:2px}
-nav a:hover{border-bottom-color:rgba(10,102,194,.4)}
-.controls{display:flex;gap:8px;align-items:center}
-.btn{padding:6px 10px;border:1px solid var(--border);background:#f9f9f9;border-radius:8px;cursor:pointer}
-.btn.ghost{background:#fff}
-.lang-toggle{display:inline-flex;border:1px solid var(--border);border-radius:8px;overflow:hidden}
-.lang-toggle .btn{border:none}
-.lang-toggle .btn.active{background:var(--primary);color:#fff}
-.hero{padding:48px 0 12px}
-h1.title{font-family:"Source Serif 4",Georgia,serif;font-weight:600;font-size:clamp(28px,5vw,40px);margin:0}
-.role{margin:6px 0 0;color:var(--primary);font-weight:700}
-.tagline{margin:10px 0;color:var(--muted)}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
-@media (max-width:900px){.grid{grid-template-columns:1fr}}
-.card{border:1px solid var(--border);border-radius:14px;padding:16px;background:#fff}
-.card h3{margin-top:0}
-.hr{height:1px;background:var(--border);margin:16px 0}
-.chips{display:flex;flex-wrap:wrap;gap:8px}
-.chip{padding:6px 10px;border:1px solid #dbe9ff;background:var(--chip);border-radius:999px}
-.meta{color:var(--muted);font-size:.96rem}
-.footer{margin:32px 0;color:var(--muted);font-size:.92rem;border-top:1px solid var(--border);padding-top:16px}
-svg.diagram{width:100%;height:auto;display:block;border:1px solid var(--border);border-radius:12px;background:#fff;margin-top:8px}
-.fig{font-size:.92rem;color:var(--muted);margin-top:6px}
-.timeline{border-left:2px solid var(--border);padding-left:14px}
-.timeline li{margin:10px 0}
-:focus-visible{outline:3px solid #94c5ff;outline-offset:2px}
-.theme-dark{--bg:#0b0d12;--fg:#f3f4f6;--muted:#a3a7ad;--border:#1c2230;--chip:#0f1a2e}
-.theme-dark .header{background:rgba(12,14,20,.75);border-bottom-color:#1c2230}
-.theme-dark nav a:hover{border-bottom-color:rgba(82,156,255,.6)}
-.theme-dark .card, .theme-dark svg.diagram{background:#0f1320;border-color:#1c2230}
-.theme-dark .btn{background:#0f1320}
-@page{size:A4;margin:16mm}
-@media print{.header,.footer,.controls{display:none}.container{max-width:none}}
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--fg);
+  line-height: 1.6;
+  transition: background 0.3s, color 0.3s;
+}
+.container { max-width: var(--maxw); margin: 0 auto; padding: 1.5rem; }
+a { text-decoration: none; color: inherit; }
+
+/* Header */
+.header {
+  position: sticky; top: 0; z-index: 100;
+  backdrop-filter: blur(10px);
+  background: rgba(255,255,255,0.85);
+  border-bottom: 1px solid var(--border);
+}
+.header-inner { display: flex; align-items: center; justify-content: space-between; }
+.nav a { margin: 0 1rem; font-weight: 500; position: relative; }
+.nav a::after {
+  content:""; display:block; height:2px; width:0; background:var(--primary);
+  transition: width 0.3s; margin-top:4px;
+}
+.nav a:hover::after { width:100%; }
+
+/* Toggles */
+.toggles { position: relative; }
+.toggle-btn { background: none; border: none; font-size: 1.2rem; cursor: pointer; }
+.toggle-menu {
+  display: none; position: absolute; right:0; top:100%;
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: var(--radius); padding:0.5rem 1rem; box-shadow:0 4px 12px rgba(0,0,0,0.1);
+}
+.toggle-menu.active { display:block; }
+.toggle-section { margin-bottom:0.5rem; }
+.toggle-section span { display:block; font-size:0.9rem; margin-bottom:0.25rem; color:var(--muted); }
+.toggle-section button { margin-right:0.5rem; padding:0.3rem 0.6rem; border-radius:6px; border:1px solid var(--border); cursor:pointer; }
+
+/* Hero */
+.hero { padding: 5rem 0 3rem; text-align: center; }
+.title { font-family: var(--font-title); font-size: clamp(2rem, 5vw, 3rem); margin: 0; }
+.tagline { color: var(--muted); margin-top: 1rem; }
+
+/* Sections */
+.about, .projects { padding: 4rem 0; }
+h2 { font-size: 1.8rem; margin-bottom: 1rem; }
+
+/* Carousel */
+.carousel { position:relative; overflow:hidden; }
+.carousel-track { display:flex; transition: transform 0.4s ease; }
+.card {
+  flex:0 0 80%; margin:0 10%;
+  background:#fff; border:1px solid var(--border); border-radius:var(--radius);
+  padding:2rem; box-shadow:0 6px 12px rgba(0,0,0,0.05);
+}
+.carousel-btn {
+  position:absolute; top:50%; transform:translateY(-50%);
+  background:var(--primary); color:#fff; border:none; border-radius:50%;
+  width:40px; height:40px; cursor:pointer;
+}
+.carousel-btn.prev { left:10px; }
+.carousel-btn.next { right:10px; }
+
+/* Footer */
+.footer { border-top: 1px solid var(--border); padding: 1rem 0; text-align: center; color: var(--muted); }
+
+/* Animations */
+.fade-in { opacity:0; transform: translateY(20px); transition: opacity 0.6s, transform 0.6s; }
+.fade-in.visible { opacity:1; transform:translateY(0); }
+.slide-up { opacity:0; transform: translateY(40px); transition: all 0.6s; }
+.slide-up.visible { opacity:1; transform: translateY(0); }
+
+/* Dark mode */
+.theme-dark {
+  --bg:#0f1116; --fg:#f3f4f6; --muted:#9ca3af; --border:#1f2937; --primary:#3b82f6;
+}
+.theme-dark .header { background:rgba(15,17,22,0.85); }
+.theme-dark .card { background:#1a1f2a; }
+.theme-dark .toggle-menu { background:#1a1f2a; }
