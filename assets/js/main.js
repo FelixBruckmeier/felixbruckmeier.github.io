@@ -15,7 +15,7 @@ function applyTheme(mode) {
   } else {
     root.setAttribute('data-theme', mode);
   }
-  themeToggle.setAttribute('aria-pressed', mode === 'dark');
+  themeToggle?.setAttribute('aria-pressed', mode === 'dark');
 }
 function cycleTheme() {
   const cur = root.getAttribute('data-theme') || 'auto';
@@ -23,9 +23,8 @@ function cycleTheme() {
   localStorage.setItem('theme', next);
   applyTheme(next);
 }
-
 applyTheme(getStoredTheme());
-themeToggle.addEventListener('click', cycleTheme);
+themeToggle?.addEventListener('click', cycleTheme);
 
 /* ===== Language toggle (EN/DE) ===== */
 const i18n = {
@@ -92,7 +91,7 @@ const i18n = {
 };
 
 const langBtn = $('#langToggle');
-const langMenu = langBtn.nextElementSibling;
+const langMenu = langBtn?.nextElementSibling;
 const currentLangEl = $('#currentLang');
 
 function getStoredLang() {
@@ -100,24 +99,25 @@ function getStoredLang() {
 }
 function applyLang(lang) {
   const dict = i18n[lang];
-  $$('[data-i18n]').forEach(el => {
+  if (!dict) return;
+  document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.getAttribute('data-i18n');
     if (dict[key]) el.textContent = dict[key];
   });
-  currentLangEl.textContent = lang.toUpperCase();
-  $$('[role="option"]', langMenu).forEach(li => {
+  currentLangEl && (currentLangEl.textContent = lang.toUpperCase());
+  langMenu && langMenu.querySelectorAll('[role="option"]').forEach(li => {
     const on = li.getAttribute('data-lang') === lang;
     li.setAttribute('aria-selected', on ? 'true' : 'false');
   });
 }
 applyLang(getStoredLang());
 
-langBtn.addEventListener('click', (e) => {
+langBtn?.addEventListener('click', () => {
   const expanded = langBtn.getAttribute('aria-expanded') === 'true';
   langBtn.setAttribute('aria-expanded', String(!expanded));
-  langMenu.style.display = expanded ? 'none' : 'block';
+  if (langMenu) langMenu.style.display = expanded ? 'none' : 'block';
 });
-langMenu.addEventListener('click', (e) => {
+langMenu?.addEventListener('click', (e) => {
   const li = e.target.closest('li[role="option"]');
   if (!li) return;
   const lang = li.getAttribute('data-lang');
@@ -127,6 +127,7 @@ langMenu.addEventListener('click', (e) => {
   langBtn.setAttribute('aria-expanded', 'false');
 });
 document.addEventListener('click', (e) => {
+  if (!langBtn || !langMenu) return;
   if (!langBtn.contains(e.target) && !langMenu.contains(e.target)) {
     langMenu.style.display = 'none';
     langBtn.setAttribute('aria-expanded', 'false');
@@ -134,18 +135,18 @@ document.addEventListener('click', (e) => {
 });
 
 /* ===== Smooth scroll + Scrollspy ===== */
-const navLinks = $$('.nav__link');
+const navLinks = Array.from(document.querySelectorAll('.nav__link'));
 navLinks.forEach(a => {
   a.addEventListener('click', (e) => {
     const id = a.getAttribute('href');
-    if (!id.startsWith('#')) return;
+    if (!id || !id.startsWith('#')) return;
     e.preventDefault();
     const target = document.querySelector(id);
     if (target) window.scrollTo({ top: target.offsetTop - 70, behavior: 'smooth' });
   });
 });
 
-const sections = $$('[data-section]');
+const sections = Array.from(document.querySelectorAll('[data-section]'));
 const spy = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
@@ -162,7 +163,8 @@ const revealer = new IntersectionObserver((entries) => {
     if (entry.isIntersecting) entry.target.classList.add('is-visible');
   });
 }, { threshold: 0.12 });
-$$('.reveal').forEach(el => revealer.observe(el));
+document.querySelectorAll('.reveal').forEach(el => revealer.observe(el));
 
 /* ===== Footer year ===== */
-$('#year').textContent = new Date().getFullYear();
+const yearEl = document.getElementById('year');
+if (yearEl) yearEl.textContent = new Date().getFullYear();
