@@ -4,28 +4,22 @@
 
 /* ---- Design Tokens (LIGHT Default) ---- */
 :root{
-  /* Surfaces */
   --bg:#ffffff; --bg-2:#faf9f7; --bg-3:#f4f1ed;
   --tile:#ffffff; --tile-tinted:#fbfaf8;
 
-  /* Text & Lines */
   --text:#0f172a; --muted:#475569; --line:#e6e1da;
 
-  /* Warm palette */
   --sand:#efe5d6;
   --sage:#a9c3b0;
   --mustard:#d9b26b;
 
-  /* Accents */
   --accent: var(--sage);
   --accent-2: var(--mustard);
 
-  /* Buttons */
   --btn-bg:#ece7df;
   --btn-text:#0f172a;
   --btn-border:#d8d2c9;
 
-  /* UI */
   --shadow:0 10px 30px rgba(2,6,23,.08);
   --radius:20px;
 }
@@ -44,7 +38,7 @@
   --shadow:0 14px 34px rgba(0,0,0,.45);
 }
 
-/* System-Fallback, falls JS aus ist */
+/* System-Fallback */
 @media (prefers-color-scheme:dark){
   :root{
     --bg:#0b0f1a; --bg-2:#0e1422; --bg-3:#101828;
@@ -59,8 +53,6 @@
     --shadow:0 14px 34px rgba(0,0,0,.45);
   }
 }
-
-/* Explizit */
 [data-theme="light"]{ color-scheme:light; }
 [data-theme="dark"]{ color-scheme:dark; }
 
@@ -105,7 +97,7 @@ body{
 .brand__logo{ height:1.2em; width:auto; object-fit:contain; display:block; }
 .brand__name{ font-weight:700; white-space:nowrap; }
 
-/* Nav */
+/* Desktop-Navigation */
 .nav{ grid-column: 1 / -1; }
 .nav ul{ display:flex; gap:24px; list-style:none; margin:0; padding:0; justify-content:center; }
 .nav__link{
@@ -119,7 +111,7 @@ body{
 }
 .nav__link:hover::after, .nav__link.is-active::after{ width:100%; }
 
-/* Header actions (Lang + Theme) */
+/* Header actions */
 .header-actions{ display:flex; align-items:center; gap:8px; justify-self:end; }
 
 /* Buttons */
@@ -148,7 +140,6 @@ body{
   background-position:center;
   border:1px solid var(--line);
 }
-/* Flaggen als SVG-Hintergrund – gleiche Maße (256×256), runder Zuschnitt */
 .lang-toggle[data-lang="de"] .flag{ background-image:url('/assets/img/flag-de.svg'); }
 .lang-toggle[data-lang="en"] .flag{ background-image:url('/assets/img/flag-en.svg'); }
 .lang-toggle .lang-label{ font-weight:600; }
@@ -162,18 +153,38 @@ body{
 [data-theme="light"] .toggle-theme .moon{ opacity:.35; filter:grayscale(1); }
 .toggle-theme:hover .sun, .toggle-theme:hover .moon{ transform:translateY(-1px); }
 
-/* Burger-Button (Checkbox-Hack) */
+/* =========================
+   Burger-Button (mit X-Animation)
+   ========================= */
 .nav-toggle{ display:none; }
 .hamburger{
+  position:relative;
   width:44px; height:44px; border-radius:12px;
   border:1px solid var(--btn-border); background:var(--btn-bg); color:var(--btn-text);
-  align-items:center; justify-content:center; cursor:pointer; display:none; /* Desktop: versteckt */
-  transition:filter .15s ease, transform .15s ease;
+  display:none; /* Desktop: versteckt */
+  cursor:pointer; transition:filter .15s ease, transform .15s ease;
 }
 .hamburger:hover{ filter:brightness(.94); transform:translateY(-1px); }
+
+/* Die drei Balken */
 .hamburger span{
-  display:block; width:22px; height:2px; background:var(--btn-text); margin:4px 0; border-radius:2px;
-  transition:transform .2s ease, opacity .2s ease;
+  position:absolute; left:50%; transform:translateX(-50%);
+  width:24px; height:2px; background:var(--btn-text); border-radius:2px;
+  transition:top .2s ease, transform .2s ease, opacity .2s ease, background-color .2s ease;
+}
+.hamburger span:nth-child(1){ top:13px; }
+.hamburger span:nth-child(2){ top:21px; }
+.hamburger span:nth-child(3){ top:29px; }
+
+/* zu X animieren, wenn Checkbox gecheckt */
+.nav-toggle:checked + .hamburger span:nth-child(1){
+  top:21px; transform:translateX(-50%) rotate(45deg);
+}
+.nav-toggle:checked + .hamburger span:nth-child(2){
+  opacity:0;
+}
+.nav-toggle:checked + .hamburger span:nth-child(3){
+  top:21px; transform:translateX(-50%) rotate(-45deg);
 }
 
 /* =========================
@@ -217,17 +228,10 @@ body{
   padding:clamp(16px,3vw,22px);
   transition:transform .18s ease, filter .18s ease, border-color .18s ease, background-color .18s ease;
 }
-.tile--square{ aspect-ratio:1/1.02; }        /* nahezu quadratisch */
-.tile:hover{
-  filter:brightness(.94);
-  transform:translateY(-3px);
-  border-color:color-mix(in oklab, var(--mustard) 35%, var(--line));
-}
-.tile--accent{
-  background:linear-gradient(135deg, color-mix(in oklab, var(--sage) 12%, var(--tile)) 0%, var(--tile) 70%);
-}
+.tile--square{ aspect-ratio:1/1.02; }
+.tile:hover{ filter:brightness(.94); transform:translateY(-3px); border-color:color-mix(in oklab, var(--mustard) 35%, var(--line)); }
+.tile--accent{ background:linear-gradient(135deg, color-mix(in oklab, var(--sage) 12%, var(--tile)) 0%, var(--tile) 70%); }
 
-/* Bilder in Kacheln responsiv & sauber einpassen */
 .tile__img{
   width:100%; height:clamp(160px,28vh,260px);
   object-fit:contain; object-position:center; display:block;
@@ -237,7 +241,7 @@ body{
 .tile__meta h3{ margin:.2rem 0 .25rem; font:700 clamp(18px,2.6vw,22px)/1.2 Poppins,Inter,sans-serif; }
 .tile__meta p{ margin:0; color:var(--muted); }
 
-/* Intro-Layout: links erste Kachel, rechts Introtext */
+/* Intro-Layout mit erster Kachel */
 .intro-with-first-tile{
   display:grid; grid-template-columns:1fr 1fr;
   gap:clamp(18px,3.5vw,28px);
@@ -281,27 +285,18 @@ body{
 /* =========================
    CV Page Specifics
    ========================= */
-.cv-hero{
-  display:flex; align-items:center; justify-content:space-between; gap:24px; flex-wrap:wrap;
-}
+.cv-hero{ display:flex; align-items:center; justify-content:space-between; gap:24px; flex-wrap:wrap; }
 .call-block{ display:flex; flex-direction:column; align-items:center; justify-content:center; margin: 1.5rem 0; }
 .call-tile{
   display:flex; flex-direction:column; align-items:center; justify-content:center;
-  text-align:center; text-decoration:none;
-  border:1px solid var(--btn-border);
+  text-align:center; text-decoration:none; border:1px solid var(--btn-border);
   background:var(--btn-bg); color:var(--btn-text);
-  border-radius:20px;
-  min-height:240px; min-width:260px;
-  box-shadow:var(--shadow);
-  transition:filter .2s ease, transform .2s ease;
-  padding: 1.5rem;
+  border-radius:20px; min-height:240px; min-width:260px; box-shadow:var(--shadow);
+  transition:filter .2s ease, transform .2s ease; padding: 1.5rem;
 }
 .call-tile:hover{ filter:brightness(.94); transform:translateY(-4px); }
 .tile__icon{ margin-bottom:14px; }
-.tile__label span{
-  font-family:Poppins, Inter, sans-serif;
-  font-weight:600; font-size:1.2rem;
-}
+.tile__label span{ font-family:Poppins, Inter, sans-serif; font-weight:600; font-size:1.2rem; }
 
 .contact-icons{ display:flex; gap:18px; margin-top:16px; }
 .contact-icons .icon-link{ color:var(--btn-text); transition:filter .2s ease; }
@@ -325,8 +320,8 @@ body{
   .nav{ grid-column: 1 / -1; }
 }
 @media (max-width: 980px){
-  .hamburger{ display:flex; }                /* Burger sichtbar */
-  .brand{ justify-self:center; }             /* Brand mittig */
+  .hamburger{ display:block; }              /* Burger sichtbar */
+  .brand{ justify-self:center; }            /* Brand mittig */
   .nav{
     position:absolute; left:0; right:0; top:100%;
     background:var(--tile); border-bottom:1px solid var(--line);
@@ -351,14 +346,12 @@ body{
   .call-tile{ max-width:100%; }
 }
 @media (max-width: 720px){
-  .tile-grid{ grid-template-columns:1fr; }   /* Kacheln einspaltig */
+  .tile-grid{ grid-template-columns:1fr; }
 }
 
-/* =========================
-   Globale Bild-Optimierungen
-   ========================= */
+/* Bilder global */
 img{ max-width:100%; height:auto; display:block; }
 
-/* Hero Portrait Tweaks */
+/* Hero tweaks */
 @media (max-width: 980px){ .photo-frame{ width:min(280px,80%); } }
 @media (max-width: 720px){ .photo-frame{ width:min(220px,75%); } }
