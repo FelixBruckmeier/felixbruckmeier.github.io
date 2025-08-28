@@ -76,17 +76,30 @@ body{
   background:color-mix(in oklab, var(--bg) 88%, transparent);
 }
 .header-inner{
-  position:relative; /* wichtig für das mobile Dropdown-Panel */
-  display:grid; grid-template-columns:auto 1fr auto;
+  position:relative;
+  display:grid;
+  grid-template-columns:auto 1fr auto; /* burger | brand | actions */
   align-items:center; gap:16px; padding:14px 0;
 }
 
-.brand{ display:flex; align-items:center; gap:10px; text-decoration:none; color:var(--text); }
-.brand__logo{ width:28px; height:28px; object-fit:contain; display:block; }
-.brand__name{ font-weight:700; }
+/* Brand center on mobile via justify-self */
+.brand{
+  justify-self:center;
+  display:flex; align-items:center; gap:10px;
+  text-decoration:none; color:var(--text);
+  font-size:1rem; /* Referenz für Logo-Höhe (em) */
+}
+/* Logo: max so hoch wie Name (em-basiert) */
+.brand__logo{
+  height:1.2em; width:auto; object-fit:contain; display:block;
+}
+.brand__name{ font-weight:700; white-space:nowrap; }
 
-/* Nav (Desktop) */
-.nav ul{ display:flex; gap:24px; list-style:none; margin:0; padding:0; }
+/* Desktop Navigation (wird auf mobile ausgeklappt) */
+.nav{
+  grid-column: 1 / -1; /* desktop: eigene Zeile nicht nötig; mobile: Panel; wir überschreiben gleich */
+}
+.nav ul{ display:flex; gap:24px; list-style:none; margin:0; padding:0; justify-content:center; }
 .nav__link{
   position:relative; text-decoration:none; color:var(--text);
   font-weight:600; font-family:Poppins, Inter, sans-serif;
@@ -99,48 +112,46 @@ body{
 .nav__link:hover::after, .nav__link.is-active::after{ width:100%; }
 
 /* Header actions */
-.header-actions{ display:flex; align-items:center; gap:8px; }
+.header-actions{ display:flex; align-items:center; gap:8px; justify-self:end; }
 
-/* Burger Toggle (CSS-only) */
-.nav-toggle{ display:none; } /* Checkbox selbst verstecken */
+/* Buttons (neutral, toggle-like) */
+.btn{
+  border:1px solid var(--btn-border); background:var(--btn-bg); color:var(--btn-text);
+  padding:10px 14px; border-radius:14px; cursor:pointer;
+  font-weight:600; font-family:Poppins, Inter, sans-serif;
+  transition:transform .15s ease, filter .15s ease, background-color .15s ease, color .15s ease, border-color .15s ease;
+  text-decoration:none; display:inline-block; /* wichtig, damit <a> wie Button rendert */
+}
+.btn--ghost{ background:transparent; }
+.btn--neutral{ background:var(--btn-bg); border-color:var(--btn-border); color:var(--btn-text); }
+.btn--xl{ padding:14px 18px; border-radius:16px; font-size:1rem; }
+.btn:hover{ filter:brightness(.94); transform:translateY(-1px); }
 
+/* Dropdown */
+.dropdown{ position:relative; }
+.dropdown__toggle{ display:flex; align-items:center; gap:.5rem; }
+.dropdown__menu{
+  position:absolute; right:0; top:calc(100% + 8px);
+  background:var(--tile); border:1px solid var(--line); border-radius:12px; padding:6px;
+  list-style:none; margin:0; display:none; box-shadow:var(--shadow);
+  min-width:92px;
+}
+.dropdown__menu li{ padding:8px 12px; border-radius:10px; cursor:pointer; }
+.dropdown__menu li:hover{ background:var(--tile-tinted); }
+.dropdown.is-open .dropdown__menu{ display:block; }
+
+/* Burger Toggle (Checkbox-Hack) */
+.nav-toggle{ display:none; } /* Checkbox ausblenden */
 .hamburger{
-  display:none; /* nur mobil sichtbar */
   width:44px; height:44px; border-radius:12px;
   border:1px solid var(--btn-border); background:var(--btn-bg); color:var(--btn-text);
-  align-items:center; justify-content:center; cursor:pointer;
+  align-items:center; justify-content:center; cursor:pointer; display:none; /* Desktop: versteckt */
   transition:filter .15s ease, transform .15s ease;
 }
 .hamburger:hover{ filter:brightness(.94); transform:translateY(-1px); }
 .hamburger span{
   display:block; width:22px; height:2px; background:var(--btn-text); margin:4px 0; border-radius:2px;
   transition:transform .2s ease, opacity .2s ease;
-}
-
-/* Mobile Panel (geschlossen) */
-@media (max-width: 980px){
-  /* Grid neu: Brand | Actions | Burger */
-  .header-inner{ grid-template-columns:auto 1fr auto; }
-  .nav{ 
-    position:absolute; left:0; right:0; top:100%;
-    background:var(--tile); border-bottom:1px solid var(--line);
-    display:none; /* standard: zu */
-    box-shadow:var(--shadow);
-  }
-  .nav ul{
-    flex-direction:column; gap:0;
-  }
-  .nav li{ border-top:1px solid var(--line); }
-  .nav li:first-child{ border-top:0; }
-  .nav__link{ display:block; padding:14px 18px; }
-
-  .hamburger{ display:flex; }     /* sichtbar auf mobil */
-  .nav-toggle:checked ~ .hamburger span:nth-child(1){ transform:translateY(6px) rotate(45deg); }
-  .nav-toggle:checked ~ .hamburger span:nth-child(2){ opacity:0; }
-  .nav-toggle:checked ~ .hamburger span:nth-child(3){ transform:translateY(-6px) rotate(-45deg); }
-
-  /* Panel aufklappen, wenn checkbox gecheckt */
-  .nav-toggle:checked ~ .nav{ display:block; }
 }
 
 /* =========================
@@ -250,39 +261,27 @@ body{
 .cv-hero{
   display:flex; align-items:center; justify-content:space-between; gap:24px; flex-wrap:wrap;
 }
-
-/* Call Tile (bigger CTA ~ half project tile) */
-.call-block{
-  display:flex; flex-direction:column; align-items:center; justify-content:center;
-  margin: 1.5rem 0;
-}
+.call-block{ display:flex; flex-direction:column; align-items:center; justify-content:center; margin: 1.5rem 0; }
 .call-tile{
   display:flex; flex-direction:column; align-items:center; justify-content:center;
   text-align:center; text-decoration:none;
   border:1px solid var(--btn-border);
   background:var(--btn-bg); color:var(--btn-text);
   border-radius:20px;
-  min-height:240px; min-width:260px; /* ~ halbe Projekt-Kachel */
+  min-height:240px; min-width:260px;
   box-shadow:var(--shadow);
   transition:filter .2s ease, transform .2s ease;
   padding: 1.5rem;
 }
 .call-tile:hover{ filter:brightness(.94); transform:translateY(-4px); }
 .tile__icon{ margin-bottom:14px; }
-.tile__label span{
-  font-family:Poppins, Inter, sans-serif;
-  font-weight:600; font-size:1.2rem;
-}
+.tile__label span{ font-family:Poppins, Inter, sans-serif; font-weight:600; font-size:1.2rem; }
 
-/* Contact icons directly under the call tile */
 .contact-icons{ display:flex; gap:18px; margin-top:16px; }
 .contact-icons .icon-link{ color:var(--btn-text); transition:filter .2s ease; }
 .contact-icons .icon-link:hover{ filter:brightness(.85); }
 
-/* Downloads row */
 .downloads{ margin-top:18px; display:flex; gap:12px; flex-wrap:wrap; }
-
-/* CV content blocks */
 .cv-h2{ font-family:Poppins, Inter, sans-serif; font-size:clamp(22px,2.6vw,26px); margin:0 0 10px; }
 .cv-item{ padding:16px 0; border-bottom:1px dashed var(--line); }
 .cv-item header{ font-weight:600; margin-bottom:6px; }
@@ -294,33 +293,50 @@ body{
 .cv-list li{ margin:6px 0; }
 
 /* =========================
-   Responsive
+   Responsive Layout
    ========================= */
-@media (max-width: 980px){
-  .hero__grid{ grid-template-columns:1fr; text-align:center; }
+@media (min-width: 981px){
+  /* Desktop: Nav in Zeile unter Header? Hier inline mittig */
+  .nav{ grid-column: 1 / -1; }
 }
+
+@media (max-width: 980px){
+  .hamburger{ display:flex; }                /* Burger sichtbar */
+  .brand{ justify-self:center; }             /* Brand mittig */
+  .nav{
+    position:absolute; left:0; right:0; top:100%;
+    background:var(--tile); border-bottom:1px solid var(--line);
+    display:none; box-shadow:var(--shadow);
+  }
+  .nav ul{ flex-direction:column; gap:0; }
+  .nav li{ border-top:1px solid var(--line); }
+  .nav li:first-child{ border-top:0; }
+  .nav__link{ display:block; padding:14px 18px; }
+  .nav-toggle:checked ~ .nav{ display:block; }
+
+  /* Actions bei wenig Platz unter die Zeile zentriert */
+  .header-actions{
+    grid-column: 1 / -1;
+    justify-self:center;
+    margin-top:8px;
+  }
+}
+
 @media (max-width: 860px){
-  .intro-with-first-tile{ grid-template-columns:1fr; }  /* Expertise Intro über Kacheln */
+  .intro-with-first-tile{ grid-template-columns:1fr; }
   .cv-columns{ grid-template-columns:1fr; }
   .call-tile{ max-width:100%; }
 }
+
 @media (max-width: 720px){
-  .tile-grid{ grid-template-columns:1fr; }              /* Kacheln einspaltig */
+  .tile-grid{ grid-template-columns:1fr; }
 }
 
 /* =========================
    Responsive Bild-Optimierungen (global)
    ========================= */
-img{
-  max-width:100%;
-  height:auto;
-  display:block;
-}
+img{ max-width:100%; height:auto; display:block; }
 
-/* Hero Portrait Tweaks für schmale Screens */
-@media (max-width: 980px){
-  .photo-frame{ width:min(280px,80%); }
-}
-@media (max-width: 720px){
-  .photo-frame{ width:min(220px,75%); }
-}
+/* Hero Portrait Tweaks */
+@media (max-width: 980px){ .photo-frame{ width:min(280px,80%); } }
+@media (max-width: 720px){ .photo-frame{ width:min(220px,75%); } }
