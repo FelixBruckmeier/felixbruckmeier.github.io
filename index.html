@@ -5,16 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Felix Bruckmeier — UX Research Lead</title>
   <meta name="description" content="UX Research Lead — turning insights into strategies with measurable ROI." />
+
+  <!-- JS-Hinweis für Progressive-Enhancement (Reveal) -->
+  <script>document.documentElement.classList.add('has-js');</script>
+
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/style.css" type="text/css">
-  <script src="assets/js/main.js" defer></script>
+  <link rel="stylesheet" href="/assets/css/style.css" type="text/css">
+  <script src="/assets/js/main.js" defer></script>
 </head>
 <body>
   <!-- Sticky Header -->
   <header class="site-header" id="top">
     <div class="container header-inner">
-      <!-- Burger Toggle (CSS-only) -->
+      <!-- Burger Toggle -->
       <input type="checkbox" id="navToggle" class="nav-toggle" aria-label="Navigation umschalten" />
       <label for="navToggle" class="hamburger" aria-controls="primary-nav" aria-label="Menü öffnen/schließen">
         <span></span><span></span><span></span>
@@ -22,7 +26,7 @@
 
       <!-- Brand (Logo + Name) -->
       <a href="#top" class="brand" aria-label="Home">
-        <img id="brandMark" src="assets/img/logo1.png" alt="" class="brand__logo" />
+        <img id="brandMark" src="/assets/img/logo1.png" alt="" class="brand__logo" />
         <span class="brand__name">Felix Bruckmeier</span>
       </a>
 
@@ -79,7 +83,7 @@
 
       <figure class="hero__photo reveal" aria-label="Portrait von Felix">
         <div class="photo-frame">
-          <img src="assets/img/profilbild1.png" alt="Felix Bruckmeier" class="photo" />
+          <img src="/assets/img/profilbild1.png" alt="Felix Bruckmeier" class="photo" />
         </div>
       </figure>
     </div>
@@ -96,7 +100,7 @@
       <div class="intro-with-first-tile">
         <div class="tile tile--square reveal">
           <div class="tile__meta"><h3>UX Strategy</h3></div>
-          <img src="assets/img/expertise/ux_strategy_expertise.png" alt="Illustration: UX Strategy" class="tile__img">
+          <img src="/assets/img/expertise/ux_strategy_expertise.png" alt="Illustration: UX Strategy" class="tile__img">
           <div class="tile__desc">
             <p>I translate complex user needs and behaviors into actionable product strategies that drive innovation and foster sustainable growth.</p>
           </div>
@@ -112,7 +116,7 @@
       <div class="tile-grid">
         <div class="tile tile--square reveal">
           <div class="tile__meta"><h3>ResearchOps</h3></div>
-          <img src="assets/img/expertise/researchops_expertise.png" alt="Illustration: ResearchOps" class="tile__img">
+          <img src="/assets/img/expertise/researchops_expertise.png" alt="Illustration: ResearchOps" class="tile__img">
           <div class="tile__desc">
             <p>I build and optimize processes, tools, and infrastructure to ensure efficient, high-quality, and scalable research practices.</p>
           </div>
@@ -120,7 +124,7 @@
 
         <div class="tile tile--square reveal">
           <div class="tile__meta"><h3>Impact Measurement</h3></div>
-          <img src="assets/img/expertise/impact_measurement_expertise.png" alt="Illustration: Impact Measurement" class="tile__img">
+          <img src="/assets/img/expertise/impact_measurement_expertise.png" alt="Illustration: Impact Measurement" class="tile__img">
           <div class="tile__desc">
             <p>I consistently demonstrate the measurable ROI of UX Research and effectively communicate compelling insights to key stakeholders.</p>
           </div>
@@ -128,7 +132,7 @@
 
         <div class="tile tile--square reveal">
           <div class="tile__meta"><h3>Team Leadership &amp; Mentoring</h3></div>
-          <img src="assets/img/expertise/team_leadership_expertise.png" alt="Illustration: Team Leadership & Mentoring" class="tile__img">
+          <img src="/assets/img/expertise/team_leadership_expertise.png" alt="Illustration: Team Leadership & Mentoring" class="tile__img">
           <div class="tile__desc">
             <p>I build and lead high-performing UX Research teams, fostering individual talent and cultivating a culture of excellence and collaborative growth.</p>
           </div>
@@ -136,7 +140,7 @@
 
         <div class="tile tile--square reveal">
           <div class="tile__meta"><h3>Strategic UX Research</h3></div>
-          <img src="assets/img/expertise/strategic_ux_research_expertise.png" alt="Illustration: Strategic UX Research" class="tile__img">
+          <img src="/assets/img/expertise/strategic_ux_research_expertise.png" alt="Illustration: Strategic UX Research" class="tile__img">
           <div class="tile__desc">
             <p>I develop and execute comprehensive research strategies that directly align with and achieve core business objectives.</p>
           </div>
@@ -155,7 +159,7 @@
       <div class="tile-grid">
         <a class="tile tile--square tile--accent reveal" href="projects/car-insurance.html" aria-describedby="car-desc">
           <div class="tile__meta"><h3>Car Insurance Onboarding</h3></div>
-          <img src="assets/img/projects/new_sales_software_project.png" alt="Illustration: Car Insurance Onboarding" class="tile__img">
+          <img src="/assets/img/projects/new_sales_software_project.png" alt="Illustration: Car Insurance Onboarding" class="tile__img">
           <div class="tile__desc">
             <p id="car-desc">Reimagined an outdated sales software used by ADAC using Design Thinking — improving efficiency and experience for agents and customers.</p>
           </div>
@@ -163,7 +167,7 @@
 
         <a class="tile tile--square reveal" href="projects/pricing-component.html" aria-describedby="pricing-desc">
           <div class="tile__meta"><h3>Pricing Component Usability</h3></div>
-          <img src="assets/img/projects/pricing_component_project.png" alt="Illustration: Pricing Component Usability" class="tile__img">
+          <img src="/assets/img/projects/pricing_component_project.png" alt="Illustration: Pricing Component Usability" class="tile__img">
           <div class="tile__desc">
             <p id="pricing-desc">Kano-driven UX strategy to align pricing features with customer needs and SAFe priorities; clearer decisions and higher usability.</p>
           </div>
@@ -171,7 +175,7 @@
 
         <a class="tile tile--square reveal" href="projects/winning-strategy.html" aria-describedby="winning-desc">
           <div class="tile__meta"><h3>Winning UX Strategy</h3></div>
-          <img src="assets/img/projects/ux_strategy_project.png" alt="Illustration: Winning UX Strategy" class="tile__img">
+          <img src="/assets/img/projects/ux_strategy_project.png" alt="Illustration: Winning UX Strategy" class="tile__img">
           <div class="tile__desc">
             <p id="winning-desc">Designed a scalable, user-centric UX strategy; prioritized value, improved efficiency, and aligned design with business objectives.</p>
           </div>
@@ -179,7 +183,7 @@
 
         <a class="tile tile--square reveal" href="projects/ux-method-cards.html" aria-describedby="cards-desc">
           <div class="tile__meta"><h3>UX Method Cards</h3></div>
-          <img src="assets/img/projects/ux_method_cards_project.png" alt="Illustration: UX Method Cards" class="tile__img">
+          <img src="/assets/img/projects/ux_method_cards_project.png" alt="Illustration: UX Method Cards" class="tile__img">
           <div class="tile__desc">
             <p id="cards-desc">A method card deck making research accessible to cross-functional teams — mapped to Design Thinking, digital & printed.</p>
           </div>
