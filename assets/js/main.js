@@ -1,4 +1,4 @@
-/* ===== Utilities ===== */
+/* ===== Helpers ===== */
 const $ = (sel, ctx = document) => ctx.querySelector(sel);
 const $$ = (sel, ctx = document) => Array.from(ctx.querySelectorAll(sel));
 
@@ -9,32 +9,28 @@ document.addEventListener('DOMContentLoaded', () => {
   if (yearEl) yearEl.textContent = y;
 });
 
-/* ===== Theme Toggle (Light/Dark) =====
-   WICHTIG: CSS hat jetzt Variablen unter [data-theme="dark"] — damit wirkt der Toggle.
-*/
+/* ===== Theme Toggle (Light/Dark) ===== */
 (function themeInit(){
-  const root = document.documentElement; // <html>
-  const btn = $('#themeToggle');
+  const root = document.documentElement;
+  const btn  = $('#themeToggle');
 
   function applyTheme(mode){
     if (mode === 'light' || mode === 'dark') {
       root.setAttribute('data-theme', mode);
       localStorage.setItem('theme', mode);
-      if (btn) btn.setAttribute('aria-pressed', mode === 'dark' ? 'true' : 'false');
+      btn?.setAttribute('aria-pressed', mode === 'dark' ? 'true' : 'false');
     } else {
-      // 'auto' -> Systempräferenz
       const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
       root.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
       localStorage.setItem('theme', 'auto');
-      if (btn) btn.setAttribute('aria-pressed', prefersDark ? 'true' : 'false');
+      btn?.setAttribute('aria-pressed', prefersDark ? 'true' : 'false');
     }
   }
 
-  // Initial aus Storage oder 'auto'
   const saved = localStorage.getItem('theme') || 'auto';
   applyTheme(saved);
 
-  // Live-Update, falls System-Theme wechselt und wir im 'auto' Modus sind
+  // Systemwechsel live spiegeln, wenn 'auto'
   if (window.matchMedia) {
     const mq = window.matchMedia('(prefers-color-scheme: dark)');
     mq.addEventListener?.('change', () => {
@@ -42,17 +38,17 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  if (btn) {
-    btn.addEventListener('click', () => {
-      const current = root.getAttribute('data-theme');
-      // Wenn wir im 'auto'-State wären, hat root bereits 'dark' oder 'light' stehen.
-      const next = current === 'dark' ? 'light' : 'dark';
-      applyTheme(next);
-    });
-  }
+  btn?.addEventListener('click', () => {
+    const current = root.getAttribute('data-theme'); // 'light' oder 'dark'
+    const next = current === 'dark' ? 'light' : 'dark';
+    applyTheme(next);
+  });
 })();
 
-/* ===== Language Toggle (DE/EN) – Single Button ===== */
+/* ===== Language Toggle (DE/EN) =====
+   Ein Button, zeigt aktive Flagge + Label (DE/EN).
+   Wechselt alle Elemente mit data-i18n.
+*/
 (function i18nInit(){
   const dict = {
     de: {
@@ -62,13 +58,55 @@ document.addEventListener('DOMContentLoaded', () => {
       "nav.craft":"Craft",
       "nav.contact":"Kontakt",
       "nav.top":"Nach oben",
+
+      "hero.name":"Felix Bruckmeier",
       "hero.role":"UX Research Lead",
-      "hero.tagline":"turning insights into strategies with measurable ROI",
+      "hero.tagline":"Insights in Strategien mit messbarem ROI übersetzen",
+
       "cta.viewProjects":"Projekte ansehen",
       "cta.viewExpertise":"Expertise ansehen",
-      "ui.toggleTheme":"Theme umschalten",
+
       "expertise.title":"Expertise",
-      "projects.title":"Projekte"
+      "expertise.intro":"Ich denke vorausschauend und schaffe heute die Basis für die Herausforderungen von morgen.",
+
+      "expertise.ux_strategy.title":"UX Strategy",
+      "expertise.ux_strategy.desc":"Ich übersetze komplexe Nutzerbedürfnisse in umsetzbare Produktstrategien, die Innovation und nachhaltiges Wachstum treiben.",
+
+      "expertise.researchops.title":"ResearchOps",
+      "expertise.researchops.desc":"Effiziente, qualitativ hochwertige und skalierbare Research-Praxis durch Prozesse, Tools und Infrastruktur.",
+
+      "expertise.impact.title":"Impact Measurement",
+      "expertise.impact.desc":"Messbarer ROI von UX Research; klare, überzeugende Insight-Kommunikation an Stakeholder.",
+
+      "expertise.team.title":"Team Leadership & Mentoring",
+      "expertise.team.desc":"Leistungsstarke Teams aufbauen und entwickeln; Talentförderung und Kultur der Exzellenz.",
+
+      "expertise.strategic.title":"Strategic UX Research",
+      "expertise.strategic.desc":"End-to-end Research-Strategien, die direkt auf Geschäftsziele einzahlen.",
+
+      "projects.title":"Projekte",
+      "projects.car.title":"Car Insurance Onboarding",
+      "projects.car.desc":"Vertriebssoftware des ADAC mit Design Thinking neu gedacht — effizientere Prozesse und bessere Experience für Agent:innen und Kund:innen.",
+      "projects.pricing.title":"Pricing Component Usability",
+      "projects.pricing.desc":"Kano-getriebene UX-Strategie, die Pricing-Features an Kundenbedürfnissen und SAFe-Prioritäten ausrichtet.",
+      "projects.winning.title":"Winning UX Strategy",
+      "projects.winning.desc":"Skalierbare, nutzerzentrierte UX-Strategie; Wert priorisiert, Effizienz gesteigert, Ausrichtung verbessert.",
+      "projects.cards.title":"UX Method Cards",
+      "projects.cards.desc":"Methoden-Kartenset für cross-funktionale Teams — entlang Design Thinking, digital & gedruckt.",
+
+      "cv.title":"CV",
+      "cv.present":"Heute",
+      "cv.atoss.role":"UXR Lead",
+      "cv.zooplus.role":"UXR Lead",
+      "cv.swisslife.role":"Senior UXR",
+      "cv.kxl.role":"UXR",
+      "cv.empiriecom.role":"UXR",
+      "cv.detail":"Detail-CV",
+
+      "contact.title":"Kontakt",
+      "contact.bookcall":"Call buchen",
+
+      "ui.toggleTheme":"Theme umschalten"
     },
     en: {
       "nav.expertise":"Expertise",
@@ -77,13 +115,55 @@ document.addEventListener('DOMContentLoaded', () => {
       "nav.craft":"Craft",
       "nav.contact":"Contact",
       "nav.top":"Back to top",
+
+      "hero.name":"Felix Bruckmeier",
       "hero.role":"UX Research Lead",
-      "hero.tagline":"turning insights into strategies with measurable ROI",
+      "hero.tagline":"Turning insights into strategies with measurable ROI",
+
       "cta.viewProjects":"View projects",
       "cta.viewExpertise":"View expertise",
-      "ui.toggleTheme":"Toggle theme",
+
       "expertise.title":"Expertise",
-      "projects.title":"Projects"
+      "expertise.intro":"I lead with a forward-looking mindset, laying the groundwork for tomorrow’s challenges.",
+
+      "expertise.ux_strategy.title":"UX Strategy",
+      "expertise.ux_strategy.desc":"I translate complex user needs into actionable product strategies that drive innovation and sustainable growth.",
+
+      "expertise.researchops.title":"ResearchOps",
+      "expertise.researchops.desc":"Efficient, high-quality and scalable research via processes, tooling and infrastructure.",
+
+      "expertise.impact.title":"Impact Measurement",
+      "expertise.impact.desc":"Demonstrable ROI of UX Research; clear, compelling insight communication to stakeholders.",
+
+      "expertise.team.title":"Team Leadership & Mentoring",
+      "expertise.team.desc":"Build and grow high-performing teams; talent development and a culture of excellence.",
+
+      "expertise.strategic.title":"Strategic UX Research",
+      "expertise.strategic.desc":"End-to-end research strategies aligned to core business objectives.",
+
+      "projects.title":"Projects",
+      "projects.car.title":"Car Insurance Onboarding",
+      "projects.car.desc":"Reimagined an outdated ADAC sales software using Design Thinking — improved efficiency and experience for agents and customers.",
+      "projects.pricing.title":"Pricing Component Usability",
+      "projects.pricing.desc":"Kano-driven UX strategy aligning pricing features with customer needs and SAFe priorities.",
+      "projects.winning.title":"Winning UX Strategy",
+      "projects.winning.desc":"A scalable, user-centric UX strategy; prioritized value, improved efficiency, stronger alignment.",
+      "projects.cards.title":"UX Method Cards",
+      "projects.cards.desc":"A method card deck for cross-functional teams — mapped to Design Thinking, digital & printed.",
+
+      "cv.title":"CV",
+      "cv.present":"Present",
+      "cv.atoss.role":"UXR Lead",
+      "cv.zooplus.role":"UXR Lead",
+      "cv.swisslife.role":"Senior UXR",
+      "cv.kxl.role":"UXR",
+      "cv.empiriecom.role":"UXR",
+      "cv.detail":"Detailed CV",
+
+      "contact.title":"Contact",
+      "contact.bookcall":"Book a call",
+
+      "ui.toggleTheme":"Toggle theme"
     }
   };
 
@@ -101,7 +181,6 @@ document.addEventListener('DOMContentLoaded', () => {
       if (label) label.textContent = lang.toUpperCase();
     }
     localStorage.setItem('lang', lang);
-    // html lang-Attribut setzen (hilft Screenreadern & SEO)
     document.documentElement.setAttribute('lang', lang);
   }
 
@@ -112,12 +191,10 @@ document.addEventListener('DOMContentLoaded', () => {
     : ((navigator.language || 'de').slice(0,2).toLowerCase() === 'en' ? 'en' : 'de');
   setLang(initial);
 
-  if (btn) {
-    btn.addEventListener('click', () => {
-      const next = (btn.dataset.lang === 'de') ? 'en' : 'de';
-      setLang(next);
-    });
-  }
+  btn?.addEventListener('click', () => {
+    const next = (btn.dataset.lang === 'de') ? 'en' : 'de';
+    setLang(next);
+  });
 })();
 
 /* ===== Mobile Nav: nach Klick schließen ===== */
@@ -130,7 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 })();
 
-/* ===== Reveal on scroll (Progressive Enhancement) ===== */
+/* ===== Reveal on scroll ===== */
 (() => {
   const els = document.querySelectorAll('.reveal');
   if (!('IntersectionObserver' in window) || !els.length) return;
