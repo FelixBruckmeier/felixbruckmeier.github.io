@@ -9,7 +9,9 @@ document.addEventListener('DOMContentLoaded', () => {
   if (yearEl) yearEl.textContent = y;
 });
 
-/* ===== Theme Toggle (light/dark) ===== */
+/* ===== Theme Toggle (Light/Dark) =====
+   WICHTIG: CSS hat jetzt Variablen unter [data-theme="dark"] — damit wirkt der Toggle.
+*/
 (function themeInit(){
   const root = document.documentElement; // <html>
   const btn = $('#themeToggle');
@@ -20,26 +22,37 @@ document.addEventListener('DOMContentLoaded', () => {
       localStorage.setItem('theme', mode);
       if (btn) btn.setAttribute('aria-pressed', mode === 'dark' ? 'true' : 'false');
     } else {
-      // system preference
+      // 'auto' -> Systempräferenz
       const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
       root.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+      localStorage.setItem('theme', 'auto');
       if (btn) btn.setAttribute('aria-pressed', prefersDark ? 'true' : 'false');
     }
   }
 
+  // Initial aus Storage oder 'auto'
   const saved = localStorage.getItem('theme') || 'auto';
   applyTheme(saved);
+
+  // Live-Update, falls System-Theme wechselt und wir im 'auto' Modus sind
+  if (window.matchMedia) {
+    const mq = window.matchMedia('(prefers-color-scheme: dark)');
+    mq.addEventListener?.('change', () => {
+      if ((localStorage.getItem('theme') || 'auto') === 'auto') applyTheme('auto');
+    });
+  }
 
   if (btn) {
     btn.addEventListener('click', () => {
       const current = root.getAttribute('data-theme');
+      // Wenn wir im 'auto'-State wären, hat root bereits 'dark' oder 'light' stehen.
       const next = current === 'dark' ? 'light' : 'dark';
       applyTheme(next);
     });
   }
 })();
 
-/* ===== Language Toggle (DE/EN) ===== */
+/* ===== Language Toggle (DE/EN) – Single Button ===== */
 (function i18nInit(){
   const dict = {
     de: {
@@ -74,10 +87,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  const dropdown = $('#langDropdown');
-  const toggle = $('#langToggle');
-  const menu = dropdown ? $('.dropdown__menu', dropdown) : null;
-  const current = $('#currentLang');
+  const btn = $('#langToggleBtn');
+  const label = btn ? $('.lang-label', btn) : null;
 
   function setLang(lang){
     const map = dict[lang] || dict.de;
@@ -85,45 +96,26 @@ document.addEventListener('DOMContentLoaded', () => {
       const key = el.getAttribute('data-i18n');
       if (map[key]) el.textContent = map[key];
     });
-    if (current) current.textContent = lang.toUpperCase();
-    // update aria-selected
-    $$('.dropdown__menu [role="option"]').forEach(opt => {
-      opt.setAttribute('aria-selected', opt.dataset.lang === lang ? 'true' : 'false');
-    });
+    if (btn) {
+      btn.dataset.lang = lang;
+      if (label) label.textContent = lang.toUpperCase();
+    }
     localStorage.setItem('lang', lang);
+    // html lang-Attribut setzen (hilft Screenreadern & SEO)
+    document.documentElement.setAttribute('lang', lang);
   }
 
-  // init from storage or default
-  const savedLang = localStorage.getItem('lang') || (navigator.language || 'de').slice(0,2).toLowerCase();
-  setLang(savedLang === 'en' ? 'en' : 'de');
+  // Initialsprache
+  const saved = localStorage.getItem('lang');
+  const initial = (saved === 'en' || saved === 'de')
+    ? saved
+    : ((navigator.language || 'de').slice(0,2).toLowerCase() === 'en' ? 'en' : 'de');
+  setLang(initial);
 
-  if (toggle && dropdown && menu) {
-    toggle.addEventListener('click', (e) => {
-      e.stopPropagation();
-      dropdown.classList.toggle('is-open');
-      toggle.setAttribute('aria-expanded', dropdown.classList.contains('is-open') ? 'true' : 'false');
-    });
-
-    menu.addEventListener('click', (e) => {
-      const li = e.target.closest('[role="option"]');
-      if (!li) return;
-      setLang(li.dataset.lang);
-      dropdown.classList.remove('is-open');
-      toggle.setAttribute('aria-expanded', 'false');
-    });
-
-    // close on outside click / esc
-    document.addEventListener('click', (e) => {
-      if (!dropdown.contains(e.target)) {
-        dropdown.classList.remove('is-open');
-        toggle.setAttribute('aria-expanded', 'false');
-      }
-    });
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
-        dropdown.classList.remove('is-open');
-        toggle.setAttribute('aria-expanded', 'false');
-      }
+  if (btn) {
+    btn.addEventListener('click', () => {
+      const next = (btn.dataset.lang === 'de') ? 'en' : 'de';
+      setLang(next);
     });
   }
 })();
