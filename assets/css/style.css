@@ -4,65 +4,51 @@
 
 /* ---- Design Tokens (LIGHT Default) ---- */
 :root{
-  /* Surfaces */
   --bg:#ffffff; --bg-2:#faf9f7; --bg-3:#f4f1ed;
   --tile:#ffffff; --tile-tinted:#fbfaf8;
 
-  /* Text & Lines */
   --text:#0f172a; --muted:#475569; --line:#e6e1da;
 
-  /* Warm palette */
-  --sand:#efe5d6;      /* helles Braun (Hero/Expertise) */
-  --sage:#a9c3b0;      /* Grün / Sage (Projects) */
-  --mustard:#d9b26b;   /* Gelb-Braun (CV) */
+  --sand:#efe5d6;
+  --sage:#a9c3b0;
+  --mustard:#d9b26b;
 
-  /* Accents (warm/neutral) */
   --accent: var(--sage);
   --accent-2: var(--mustard);
 
-  /* Buttons */
   --btn-bg:#ece7df;
   --btn-text:#0f172a;
   --btn-border:#d8d2c9;
 
-  /* UI */
   --shadow:0 10px 30px rgba(2,6,23,.08);
   --radius:20px;
 }
 
-/* ---- DARK via data-theme (Fix für Toggle) ---- */
+/* ---- DARK via data-theme ---- */
 [data-theme="dark"]{
   --bg:#0b0f1a; --bg-2:#0e1422; --bg-3:#101828;
   --tile:#0f172a; --tile-tinted:#0b1220;
 
   --text:#e5e7eb; --muted:#cbd5e1; --line:#1f2937;
 
-  --sand:#2b2432;
-  --sage:#3b5f4b;
-  --mustard:#6f582e;
+  --sand:#2b2432; --sage:#3b5f4b; --mustard:#6f582e;
 
   --btn-bg:#1a1f2a; --btn-text:#e5e7eb; --btn-border:#293143;
 
   --shadow:0 14px 34px rgba(0,0,0,.45);
 }
 
-/* Optional: System-Theme als Fallback, falls JS nicht lädt */
+/* System fallback if JS off */
 @media (prefers-color-scheme:dark){
   :root{
     --bg:#0b0f1a; --bg-2:#0e1422; --bg-3:#101828;
     --tile:#0f172a; --tile-tinted:#0b1220;
-
     --text:#e5e7eb; --muted:#cbd5e1; --line:#1f2937;
-
     --sand:#2b2432; --sage:#3b5f4b; --mustard:#6f582e;
-
     --btn-bg:#1a1f2a; --btn-text:#e5e7eb; --btn-border:#293143;
-
     --shadow:0 14px 34px rgba(0,0,0,.45);
   }
 }
-
-/* Explizite System-Scrollbar-Hinweise (ok, aber nicht ausschlaggebend fürs Theme) */
 [data-theme="light"]{ color-scheme:light; }
 [data-theme="dark"]{ color-scheme:dark; }
 
@@ -137,7 +123,7 @@ body{
 .btn--xl{ padding:14px 18px; border-radius:16px; font-size:1rem; }
 .btn:hover{ filter:brightness(.94); transform:translateY(-1px); }
 
-/* Sprach-Toggle (runde Flagge + Label) */
+/* Sprach-Toggle (aktive Flagge + Label) */
 .lang-toggle{
   display:inline-flex; align-items:center; gap:.5rem;
 }
@@ -145,15 +131,20 @@ body{
   width:22px; height:22px; border-radius:50%;
   display:inline-grid; place-items:center;
   background:var(--tile); border:1px solid var(--line);
-  font-size:14px; line-height:1; /* für Emoji */
+  font-size:14px; line-height:1;
 }
 .lang-toggle[data-lang="de"] .flag::before{ content:"🇩🇪"; }
 .lang-toggle[data-lang="en"] .flag::before{ content:"🇬🇧"; }
 .lang-toggle .lang-label{ font-weight:600; }
 
-/* Dropdown (alt) – nicht mehr benutzt, bleibt neutral */
-.dropdown{ position:relative; }
-.dropdown__menu{ display:none; }
+/* Theme toggle: Sonne/Mond, inaktives Icon grau */
+.toggle-theme{ display:inline-flex; align-items:center; gap:.5rem; }
+.toggle-theme .sun, .toggle-theme .moon{
+  font-size:16px; display:inline-block; transition:opacity .2s ease, filter .2s ease, transform .2s ease;
+}
+[data-theme="dark"] .toggle-theme .sun{ opacity:.35; filter:grayscale(1); }
+[data-theme="light"] .toggle-theme .moon{ opacity:.35; filter:grayscale(1); }
+.toggle-theme:hover .sun, .toggle-theme:hover .moon{ transform:translateY(-1px); }
 
 /* Burger (Checkbox-Hack) */
 .nav-toggle{ display:none; }
@@ -260,7 +251,7 @@ body{
 /* =========================
    Reveal (Progressive Enhancement)
    ========================= */
-.reveal{ opacity:1; transform:none; transition:all .5s ease; }             /* sichtbar by default */
+.reveal{ opacity:1; transform:none; transition:all .5s ease; }
 .has-js .reveal{ opacity:0; transform:translateY(16px); }
 .has-js .reveal.is-visible{ opacity:1; transform:translateY(0); }
 
@@ -333,6 +324,6 @@ body{
 /* Bilder global */
 img{ max-width:100%; height:auto; display:block; }
 
-/* Hero tweaks auf kleineren Viewports */
+/* Hero tweaks */
 @media (max-width: 980px){ .photo-frame{ width:min(280px,80%); } }
 @media (max-width: 720px){ .photo-frame{ width:min(220px,75%); } }
