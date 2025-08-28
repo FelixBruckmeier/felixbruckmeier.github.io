@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Felix Bruckmeier — UX Research Lead</title>
   <meta name="description" content="UX Research Lead — turning insights into strategies with measurable ROI." />
-  <!-- Progressive Enhancement für Reveal -->
   <script>document.documentElement.classList.add('has-js');</script>
 
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -29,7 +28,7 @@
         <span class="brand__name">Felix Bruckmeier</span>
       </a>
 
-      <!-- Actions: Sprache (Button) + Theme -->
+      <!-- Actions -->
       <div class="header-actions">
         <!-- Sprach-Toggle: klick = DE/EN wechseln -->
         <button class="btn btn--ghost lang-toggle" id="langToggleBtn" type="button" aria-label="Sprache umschalten" data-lang="de">
@@ -37,9 +36,10 @@
           <span class="lang-label">DE</span>
         </button>
 
-        <!-- Theme toggle -->
+        <!-- Theme toggle: Sonne/Mond, inaktives Icon grau -->
         <button class="btn btn--ghost toggle-theme" id="themeToggle" aria-pressed="false" title="Dark/Light umschalten" type="button">
-          <span class="theme-icon" aria-hidden="true">☀️/🌙</span>
+          <span class="sun" aria-hidden="true">☀️</span>
+          <span class="moon" aria-hidden="true">🌙</span>
           <span class="sr-only" data-i18n="ui.toggleTheme">Theme umschalten</span>
         </button>
       </div>
@@ -62,7 +62,7 @@
     <div class="container hero__grid">
       <div class="hero__copy reveal">
         <h1 class="hero__title">
-          <span class="h-display">Felix Bruckmeier</span>
+          <span class="h-display" data-i18n="hero.name">Felix Bruckmeier</span>
           <span class="subtitle" data-i18n="hero.role">UX Research Lead</span>
         </h1>
         <p class="tagline" data-i18n="hero.tagline">
@@ -91,16 +91,19 @@
       </header>
 
       <div class="intro-with-first-tile">
+        <!-- UX Strategy -->
         <a class="tile tile--square reveal" href="/expertise/ux-strategy.html" aria-describedby="uxs-desc">
-          <div class="tile__meta"><h3>UX Strategy</h3></div>
-          <img src="/assets/img/expertise/ux_strategy_expertise.png" alt="Illustration: UX Strategy" class="tile__img">
+          <div class="tile__meta"><h3 data-i18n="expertise.ux_strategy.title">UX Strategy</h3></div>
+          <img src="/assets/img/expertise/ux_strategy_expertise.png" alt="UX Strategy" class="tile__img">
           <div class="tile__desc">
-            <p id="uxs-desc">I translate complex user needs and behaviors into actionable product strategies that drive innovation and foster sustainable growth.</p>
+            <p id="uxs-desc" data-i18n="expertise.ux_strategy.desc">
+              I translate complex user needs and behaviors into actionable product strategies that drive innovation and foster sustainable growth.
+            </p>
           </div>
         </a>
 
         <aside class="expertise-intro reveal">
-          <p>
+          <p data-i18n="expertise.intro">
             I lead with a forward-looking mindset, building a robust foundation for not just today's needs but for tomorrow's challenges.
           </p>
         </aside>
@@ -108,34 +111,42 @@
 
       <div class="tile-grid">
         <a class="tile tile--square reveal" href="/expertise/researchops.html" aria-describedby="ro-desc">
-          <div class="tile__meta"><h3>ResearchOps</h3></div>
-          <img src="/assets/img/expertise/researchops_expertise.png" alt="Illustration: ResearchOps" class="tile__img">
+          <div class="tile__meta"><h3 data-i18n="expertise.researchops.title">ResearchOps</h3></div>
+          <img src="/assets/img/expertise/researchops_expertise.png" alt="ResearchOps" class="tile__img">
           <div class="tile__desc">
-            <p id="ro-desc">Efficient, high-quality, scalable research through processes, tools and infrastructure.</p>
+            <p id="ro-desc" data-i18n="expertise.researchops.desc">
+              Efficient, high-quality, scalable research through processes, tools and infrastructure.
+            </p>
           </div>
         </a>
 
         <a class="tile tile--square reveal" href="/expertise/impact-measurement.html" aria-describedby="im-desc">
-          <div class="tile__meta"><h3>Impact Measurement</h3></div>
-          <img src="/assets/img/expertise/impact_measurement_expertise.png" alt="Illustration: Impact Measurement" class="tile__img">
+          <div class="tile__meta"><h3 data-i18n="expertise.impact.title">Impact Measurement</h3></div>
+          <img src="/assets/img/expertise/impact_measurement_expertise.png" alt="Impact Measurement" class="tile__img">
           <div class="tile__desc">
-            <p id="im-desc">Measurable ROI of UX Research; compelling insight communication to stakeholders.</p>
+            <p id="im-desc" data-i18n="expertise.impact.desc">
+              Measurable ROI of UX Research; compelling insight communication to stakeholders.
+            </p>
           </div>
         </a>
 
         <a class="tile tile--square reveal" href="/expertise/team-leadership.html" aria-describedby="tl-desc">
-          <div class="tile__meta"><h3>Team Leadership &amp; Mentoring</h3></div>
-          <img src="/assets/img/expertise/team_leadership_expertise.png" alt="Illustration: Team Leadership & Mentoring" class="tile__img">
+          <div class="tile__meta"><h3 data-i18n="expertise.team.title">Team Leadership &amp; Mentoring</h3></div>
+          <img src="/assets/img/expertise/team_leadership_expertise.png" alt="Team Leadership & Mentoring" class="tile__img">
           <div class="tile__desc">
-            <p id="tl-desc">Build and lead high-performing teams; talent growth and culture of excellence.</p>
+            <p id="tl-desc" data-i18n="expertise.team.desc">
+              Build and lead high-performing teams; talent growth and culture of excellence.
+            </p>
           </div>
         </a>
 
         <a class="tile tile--square reveal" href="/expertise/strategic-ux-research.html" aria-describedby="sur-desc">
-          <div class="tile__meta"><h3>Strategic UX Research</h3></div>
-          <img src="/assets/img/expertise/strategic_ux_research_expertise.png" alt="Illustration: Strategic UX Research" class="tile__img">
+          <div class="tile__meta"><h3 data-i18n="expertise.strategic.title">Strategic UX Research</h3></div>
+          <img src="/assets/img/expertise/strategic_ux_research_expertise.png" alt="Strategic UX Research" class="tile__img">
           <div class="tile__desc">
-            <p id="sur-desc">End-to-end research strategies aligned with business objectives.</p>
+            <p id="sur-desc" data-i18n="expertise.strategic.desc">
+              End-to-end research strategies aligned with business objectives.
+            </p>
           </div>
         </a>
       </div>
@@ -151,34 +162,42 @@
 
       <div class="tile-grid">
         <a class="tile tile--square tile--accent reveal" href="/projects/car-insurance.html" aria-describedby="car-desc">
-          <div class="tile__meta"><h3>Car Insurance Onboarding</h3></div>
-          <img src="/assets/img/projects/new_sales_software_project.png" alt="Illustration: Car Insurance Onboarding" class="tile__img">
+          <div class="tile__meta"><h3 data-i18n="projects.car.title">Car Insurance Onboarding</h3></div>
+          <img src="/assets/img/projects/new_sales_software_project.png" alt="Car Insurance Onboarding" class="tile__img">
           <div class="tile__desc">
-            <p id="car-desc">Reimagined an outdated sales software used by ADAC using Design Thinking — improving efficiency and experience for agents and customers.</p>
+            <p id="car-desc" data-i18n="projects.car.desc">
+              Reimagined an outdated sales software used by ADAC using Design Thinking — improving efficiency and experience for agents and customers.
+            </p>
           </div>
         </a>
 
         <a class="tile tile--square reveal" href="/projects/pricing-component.html" aria-describedby="pricing-desc">
-          <div class="tile__meta"><h3>Pricing Component Usability</h3></div>
-          <img src="/assets/img/projects/pricing_component_project.png" alt="Illustration: Pricing Component Usability" class="tile__img">
+          <div class="tile__meta"><h3 data-i18n="projects.pricing.title">Pricing Component Usability</h3></div>
+          <img src="/assets/img/projects/pricing_component_project.png" alt="Pricing Component Usability" class="tile__img">
           <div class="tile__desc">
-            <p id="pricing-desc">Kano-driven UX strategy to align pricing features with customer needs and SAFe priorities; clearer Entscheidungen und höhere Usability.</p>
+            <p id="pricing-desc" data-i18n="projects.pricing.desc">
+              Kano-driven UX strategy to align pricing features with customer needs and SAFe priorities; clearer decisions and higher usability.
+            </p>
           </div>
         </a>
 
         <a class="tile tile--square reveal" href="/projects/winning-strategy.html" aria-describedby="winning-desc">
-          <div class="tile__meta"><h3>Winning UX Strategy</h3></div>
-          <img src="/assets/img/projects/ux_strategy_project.png" alt="Illustration: Winning UX Strategy" class="tile__img">
+          <div class="tile__meta"><h3 data-i18n="projects.winning.title">Winning UX Strategy</h3></div>
+          <img src="/assets/img/projects/ux_strategy_project.png" alt="Winning UX Strategy" class="tile__img">
           <div class="tile__desc">
-            <p id="winning-desc">Designed a scalable, user-centric UX strategy; prioritized value, improved efficiency, and aligned design with business objectives.</p>
+            <p id="winning-desc" data-i18n="projects.winning.desc">
+              Designed a scalable, user-centric UX strategy; prioritized value, improved efficiency, and aligned design with business objectives.
+            </p>
           </div>
         </a>
 
         <a class="tile tile--square reveal" href="/projects/ux-method-cards.html" aria-describedby="cards-desc">
-          <div class="tile__meta"><h3>UX Method Cards</h3></div>
-          <img src="/assets/img/projects/ux_method_cards_project.png" alt="Illustration: UX Method Cards" class="tile__img">
+          <div class="tile__meta"><h3 data-i18n="projects.cards.title">UX Method Cards</h3></div>
+          <img src="/assets/img/projects/ux_method_cards_project.png" alt="UX Method Cards" class="tile__img">
           <div class="tile__desc">
-            <p id="cards-desc">A method card deck making research accessible to cross-functional teams — mapped to Design Thinking, digital & printed.</p>
+            <p id="cards-desc" data-i18n="projects.cards.desc">
+              A method card deck making research accessible to cross-functional teams — mapped to Design Thinking, digital & printed.
+            </p>
           </div>
         </a>
       </div>
@@ -189,17 +208,17 @@
   <section class="section section--mustard" id="cv" data-section>
     <div class="container">
       <header class="section__header">
-        <h2>CV</h2>
+        <h2 data-i18n="cv.title">CV</h2>
       </header>
       <ul class="timeline reveal">
-        <li><strong>ATOSS</strong> — UXR Lead (2025–Present)</li>
-        <li><strong>zooplus</strong> — UXR Lead (2022–2024)</li>
-        <li><strong>Swiss Life</strong> — Senior UXR (2020–2022)</li>
-        <li><strong>Kaiser X Labs</strong> — UXR (2018–2020)</li>
-        <li><strong>empiriecom</strong> — UXR (2016–2018)</li>
+        <li><strong>ATOSS</strong> — <span data-i18n="cv.atoss.role">UXR Lead</span> (2025–<span data-i18n="cv.present">Present</span>)</li>
+        <li><strong>zooplus</strong> — <span data-i18n="cv.zooplus.role">UXR Lead</span> (2022–2024)</li>
+        <li><strong>Swiss Life</strong> — <span data-i18n="cv.swisslife.role">Senior UXR</span> (2020–2022)</li>
+        <li><strong>Kaiser X Labs</strong> — <span data-i18n="cv.kxl.role">UXR</span> (2018–2020)</li>
+        <li><strong>empiriecom</strong> — <span data-i18n="cv.empiriecom.role">UXR</span> (2016–2018)</li>
       </ul>
       <div class="cv-cta">
-        <a class="btn btn--neutral btn--xl" href="/cv/index.html">Detail-CV</a>
+        <a class="btn btn--neutral btn--xl" href="/cv/index.html" data-i18n="cv.detail">Detail-CV</a>
       </div>
     </div>
   </section>
@@ -208,10 +227,10 @@
   <section class="section section--tinted" id="contact" data-section>
     <div class="container">
       <header class="section__header">
-        <h2>Kontakt</h2>
+        <h2 data-i18n="contact.title">Kontakt</h2>
       </header>
       <div class="contact-cta reveal">
-        <a class="btn btn--neutral btn--xl" href="#" aria-label="Call buchen">Call buchen</a>
+        <a class="btn btn--neutral btn--xl" href="#" aria-label="Call buchen" data-i18n="contact.bookcall">Call buchen</a>
 
         <div class="socials">
           <a class="icon-link" href="mailto:felixbruckmeier@googlemail.com" aria-label="E-Mail">
