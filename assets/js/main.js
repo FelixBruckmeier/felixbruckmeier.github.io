@@ -30,6 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const saved = localStorage.getItem('theme') || 'auto';
   applyTheme(saved);
 
+  // Systemwechsel live spiegeln, wenn 'auto'
   if (window.matchMedia) {
     const mq = window.matchMedia('(prefers-color-scheme: dark)');
     mq.addEventListener?.('change', () => {
@@ -38,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   btn?.addEventListener('click', () => {
-    const current = root.getAttribute('data-theme');
+    const current = root.getAttribute('data-theme'); // 'light' oder 'dark'
     const next = current === 'dark' ? 'light' : 'dark';
     applyTheme(next);
   });
@@ -95,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (map[key]) el.textContent = map[key];
     });
     if (btn) {
-      btn.dataset.lang = lang;         // <- schaltet Flagge via CSS-Hintergrund
+      btn.dataset.lang = lang;         // Flagge via CSS
       if (label) label.textContent = lang.toUpperCase();
     }
     localStorage.setItem('lang', lang);
@@ -113,13 +114,37 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 })();
 
-/* ===== Mobile Nav: nach Klick schließen ===== */
-(function mobileNavClose(){
+/* ===== Mobile Nav: nach Klick schließen + aria-expanded setzen ===== */
+(function mobileNav(){
   const checkbox = $('#navToggle');
+  const hamburger = $('#hamburgerBtn');
+  const nav = $('#primary-nav');
+
+  function syncAria(){
+    if (!hamburger) return;
+    hamburger.setAttribute('aria-expanded', checkbox?.checked ? 'true' : 'false');
+  }
+
+  checkbox?.addEventListener('change', syncAria);
+  syncAria();
+
+  // Nav schließen, wenn Link gewählt
   $$('.nav__link').forEach(a => {
     a.addEventListener('click', () => {
-      if (checkbox && checkbox.checked) checkbox.checked = false;
+      if (checkbox && checkbox.checked) {
+        checkbox.checked = false;
+        syncAria();
+      }
     });
+  });
+
+  // Optional: Outside-Click schließt das Menü
+  document.addEventListener('click', (e) => {
+    const insideHeader = e.target.closest('.site-header');
+    if (!insideHeader && checkbox && checkbox.checked) {
+      checkbox.checked = false;
+      syncAria();
+    }
   });
 })();
 
