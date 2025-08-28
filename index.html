@@ -14,32 +14,22 @@
   <!-- Sticky Header -->
   <header class="site-header" id="top">
     <div class="container header-inner">
-      <a href="#top" class="brand" aria-label="Home">
-        <!-- LOGO -->
-        <img id="brandMark" src="assets/img/logo.svg" alt="" class="brand__logo" />
-        <span class="brand__name">Felix Bruckmeier</span>
-      </a>
-
       <!-- Burger Toggle (CSS-only) -->
       <input type="checkbox" id="navToggle" class="nav-toggle" aria-label="Navigation umschalten" />
       <label for="navToggle" class="hamburger" aria-controls="primary-nav" aria-label="Menü öffnen/schließen">
         <span></span><span></span><span></span>
       </label>
 
-      <!-- Navigation -->
-      <nav class="nav" id="primary-nav" aria-label="Primary">
-        <ul>
-          <li><a class="nav__link" href="#expertise" data-i18n="nav.expertise">Expertise</a></li>
-          <li><a class="nav__link" href="#projects" data-i18n="nav.projects">Projekte</a></li>
-          <li><a class="nav__link" href="#cv" data-i18n="nav.cv">CV</a></li>
-          <li><a class="nav__link" href="#craft" data-i18n="nav.craft">Craft</a></li>
-          <li><a class="nav__link" href="#contact" data-i18n="nav.contact">Kontakt</a></li>
-        </ul>
-      </nav>
+      <!-- Brand (Logo + Name) -->
+      <a href="#top" class="brand" aria-label="Home">
+        <img id="brandMark" src="assets/img/logo1.png" alt="" class="brand__logo" />
+        <span class="brand__name">Felix Bruckmeier</span>
+      </a>
 
+      <!-- Actions (Lang + Theme) -->
       <div class="header-actions">
         <!-- Language toggle -->
-        <div class="dropdown">
+        <div class="dropdown" id="langDropdown">
           <button class="btn btn--ghost dropdown__toggle" id="langToggle" aria-haspopup="listbox" aria-expanded="false">
             <span class="icon" aria-hidden="true">🌐</span>
             <span id="currentLang">DE</span>
@@ -56,6 +46,17 @@
           <span class="sr-only" data-i18n="ui.toggleTheme">Theme umschalten</span>
         </button>
       </div>
+
+      <!-- Navigation -->
+      <nav class="nav" id="primary-nav" aria-label="Primary">
+        <ul>
+          <li><a class="nav__link" href="#expertise" data-i18n="nav.expertise">Expertise</a></li>
+          <li><a class="nav__link" href="#projects" data-i18n="nav.projects">Projekte</a></li>
+          <li><a class="nav__link" href="#cv" data-i18n="nav.cv">CV</a></li>
+          <li><a class="nav__link" href="#craft" data-i18n="nav.craft">Craft</a></li>
+          <li><a class="nav__link" href="#contact" data-i18n="nav.contact">Kontakt</a></li>
+        </ul>
+      </nav>
     </div>
   </header>
 
@@ -78,7 +79,6 @@
 
       <figure class="hero__photo reveal" aria-label="Portrait von Felix">
         <div class="photo-frame">
-          <!-- Profilbild – bitte sicherstellen, dass es wirklich unter assets/img/profilbild1.png liegt -->
           <img src="assets/img/profilbild1.png" alt="Felix Bruckmeier" class="photo" />
         </div>
       </figure>
