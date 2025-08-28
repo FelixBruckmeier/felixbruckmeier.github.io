@@ -129,12 +129,15 @@ body{
 }
 .lang-toggle .flag{
   width:22px; height:22px; border-radius:50%;
-  display:inline-grid; place-items:center;
-  background:var(--tile); border:1px solid var(--line);
-  font-size:14px; line-height:1;
+  display:inline-block;
+  background-color:var(--tile);
+  background-repeat:no-repeat;
+  background-size:cover;
+  background-position:center;
+  border:1px solid var(--line);
 }
-.lang-toggle[data-lang="de"] .flag::before{ content:"🇩🇪"; }
-.lang-toggle[data-lang="en"] .flag::before{ content:"🇬🇧"; }
+.lang-toggle[data-lang="de"] .flag{ background-image:url('/assets/img/flag-de.svg'); }
+.lang-toggle[data-lang="en"] .flag{ background-image:url('/assets/img/flag-en.svg'); }
 .lang-toggle .lang-label{ font-weight:600; }
 
 /* Theme toggle: Sonne/Mond, inaktives Icon grau */
@@ -146,7 +149,7 @@ body{
 [data-theme="light"] .toggle-theme .moon{ opacity:.35; filter:grayscale(1); }
 .toggle-theme:hover .sun, .toggle-theme:hover .moon{ transform:translateY(-1px); }
 
-/* Burger (Checkbox-Hack) */
+/* Burger */
 .nav-toggle{ display:none; }
 .hamburger{
   width:44px; height:44px; border-radius:12px;
