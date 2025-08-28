@@ -12,15 +12,15 @@
   --text:#0f172a; --muted:#475569; --line:#e6e1da;
 
   /* Warm palette */
-  --sand:#efe5d6;
-  --sage:#a9c3b0;
-  --mustard:#d9b26b;
+  --sand:#efe5d6;      /* helles Braun (Hero/Expertise) */
+  --sage:#a9c3b0;      /* Grün / Sage (Projects) */
+  --mustard:#d9b26b;   /* Gelb-Braun (CV) */
 
-  /* Accents */
+  /* Accents (warm/neutral) */
   --accent: var(--sage);
   --accent-2: var(--mustard);
 
-  /* Buttons */
+  /* Buttons (toggle-like) */
   --btn-bg:#ece7df;
   --btn-text:#0f172a;
   --btn-border:#d8d2c9;
@@ -34,15 +34,20 @@
   :root{
     --bg:#0b0f1a; --bg-2:#0e1422; --bg-3:#101828;
     --tile:#0f172a; --tile-tinted:#0b1220;
+
     --text:#e5e7eb; --muted:#cbd5e1; --line:#1f2937;
-    --sand:#2b2432;
+
+    --sand:#2b2432;     /* warme Töne dunkel adaptiert */
     --sage:#3b5f4b;
     --mustard:#6f582e;
+
     --btn-bg:#1a1f2a; --btn-text:#e5e7eb; --btn-border:#293143;
+
     --shadow:0 14px 34px rgba(0,0,0,.45);
   }
 }
 
+/* Explicit theme override */
 [data-theme="light"]{ color-scheme:light; }
 [data-theme="dark"]{ color-scheme:dark; }
 
@@ -71,13 +76,16 @@ body{
   background:color-mix(in oklab, var(--bg) 88%, transparent);
 }
 .header-inner{
-  display:grid; grid-template-columns:1fr auto auto;
+  position:relative; /* wichtig für das mobile Dropdown-Panel */
+  display:grid; grid-template-columns:auto 1fr auto;
   align-items:center; gap:16px; padding:14px 0;
 }
+
 .brand{ display:flex; align-items:center; gap:10px; text-decoration:none; color:var(--text); }
 .brand__logo{ width:28px; height:28px; object-fit:contain; display:block; }
 .brand__name{ font-weight:700; }
 
+/* Nav (Desktop) */
 .nav ul{ display:flex; gap:24px; list-style:none; margin:0; padding:0; }
 .nav__link{
   position:relative; text-decoration:none; color:var(--text);
@@ -90,28 +98,50 @@ body{
 }
 .nav__link:hover::after, .nav__link.is-active::after{ width:100%; }
 
+/* Header actions */
 .header-actions{ display:flex; align-items:center; gap:8px; }
 
-.btn{
-  border:1px solid var(--btn-border); background:var(--btn-bg); color:var(--btn-text);
-  padding:10px 14px; border-radius:14px; cursor:pointer;
-  font-weight:600; font-family:Poppins, Inter, sans-serif;
-  transition:transform .15s ease, filter .15s ease, background-color .15s ease, color .15s ease, border-color .15s ease;
-}
-.btn--ghost{ background:transparent; }
-.btn--neutral{ background:var(--btn-bg); border-color:var(--btn-border); color:var(--btn-text); }
-.btn--xl{ padding:14px 18px; border-radius:16px; font-size:1rem; }
-.btn:hover{ filter:brightness(.94); transform:translateY(-1px); }
+/* Burger Toggle (CSS-only) */
+.nav-toggle{ display:none; } /* Checkbox selbst verstecken */
 
-.dropdown{ position:relative; }
-.dropdown__toggle{ display:flex; align-items:center; gap:.5rem; }
-.dropdown__menu{
-  position:absolute; right:0; top:calc(100% + 8px);
-  background:var(--tile); border:1px solid var(--line); border-radius:12px; padding:6px;
-  list-style:none; margin:0; display:none; box-shadow:var(--shadow);
+.hamburger{
+  display:none; /* nur mobil sichtbar */
+  width:44px; height:44px; border-radius:12px;
+  border:1px solid var(--btn-border); background:var(--btn-bg); color:var(--btn-text);
+  align-items:center; justify-content:center; cursor:pointer;
+  transition:filter .15s ease, transform .15s ease;
 }
-.dropdown__menu li{ padding:8px 12px; border-radius:10px; cursor:pointer; }
-.dropdown__menu li:hover{ background:var(--tile-tinted); }
+.hamburger:hover{ filter:brightness(.94); transform:translateY(-1px); }
+.hamburger span{
+  display:block; width:22px; height:2px; background:var(--btn-text); margin:4px 0; border-radius:2px;
+  transition:transform .2s ease, opacity .2s ease;
+}
+
+/* Mobile Panel (geschlossen) */
+@media (max-width: 980px){
+  /* Grid neu: Brand | Actions | Burger */
+  .header-inner{ grid-template-columns:auto 1fr auto; }
+  .nav{ 
+    position:absolute; left:0; right:0; top:100%;
+    background:var(--tile); border-bottom:1px solid var(--line);
+    display:none; /* standard: zu */
+    box-shadow:var(--shadow);
+  }
+  .nav ul{
+    flex-direction:column; gap:0;
+  }
+  .nav li{ border-top:1px solid var(--line); }
+  .nav li:first-child{ border-top:0; }
+  .nav__link{ display:block; padding:14px 18px; }
+
+  .hamburger{ display:flex; }     /* sichtbar auf mobil */
+  .nav-toggle:checked ~ .hamburger span:nth-child(1){ transform:translateY(6px) rotate(45deg); }
+  .nav-toggle:checked ~ .hamburger span:nth-child(2){ opacity:0; }
+  .nav-toggle:checked ~ .hamburger span:nth-child(3){ transform:translateY(-6px) rotate(-45deg); }
+
+  /* Panel aufklappen, wenn checkbox gecheckt */
+  .nav-toggle:checked ~ .nav{ display:block; }
+}
 
 /* =========================
    Sections / Themes
@@ -133,13 +163,14 @@ body{
 .tagline{ color:var(--muted); font-size:clamp(16px,2.2vw,19px); margin-top:8px; }
 .hero__cta{ display:flex; gap:12px; margin-top:20px; }
 
-.photo-frame{ width:min(400px,90%); aspect-ratio:1/1; margin-inline:auto; position:relative; }
-.photo{ position:absolute; inset:0; border-radius:22px; object-fit:cover; box-shadow:var(--shadow); }
+.photo-frame{ width:min(360px,90%); aspect-ratio:1/1; margin-inline:auto; position:relative; }
+.photo{ position:absolute; inset:0; border-radius:22px; object-fit:cover; box-shadow:var(--shadow); width:100%; height:100%; }
+
 .scroll-hint{ position:absolute; left:50%; bottom:12px; transform:translateX(-50%); text-decoration:none; color:var(--muted); font-size:28px; }
 .scroll-hint:hover{ color:var(--text); }
 
 /* =========================
-   Tiles
+   Tiles (Expertise/Projects)
    ========================= */
 .tile-grid{
   display:grid; grid-template-columns:repeat(2,1fr);
@@ -153,9 +184,17 @@ body{
   padding:clamp(16px,3vw,22px);
   transition:transform .18s ease, filter .18s ease, border-color .18s ease, background-color .18s ease;
 }
-.tile--square{ aspect-ratio:1/1.02; }
-.tile:hover{ filter:brightness(.94); transform:translateY(-3px); border-color:color-mix(in oklab, var(--mustard) 35%, var(--line)); }
-.tile--accent{ background:linear-gradient(135deg, color-mix(in oklab, var(--sage) 12%, var(--tile)) 0%, var(--tile) 70%); }
+.tile--square{ aspect-ratio:1/1.02; }        /* nahezu quadratisch */
+.tile:hover{
+  filter:brightness(.94);
+  transform:translateY(-3px);
+  border-color:color-mix(in oklab, var(--mustard) 35%, var(--line));
+}
+.tile--accent{
+  background:linear-gradient(135deg, color-mix(in oklab, var(--sage) 12%, var(--tile)) 0%, var(--tile) 70%);
+}
+
+/* Bilder in Kacheln responsiv & sauber einpassen */
 .tile__img{
   width:100%; height:clamp(160px,28vh,260px);
   object-fit:contain; object-position:center; display:block;
@@ -165,8 +204,17 @@ body{
 .tile__meta h3{ margin:.2rem 0 .25rem; font:700 clamp(18px,2.6vw,22px)/1.2 Poppins,Inter,sans-serif; }
 .tile__meta p{ margin:0; color:var(--muted); }
 
-.intro-with-first-tile{ display:grid; grid-template-columns:1fr 1fr; gap:clamp(18px,3.5vw,28px); margin-bottom:clamp(18px,3.5vw,28px); }
-.expertise-intro{ background:var(--tile); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); padding:clamp(18px,3.5vw,24px); display:flex; align-items:center; font-size:clamp(16px,2vw,18px); color:var(--text); }
+/* Expertise-Intro (Text oben rechts statt Kachel) */
+.intro-with-first-tile{
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:clamp(18px,3.5vw,28px);
+  margin-bottom:clamp(18px,3.5vw,28px);
+}
+.expertise-intro{
+  background:var(--tile); border:1px solid var(--line); border-radius:var(--radius);
+  box-shadow:var(--shadow); padding:clamp(18px,3.5vw,24px);
+  display:flex; align-items:center; font-size:clamp(16px,2vw,18px); color:var(--text);
+}
 
 /* =========================
    Timeline / Contact / Footer
@@ -177,7 +225,12 @@ body{
 
 .contact-cta{ display:flex; align-items:center; gap:18px; flex-wrap:wrap; }
 .socials{ display:flex; gap:12px; }
-.icon-link{ display:grid; place-items:center; width:44px; height:44px; border-radius:12px; border:1px solid var(--btn-border); background:var(--btn-bg); color:var(--btn-text); text-decoration:none; transition:filter .15s ease, transform .15s ease; }
+.icon-link{
+  display:grid; place-items:center;
+  width:44px; height:44px; border-radius:12px;
+  border:1px solid var(--btn-border); background:var(--btn-bg); color:var(--btn-text);
+  text-decoration:none; transition:filter .15s ease, transform .15s ease;
+}
 .icon-link:hover{ filter:brightness(.94); transform:translateY(-1px); }
 
 .site-footer{ border-top:1px solid var(--line); padding:22px 0; background:var(--bg-2); }
@@ -185,22 +238,51 @@ body{
 .footer-nav a{ color:var(--muted); text-decoration:none; margin-left:14px; }
 .footer-nav a:hover{ color:var(--text); }
 
+/* =========================
+   Reveal on scroll
+   ========================= */
 .reveal{ opacity:0; transform:translateY(16px); transition:all .5s ease; }
 .reveal.is-visible{ opacity:1; transform:translateY(0); }
 
-.cv-hero{ display:flex; align-items:center; justify-content:space-between; gap:24px; flex-wrap:wrap; }
+/* =========================
+   CV Page Specifics
+   ========================= */
+.cv-hero{
+  display:flex; align-items:center; justify-content:space-between; gap:24px; flex-wrap:wrap;
+}
 
-.call-block{ display:flex; flex-direction:column; align-items:center; justify-content:center; margin: 1.5rem 0; }
-.call-tile{ display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; text-decoration:none; border:1px solid var(--btn-border); background:var(--btn-bg); color:var(--btn-text); border-radius:20px; min-height:240px; min-width:260px; box-shadow:var(--shadow); transition:filter .2s ease, transform .2s ease; padding: 1.5rem; }
+/* Call Tile (bigger CTA ~ half project tile) */
+.call-block{
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  margin: 1.5rem 0;
+}
+.call-tile{
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  text-align:center; text-decoration:none;
+  border:1px solid var(--btn-border);
+  background:var(--btn-bg); color:var(--btn-text);
+  border-radius:20px;
+  min-height:240px; min-width:260px; /* ~ halbe Projekt-Kachel */
+  box-shadow:var(--shadow);
+  transition:filter .2s ease, transform .2s ease;
+  padding: 1.5rem;
+}
 .call-tile:hover{ filter:brightness(.94); transform:translateY(-4px); }
 .tile__icon{ margin-bottom:14px; }
-.tile__label span{ font-family:Poppins, Inter, sans-serif; font-weight:600; font-size:1.2rem; }
+.tile__label span{
+  font-family:Poppins, Inter, sans-serif;
+  font-weight:600; font-size:1.2rem;
+}
 
+/* Contact icons directly under the call tile */
 .contact-icons{ display:flex; gap:18px; margin-top:16px; }
 .contact-icons .icon-link{ color:var(--btn-text); transition:filter .2s ease; }
 .contact-icons .icon-link:hover{ filter:brightness(.85); }
 
+/* Downloads row */
 .downloads{ margin-top:18px; display:flex; gap:12px; flex-wrap:wrap; }
+
+/* CV content blocks */
 .cv-h2{ font-family:Poppins, Inter, sans-serif; font-size:clamp(22px,2.6vw,26px); margin:0 0 10px; }
 .cv-item{ padding:16px 0; border-bottom:1px dashed var(--line); }
 .cv-item header{ font-weight:600; margin-bottom:6px; }
@@ -214,21 +296,31 @@ body{
 /* =========================
    Responsive
    ========================= */
-@media (max-width: 980px){ .hero__grid{ grid-template-columns:1fr; text-align:center; } }
-@media (max-width: 860px){ .intro-with-first-tile{ grid-template-columns:1fr; } .cv-columns{ grid-template-columns:1fr; } .call-tile{ max-width:100%; } }
-@media (max-width: 720px){ .tile-grid{ grid-template-columns:1fr; } }
-
-/* =========================
-   Responsive Fixes (neu)
-   ========================= */
-img { max-width: 100%; height: auto; display: block; }
-
-.photo-frame { width:min(360px,90%); }
-.photo { width:100%; height:100%; object-fit:cover; }
-
 @media (max-width: 980px){
-  .photo-frame { width:min(280px,80%); }
+  .hero__grid{ grid-template-columns:1fr; text-align:center; }
+}
+@media (max-width: 860px){
+  .intro-with-first-tile{ grid-template-columns:1fr; }  /* Expertise Intro über Kacheln */
+  .cv-columns{ grid-template-columns:1fr; }
+  .call-tile{ max-width:100%; }
 }
 @media (max-width: 720px){
-  .photo-frame { width:min(220px,75%); }
+  .tile-grid{ grid-template-columns:1fr; }              /* Kacheln einspaltig */
+}
+
+/* =========================
+   Responsive Bild-Optimierungen (global)
+   ========================= */
+img{
+  max-width:100%;
+  height:auto;
+  display:block;
+}
+
+/* Hero Portrait Tweaks für schmale Screens */
+@media (max-width: 980px){
+  .photo-frame{ width:min(280px,80%); }
+}
+@media (max-width: 720px){
+  .photo-frame{ width:min(220px,75%); }
 }
