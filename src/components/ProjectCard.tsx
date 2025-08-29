@@ -1,3 +1,5 @@
+import React from "react";
+
 type Project = { title: string; summary: string; tags: string[]; link?: string };
 
 export default function ProjectCard({ project }: { project: Project }) {

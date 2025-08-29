@@ -1,3 +1,4 @@
+import React from "react";
 import { hero } from "../content/content";
 
 export default function Hero() {
