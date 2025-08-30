@@ -1,0 +1,156 @@
+// src/App.tsx
+import React, { useEffect } from 'react'
+import Navbar from './components/Navbar'
+import Hero from './components/Hero'
+import Section from './components/Section'
+import ProjectCard from './components/ProjectCard'
+import Footer from './components/Footer'
+import { about, expertise, projects, craft, contact } from './content/content'
+
+export default function App() {
+  // Glatte Anker-Navigation (#about etc.)
+  useEffect(() => {
+    const onClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement
+      const link = target?.closest?.('a[href^="#"]') as HTMLAnchorElement | null
+      if (!link) return
+      const id = link.getAttribute('href')!.slice(1)
+      const el = document.getElementById(id)
+      if (el) {
+        e.preventDefault()
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }
+    }
+    document.addEventListener('click', onClick)
+    return () => document.removeEventListener('click', onClick)
+  }, [])
+
+  return (
+    <div className="min-h-screen bg-background text-foreground font-inter">
+      <Navbar />
+
+      <main>
+        <Hero />
+
+        {/* ABOUT */}
+        <Section id="about" title="About me" className="fade-in">
+          <div>
+            <p className="text-lg leading-relaxed">{about.intro}</p>
+
+            {about.pillars?.length ? (
+              <ul className="mt-4 list-disc pl-5 space-y-1">
+                {about.pillars.map((p: any) => (
+                  <li key={p.title}>
+                    <span className="font-semibold">{p.title}:</span> {p.desc}
+                  </li>
+                ))}
+              </ul>
+            ) : null}
+
+            {about.stations?.length ? (
+              <>
+                <h3 className="mt-6 text-xl font-semibold">Stations</h3>
+                <ul className="mt-2 grid gap-3 md:grid-cols-2">
+                  {about.stations.map((s: any) => (
+                    <li
+                      key={`${s.org}-${s.time}`}
+                      className="p-4 rounded-xl bg-card border border-card-border research-glow"
+                    >
+                      <div className="font-medium">{s.title}</div>
+                      <div className="text-sm opacity-80">
+                        {s.org} · {s.time}
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </>
+            ) : null}
+          </div>
+        </Section>
+
+        {/* EXPERTISE */}
+        <Section id="expertise" title="My Expertise" className="slide-up">
+          <div className="grid gap-4 md:grid-cols-2">
+            {expertise.themes?.map((t: any) => (
+              <div
+                key={t.title}
+                className="p-5 rounded-xl bg-card border border-card-border research-glow"
+              >
+                <div className="text-lg font-semibold">{t.title}</div>
+                <p className="mt-2 text-sm opacity-90">{t.desc}</p>
+
+                {t.tags?.length ? (
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {t.tags.map((tag: string) => (
+                      <span
+                        key={tag}
+                        className="px-2 py-1 text-xs rounded-full bg-muted"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                ) : null}
+              </div>
+            ))}
+          </div>
+        </Section>
+
+        {/* PROJECTS */}
+        <Section id="projects" title="Projects">
+          <div className="grid gap-5 md:grid-cols-2">
+            {projects.items?.map((p: any) => (
+              <ProjectCard key={p.title} project={p} />
+            ))}
+          </div>
+        </Section>
+
+        {/* CRAFT & RESEARCH */}
+        <Section id="craft" title="Craft & Research">
+          <div className="grid gap-5 md:grid-cols-2">
+            <div className="p-5 rounded-xl bg-card border border-card-border">
+              <h3 className="text-lg font-semibold">Holzhandwerk × UXR</h3>
+              <p className="mt-2 opacity-90">{craft.analogy}</p>
+              <ul className="mt-3 list-disc pl-5">
+                {craft.gallery?.map((it: string) => (
+                  <li key={it}>{it}</li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="p-5 rounded-xl bg-card-secondary border border-card-border">
+              <h3 className="text-lg font-semibold">Methoden & Ops</h3>
+              <ul className="mt-2 list-disc pl-5 space-y-1">
+                {craft.methods?.map((m: string) => (
+                  <li key={m}>{m}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </Section>
+
+        {/* CONTACT */}
+        <Section id="contact" title="Contact">
+          <div className="p-6 rounded-xl bg-card border border-card-border">
+            <p className="text-lg">{contact.invite}</p>
+            <div className="mt-4 flex flex-wrap gap-3">
+              {contact.links?.map((l: any) => (
+                <a
+                  key={l.label}
+                  href={l.href}
+                  className="px-4 py-2 rounded-lg bg-primary text-white hover:opacity-90 transition"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {l.label}
+                </a>
+              ))}
+            </div>
+          </div>
+        </Section>
+      </main>
+
+      <Footer />
+    </div>
+  )
+}
