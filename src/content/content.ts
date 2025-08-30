@@ -1,55 +1,101 @@
-export const hero = {
-  badge: "UX Research • Strategy • Ops",
-  title: "I accelerate decisions with research that moves the business.",
-  subtitle: "Director/Lead UXR — Strategy & roadmaps, ResearchOps/DesignOps at scale, mentorship, and UXR as a business partner.",
-  focus: ["Decision acceleration", "Strategy & roadmaps", "ResearchOps & DesignOps", "Mentorship", "UXR as business partner"],
+export type NavLink = { href: string; label: string };
+export type HeroContent = {
+  badge: string;
+  title: string;
+  subtitle: string;
+  ctaPrimary: string;
+  ctaSecondary: string;
+  focus: string[];
+};
+export type ExpertiseItem = { title: string; desc: string };
+export type Project = { title: string; summary: string; tags: string[]; link?: string };
+export type Translations = {
+  nav: { links: NavLink[] };
+  hero: HeroContent;
+  sections: { expertise: string; projects: string; contact: string };
+  expertise: ExpertiseItem[];
+  projects: Project[];
 };
 
-export const about = {
-  intro: "Von Ökonometrie zu UXR: Ich verbinde quantitative Strenge mit qualitativer Tiefe. Fokus: Empowerment, Impact, kontinuierliches Lernen.",
-  pillars: [
-    { title: "Empowerment", desc: "Teams befähigen, gute Entscheidungen zu treffen." },
-    { title: "Impact Orientation", desc: "Fokus auf Outcomes und messbaren Wertbeitrag." },
-    { title: "Continuous Learning", desc: "Iterative, evidenzbasierte Produktentwicklung." },
-  ],
-  stations: [
-    { title: "UXR Lead", org: "ATOSS", time: "01/2025–05/2025" },
-    { title: "UXR Lead", org: "zooplus", time: "07/2022–12/2024" },
-    { title: "Senior UXR", org: "Swiss Life", time: "05/2020–06/2022" },
-    { title: "UXR", org: "Kaiser X Labs", time: "08/2018–04/2020" },
-    { title: "UXR", org: "empiriecom", time: "02/2016–07/2018" },
-  ],
+export const translations: Record<"en" | "de", Translations> = {
+  en: {
+    nav: {
+      links: [
+        { href: "#expertise", label: "Expertise" },
+        { href: "#projects", label: "Projects" },
+        { href: "#contact", label: "Contact" }
+      ]
+    },
+    hero: {
+      badge: "UX Research & Design",
+      title: "Research that drives confident product moves.",
+      subtitle: "From discovery to validation: I help teams de-risk ideas and improve UX quality with mixed-methods research.",
+      ctaPrimary: "View Projects",
+      ctaSecondary: "Contact",
+      focus: ["Interviews", "Surveys", "Usability Tests", "Prototyping", "Product Strategy"]
+    },
+    sections: {
+      expertise: "Expertise",
+      projects: "Projects",
+      contact: "Contact"
+    },
+    expertise: [
+      { title: "Discovery Interviews", desc: "Jobs-to-be-done, unmet needs, opportunity sizing." },
+      { title: "Surveys", desc: "Segmentation, sizing, triangulation with qual insights." },
+      { title: "Usability Tests", desc: "Moderated/remote tests, accessibility, quality gates." },
+      { title: "Prototyping", desc: "Low→high fidelity prototypes to evaluate solutions." },
+      { title: "Experimentation", desc: "Concept tests, smoke tests, A/B – from signal to rollout." },
+      { title: "Insight Communication", desc: "Short artifacts, prioritization, PM/Design partnership." }
+    ],
+    projects: [
+      { title: "Checkout Usability Study", summary: "Reduced drop-off by 14% via moderated tests and quick iteration.", tags: ["Usability", "E‑commerce", "Figma"], link: "#" },
+      { title: "Onboarding Research", summary: "Interview + survey triangulation prioritized onboarding improvements.", tags: ["Interviews", "Survey"], link: "#" },
+      { title: "Pricing Experiment", summary: "Mixed-methods + A/B test led to +9% trial signups.", tags: ["Experiment", "Analytics"], link: "#" },
+      { title: "Mobile Navigation", summary: "Card sorting + tree tests improved findability by 23%.", tags: ["IA", "Card Sort"], link: "#" },
+      { title: "Support Center", summary: "Search logs + interviews cut time-to-answer by 30%.", tags: ["Search", "Content"], link: "#" },
+      { title: "Dashboard UX", summary: "Task analysis simplified workflows for core personas.", tags: ["Workflows", "Personas"], link: "#" }
+    ]
+  },
+  de: {
+    nav: {
+      links: [
+        { href: "#expertise", label: "Expertise" },
+        { href: "#projects", label: "Projekte" },
+        { href: "#contact", label: "Kontakt" }
+      ]
+    },
+    hero: {
+      badge: "UX Research & Design",
+      title: "Research für sichere Produkt-Entscheidungen.",
+      subtitle: "Von Discovery bis Validierung: Mixed-Methods-Research, das Risiken senkt und UX-Qualität hebt.",
+      ctaPrimary: "Projekte ansehen",
+      ctaSecondary: "Kontakt",
+      focus: ["Interviews", "Umfragen", "Usability-Tests", "Prototyping", "Produktstrategie"]
+    },
+    sections: {
+      expertise: "Expertise",
+      projects: "Projekte",
+      contact: "Kontakt"
+    },
+    expertise: [
+      { title: "Discovery-Interviews", desc: "Jobs-to-be-done, Needs, Opportunity-Sizing." },
+      { title: "Umfragen", desc: "Segmentierung, Sizing, Triangulation mit qualitativen Insights." },
+      { title: "Usability-Tests", desc: "Moderiert/remote, Accessibility, Quality-Gates." },
+      { title: "Prototyping", desc: "Low→High-Fidelity-Prototypen für Evaluation." },
+      { title: "Experimente", desc: "Concept Tests, Smoke Tests, A/B – vom Signal zum Rollout." },
+      { title: "Insights kommunizieren", desc: "Kurze Artefakte, Priorisierung, enge PM/Design-Partnerschaft." }
+    ],
+    projects: [
+      { title: "Checkout-Usability", summary: "14% weniger Abbrüche durch moderierte Tests und schnelle Iteration.", tags: ["Usability", "E‑Commerce", "Figma"], link: "#" },
+      { title: "Onboarding-Research", summary: "Interviews + Umfrage priorisierten Onboarding-Verbesserungen.", tags: ["Interviews", "Umfrage"], link: "#" },
+      { title: "Pricing-Experiment", summary: "Mixed-Methods + A/B führten zu +9% Trial-Signups.", tags: ["Experiment", "Analytics"], link: "#" },
+      { title: "Mobile Navigation", summary: "Card Sorting + Tree Tests steigerten Findbarkeit um 23%.", tags: ["IA", "Card Sort"], link: "#" },
+      { title: "Support Center", summary: "Search-Logs + Interviews reduzierten Time-to-Answer um 30%.", tags: ["Search", "Content"], link: "#" },
+      { title: "Dashboard-UX", summary: "Task-Analyse vereinfachte Workflows für Kern-Personas.", tags: ["Workflows", "Personas"], link: "#" }
+    ]
+  }
 };
 
-export const expertise = {
-  themes: [
-    { title: "Strategy Alignment", desc: "UXR OKRs, Research Roadmaps, Entscheidungs-Backlogs.", tags: ["OKRs", "Roadmaps", "Decision logs"] },
-    { title: "Translating Needs → Product Strategy", desc: "Discovery bis Prototyping, Analytics-Integration, Double Diamond.", tags: ["Discovery", "Prototyping", "Analytics"] },
-    { title: "ResearchOps at Scale", desc: "ReOps Maturity Matrix, Governance, Insights Activation, Tooling & Automation.", tags: ["Governance", "Ops", "Automation"] },
-    { title: "Team Leadership & Mentoring", desc: "Rollen- & Skill-Frameworks, Communities of Practice, Coaching.", tags: ["CoP", "Mentoring", "Frameworks"] },
-    { title: "Proving ROI", desc: "CLTV/Churn-Modelle, HEART, Business Cases.", tags: ["CLTV", "HEART", "ROI"] },
-  ],
-};
-
-export const projects = {
-  items: [
-    { title: "Car Insurance — Quote to Bind", summary: "Strategische Research-Initiative: IA, Entscheidungsunterstützung, Pricing-Transparenz.", tags: ["Strategic UXR", "IA", "Pricing"], link: "#" },
-    { title: "A Winning UX Strategy", summary: "Vision-Alignment, Research-Roadmap, Priorisierung via 2×2 (Risk × Knowledge).", tags: ["Strategy", "Prioritization", "Leadership"], link: "#" },
-    { title: "Usability Test — Pricing Component", summary: "RITE-Zyklus von Low- bis High-Fi Prototypen.", tags: ["RITE", "Usability", "Prototype"] },
-    { title: "UX Method Cards", summary: "Enablement-Tool: Methoden, Beispiele, Auswahlhilfen.", tags: ["Enablement", "Ops", "Education"] },
-  ],
-};
-
-export const craft = {
-  analogy: "Wie im Holzhandwerk: Maßhaltigkeit, Materialverständnis, präzise Verbindungen. In UXR: saubere Fragen, solide Ableitungen, iterative Veredelung.",
-  gallery: ["Esstische & Couchtische", "Betten", "Schreibtische", "Schwert & Schild (Deko)"],
-  methods: ["MaxDiff, Conjoint", "AI Eye Tracking", "Baymard Benchmarking", "Mouseflow", "RITE"],
-};
-
-export const contact = {
-  invite: "Lass uns sprechen: Ich bringe Forschung, Struktur und Geschwindigkeit in Produktentscheidungen.",
-  links: [
-    { label: "LinkedIn", href: "https://www.linkedin.com/in/felix-bruckmeier/" },
-    { label: "E-Mail", href: "mailto:felix.bruckmeier@proton.me" },
-  ],
-};
+export function getContent(lang: "en" | "de") {
+  return translations[lang];
+}
