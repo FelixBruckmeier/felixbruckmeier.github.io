@@ -1,33 +1,31 @@
 
-import { useEffect, useState } from "react";
-import de from "@/data/content.de.json";
-import en from "@/data/content.en.json";
-import { getLocale } from "@/lib/i18n";
+import { smoothScrollToId } from "../lib/scroll";
 
 export default function Hero() {
-  const [lang, setLang] = useState(getLocale());
-  useEffect(() => {
-    const onPop = () => setLang(getLocale());
-    window.addEventListener("popstate", onPop);
-    return () => window.removeEventListener("popstate", onPop);
-  }, []);
-
-  const t = lang === "de" ? de.home : en.home;
-
   return (
     <section className="relative overflow-hidden">
-      <div className="absolute inset-0 -z-10 opacity-40" style={{background: "var(--gradient-secondary)"}}/>
-      <div className="mx-auto max-w-6xl px-4 py-16 md:py-24">
-        <h1 className="text-3xl md:text-5xl font-semibold leading-tight">{t.tagline}</h1>
-        <p className="mt-4 text-lg md:text-xl max-w-2xl">{t.value}</p>
-        <div className="mt-6 flex flex-wrap gap-2">
-          {t.focus.map(item => (
-            <span key={item} className="px-3 py-1 rounded-sm border bg-card">{item}</span>
-          ))}
+      <div className="absolute inset-0 -z-10 opacity-70" style={{ background: "linear-gradient(135deg, hsl(var(--background)) 0%, hsl(var(--muted)) 100%)" }} />
+      <div className="mx-auto max-w-6xl px-4 py-20 md:py-28 grid md:grid-cols-2 gap-10 items-center">
+        <div>
+          <p className="text-sm uppercase tracking-wider opacity-70">UX Research · Strategy · ResearchOps</p>
+          <h1 className="text-3xl md:text-5xl font-semibold leading-tight mt-2">
+            Entscheidungen beschleunigen – mit klaren Insights, starken Roadmaps und skalierbaren ResearchOps.
+          </h1>
+          <p className="mt-4 text-lg md:text-xl max-w-2xl opacity-90">
+            Ich helfe Teams, schneller die richtigen Produktentscheidungen zu treffen – evidenzbasiert, messbar, nutzerzentriert.
+          </p>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <button onClick={() => smoothScrollToId('expertise')} className="px-4 py-2 rounded-sm bg-[hsl(var(--primary))] text-white shadow-md hover:shadow-lg transition">Expertise</button>
+            <button onClick={() => smoothScrollToId('projects')} className="px-4 py-2 rounded-sm border">Meine Projekte</button>
+          </div>
+          <div className="mt-10 flex flex-wrap gap-2">
+            {["Strategy & Roadmaps", "ResearchOps & DesignOps", "Mentoring & Leadership", "UXR als Business-Partner"].map((chip) => (
+              <span key={chip} className="px-3 py-1 text-sm rounded-sm border bg-[hsl(var(--card))]">{chip}</span>
+            ))}
+          </div>
         </div>
-        <div className="mt-8 flex gap-3">
-          <a href="/assets/CV_Felix_Bruckmeier.pdf" className="px-4 py-2 rounded-sm bg-primary text-white">CV Download</a>
-          <a href="/contact" className="px-4 py-2 rounded-sm border">Contact</a>
+        <div className="justify-self-center">
+          <img src="/assets/profile.jpg" alt="Profilbild" className="h-48 w-48 md:h-64 md:w-64 rounded-xl object-cover border shadow-md" />
         </div>
       </div>
     </section>
