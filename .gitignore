@@ -4,3 +4,4 @@ dist/
 .vite/
 .turbo/
 .parcel-cache/
+*.tsbuildinfo
