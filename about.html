@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>About — Felix Bruckmeier</title>
+  <meta name="description" content="About — Felix Bruckmeier">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="container nav">
+    <a class="logo" href="index.html">Felix <span>Bruckmeier</span></a>
+    
+    <nav id="nav">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="expertise/index.html">My Expertise</a>
+      <a href="projects/index.html">Projects</a>
+      <a href="craft-research.html">Craft & Research</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    
+    <button id="menuToggle" class="menu" aria-label="Menu" aria-expanded="false">☰</button>
+  </div>
+  <div class="progress" id="progress"></div>
+</header>
+
+<main>
+  <div class="container">
+    
+<h1 class="reveal">About me</h1>
+<div class="grid two">
+  <div class="reveal">
+    <h2>My professional journey</h2>
+    <p>Economics background with a strong statistics focus led me into UX Research through quantitative usability engineering. Since then, I’ve worked across methods and frameworks — Design Thinking, HCD, Agile — connecting user understanding with product decisions.</p>
+    <p>Today I focus on strategic research and ResearchOps — enabling teams, standardizing practice, and tying outcomes to business metrics.</p>
+    <h2>Leadership philosophy</h2>
+    <ul>
+      <li><strong>Empowerment:</strong> autonomy, ownership, and first‑hand exposure to users.</li>
+      <li><strong>Impact orientation:</strong> every activity linked to goals and value.</li>
+      <li><strong>Continuous learning:</strong> iterate methods and raise the bar.</li>
+    </ul>
+  </div>
+  <aside class="card sidebar reveal">
+    <h3>Professional Experience</h3>
+    <ul class="small">
+      <li><strong>ATOSS Software SE</strong> — UX Research Lead (2025)</li>
+      <li><strong>Zooplus SE</strong> — UX Research Lead (2022–2024)</li>
+      <li><strong>Swiss Life AG</strong> — Senior UX Researcher (2020–2022)</li>
+      <li><strong>Kaiser X Labs (Allianz)</strong> — UX Researcher (2018–2020)</li>
+      <li><strong>empiriecom GmbH</strong> — Consultant UCD (2016–2018)</li>
+    </ul>
+  </aside>
+</div>
+
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">© <span id="year"></span> Felix Bruckmeier — UX Research Lead</div>
+</footer>
+
+<script src="script.js"></script>
+<script>document.getElementById('year').textContent = new Date().getFullYear()</script>
+</body>
+</html>

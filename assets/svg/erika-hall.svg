@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-label="UX research cycle (Erika Hall inspired)">
+  <desc>Six-phase circular flow: Clarity → Questions → Methods → Analysis &amp; Synthesis → Integration → Impact → back to Clarity.</desc>
+  <circle cx="400" cy="200" r="150" fill="none" stroke="#dbe9ff" stroke-width="2"/>
+  <g font-family="Inter, Arial, sans-serif" font-size="14" fill="#161616">
+    <text x="400" y="35" text-anchor="middle">Clarity</text>
+    <text x="590" y="120" text-anchor="start">Questions</text>
+    <text x="590" y="280" text-anchor="start">Methods</text>
+    <text x="400" y="375" text-anchor="middle">Analysis &amp; Synthesis</text>
+    <text x="210" y="280" text-anchor="end">Integration</text>
+    <text x="210" y="120" text-anchor="end">Impact</text>
+  </g>
+  <g stroke="#0a66c2" stroke-width="3" fill="none">
+    <path d="M400,50 A150,150 0 0 1 560,120"/><path d="M555,120 l10,-14 l5,18 z" fill="#0a66c2"/>
+    <path d="M590,140 A150,150 0 0 1 590,260"/><path d="M590,255 l14,10 l-18,5 z" fill="#0a66c2"/>
+    <path d="M560,280 A150,150 0 0 1 400,350"/><path d="M405,350 l18,5 l-14,10 z" fill="#0a66c2"/>
+    <path d="M240,280 A150,150 0 0 1 400,350"/><path d="M395,350 l-18,5 l14,10 z" fill="#0a66c2"/>
+    <path d="M210,260 A150,150 0 0 1 210,140"/><path d="M210,145 l-14,10 l18,5 z" fill="#0a66c2"/>
+    <path d="M240,120 A150,150 0 0 1 400,50"/><path d="M395,50 l-18,5 l14,10 z" fill="#0a66c2"/>
+  </g>
+</svg>

@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Craft &amp; Research — Felix Bruckmeier</title>
+  <meta name="description" content="Craft &amp; Research — Felix Bruckmeier">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="container nav">
+    <a class="logo" href="index.html">Felix <span>Bruckmeier</span></a>
+    
+    <nav id="nav">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="expertise/index.html">My Expertise</a>
+      <a href="projects/index.html">Projects</a>
+      <a href="craft-research.html">Craft & Research</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    
+    <button id="menuToggle" class="menu" aria-label="Menu" aria-expanded="false">☰</button>
+  </div>
+  <div class="progress" id="progress"></div>
+</header>
+
+<main>
+  <div class="container">
+    <h1 class='reveal'>Craft & Research: Dual passion</h1><p class='reveal'>Woodworking and research share precision, creativity, iteration.</p>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">© <span id="year"></span> Felix Bruckmeier — UX Research Lead</div>
+</footer>
+
+<script src="script.js"></script>
+<script>document.getElementById('year').textContent = new Date().getFullYear()</script>
+</body>
+</html>
