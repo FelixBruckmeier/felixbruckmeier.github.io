@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="420" viewBox="0 0 820 420">
+  <rect width="100%" height="100%" fill="white"/>
+  <g font-family="Inter, sans-serif" fill="hsl(226,30%,15%)">
+    <text x="20" y="30" font-size="20">ResearchOps Impact Areas</text>
+  </g>
+  <g transform="translate(20,50)" stroke="hsl(220,25%,88%)" stroke-width="2">
+    <rect width="780" height="320" fill="none"/>
+    <g>
+      <rect x="0" y="0" width="380" height="100" fill="hsl(219,85%,58%)" />
+      <text x="190" y="60" text-anchor="middle" font-family="Inter" font-size="16" fill="white">Governance</text>
+    </g>
+    <g>
+      <rect x="400" y="0" width="380" height="100" fill="hsl(262,70%,68%)" />
+      <text x="590" y="60" text-anchor="middle" font-family="Inter" font-size="16" fill="white">Insights Activation & Enablement</text>
+    </g>
+    <g>
+      <rect x="0" y="110" width="380" height="100" fill="hsl(31,100%,65%)" />
+      <text x="190" y="170" text-anchor="middle" font-family="Inter" font-size="16" fill="hsl(226,30%,15%)">Process & Scope</text>
+    </g>
+    <g>
+      <rect x="400" y="110" width="380" height="100" fill="hsl(219,85%,58%)" />
+      <text x="590" y="170" text-anchor="middle" font-family="Inter" font-size="16" fill="white">Tools & Automation</text>
+    </g>
+    <g>
+      <rect x="0" y="220" width="380" height="100" fill="hsl(262,70%,68%)" />
+      <text x="190" y="280" text-anchor="middle" font-family="Inter" font-size="16" fill="white">Org Alignment & Evangelization</text>
+    </g>
+    <g>
+      <rect x="400" y="220" width="380" height="100" fill="hsl(31,100%,65%)" />
+      <text x="590" y="280" text-anchor="middle" font-family="Inter" font-size="16" fill="hsl(226,30%,15%)">Resource & Strategic Management</text>
+    </g>
+  </g>
+</svg>

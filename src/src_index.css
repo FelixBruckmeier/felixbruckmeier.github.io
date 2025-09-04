@@ -1,0 +1,26 @@
+@import "tailwindcss";
+
+/* Optional: design tokens (Tailwind v4 @theme) */
+@theme {
+  --color-background: hsl(0 0% 100%);
+  --color-foreground: hsl(222 47% 11%);
+  --color-muted: hsl(210 40% 96%);
+  --color-muted-foreground: hsl(215 16% 47%);
+  --color-border: hsl(214 32% 91%);
+}
+
+/* Example base styles */
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-background);
+  color: var(--color-foreground);
+}
+
+/* Example utility usage: remove if you have your own */
+.container {
+  @apply mx-auto max-w-5xl p-4;
+}
