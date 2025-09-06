@@ -1,66 +1,23 @@
-import React from 'react'
-import { useI18n } from '@/i18n/i18n'
-import imgJourney from '@/assets/artefacts/swisslife-journey.png'
-import imgConjoint from '@/assets/artefacts/swisslife-conjoint.png'
+﻿import { Link } from "react-router-dom";
+import { t } from "../../i18n";
+import journey from "@/assets/artefacts/swisslife-journey.png";
+import conjoint from "@/assets/artefacts/swisslife-conjoint.png";
 
-const Page: React.FC = () => {
-  const { t } = useI18n()
+export default function SwissLife() {
   return (
-    <div className="container-responsive py-12 space-y-10">
-      <header className="space-y-3">
-        <h1 className="text-3xl font-semibold">Swiss Life — B2B2C UX Research</h1>
-        <p className="text-muted-foreground">Rolle: Senior UX Researcher (2020–2022).</p>
-      </header>
-
-      <section className="space-y-3">
-        <h2 className="text-xl font-semibold">Kontext & Herausforderung</h2>
-        <p className="text-muted-foreground">Digitale Versicherungsplattform mit B2B2C-Prozessen; Bedarf an klaren Entscheidungsgrundlagen für Feature-Ausbau.</p>
+    <main className="pt-20 mx-auto max-w-6xl px-4 py-10">
+      <Link to="/" className="text-sm text-muted-foreground">{t("case.back")}</Link>
+      <h1 className="text-2xl font-semibold mt-2">{t("projects.swiss.title")}</h1>
+      <p className="mt-3 text-muted-foreground max-w-3xl">{t("projects.swiss.teaser")}</p>
+      <div className="mt-6 grid md:grid-cols-2 gap-4">
+        <img className="rounded-2xl border border-border" src={journey} alt="Journey" />
+        <img className="rounded-2xl border border-border" src={conjoint} alt="Conjoint" />
+      </div>
+      <section className="mt-8 grid md:grid-cols-3 gap-4">
+        <article className="rounded-2xl border border-border p-4"><h3 className="font-semibold">Discovery</h3><p className="text-sm text-muted-foreground mt-1">Context interviews; Entscheidungsreise & Segmente.</p></article>
+        <article className="rounded-2xl border border-border p-4"><h3 className="font-semibold">Quant</h3><p className="text-sm text-muted-foreground mt-1">Conjoint/MaxDiff; Präferenzen & Preis-Trade-offs.</p></article>
+        <article className="rounded-2xl border border-border p-4"><h3 className="font-semibold">Outcome</h3><p className="text-sm text-muted-foreground mt-1">Klare Segmente & Value Drivers; B2B2C-Roadmap.</p></article>
       </section>
-
-      <section className="space-y-4">
-        <h2 className="text-xl font-semibold">Forschungsdesign & Methoden</h2>
-        <ul className="grid sm:grid-cols-2 gap-3">
-          <li className='card p-4'>Design Thinking Workshops (5 Iterationen)</li>
-          <li className='card p-4'>Conjoint-Analyse für Produktfeatures</li>
-          <li className='card p-4'>Customer Journey Mapping</li>
-          <li className='card p-4'>Rapid Prototyping (RITE)</li>
-        </ul>
-      </section>
-
-      <section className="space-y-6">
-        <h2 className="text-xl font-semibold">Artefakte</h2>
-
-<figure className="space-y-2">
-  <img src={ imgJourney } alt={t('captions.swissJourney')} className="w-full rounded-2xl border border-border" />
-  <figcaption className="text-sm text-muted-foreground">{t('captions.swissJourney')}</figcaption>
-</figure>
-
-
-<figure className="space-y-2">
-  <img src={ imgConjoint } alt={t('captions.swissConjoint')} className="w-full rounded-2xl border border-border" />
-  <figcaption className="text-sm text-muted-foreground">{t('captions.swissConjoint')}</figcaption>
-</figure>
-
-      </section>
-
-      <section className="space-y-3">
-        <h2 className="text-xl font-semibold">Synthese & Entscheidungen</h2>
-        <ul className="list-disc pl-6 space-y-1 text-muted-foreground">
-          <li>• Priorisierung von Features mit hoher Zahlungs-/Nutzungsbereitschaft</li>
-<li>• Optimierung kritischer Journey-Schritte mit hoher Abbruchquote</li>
-<li>• Einführung eines iterativen Validierungszyklus (RITE)</li>
-        </ul>
-      </section>
-
-      <section className="space-y-3">
-        <h2 className="text-xl font-semibold">Impact</h2>
-        <ul className="list-disc pl-6 space-y-1 text-muted-foreground">
-          <li>• 30 % kürzere Entscheidungszyklen</li>
-<li>• Höhere Klarheit bei Stakeholdern über Roadmap-Prioritäten</li>
-        </ul>
-      </section>
-    </div>
-  )
+    </main>
+  );
 }
-
-export default Page
