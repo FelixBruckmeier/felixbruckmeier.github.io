@@ -1,10 +1,15 @@
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
-import path from "path";
+// vite.config.ts
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
 
+// Kein __dirname, kein 'path', kein 'node:url'.
+// Alias '@' zeigt direkt auf '/src' (aus Projekt-Root).
 export default defineConfig({
+  base: '/',
   plugins: [react()],
   resolve: {
-    alias: { "@": path.resolve(__dirname, "src") }
-  }
-});
+    alias: {
+      '@': '/src',
+    },
+  },
+})
