@@ -1,5 +1,6 @@
 ﻿import Navbar from "../components/Navbar";
-export default function CVPage(){
+
+export default function CVPage() {
   return (
     <div>
       <Navbar />
