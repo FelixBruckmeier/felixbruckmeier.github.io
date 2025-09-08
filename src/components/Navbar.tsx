@@ -35,7 +35,7 @@ export default function Navbar() {
         <div className="hidden md:flex items-center gap-3">
           {tabs.map(tab => (
             <Link key={tab.key} to={tab.to} className="px-3 py-1 rounded-md text-sm hover:bg-neutral-100 dark:hover:bg-neutral-800 transition">
-              {t(tab.key as any)}
+              {t(tab.key)}
             </Link>
           ))}
         </div>
@@ -51,7 +51,7 @@ export default function Navbar() {
         <div className="flex overflow-x-auto gap-2 px-4 py-2">
           {tabs.map(tab => (
             <Link key={tab.key} to={tab.to} className="px-3 py-1 rounded-full text-xs border border-neutral-300 dark:border-neutral-700">
-              {t(tab.key as any)}
+              {t(tab.key)}
             </Link>
           ))}
         </div>
