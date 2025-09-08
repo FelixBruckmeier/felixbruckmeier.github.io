@@ -1,46 +1,29 @@
-import { BrowserRouter, Routes, Route, useLocation, useEffect } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import Home from "@/pages/Home";
-import ExpertiseDetail from "@/pages/ExpertiseDetail";
-import ProjectDetail from "@/pages/ProjectDetail";
+import About from "@/pages/About";
+import Expertise from "@/pages/Expertise";
+import Projects from "@/pages/Projects";
+import CV from "@/pages/CV";
 import Impressum from "@/pages/Impressum";
-import { smoothScrollToId } from "@/lib/scroll";
-
-function HashScroller() {
-  const location = useLocation();
-  useEffect(() => {
-    if (location.pathname === "/" && location.hash) {
-      const id = location.hash.replace("#", "");
-      setTimeout(() => smoothScrollToId(id), 20);
-    }
-  }, [location]);
-  return null;
-}
-
-function Shell() {
-  return (
-    <div className="min-h-screen flex flex-col bg-[hsl(var(--background))] text-[hsl(var(--foreground))]">
-      <Navbar />
-      <main className="flex-1">
-        <HashScroller />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/expertise/:slug" element={<ExpertiseDetail />} />
-          <Route path="/projects/:slug" element={<ProjectDetail />} />
-          <Route path="/impressum" element={<Impressum />} />
-          <Route path="*" element={<div className='p-8'>404 — Not found</div>} />
-        </Routes>
-      </main>
-      <Footer />
-    </div>
-  );
-}
+import { I18nProvider } from "@/i18n";
 
 export default function App() {
   return (
     <BrowserRouter>
-      <Shell />
+      <I18nProvider>
+        <div className="min-h-dvh bg-white text-neutral-900 dark:bg-neutral-900 dark:text-neutral-100">
+          <Navbar />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/expertise" element={<Expertise />} />
+            <Route path="/projects" element={<Projects />} />
+            <Route path="/cv" element={<CV />} />
+            <Route path="/impressum" element={<Impressum />} />
+          </Routes>
+        </div>
+      </I18nProvider>
     </BrowserRouter>
   );
 }
