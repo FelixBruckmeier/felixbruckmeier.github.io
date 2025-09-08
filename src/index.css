@@ -2,56 +2,72 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Fonts */
+/* UX Research Portfolio Design System */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 
 @layer base {
   :root {
+    /* Background System */
     --background: 250 100% 99%;
     --background-secondary: 248 60% 97%;
     --background-tertiary: 246 50% 95%;
     --foreground: 226 30% 15%;
 
+    /* Card System */
     --card: 0 0% 100%;
     --card-secondary: 249 50% 98%;
     --card-foreground: 226 30% 15%;
     --card-border: 220 30% 90%;
 
+    /* Primary Research Blue */
     --primary: 219 85% 58%;
     --primary-light: 219 85% 68%;
     --primary-dark: 219 85% 48%;
     --primary-foreground: 0 0% 100%;
 
+    /* Secondary Insight Orange */
     --secondary: 31 100% 65%;
     --secondary-light: 31 100% 75%;
     --secondary-foreground: 226 30% 15%;
 
+    /* Muted Research Grays */
     --muted: 220 15% 96%;
     --muted-dark: 220 15% 92%;
     --muted-foreground: 226 20% 45%;
 
+    /* Accent Data Purple */
     --accent: 262 70% 68%;
     --accent-light: 262 70% 78%;
     --accent-foreground: 0 0% 100%;
 
+    /* Status Colors */
     --success: 142 70% 45%;
     --warning: 45 90% 55%;
     --destructive: 0 75% 58%;
     --destructive-foreground: 0 0% 100%;
 
+    /* Interactive Elements */
     --border: 220 25% 88%;
     --input: 220 25% 88%;
     --ring: 219 85% 58%;
 
+    /* Design tokens */
     --radius: 0.75rem;
     --radius-sm: 0.5rem;
     --radius-lg: 1rem;
 
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--accent)) 100%);
+    --gradient-secondary: linear-gradient(135deg, hsl(var(--background)) 0%, hsl(var(--background-secondary)) 100%);
+    --gradient-data: linear-gradient(90deg, hsl(var(--primary)) 0%, hsl(var(--secondary)) 50%, hsl(var(--accent)) 100%);
+
+    /* Shadows */
     --shadow-sm: 0 2px 8px -2px hsl(var(--primary) / 0.1);
     --shadow-md: 0 8px 24px -8px hsl(var(--primary) / 0.15);
     --shadow-lg: 0 16px 40px -12px hsl(var(--primary) / 0.2);
     --shadow-research: 0 4px 20px -4px hsl(var(--accent) / 0.15);
 
+    /* Animations */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-spring: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 
@@ -70,6 +86,8 @@
     --foreground: 210 40% 98%;
     --card: 222.2 84% 4.9%;
     --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
     --primary: 210 40% 98%;
     --primary-foreground: 222.2 47.4% 11.2%;
     --secondary: 217.2 32.6% 17.5%;
@@ -92,12 +110,11 @@
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
+}
 
+@layer base {
   * { @apply border-border; }
-  body {
-    @apply bg-background text-foreground font-inter antialiased;
-    background: hsl(var(--background));
-  }
+  body { @apply bg-background text-foreground font-inter antialiased; background: hsl(var(--background)); }
 }
 
 @layer components {
