@@ -1,29 +1,25 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Navbar from "@/components/Navbar";
-import Home from "@/pages/Home";
-import About from "@/pages/About";
-import Expertise from "@/pages/Expertise";
-import Projects from "@/pages/Projects";
-import CV from "@/pages/CV";
-import Impressum from "@/pages/Impressum";
-import { I18nProvider } from "@/i18n";
+import { HashRouter, Routes, Route } from "react-router-dom";
+import { I18nProvider } from "./i18n";
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
+import Home from "./pages/Home";
+import Impressum from "./pages/Impressum";
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <I18nProvider>
-        <div className="min-h-dvh bg-white text-neutral-900 dark:bg-neutral-900 dark:text-neutral-100">
+        <div className="min-h-dvh bg-white text-neutral-900 dark:bg-neutral-900 dark:text-neutral-100 flex flex-col">
           <Navbar />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/expertise" element={<Expertise />} />
-            <Route path="/projects" element={<Projects />} />
-            <Route path="/cv" element={<CV />} />
-            <Route path="/impressum" element={<Impressum />} />
-          </Routes>
+          <div className="flex-1">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/impressum" element={<Impressum />} />
+            </Routes>
+          </div>
+          <Footer />
         </div>
       </I18nProvider>
-    </BrowserRouter>
+    </HashRouter>
   );
 }

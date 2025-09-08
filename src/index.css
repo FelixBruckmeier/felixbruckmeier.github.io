@@ -1,8 +1,6 @@
 @import "tailwindcss";
-/* optional: Google Font */
-/* @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap'); */
 
-/* ---- Tailwind v4 Tokens ---- */
+/* ---- Tokens ---- */
 @theme {
   --color-background: 250 100% 99%;
   --color-foreground: 226 30% 15%;
@@ -14,13 +12,12 @@
   --color-muted:      220 15% 96%;
 
   --font-sans: Inter, ui-sans-serif, system-ui, sans-serif;
-  --radius: 0.75rem;
+  --radius: .75rem;
 
-  /* custom var (für Effekte) */
   --shadow-research: 0 4px 20px -4px hsl(var(--color-accent) / 0.15);
 }
 
-/* Dark Overrides + Base */
+/* Dark + Base */
 @layer base {
   .dark {
     --color-background: 222.2 84% 4.9%;
@@ -28,20 +25,11 @@
     --color-card:       222.2 84% 4.9%;
     --color-border:     217.2 32.6% 17.5%;
   }
-
   html, body, #root { height: 100%; }
   body { @apply bg-background text-foreground font-sans antialiased; }
 }
 
 @layer components {
-  .fade-in { animation: fadeIn .6s ease-out forwards; }
-  .slide-up { animation: slideUp .8s cubic-bezier(.175,.885,.32,1.275) forwards; }
-  .research-glow {
-    box-shadow: var(--shadow-research);
-    transition: all .3s cubic-bezier(.4,0,.2,1);
-  }
-  .research-glow:hover { box-shadow: 0 16px 40px -12px hsl(var(--color-primary) / .2); transform: translateY(-2px); }
+  .research-glow { box-shadow: var(--shadow-research); transition: all .3s cubic-bezier(.4,0,.2,1); }
+  .research-glow:hover { box-shadow: 0 16px 40px -12px hsl(var(--color-primary)/.2); transform: translateY(-2px); }
 }
-
-@keyframes fadeIn { from {opacity:0; transform: translateY(20px);} to {opacity:1; transform: none;} }
-@keyframes slideUp { from {opacity:0; transform: translateY(40px);} to {opacity:1; transform: none;} }

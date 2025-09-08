@@ -2,7 +2,7 @@ type Props = { title?: string; pillars?: string[]; footer?: string };
 export default function HouseDiagram({
   title = "UX Research",
   pillars = ["Strategy", "Ops", "Methods", "Activation", "Leadership"],
-  footer = "Impact",
+  footer = "Impact"
 }: Props) {
   return (
     <div className="w-full max-w-3xl mx-auto p-4">

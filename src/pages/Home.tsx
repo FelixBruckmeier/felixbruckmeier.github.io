@@ -1,6 +1,5 @@
-import { useI18n } from "@/i18n";
-import HouseDiagram from "@/components/HouseDiagram";
-import { Link } from "react-router-dom";
+import { useI18n } from "../i18n";
+import HouseDiagram from "../components/HouseDiagram";
 
 export default function Home() {
   const { t } = useI18n();
@@ -13,11 +12,16 @@ export default function Home() {
             <p className="text-neutral-600 dark:text-neutral-300 mb-6">{t("hero_sub")}</p>
             <div className="flex gap-3">
               <a href="/assets/CV_Felix_Bruckmeier.pdf" className="px-4 py-2 rounded-md bg-neutral-900 text-white dark:bg-white dark:text-neutral-900">CV</a>
-              <Link to="/projects" className="px-4 py-2 rounded-md border border-neutral-300 dark:border-neutral-700">Projects</Link>
+              <a href="#projects" className="px-4 py-2 rounded-md border border-border">Projects</a>
             </div>
           </div>
           <div className="flex justify-center">
-            <img src="/assets/profile.jpg" alt="Profile" className="w-48 h-48 rounded-2xl object-cover border border-neutral-200 dark:border-neutral-700" />
+            <img
+              src="/assets/profile.jpg"
+              alt="Profile"
+              className="w-48 h-48 rounded-2xl object-cover border border-border"
+              onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
+            />
           </div>
         </div>
       </section>
@@ -37,9 +41,9 @@ export default function Home() {
       <section id="projects" className="max-w-6xl mx-auto px-4 py-12">
         <h2 className="text-2xl font-semibold mb-4">{t("projects_title")}</h2>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          <Link to="/projects" className="p-4 rounded-lg border hover:shadow-sm transition">ADAC Car Insurance</Link>
-          <Link to="/projects" className="p-4 rounded-lg border hover:shadow-sm transition">zooplus ResearchOps</Link>
-          <Link to="/projects" className="p-4 rounded-lg border hover:shadow-sm transition">Swiss Life B2B2C</Link>
+          <div className="p-4 rounded-lg border research-glow">ADAC Car Insurance</div>
+          <div className="p-4 rounded-lg border research-glow">zooplus ResearchOps</div>
+          <div className="p-4 rounded-lg border research-glow">Swiss Life B2B2C</div>
         </div>
       </section>
 
