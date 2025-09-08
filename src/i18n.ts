@@ -1,7 +1,9 @@
 import { createContext, useContext, useState, ReactNode } from "react";
 
 type Lang = "en" | "de";
-const dict = {
+type Dict = Record<string, { en: string; de: string }>;
+
+const dict: Dict = {
   nav_home: { en: "Home", de: "Start" },
   nav_about: { en: "About me", de: "Über mich" },
   nav_expertise: { en: "Expertise", de: "Expertise" },
@@ -15,14 +17,14 @@ const dict = {
   projects_title: { en: "Projects", de: "Projekte" },
   cv_title: { en: "Curriculum Vitae", de: "Lebenslauf" },
   imprint_title: { en: "Imprint", de: "Impressum" }
-} as const;
+};
 
-type Ctx = { lang: Lang; t: (k: keyof typeof dict)=>string; setLang:(l:Lang)=>void };
+type Ctx = { lang: Lang; t: (k: keyof typeof dict | string) => string; setLang:(l:Lang)=>void };
 const I18nCtx = createContext<Ctx | null>(null);
 
 export function I18nProvider({ children }: { children: ReactNode }) {
   const [lang, setLang] = useState<Lang>("de");
-  const t = (k: keyof typeof dict) => dict[k]?.[lang] ?? String(k);
+  const t: Ctx["t"] = (k) => (dict as any)[k]?.[lang] ?? String(k);
   return <I18nCtx.Provider value={{ lang, t, setLang }}>{children}</I18nCtx.Provider>;
 }
 export function useI18n() {
