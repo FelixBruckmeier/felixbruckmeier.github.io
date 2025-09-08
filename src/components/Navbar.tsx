@@ -7,10 +7,7 @@ import { useI18n } from "../i18n";
 export const Navbar: React.FC = () => {
   const { t } = useI18n();
   const [open, setOpen] = React.useState(false);
-
-  const navItem =
-    "px-3 py-2 rounded-md hover:bg-[hsl(var(--muted))] transition text-sm";
-
+  const navItem = "px-3 py-2 rounded-md hover:bg-[hsl(var(--muted))] transition text-sm";
   const close = () => setOpen(false);
 
   return (
@@ -30,7 +27,6 @@ export const Navbar: React.FC = () => {
             <LanguageToggle />
             <ThemeToggle />
           </div>
-
           <button
             className="md:hidden p-2 border rounded-md"
             onClick={() => setOpen((v) => !v)}
@@ -41,7 +37,6 @@ export const Navbar: React.FC = () => {
         </div>
       </div>
 
-      {/* Mobile menu */}
       {open && (
         <div className="md:hidden border-t bg-[hsl(var(--background))]">
           <div className="px-4 py-2 flex flex-col gap-1">
@@ -51,13 +46,4 @@ export const Navbar: React.FC = () => {
             <NavLink to="/projects" className={navItem} onClick={close}>{t("nav_projects")}</NavLink>
             <NavLink to="/craft" className={navItem} onClick={close}>{t("nav_craft")}</NavLink>
             <NavLink to="/contact" className={navItem} onClick={close}>{t("nav_contact")}</NavLink>
-            <div className="flex items-center gap-2 pt-2">
-              <LanguageToggle />
-              <ThemeToggle />
-            </div>
-          </div>
-        </div>
-      )}
-    </header>
-  );
-};
+            <div className
