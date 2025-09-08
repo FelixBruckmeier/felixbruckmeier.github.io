@@ -1,0 +1,3 @@
+/* Tailwind present in the project; keep minimal to avoid conflicts */
+:root { color-scheme: light dark; }
+html { scroll-behavior: smooth; }
