@@ -27,7 +27,7 @@ jobs:
           npm cache clean --force
 
       - name: Install deps
-        run: npm install --no-audit --no-fund
+        run: npm install --no-audit --no-fund --include=dev
 
       - name: Build
         run: npm run build
