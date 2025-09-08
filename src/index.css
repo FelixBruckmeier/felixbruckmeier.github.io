@@ -2,5 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Deine minimalen Regeln können bleiben */
 :root { color-scheme: light dark; }
 html { scroll-behavior: smooth; }
