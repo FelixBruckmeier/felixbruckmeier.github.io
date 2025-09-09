@@ -1,3 +1,19 @@
-package-lock.json
-package-lock.json
-package-lock.json
+# Node
+node_modules/
+dist/
+.vite/
+.cache/
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Editor/OS
+.DS_Store
+.idea/
+.vscode/
+*.local
+
+# Env
+.env
+.env.*
