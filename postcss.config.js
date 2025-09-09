@@ -1,4 +1,4 @@
-// Tailwind v4 minimal setup über das PostCSS-Plugin
+// Tailwind v4 über PostCSS-Plugin
 export default {
   plugins: {
     "@tailwindcss/postcss": {},
