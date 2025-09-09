@@ -1,7 +1,18 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-/* Deine minimalen Regeln können bleiben */
-:root { color-scheme: light dark; }
-html { scroll-behavior: smooth; }
+/* Token-Mapping für Utilities wie bg-background, text-foreground, border-border */
+@theme {
+  --color-background: light-dark(#ffffff, #0b0b0b);
+  --color-foreground: light-dark(#0b0b0b, #e5e7eb);
+  --color-border:     light-dark(#e5e7eb, #1f2937);
+}
+
+/* Systemweiten Dark/Light-Hint – schadet nicht */
+html { color-scheme: light dark; }
+
+/* (Optional) kleine Helfer – können weg, falls du eigene Basestyles hast */
+:root { --radius: 1rem; }
+.card {
+  border-radius: var(--radius);
+  border: 1px solid var(--color-border);
+}
