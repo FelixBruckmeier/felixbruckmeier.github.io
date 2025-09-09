@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-/* Tokens für Utilities wie bg-background / text-foreground / border-border */
+/* Token-Mapping für Utilities wie bg-background, text-foreground, border-border */
 @theme {
   --color-background: light-dark(#ffffff, #0b0b0b);
   --color-foreground: light-dark(#0b0b0b, #e5e7eb);
