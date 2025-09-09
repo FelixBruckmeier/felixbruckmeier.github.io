@@ -1,10 +1,28 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-/* Token-Mapping für Utilities wie bg-background, text-foreground, border-border */
-@theme {
-  --color-background: light-dark(#ffffff, #0b0b0b);
-  --color-foreground: light-dark(#0b0b0b, #e5e7eb);
-  --color-border:     light-dark(#e5e7eb, #1f2937);
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+@layer base {
+  :root {
+    --background: 250 100% 99%;
+    --foreground: 226 30% 15%;
+    --card: 0 0% 100%;
+    --muted: 220 15% 96%;
+    --muted-foreground: 226 20% 45%;
+    --primary: 219 85% 58%;
+    --border: 220 25% 88%;
+  }
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --primary: 224.3 76.3% 48%;
+    --border: 217.2 32.6% 17.5%;
+  }
+  * { @apply border-[hsl(var(--border))]; }
+  body { @apply font-sans; background: hsl(var(--background)); color: hsl(var(--foreground)); }
 }
-
-html { color-scheme: light dark; }
