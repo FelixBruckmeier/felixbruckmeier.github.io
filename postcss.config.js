@@ -1,7 +1,6 @@
-// postcss.config.js (ESM)
+// Tailwind v4 minimal setup über das PostCSS-Plugin
 export default {
   plugins: {
-    '@tailwindcss/postcss': {},
-    autoprefixer: {},
+    "@tailwindcss/postcss": {},
   },
 };
