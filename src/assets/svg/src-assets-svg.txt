@@ -1,0 +1,67 @@
+﻿1. double-diamond.svg:
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="220" viewBox="0 0 800 220">
+  <rect width="100%" height="100%" fill="none"/>
+  <g stroke="hsl(219,85%,58%)" stroke-width="2" fill="none">
+    <polygon points="60,110 160,20 260,110 160,200" />
+    <polygon points="260,110 360,20 460,110 360,200" />
+    <polygon points="460,110 560,20 660,110 560,200" />
+  </g>
+  <g fill="hsl(226,30%,15%)" font-family="Inter, sans-serif" font-size="14">
+    <text x="110" y="210" text-anchor="middle">Discover</text>
+    <text x="210" y="210" text-anchor="middle">Define</text>
+    <text x="410" y="210" text-anchor="middle">Develop</text>
+    <text x="610" y="210" text-anchor="middle">Deliver</text>
+  </g>
+</svg>
+
+2. matrix-2x2.svg:
+<svg xmlns="http://www.w3.org/2000/svg" width="420" height="420" viewBox="0 0 420 420">
+  <rect width="100%" height="100%" fill="white"/>
+  <g transform="translate(40,40)" stroke="hsl(220,25%,88%)" stroke-width="2" fill="none">
+    <rect width="320" height="320"/>
+    <line x1="160" y1="0" x2="160" y2="320"/>
+    <line x1="0" y1="160" x2="320" y2="160"/>
+  </g>
+  <g font-family="Inter, sans-serif" font-size="14" fill="hsl(226,30%,15%)">
+    <text x="200" y="24" text-anchor="middle">Risk â†‘</text>
+    <text x="200" y="402" text-anchor="middle">Risk â†“</text>
+    <text x="12" y="210" transform="rotate(-90,12,210)">Knowledge â†“</text>
+    <text x="408" y="210" text-anchor="end" transform="rotate(-90,408,210)">Knowledge â†‘</text>
+  </g>
+</svg>
+
+3. reops-matrix.svg:
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="420" viewBox="0 0 820 420">
+  <rect width="100%" height="100%" fill="white"/>
+  <g font-family="Inter, sans-serif" fill="hsl(226,30%,15%)">
+    <text x="20" y="30" font-size="20">ResearchOps Impact Areas</text>
+  </g>
+  <g transform="translate(20,50)" stroke="hsl(220,25%,88%)" stroke-width="2">
+    <rect width="780" height="320" fill="none"/>
+    <g>
+      <rect x="0" y="0" width="380" height="100" fill="hsl(219,85%,58%)" />
+      <text x="190" y="60" text-anchor="middle" font-family="Inter" font-size="16" fill="white">Governance</text>
+    </g>
+    <g>
+      <rect x="400" y="0" width="380" height="100" fill="hsl(262,70%,68%)" />
+      <text x="590" y="60" text-anchor="middle" font-family="Inter" font-size="16" fill="white">Insights Activation & Enablement</text>
+    </g>
+    <g>
+      <rect x="0" y="110" width="380" height="100" fill="hsl(31,100%,65%)" />
+      <text x="190" y="170" text-anchor="middle" font-family="Inter" font-size="16" fill="hsl(226,30%,15%)">Process & Scope</text>
+    </g>
+    <g>
+      <rect x="400" y="110" width="380" height="100" fill="hsl(219,85%,58%)" />
+      <text x="590" y="170" text-anchor="middle" font-family="Inter" font-size="16" fill="white">Tools & Automation</text>
+    </g>
+    <g>
+      <rect x="0" y="220" width="380" height="100" fill="hsl(262,70%,68%)" />
+      <text x="190" y="280" text-anchor="middle" font-family="Inter" font-size="16" fill="white">Org Alignment & Evangelization</text>
+    </g>
+    <g>
+      <rect x="400" y="220" width="380" height="100" fill="hsl(31,100%,65%)" />
+      <text x="590" y="280" text-anchor="middle" font-family="Inter" font-size="16" fill="hsl(226,30%,15%)">Resource & Strategic Management</text>
+    </g>
+  </g>
+</svg>
+

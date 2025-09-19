@@ -1,0 +1,127 @@
+﻿1. App.tsx:
+import { Routes, Route, Navigate } from "react-router-dom";
+import AppLayout from "@/layouts/AppLayout";
+import Home from "@/pages/Home";
+import CV from "@/pages/CV";
+
+// Projektseiten
+import ADAC from "@/pages/projects/ADAC";
+import CarInsurance from "@/pages/projects/CarInsurance";
+import SwissLife from "@/pages/projects/SwissLife";
+import ZooplusReOps from "@/pages/projects/ZooplusReOps";
+import ZooplusPricing from "@/pages/projects/ZooplusPricing";
+import PricingUsability from "@/pages/projects/PricingUsability";
+import UXMethodCards from "@/pages/projects/UXMethodCards";
+import WinningUXStrategy from "@/pages/projects/WinningUXStrategy";
+
+// Optional: Falls vorhanden
+import NotFound from "@/pages/NotFound";
+
+import { Routes, Route, Navigate } from "react-router-dom";
+import AppLayout from "@/layouts/AppLayout";
+import Home from "@/pages/Home";
+import CV from "@/pages/CV";
+
+// Projektseiten
+import ADAC from "@/pages/projects/ADAC";
+import CarInsurance from "@/pages/projects/CarInsurance";
+import SwissLife from "@/pages/projects/SwissLife";
+import ZooplusReOps from "@/pages/projects/ZooplusReOps";
+import ZooplusPricing from "@/pages/projects/ZooplusPricing";
+import PricingUsability from "@/pages/projects/PricingUsability";
+import UXMethodCards from "@/pages/projects/UXMethodCards";
+import WinningUXStrategy from "@/pages/projects/WinningUXStrategy";
+
+// Optional: Falls vorhanden
+import NotFound from "@/pages/NotFound";
+
+export default function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<AppLayout />}>
+        <Route index element={<Home />} />
+        <Route path="cv" element={<CV />} />
+
+        {/* Projekt-Routen */}
+        <Route path="projects/adac" element={<ADAC />} />
+        <Route path="projects/adac-car-insurance" element={<ADAC />} /> {/* Alias, falls Ã¤ltere Links existieren */}
+        <Route path="projects/car-insurance" element={<CarInsurance />} />
+        <Route path="projects/swiss-life" element={<SwissLife />} />
+        <Route path="projects/zooplus-reops" element={<ZooplusReOps />} />
+        <Route path="projects/zooplus-pricing" element={<ZooplusPricing />} />
+        <Route path="projects/pricing-usability" element={<PricingUsability />} />
+        <Route path="projects/ux-method-cards" element={<UXMethodCards />} />
+        <Route path="projects/winning-ux-strategy" element={<WinningUXStrategy />} />
+
+        {/* Fallback */}
+        {typeof NotFound !== "undefined" ? (
+          <>
+            <Route path="404" element={<NotFound />} />
+            <Route path="*" element={<Navigate to="/404" replace />} />
+          </>
+        ) : (
+          <Route path="*" element={<Navigate to="/" replace />} />
+        )}
+      </Route>
+    </Routes>
+  );
+}
+
+
+2. AppLayout.tsx:
+import { Outlet } from "react-router-dom";
+import NavBar from "@/components/Navbar";
+
+export default function AppLayout() {
+  return (
+    <div className="min-h-screen">
+      <NavBar />
+      <Outlet />
+    </div>
+  );
+}
+
+
+3. i18n.ts:
+import i18n from "i18next";
+import { initReactI18next } from "react-i18next";
+import de from "@/locales/de.json";
+import en from "@/locales/en.json";
+
+void i18n
+  .use(initReactI18next)
+  .init({
+    resources: { de: { translation: de }, en: { translation: en } },
+    lng: "en",
+    fallbackLng: "en",
+    interpolation: { escapeValue: false },
+  });
+
+export default i18n;
+
+
+4. index.css:
+@import "tailwindcss";
+
+:root { color-scheme: light dark; }
+html { scroll-behavior: smooth; }
+
+
+5. main.tsx:
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { StrictMode } from "react";
+import { BrowserRouter } from "react-router-dom";
+import App from "@/App";
+import "@/i18n";
+import "./index.css";
+
+ReactDOM.createRoot(document.getElementById("root")!).render(
+  <StrictMode>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </StrictMode>
+);
+
+

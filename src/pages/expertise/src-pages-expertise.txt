@@ -1,0 +1,55 @@
+﻿1. ImpactMeasurement.tsx:
+import React from 'react'
+
+const Page: React.FC = () => (
+  <div className="container-responsive py-12 space-y-4">
+    <h1 className="text-3xl font-semibold">Impact Measurement</h1>
+    <p className="text-muted-foreground">Content coming soon. Replace with real case details (Situation â†’ Research â†’ Decisions â†’ Impact).</p>
+  </div>
+)
+export default Page
+
+2. ResearchOps.tsx:
+import React from 'react'
+
+const Page: React.FC = () => (
+  <div className="container-responsive py-12 space-y-4">
+    <h1 className="text-3xl font-semibold">ResearchOps</h1>
+    <p className="text-muted-foreground">Content coming soon. Replace with real case details (Situation â†’ Research â†’ Decisions â†’ Impact).</p>
+  </div>
+)
+export default Page
+
+3. StrategicUXResearch.tsx:
+import React from 'react'
+
+const Page: React.FC = () => (
+  <div className="container-responsive py-12 space-y-4">
+    <h1 className="text-3xl font-semibold">Strategic UX Research</h1>
+    <p className="text-muted-foreground">Content coming soon. Replace with real case details (Situation â†’ Research â†’ Decisions â†’ Impact).</p>
+  </div>
+)
+export default Page
+
+4. TeamLeadership.tsx:
+import React from 'react'
+
+const Page: React.FC = () => (
+  <div className="container-responsive py-12 space-y-4">
+    <h1 className="text-3xl font-semibold">Team Leadership & Mentoring</h1>
+    <p className="text-muted-foreground">Content coming soon. Replace with real case details (Situation â†’ Research â†’ Decisions â†’ Impact).</p>
+  </div>
+)
+export default Page
+
+5. UXStrategy.tsx:
+import React from 'react'
+
+const Page: React.FC = () => (
+  <div className="container-responsive py-12 space-y-4">
+    <h1 className="text-3xl font-semibold">UX Strategy</h1>
+    <p className="text-muted-foreground">Content coming soon. Replace with real case details (Situation â†’ Research â†’ Decisions â†’ Impact).</p>
+  </div>
+)
+export default Page
+

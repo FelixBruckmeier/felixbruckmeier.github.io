@@ -1,0 +1,12 @@
+{
+  "captions": {
+    "adacPricing": "Before/After pricing component (ADAC): clearer plan structure, reduced cognitive load.",
+    "adacHeatmap": "Heatmap (Before): click hotspots on non-core elements \u2192 reveals orientation issues.",
+    "reopsMatrix": "ResearchOps matrix (zooplus): six impact areas as governance frame.",
+    "reopsDashboard": "ReOps dashboard/template library (zooplus): reusability & consistency.",
+    "swissJourney": "Customer journey map (Swiss Life): stages, touchpoints, pain points, opportunities.",
+    "swissConjoint": "Conjoint results: relative importance of product features.",
+    "pricingMaxdiff": "MaxDiff results (zooplus): prioritization of pricing module features.",
+    "pricingHeatmap": "Eye-tracking/heatmap (zooplus): gaze focus on core price info after redesign."
+  }
+}

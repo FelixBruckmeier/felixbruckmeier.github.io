@@ -1,0 +1,212 @@
+﻿1. Footer.tsx:
+import React from 'react'
+import { useI18n } from '@/i18n'
+
+const Footer: React.FC = () => {
+  const { t } = useI18n()
+  const year = new Date().getFullYear()
+  return (
+    <footer className="border-t border-border mt-12">
+      <div className="container-responsive py-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <p className="text-sm text-muted-foreground">{t('footer.rights').replace('{year}', String(year))}</p>
+        <nav className="flex items-center gap-4 text-sm">
+          <a className="hover:underline" href="/imprint">Imprint</a>
+          <a className="hover:underline" href="/privacy">Privacy</a>
+        </nav>
+      </div>
+    </footer>
+  )
+}
+
+export default Footer
+
+2. HouseDiagram.tsx:
+import { useTranslation } from "react-i18next";
+type Pillar = { title: string; caption?: string; href?: string; };
+
+export default function HouseDiagram() {
+  const { t } = useTranslation();
+  const pillars = t("expertise.pillars", { returnObjects: true }) as Pillar[];
+
+  return (
+    <div className="w-full">
+      {/* Roof */}
+      <div className="mx-auto max-w-4xl flex justify-center">
+        <div className="relative">
+          <div className="w-0 h-0 border-l-[120px] border-l-transparent border-r-[120px] border-r-transparent border-b-[90px] border-b-neutral-900 dark:border-b-white" aria-hidden />
+          <div className="absolute inset-0 -top-5 flex items-end justify-center">
+            <span className="px-3 py-1 text-xs font-semibold bg-neutral-900 text-white dark:bg-white dark:text-neutral-900 rounded-md translate-y-5">
+              {t("expertise.roof")}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* Tiles */}
+      <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        {pillars.slice(0,5).map((p, i) => (
+          <a key={i} href="/#projects" className="block focus:outline-none focus:ring-2 focus:ring-neutral-400 dark:focus:ring-neutral-600 rounded-2xl">
+            <div className="h-full rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-4 shadow-sm hover:shadow-md transition-shadow">
+              <div className="font-semibold leading-snug">{p.title}</div>
+              {p.caption ? <div className="mt-2 text-sm opacity-80">{p.caption}</div> : null}
+            </div>
+          </a>
+        ))}
+      </div>
+
+      {/* Foundation */}
+      <div className="mt-8">
+        <div className="mx-auto max-w-5xl rounded-full bg-neutral-900 text-white dark:bg-white dark:text-neutral-900 text-center text-sm font-semibold px-4 py-2">
+          {t("expertise.foundation")}
+        </div>
+      </div>
+
+      {/* Value Proposition */}
+      <p className="mt-4 text-center text-sm text-neutral-700 dark:text-neutral-300 max-w-3xl mx-auto">
+        {t("expertise.valueProp")}
+      </p>
+    </div>
+  );
+}
+
+
+3. LangToggle.tsx:
+import { useTranslation } from "react-i18next";
+export default function LangToggle() {
+  const { i18n } = useTranslation();
+  const curr = i18n.language.startsWith("de") ? "de" : "en";
+  const next = curr === "de" ? "en" : "de";
+  return <button aria-label="Toggle language" onClick={()=>i18n.changeLanguage(next)} className="rounded-md border border-neutral-300 dark:border-neutral-700 px-2 py-1 text-xs">{curr.toUpperCase()}</button>;
+}
+
+
+4. LanguageToggle.tsx:
+import React from 'react'
+import { useI18n } from '@/i18n'
+
+const LanguageToggle: React.FC = () => {
+  const { lang, setLang } = useI18n()
+  const next = lang === 'de' ? 'en' : 'de'
+  return (
+    <button
+      className="px-3 py-2 rounded-lg hover:bg-muted transition"
+      onClick={()=>setLang(next)}
+      aria-label="Toggle language"
+      title={lang === 'de' ? 'Switch to English' : 'Auf Deutsch umschalten'}
+    >
+      {lang.toUpperCase()}
+    </button>
+  )
+}
+
+export default LanguageToggle
+
+5. Navbar.tsx:
+import { Link, useLocation } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
+import ThemeToggle from "@/components/ThemeToggle";
+import LangToggle from "@/components/LanguageToggle";
+
+const NAV = ["about","expertise","projects","cv","craft","contact"] as const;
+
+export default function NavBar() {
+  const { t } = useTranslation();
+  const { pathname, hash } = useLocation();
+  const onHome = pathname === "/";
+  const [active, setActive] = useState<string>("");
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    const prev = document.documentElement.style.scrollBehavior;
+    document.documentElement.style.scrollBehavior = "smooth";
+    return () => { document.documentElement.style.scrollBehavior = prev; };
+  }, []);
+
+  const observerRef = useRef<IntersectionObserver | null>(null);
+  useEffect(() => {
+    if (!onHome) return;
+    const sections = NAV.map(id => document.getElementById(id)).filter(Boolean) as HTMLElement[];
+    if (observerRef.current) observerRef.current.disconnect();
+    observerRef.current = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const id = entry.target.getAttribute("id") || "";
+          setActive(id);
+          history.replaceState(null, "", `#${id}`);
+        }
+      });
+    }, { threshold: 0.5, rootMargin: "-20% 0px -50% 0px" });
+    sections.forEach(sec => observerRef.current?.observe(sec));
+    return () => observerRef.current?.disconnect();
+  }, [onHome]);
+
+  const hrefFor = (id: string) => (onHome ? `#${id}` : `/#${id}`);
+  useEffect(() => { setOpen(false); }, [hash, pathname]);
+
+  return (
+    <header className="sticky top-0 z-50 border-b border-neutral-200 dark:border-neutral-800 bg-white/80 dark:bg-neutral-950/80 backdrop-blur">
+      <nav className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <Link to="/" className="flex items-center gap-2 font-bold text-sm md:text-base">
+          <img src="/favicon.png" alt="FB logo" className="h-6 w-6 rounded-md" />
+          <span>Felix Bruckmeier</span>
+        </Link>
+
+        <ul className="hidden md:flex items-center gap-4 text-sm">
+          {NAV.map((id) => (
+            <li key={id}>
+              <a
+                href={hrefFor(id)}
+                aria-current={active === id ? "page" : undefined}
+                className={`px-1 py-2 ${active === id ? "font-semibold underline underline-offset-4" : ""} text-neutral-700 dark:text-neutral-200 hover:text-black dark:hover:text-white`}
+              >
+                {t(`nav.${id}`)}
+              </a>
+            </li>
+          ))}
+          <li className="pl-2"><LangToggle /></li>
+          <li><ThemeToggle /></li>
+        </ul>
+
+        <button aria-label="Open menu" className="md:hidden inline-flex items-center justify-center h-10 w-10 rounded-md border border-neutral-300 dark:border-neutral-700" onClick={()=>setOpen(v=>!v)}>
+          <div className={`transition-transform ${open ? "rotate-45" : ""}`}>
+            <div className="w-5 h-0.5 bg-current mb-1"></div>
+            <div className={`w-5 h-0.5 bg-current ${open ? "opacity-0" : ""}`}></div>
+            <div className="w-5 h-0.5 bg-current mt-1"></div>
+          </div>
+        </button>
+      </nav>
+
+      {open && (
+        <div className="md:hidden border-t border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950">
+          <div className="mx-auto max-w-6xl px-4 py-3 space-y-2">
+            {NAV.map((id) => (
+              <a key={id} href={hrefFor(id)} className="block py-2 text-neutral-800 dark:text-neutral-100">{t(`nav.${id}`)}</a>
+            ))}
+            <div className="flex gap-3 pt-2"><LangToggle /><ThemeToggle /></div>
+          </div>
+        </div>
+      )}
+    </header>
+  );
+}
+
+
+6. ThemeToggle.tsx:
+import { useEffect, useState } from "react";
+export default function ThemeToggle() {
+  const [dark, setDark] = useState(false);
+  useEffect(() => {
+    const stored = localStorage.getItem("theme");
+    const prefers = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+    setDark(stored ? stored === "dark" : prefers);
+  }, []);
+  useEffect(() => {
+    const root = document.documentElement;
+    if (dark) { root.classList.add("dark"); localStorage.setItem("theme","dark"); }
+    else { root.classList.remove("dark"); localStorage.setItem("theme","light"); }
+  }, [dark]);
+  return <button aria-label="Toggle theme" onClick={()=>setDark(v=>!v)} className="rounded-md border border-neutral-300 dark:border-neutral-700 px-2 py-1 text-xs">{dark?"Light":"Dark"}</button>;
+}
+
+

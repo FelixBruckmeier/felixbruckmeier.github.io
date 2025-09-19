@@ -1,0 +1,48 @@
+@import "tailwindcss";
+
+/* Tailwind v4: eigene Tokens.
+   WICHTIG: Breakpoints wieder definieren, sonst sind sm:, md:, ... "unbekannt". */
+@theme {
+  /* Breakpoints (Default-Werte) */
+  --breakpoint-sm: 40rem;   /* 640px  */
+  --breakpoint-md: 48rem;   /* 768px  */
+  --breakpoint-lg: 64rem;   /* 1024px */
+  --breakpoint-xl: 80rem;   /* 1280px */
+  --breakpoint-2xl: 96rem;  /* 1536px */
+
+  /* Light-Theme Farben */
+  --color-background: #ffffff;
+  --color-foreground: #0a0a0a;
+  --color-border: oklch(0.86 0 0 / 1);
+  --color-muted: oklch(0.96 0 0 / 1);
+  --color-muted-foreground: oklch(0.45 0 0 / 1);
+}
+
+/* Dark-Overrides (hellerer Kontrast) */
+.dark {
+  --color-background: #0b0b0b;
+  --color-foreground: #f8f8f8;                /* heller */
+  --color-border: oklch(0.32 0 0 / 1);
+  --color-muted: oklch(0.18 0 0 / 1);         /* etwas dunkleres Card-Grau */
+  --color-muted-foreground: oklch(0.88 0 0);  /* deutlich heller für Fließtexte */
+}
+
+/* Global */
+:root { color-scheme: light dark; }
+html { scroll-behavior: smooth; }
+
+/* Mini-Designsystem: wiederverwendete Utilities/Components */
+@layer components {
+  .container-responsive {
+    @apply mx-auto max-w-6xl px-4 sm:px-6 lg:px-8;
+  }
+  .card {
+    @apply rounded-2xl border border-border bg-white dark:bg-neutral-950;
+  }
+  .btn {
+    @apply inline-flex items-center rounded-2xl px-4 py-2 text-sm font-semibold border border-border;
+  }
+  .btn-secondary {
+    @apply inline-flex items-center rounded-2xl px-4 py-2 text-sm font-semibold border border-border bg-muted text-foreground;
+  }
+}
