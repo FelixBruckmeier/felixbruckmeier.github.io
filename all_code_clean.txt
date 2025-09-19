@@ -1,3 +1,2036 @@
+==== index.html ====
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- Theme bootstrapping: setzt .dark auf <html>, bevor CSS rendert -->
+    <script>
+      (() => {
+        try {
+          const stored = localStorage.getItem('theme');
+          const prefers = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          const theme = stored ?? (prefers ? 'dark' : 'light');
+          const root = document.documentElement;
+          if (theme === 'dark') { root.classList.add('dark'); root.style.colorScheme = 'dark'; }
+          else { root.classList.remove('dark'); root.style.colorScheme = 'light'; }
+        } catch {}
+      })();
+    </script>
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Felix Bruckmeier – UX Research</title>
+  </head>
+  <!-- WICHTIG: Tokens statt feste Farben -->
+  <body class="min-h-screen bg-background text-foreground">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+
+
+==== package.json ====
+{
+  "name": "uxr-portfolio-felix",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "i18next": "^23.16.8",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-i18next": "^13.5.0",
+    "react-router-dom": "^6.26.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.0.0",
+    "@types/node": "^24.5.2",
+    "@types/react": "^18.2.66",
+    "@types/react-dom": "^18.2.22",
+    "@vitejs/plugin-react": "^4.3.4",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.47",
+    "tailwindcss": "^4.0.0",
+    "typescript": "^5.4.0",
+    "vite": "^5.4.19"
+  }
+}
+
+
+==== tsconfig.json ====
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "esModuleInterop": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    },
+    "types": ["node"]
+  },
+  "include": ["src", "src/vite-env.d.ts"],
+  "references": [
+    {
+      "path": "./tsconfig.node.json"
+    }
+  ]
+}
+
+
+==== vite.config.ts ====
+// vite.config.ts
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import { fileURLToPath } from "node:url";
+import { dirname, resolve } from "node:path";
+
+// __dirname in ESM nachbauen
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+// Prüfen, ob wir in GitHub Actions laufen
+const isActions = process.env.GITHUB_ACTIONS === "true";
+
+export default defineConfig({
+  plugins: [react()],
+  base: "/", // User/Org Pages: Root
+  build: {
+    outDir: isActions ? "dist" : "docs", // Actions → dist, lokal → docs
+  },
+  resolve: {
+    alias: {
+      "@": resolve(__dirname, "src"),
+    },
+  },
+});
+
+
+==== tailwind.config.js ====
+/**** Tailwind v4 minimal config ****/
+export default {
+  darkMode: "class",
+};
+
+
+==== postcss.config.js ====
+export default {
+  plugins: {
+    "@tailwindcss/postcss": {},
+  },
+};
+
+
+==== \.github\workflows\deploy.yml ====
+name: Deploy Vite site to GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+
+==== \public\404.html ====
+<!doctype html><html><head><meta charset="UTF-8"><meta http-equiv="refresh" content="0;url=/" /><script>sessionStorage.redirect=location.pathname+location.search</script><title>Redirecting…</title></head><body>Redirecting…</body></html>
+
+
+==== \src\components\CVPreview.tsx ====
+import React, { useEffect, useMemo, useRef, useState } from "react";
+
+type Role = {
+  id: string;
+  company: string;
+  role: string;
+  period: string;
+  tags: string[];
+  bullets?: string[];
+};
+
+const ROLES: Role[] = [
+  {
+    id: "exp-freelance",
+    company: "Freelance",
+    role: "UX Research Consultant",
+    period: "2023 – present",
+    tags: ["Consulting", "B2C", "ResearchOps"],
+    bullets: [
+      "Optimized UX & analytics for shop flows → better conversion.",
+      "User tests/experiments → informed presentation & pricing.",
+      "Scaled research cadence (RITE, office hours) → ~30% faster test cycles.",
+      "MaxDiff (250+) → data-driven prioritization.",
+    ],
+  },
+  {
+    id: "exp-atoss",
+    company: "ATOSS Software SE",
+    role: "UX Research Lead",
+    period: "Jan 2025 – May 2025",
+    tags: ["Leadership", "Enterprise", "B2B"],
+    bullets: [
+      "Established lean research cadence → 70% project coverage.",
+      "Conjoint & surveys (>1,000) → feature prioritization.",
+      "Partnered with CX/Analytics; mentored cross-functional teams.",
+    ],
+  },
+  {
+    id: "exp-zooplus",
+    company: "zooplus SE",
+    role: "UX Research Lead",
+    period: "Jul 2022 – Dec 2024",
+    tags: ["Leadership", "E-commerce", "ResearchOps"],
+    bullets: [
+      "ResearchOps governance, templates & enablement at scale.",
+      "Faster insight cycles; higher consistency across studies.",
+    ],
+  },
+  {
+    id: "exp-swisslife",
+    company: "Swiss Life",
+    role: "Senior UX Researcher",
+    period: "May 2020 – Jun 2022",
+    tags: ["Insurance", "B2B2C", "Quant"],
+    bullets: [
+      "B2B2C research (SAFe Epic Owner) → informed 3 new features.",
+      "Stakeholder workshops; iterative validation (RITE).",
+    ],
+  },
+  {
+    id: "exp-kaiserxlabs",
+    company: "Kaiser X Labs (Allianz)",
+    role: "UX Researcher",
+    period: "Aug 2018 – Apr 2020",
+    tags: ["Insurance", "Quant", "Experiments"],
+    bullets: [
+      "Mixed methods (interviews, surveys, MaxDiff) → clear priorities.",
+      "Contextual research (e.g., ADAC) → exposed redesign opportunities.",
+    ],
+  },
+];
+
+const allTags = Array.from(new Set(ROLES.flatMap((r) => r.tags))).sort();
+
+export default function CVPreview() {
+  const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [openIds, setOpenIds] = useState<Set<string>>(new Set());
+  const [activeId, setActiveId] = useState<string | null>(null);
+
+  const detailsRefs = useRef<Map<string, HTMLDetailsElement>>(new Map());
+  const summaryRefs = useRef<Map<string, HTMLElement>>(new Map());
+  const listRef = useRef<HTMLOListElement | null>(null);
+
+  const filtered = useMemo(() => {
+    return ROLES.filter(
+      (r) => selected.size === 0 || Array.from(selected).some((tag) => r.tags.includes(tag))
+    );
+  }, [selected]);
+
+  const allOpen = useMemo(
+    () => filtered.length > 0 && filtered.every((r) => openIds.has(r.id)),
+    [filtered, openIds]
+  );
+
+  useEffect(() => {
+    const id = location.hash?.replace("#", "");
+    if (!id) return;
+    const el = detailsRefs.current.get(id);
+    if (el) {
+      el.open = true;
+      setOpenIds((prev) => new Set(prev).add(id));
+      setActiveId(id);
+      setTimeout(() => el.scrollIntoView({ behavior: "smooth", block: "center" }), 10);
+    }
+  }, []);
+
+  const handleKeyNav = (e: React.KeyboardEvent) => {
+    if (!["ArrowDown", "ArrowUp", "Home", "End"].includes(e.key)) return;
+    e.preventDefault();
+    const ids = filtered.map((r) => r.id);
+    const currentIndex = ids.findIndex((id) => summaryRefs.current.get(id) === document.activeElement);
+    const focusAt = (idx: number) => summaryRefs.current.get(ids[idx])?.focus();
+    if (e.key === "Home") return focusAt(0);
+    if (e.key === "End") return focusAt(ids.length - 1);
+    if (currentIndex === -1) return focusAt(0);
+    if (e.key === "ArrowDown" && currentIndex < ids.length - 1) focusAt(currentIndex + 1);
+    if (e.key === "ArrowUp" && currentIndex > 0) focusAt(currentIndex - 1);
+  };
+
+  const toggleTag = (tag: string) => {
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (next.has(tag)) next.delete(tag);
+      else next.add(tag);
+      return next;
+    });
+  };
+
+  const clearFilters = () => setSelected(new Set());
+
+  const setAllOpenState = (open: boolean) => {
+    filtered.forEach((r) => {
+      const d = detailsRefs.current.get(r.id);
+      if (d) d.open = open;
+    });
+    setOpenIds((prev) => {
+      const next = new Set(prev);
+      filtered.forEach((r) => (open ? next.add(r.id) : next.delete(r.id)));
+      return next;
+    });
+    setActiveId(open ? filtered[0]?.id ?? null : null);
+  };
+
+  const onToggle = (id: string, isOpen: boolean) => {
+    setOpenIds((prev) => {
+      const next = new Set(prev);
+      if (isOpen) next.add(id);
+      else next.delete(id);
+      return next;
+    });
+    if (isOpen) {
+      setActiveId(id); // nur wenn offen
+      history.replaceState(null, "", `#${id}`);
+    } else {
+      if (activeId === id) setActiveId(null); // beim Schließen wieder dünn
+      if (location.hash === `#${id}`) history.replaceState(null, "", " ");
+    }
+  };
+
+  return (
+    <section id="cv" className="scroll-mt-24 border-t border-neutral-200 dark:border-neutral-800">
+      <div className="container-responsive py-12">
+        <header className="mb-6 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+          <div>
+            <h2 className="text-2xl font-bold">CV snapshot</h2>
+            <p className="mt-2 text-muted-foreground max-w-3xl">
+              Filter by tags. Tip: use <span className="font-mono">↑/↓</span> to move,{" "}
+              <span className="font-mono">Enter</span> to open.
+            </p>
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setAllOpenState(!allOpen)}
+              className="rounded-xl border border-neutral-300 dark:border-neutral-700 px-3 py-2 text-sm hover:bg-neutral-50 dark:hover:bg-neutral-900"
+              title={allOpen ? "Collapse all" : "Expand all"}
+            >
+              {allOpen ? "Collapse all" : "Expand all"}
+            </button>
+            {selected.size > 0 && (
+              <button
+                onClick={clearFilters}
+                className="rounded-xl border border-neutral-300 dark:border-neutral-700 px-3 py-2 text-sm hover:bg-neutral-50 dark:hover:bg-neutral-900"
+                title="Clear filters"
+              >
+                Clear
+              </button>
+            )}
+          </div>
+        </header>
+
+        {/* Tag Filter */}
+        <div className="mb-5 flex flex-wrap gap-2">
+          {allTags.map((tag) => {
+            const active = selected.has(tag);
+            return (
+              <button
+                key={tag}
+                onClick={() => toggleTag(tag)}
+                className={`rounded-full border px-3 py-1.5 text-xs transition ${
+                  active
+                    ? "border-neutral-900 bg-neutral-900 text-white dark:border-white dark:bg-white dark:text-neutral-900"
+                    : "border-neutral-300 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-900"
+                }`}
+                aria-pressed={active}
+              >
+                {tag}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Timeline */}
+        <ol
+          ref={listRef}
+          className="relative border-l border-neutral-200 dark:border-neutral-800 pl-8 space-y-5"
+          onKeyDown={handleKeyNav}
+        >
+          {filtered.map((r) => (
+            <li key={r.id} className="relative pl-6">
+              {/* Bullet auf der Timeline */}
+              <span
+                className="absolute left-0 top-6 -translate-x-1/2 h-2.5 w-2.5 rounded-full bg-neutral-400 dark:bg-neutral-600"
+                aria-hidden
+              />
+              <details
+                ref={(el) => {
+                  if (el) detailsRefs.current.set(r.id, el);
+                }}
+                id={r.id}
+                className={`group w-full rounded-xl bg-white/60 dark:bg-neutral-950/60 backdrop-blur transition 
+                  ${
+                    activeId === r.id
+                      ? "border-2 border-neutral-400 dark:border-neutral-600"
+                      : "border border-neutral-200 dark:border-neutral-800"
+                  }`}
+                onToggle={(e) => onToggle(r.id, (e.target as HTMLDetailsElement).open)}
+              >
+                <summary
+                  ref={(el) => {
+                    if (el) summaryRefs.current.set(r.id, el);
+                  }}
+                  className="list-none cursor-pointer px-4 py-3 flex items-center justify-between gap-4 
+                             outline-none focus:ring-2 focus:ring-neutral-400 dark:focus:ring-neutral-600 rounded-xl"
+                  tabIndex={0}
+                >
+                  <div className="min-w-0">
+                    <div className="font-semibold truncate">{r.company}</div>
+                    <div className="text-sm text-neutral-600 dark:text-neutral-300 truncate">
+                      {r.role} · {r.period}
+                    </div>
+                    <div className="mt-1 flex flex-wrap gap-1.5">
+                      {r.tags.map((t) => (
+                        <span
+                          key={t}
+                          className="inline-flex items-center rounded-full border border-neutral-300 dark:border-neutral-700 px-2 py-0.5 text-[11px]"
+                        >
+                          {t}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                  {/* Pfeil doppelt so groß */}
+                  <div
+                    className="shrink-0 transition group-open:rotate-180 text-2xl"
+                    aria-hidden
+                    title="Toggle details"
+                  >
+                    ▾
+                  </div>
+                </summary>
+
+                {r.bullets && r.bullets.length > 0 && (
+                  <div className="px-4 pb-4">
+                    <ul className="space-y-2 text-sm text-neutral-700 dark:text-neutral-300">
+                      {r.bullets.map((b, j) => (
+                        <li key={j} className="flex gap-2">
+                          <span aria-hidden>•</span>
+                          <span>{b}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </details>
+            </li>
+          ))}
+
+          {filtered.length === 0 && (
+            <li className="text-sm text-neutral-600 dark:text-neutral-300">
+              No results. Try removing some tags.
+            </li>
+          )}
+        </ol>
+
+        <div className="mt-6">
+          <a
+            href="/cv"
+            className="inline-flex items-center rounded-2xl px-5 py-3 text-sm font-semibold border border-neutral-300 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-900"
+          >
+            See full CV
+          </a>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+
+==== \src\components\Footer.tsx ====
+import { Link } from "react-router-dom";
+
+export default function Footer() {
+  const year = new Date().getFullYear();
+  return (
+    <footer className="mt-12 border-t border-border">
+      <div className="container-responsive py-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <p className="text-sm text-muted-foreground">
+          © {year} Felix Bruckmeier — All rights reserved.
+        </p>
+        <nav className="flex items-center gap-4 text-sm">
+          <Link
+            className="text-muted-foreground hover:text-foreground hover:underline"
+            to="/imprint"
+          >
+            Imprint
+          </Link>
+          <Link
+            className="text-muted-foreground hover:text-foreground hover:underline"
+            to="/privacy"
+          >
+            Privacy
+          </Link>
+        </nav>
+      </div>
+    </footer>
+  );
+}
+
+
+==== \src\components\HouseDiagram.tsx ====
+import React from "react";
+import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
+
+// Einheitliche Kachelhöhe (Dach = 1x, Fundament = 0.5x)
+const TILE_H = "176px";
+
+export default function HouseDiagram() {
+  const { t } = useTranslation();
+  const pillars =
+    (t("expertise.pillars", { returnObjects: true }) as Array<{ title: string; caption?: string }>) ?? [];
+
+  const routesByIndex = [
+    "expertise/ux-strategy",
+    "expertise/strategic-ux-research",
+    "expertise/researchops",
+    "expertise/team-leadership",
+    "expertise/impact-measurement",
+  ];
+
+  return (
+    <div className="w-full" style={{ ["--tile-h" as any]: TILE_H }}>
+      {/* Roof */}
+      <div className="relative mx-auto max-w-6xl h-[var(--tile-h)]">
+        <svg className="w-full h-full" viewBox="0 0 100 50" preserveAspectRatio="none" aria-hidden>
+          <polygon
+            points="50,2 98,48 2,48"
+            fill="currentColor"
+            className="text-neutral-900 dark:text-white"
+          />
+        </svg>
+        {/* Overlay-Text */}
+        <div className="absolute inset-0 flex items-center justify-center">
+          <span className="text-base font-semibold text-white dark:text-neutral-900">
+            {t("expertise.roof")}
+          </span>
+        </div>
+      </div>
+
+      {/* Tiles */}
+      <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        {pillars.slice(0, 5).map((p, i) => {
+          const to = routesByIndex[i] ?? "expertise";
+          return (
+            <Link
+              key={i}
+              to={to}
+              className="block focus:outline-none focus:ring-2 focus:ring-neutral-400 dark:focus:ring-neutral-600 rounded-2xl"
+            >
+              <div
+                className="
+                  h-full min-h-[var(--tile-h)]
+                  rounded-2xl border border-border
+                  p-4 shadow-sm hover:shadow-md transition-shadow
+                  bg-white text-neutral-900
+                  dark:bg-neutral-950 dark:text-neutral-100
+                "
+              >
+                <div className="text-base font-semibold leading-snug">{p.title}</div>
+                {p.caption ? (
+                  <div className="mt-2 text-sm text-neutral-600 dark:text-neutral-300">
+                    {p.caption}
+                  </div>
+                ) : null}
+              </div>
+            </Link>
+          );
+        })}
+      </div>
+
+      {/* Foundation (halbe Kachelhöhe) */}
+      <div className="mt-6">
+        <div
+          className="
+            mx-auto max-w-6xl
+            rounded-full
+            text-center border border-border
+            bg-neutral-900 text-white
+            dark:bg-white dark:text-neutral-900
+            text-base font-semibold
+          "
+          style={{
+            height: "calc(var(--tile-h) / 2)",
+            display: "grid",
+            placeItems: "center",
+          }}
+        >
+          <span className="px-4">{t("expertise.foundation")}</span>
+        </div>
+      </div>
+
+      {/* Value Proposition */}
+      <p className="mt-4 text-center text-base font-semibold text-muted-foreground max-w-3xl mx-auto">
+        {t("expertise.valueProp")}
+      </p>
+    </div>
+  );
+}
+
+
+==== \src\components\LangToggle.tsx ====
+import { useTranslation } from "react-i18next";
+export default function LangToggle() {
+  const { i18n } = useTranslation();
+  const curr = i18n.language.startsWith("de") ? "de" : "en";
+  const next = curr === "de" ? "en" : "de";
+  return <button aria-label="Toggle language" onClick={()=>i18n.changeLanguage(next)} className="rounded-md border border-neutral-300 dark:border-neutral-700 px-2 py-1 text-xs">{curr.toUpperCase()}</button>;
+}
+
+
+==== \src\components\LanguageToggle.tsx ====
+import { useTranslation } from "react-i18next";
+
+export default function LanguageToggle() {
+  const { i18n } = useTranslation();
+  const curr = i18n.language.startsWith("de") ? "de" : "en";
+  const next = curr === "de" ? "en" : "de";
+  return (
+    <button
+      className="px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-700
+                 hover:bg-muted transition text-sm
+                 text-neutral-700 dark:text-neutral-300"
+      onClick={() => i18n.changeLanguage(next)}
+      aria-label="Toggle language"
+      title={curr === "de" ? "Switch to English" : "Auf Deutsch umschalten"}
+    >
+      {curr.toUpperCase()}
+    </button>
+  );
+}
+
+
+==== \src\components\Navbar.tsx ====
+import { Link, useLocation } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
+import ThemeToggle from "@/components/ThemeToggle";
+import LangToggle from "@/components/LanguageToggle";
+
+const NAV = ["about","expertise","projects","cv","craft","contact"] as const;
+
+const SUBNAV: Record<string, { id: string; labelKey: string; path: string }[]> = {
+  projects: [
+    { id: "car-insurance", labelKey: "projects.adac", path: "/projects/car-insurance" },
+    { id: "zooplus-reops", labelKey: "projects.reops", path: "/projects/zooplus-reops" },
+    { id: "swiss-life", labelKey: "projects.sl", path: "/projects/swiss-life-b2b2c" },
+    { id: "zooplus-pricing", labelKey: "projects.pricing", path: "/projects/zooplus-pricing" },
+  ],
+  expertise: [
+    { id: "ux-strategy", labelKey: "expertise.uxStrategy", path: "/expertise/ux-strategy" },
+    { id: "strategic-ux-research", labelKey: "expertise.strategicUxResearch", path: "/expertise/strategic-ux-research" },
+    { id: "researchops", labelKey: "expertise.researchOps", path: "/expertise/researchops" },
+    { id: "team-leadership", labelKey: "expertise.teamLeadership", path: "/expertise/team-leadership" },
+    { id: "impact-measurement", labelKey: "expertise.impactMeasurement", path: "/expertise/impact-measurement" },
+  ],
+  cv: [
+    { id: "cv-full", labelKey: "nav.cvFull", path: "/cv" }
+  ]
+};
+
+export default function NavBar() {
+  const { t } = useTranslation();
+  const { pathname, hash } = useLocation();
+  const onHome = pathname === "/";
+  const [active, setActive] = useState<string>("");
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    const prev = document.documentElement.style.scrollBehavior;
+    document.documentElement.style.scrollBehavior = "smooth";
+    return () => { document.documentElement.style.scrollBehavior = prev; };
+  }, []);
+
+  const observerRef = useRef<IntersectionObserver | null>(null);
+  useEffect(() => {
+    if (!onHome) return;
+    const sections = NAV.map(id => document.getElementById(id)).filter(Boolean) as HTMLElement[];
+    if (observerRef.current) observerRef.current.disconnect();
+    observerRef.current = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const id = entry.target.getAttribute("id") || "";
+          setActive(id);
+          history.replaceState(null, "", `#${id}`);
+        }
+      });
+    }, { threshold: 0.5, rootMargin: "-20% 0px -50% 0px" });
+    sections.forEach(sec => observerRef.current?.observe(sec));
+    return () => observerRef.current?.disconnect();
+  }, [onHome]);
+
+  const hrefFor = (id: string) => (onHome ? `#${id}` : `/#${id}`);
+  useEffect(() => { setOpen(false); }, [hash, pathname]);
+
+  return (
+    <header className="sticky top-0 z-50 border-b border-neutral-200 dark:border-neutral-800 bg-white/80 dark:bg-[var(--color-bg-dark)]/80 backdrop-blur">
+      <nav className="container-responsive h-16 flex items-center justify-between">
+        <Link
+          to="/#header"
+          className="flex items-center gap-2 font-bold text-sm md:text-base
+                     text-neutral-800 dark:text-neutral-200"
+        >
+          <img src="/favicon.png" alt="FB logo" className="h-6 w-6 rounded-md" />
+          <span>Felix Bruckmeier</span>
+        </Link>
+
+        <ul className="hidden md:flex items-center gap-4 text-sm">
+          {NAV.map((id) => (
+            <li key={id} className="relative group">
+              <a
+                href={hrefFor(id)}
+                aria-current={active === id ? "page" : undefined}
+                className={`px-1 py-2 ${active === id ? "font-semibold underline underline-offset-4" : ""} 
+                            text-neutral-700 dark:text-neutral-300 hover:text-black dark:hover:text-white`}
+              >
+                {t(`nav.${id}`)}
+              </a>
+              {SUBNAV[id] && (
+                <ul className="absolute left-0 top-full hidden group-hover:block bg-white dark:bg-neutral-900 shadow-lg rounded-md mt-1 py-2 w-56 border border-border">
+                  {SUBNAV[id].map((sub) => (
+                    <li key={sub.id}>
+                      <Link
+                        to={sub.path}
+                        className="block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800"
+                      >
+                        {t(sub.labelKey)}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </li>
+          ))}
+          <li className="pl-2"><LangToggle /></li>
+          <li><ThemeToggle /></li>
+        </ul>
+
+        <button
+          aria-label="Open menu"
+          className="md:hidden inline-flex items-center justify-center h-10 w-10 rounded-md border border-neutral-300 dark:border-neutral-700
+                     text-neutral-800 dark:text-neutral-200"
+          onClick={() => setOpen(v=>!v)}
+        >
+          <div className={`transition-transform ${open ? "rotate-45" : ""}`}>
+            <div className="w-5 h-0.5 bg-current mb-1"></div>
+            <div className={`w-5 h-0.5 bg-current ${open ? "opacity-0" : ""}`}></div>
+            <div className="w-5 h-0.5 bg-current mt-1"></div>
+          </div>
+        </button>
+      </nav>
+
+      {open && (
+        <div className="md:hidden border-t border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[var(--color-bg-dark)]">
+          <div className="container-responsive py-3 space-y-2">
+            {NAV.map((id) => (
+              <div key={id}>
+                <a href={hrefFor(id)} className="block py-2 text-neutral-800 dark:text-neutral-200">{t(`nav.${id}`)}</a>
+                {SUBNAV[id] && (
+                  <div className="pl-4 space-y-1">
+                    {SUBNAV[id].map((sub) => (
+                      <Link
+                        key={sub.id}
+                        to={sub.path}
+                        className="block py-1 text-sm text-neutral-700 dark:text-neutral-300"
+                      >
+                        {t(sub.labelKey)}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
+            <div className="flex gap-3 pt-2"><LangToggle /><ThemeToggle /></div>
+          </div>
+        </div>
+      )}
+    </header>
+  );
+}
+
+
+==== \src\components\ThemeToggle.tsx ====
+import { useEffect, useState } from "react";
+
+type Mode = "light" | "dark";
+
+function getInitialTheme(): Mode {
+  const stored = localStorage.getItem("theme");
+  if (stored === "light" || stored === "dark") return stored;
+  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+}
+
+export default function ThemeToggle() {
+  const [theme, setTheme] = useState<Mode>(getInitialTheme());
+
+  useEffect(() => {
+    const root = document.documentElement;
+    if (theme === "dark") {
+      root.classList.add("dark");
+      root.style.colorScheme = "dark";
+    } else {
+      root.classList.remove("dark");
+      root.style.colorScheme = "light";
+    }
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+
+  return (
+    <button
+      aria-label="Toggle theme"
+      onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+      className="rounded-md border border-neutral-300 dark:border-neutral-700 px-2 py-1 text-xs
+                 text-neutral-700 dark:text-neutral-300"
+      title={theme === "dark" ? "Switch to light" : "Switch to dark"}
+    >
+      {theme === "dark" ? "Light" : "Dark"}
+    </button>
+  );
+}
+
+
+==== \src\i18n\de.json ====
+{
+  "captions": {
+    "adacPricing": "Vorher/Nachher Pricing-Komponente (ADAC): Klarere Tarifstruktur, reduzierte kognitive Last.",
+    "adacHeatmap": "Heatmap (Vorher): Klick-Hotspots auf irrelevanten Elementen → zeigt Orientierungsprobleme.",
+    "reopsMatrix": "ResearchOps-Matrix (zooplus): 6 Wirkungsbereiche als Governance-Rahmen.",
+    "reopsDashboard": "ReOps Dashboard/Template Library (zooplus): Wiederverwendbarkeit & Konsistenz.",
+    "swissJourney": "Customer Journey Map (Swiss Life): Stufen, Touchpoints, Pain Points, Opportunities.",
+    "swissConjoint": "Conjoint-Ergebnis: relative Wichtigkeiten von Produktfeatures.",
+    "pricingMaxdiff": "MaxDiff-Ergebnisse (zooplus): Priorisierung der Preismodul-Features.",
+    "pricingHeatmap": "Eye-Tracking/Heatmap (zooplus): Blickfokus auf Kernpreisinformationen nach Redesign."
+  }
+}
+
+
+==== \src\i18n\en.json ====
+{
+  "captions": {
+    "adacPricing": "Before/After pricing component (ADAC): clearer plan structure, reduced cognitive load.",
+    "adacHeatmap": "Heatmap (Before): click hotspots on non-core elements \u2192 reveals orientation issues.",
+    "reopsMatrix": "ResearchOps matrix (zooplus): six impact areas as governance frame.",
+    "reopsDashboard": "ReOps dashboard/template library (zooplus): reusability & consistency.",
+    "swissJourney": "Customer journey map (Swiss Life): stages, touchpoints, pain points, opportunities.",
+    "swissConjoint": "Conjoint results: relative importance of product features.",
+    "pricingMaxdiff": "MaxDiff results (zooplus): prioritization of pricing module features.",
+    "pricingHeatmap": "Eye-tracking/heatmap (zooplus): gaze focus on core price info after redesign."
+  }
+}
+
+
+==== \src\locales\de.json ====
+{
+  "nav": {
+    "about": "About",
+    "expertise": "Expertise",
+    "projects": "Projects",
+    "cv": "CV",
+    "craft": "Craft",
+    "contact": "Contact"
+  },
+  "hero": {
+    "claim": "UXR + Design Thinking + ResearchOps",
+    "intro": "Ich übersetze tiefe Nutzer:innen-Insights in umsetzbare Strategien, die Entscheidungen beschleunigen und Produktvision schärfen. Ich skaliere ResearchOps, enable Teams und belege Wirkung mit Metriken."
+  },
+  "about": {
+    "title": "About",
+    "text": "UX Research Leader mit Hintergrund in Ökonometrie & Produktentwicklung. Ich verbinde Qual & Quant, reduziere Risiko und verankere die Nutzer:innen-Perspektive in der Produktstrategie."
+  },
+  "expertise": {
+    "title": "Expertise",
+    "roof": "Sustainable Products",
+    "foundation": "User-Centered Value Creation",
+    "valueProp": "I help companies build sustainable products by transforming deep user insights into actionable strategies. My mission is to scale the user's voice and empower organizations to make user-centered decisions.",
+    "pillars": [
+      {
+        "title": "Research Strategy",
+        "caption": "Discovery-Programme an Business-Zielen ausrichten"
+      },
+      {
+        "title": "Needs → Product Strategy",
+        "caption": "Insights in Roadmaps übersetzen"
+      },
+      {
+        "title": "Process & Tooling",
+        "caption": "Effiziente, skalierbare Praxis"
+      },
+      {
+        "title": "Team Leadership",
+        "caption": "Mentoring, Standards, Exzellenz"
+      },
+      {
+        "title": "Proving ROI",
+        "caption": "Wirkung messen & kommunizieren"
+      }
+    ]
+  },
+  "projects": {
+    "title": "Projects",
+    "adac": "ADAC — Car Insurance Quote Flow",
+    "reops": "zooplus — ResearchOps Scaling",
+    "sl": "Swiss Life — B2B2C UX Research",
+    "pricing": "zooplus — Pricing Usability Testing"
+  },
+  "cv": {
+    "title": "CV",
+    "teaserTitle": "Kurzprofil & Stationen",
+    "teaserList": [
+      "Lead/Director UX Research – Enterprise & B2C",
+      "ResearchOps Aufbau & Skalierung",
+      "OKR-verbundene Research-Roadmaps",
+      "Coaching & Enablement für Produktteams"
+    ],
+    "btn": "Zur CV-Seite",
+    "pageIntro": "Vollständiger Lebenslauf (als PDF eingebettet).",
+    "pdfAlt": "CV PDF"
+  },
+  "craft": {
+    "title": "Craft",
+    "text": "Research als Handwerk: wiederholbar, verbesserbar, mit hohen Qualitätsstandards."
+  },
+  "contact": {
+    "title": "Contact",
+    "cta": "📞 Contact me — I'm eager to learn about your challenges...",
+    "cta2": "Book Your Call Now — Schedule a Discovery Call",
+    "cta3": "Click to easily book a 60-minute call directly in my calendar."
+  }
+}
+
+
+==== \src\locales\en.json ====
+{
+  "nav": {
+    "about": "About",
+    "expertise": "Expertise",
+    "projects": "Projects",
+    "cv": "CV",
+    "craft": "Craft",
+    "contact": "Contact"
+  },
+  "hero": {
+    "claim": "UXR + Design Thinking + ResearchOps",
+    "intro": "I translate deep user insights into actionable strategies that accelerate decisions and sharpen product vision. I scale ResearchOps, empower teams, and prove impact with measurement."
+  },
+  "about": {
+    "title": "About",
+    "text": "UX Research leader with a background in econometrics and product development. I combine qual & quant to de-risk decisions and embed the user's voice into product strategy."
+  },
+  "expertise": {
+    "title": "Expertise",
+    "roof": "Sustainable Products",
+    "foundation": "User-Centered Value Creation",
+    "valueProp": "I help companies build sustainable products by transforming deep user insights into actionable strategies. My mission is to scale the user's voice and empower organizations to make user-centered decisions.",
+    "pillars": [
+      {
+        "title": "Research Strategy",
+        "caption": "Discovery programs aligned to business goals"
+      },
+      {
+        "title": "Needs → Product Strategy",
+        "caption": "Translate insights into roadmaps"
+      },
+      {
+        "title": "Process & Tooling",
+        "caption": "Efficient, scalable practice"
+      },
+      {
+        "title": "Team Leadership",
+        "caption": "Mentorship, standards, excellence"
+      },
+      {
+        "title": "Proving ROI",
+        "caption": "Measure and communicate impact"
+      }
+    ]
+  },
+  "projects": {
+    "title": "Projects",
+    "adac": "ADAC — Car Insurance Quote Flow",
+    "reops": "zooplus — ResearchOps Scaling",
+    "sl": "Swiss Life — B2B2C UX Research",
+    "pricing": "zooplus — Pricing Usability Testing"
+  },
+  "cv": {
+    "title": "CV",
+    "teaserTitle": "Snapshot & Roles",
+    "teaserList": [
+      "Lead/Director UX Research – Enterprise & B2C",
+      "ResearchOps setup & scaling",
+      "OKR-linked research roadmaps",
+      "Coaching & enablement for product teams"
+    ],
+    "btn": "Go to CV page",
+    "pageIntro": "Full résumé (embedded PDF).",
+    "pdfAlt": "CV PDF"
+  },
+  "craft": {
+    "title": "Craft",
+    "text": "Research as craft: repeatable, improvable practice with strong quality standards."
+  },
+  "contact": {
+    "title": "Contact",
+    "cta": "📞 Contact me — I'm eager to learn about your challenges...",
+    "cta2": "Book Your Call Now — Schedule a Discovery Call",
+    "cta3": "Click to easily book a 60-minute call directly in my calendar."
+  }
+}
+
+
+==== \src\pages\expertise\ImpactMeasurement.tsx ====
+import React from 'react'
+
+const Page: React.FC = () => (
+  <div className="container-responsive py-12 space-y-4">
+    <h1 className="text-3xl font-semibold">Impact Measurement</h1>
+    <p className="text-muted-foreground">Content coming soon. Replace with real case details (Situation → Research → Decisions → Impact).</p>
+  </div>
+)
+export default Page
+
+
+==== \src\pages\expertise\ResearchOps.tsx ====
+import React from 'react'
+
+const Page: React.FC = () => (
+  <div className="container-responsive py-12 space-y-4">
+    <h1 className="text-3xl font-semibold">ResearchOps</h1>
+    <p className="text-muted-foreground">Content coming soon. Replace with real case details (Situation → Research → Decisions → Impact).</p>
+  </div>
+)
+export default Page
+
+
+==== \src\pages\expertise\StrategicUXResearch.tsx ====
+import React from 'react'
+
+const Page: React.FC = () => (
+  <div className="container-responsive py-12 space-y-4">
+    <h1 className="text-3xl font-semibold">Strategic UX Research</h1>
+    <p className="text-muted-foreground">Content coming soon. Replace with real case details (Situation → Research → Decisions → Impact).</p>
+  </div>
+)
+export default Page
+
+
+==== \src\pages\expertise\TeamLeadership.tsx ====
+import React from 'react'
+
+const Page: React.FC = () => (
+  <div className="container-responsive py-12 space-y-4">
+    <h1 className="text-3xl font-semibold">Team Leadership & Mentoring</h1>
+    <p className="text-muted-foreground">Content coming soon. Replace with real case details (Situation → Research → Decisions → Impact).</p>
+  </div>
+)
+export default Page
+
+
+==== \src\pages\expertise\UXStrategy.tsx ====
+import React from 'react'
+
+const Page: React.FC = () => (
+  <div className="container-responsive py-12 space-y-4">
+    <h1 className="text-3xl font-semibold">UX Strategy</h1>
+    <p className="text-muted-foreground">Content coming soon. Replace with real case details (Situation → Research → Decisions → Impact).</p>
+  </div>
+)
+export default Page
+
+
+==== \src\pages\projects\CarInsurance.tsx ====
+import React from 'react'
+import { useI18n } from '@/i18n'
+import imgPricing from '@/assets/artefacts/adac-pricing.png'
+import imgHeat from '@/assets/artefacts/adac-heatmap.png'
+
+const Page: React.FC = () => {
+  const { t } = useI18n()
+  return (
+    <div className="container-responsive py-12 space-y-10">
+      <header className="space-y-3">
+        <h1 className="text-3xl font-semibold">Car Insurance — Quote Flow</h1>
+        <p className="text-muted-foreground">Rolle: UX Researcher (2019).</p>
+      </header>
+
+      <section className="space-y-3">
+        <h2 className="text-xl font-semibold">Kontext & Herausforderung</h2>
+        <p className="text-muted-foreground">
+          Hohe Abbruchraten im Angebotsprozess; Nutzer fanden die Preisoptionen schwer vergleichbar.
+        </p>
+      </section>
+
+      <section className="space-y-4">
+        <h2 className="text-xl font-semibold">Forschungsdesign & Methoden</h2>
+        <ul className="grid sm:grid-cols-2 gap-3">
+          <li className="card p-4">Remote moderierte Usability Tests (n=12)</li>
+          <li className="card p-4">Contextual Inquiries (Beratungssituation)</li>
+          <li className="card p-4">Kano-Analyse zur Feature-Priorisierung</li>
+          <li className="card p-4">Mouseflow-Heatmaps & Clicktracking</li>
+        </ul>
+      </section>
+
+      <section className="space-y-6">
+        <h2 className="text-xl font-semibold">Artefakte</h2>
+
+        <figure className="space-y-2">
+          <img
+            src={imgPricing}
+            alt={t('captions.adacPricing')}
+            className="w-full rounded-2xl border border-border"
+          />
+          <figcaption className="text-sm text-muted-foreground">
+            {t('captions.adacPricing')}
+          </figcaption>
+        </figure>
+
+        <figure className="space-y-2">
+          <img
+            src={imgHeat}
+            alt={t('captions.adacHeatmap')}
+            className="w-full rounded-2xl border border-border"
+          />
+          <figcaption className="text-sm text-muted-foreground">
+            {t('captions.adacHeatmap')}
+          </figcaption>
+        </figure>
+      </section>
+
+      <section className="space-y-3">
+        <h2 className="text-xl font-semibold">Synthese & Entscheidungen</h2>
+        <ul className="list-disc pl-6 space-y-1 text-muted-foreground">
+          <li>• Redesign der Pricing-Komponente in drei klaren Paketen (Basic/Standard/Premium)</li>
+          <li>• Zusatzleistungen in Tooltips & Sekundärinformationen ausgelagert</li>
+          <li>• Primäre CTAs visuell priorisiert; sekundäre Aktionen entlastet</li>
+        </ul>
+      </section>
+
+      <section className="space-y-3">
+        <h2 className="text-xl font-semibold">Impact</h2>
+        <ul className="list-disc pl-6 space-y-1 text-muted-foreground">
+          <li>• +18 % Completion Rate im Flow</li>
+          <li>• +12 % Conversion</li>
+          <li>• Weniger Support-Nachfragen zur Preislogik</li>
+        </ul>
+      </section>
+    </div>
+  )
+}
+
+export default Page
+
+
+==== \src\pages\projects\SwissLife.tsx ====
+import React from 'react'
+import { useI18n } from '@/i18n'
+import imgJourney from '@/assets/artefacts/swisslife-journey.png'
+import imgConjoint from '@/assets/artefacts/swisslife-conjoint.png'
+
+const Page: React.FC = () => {
+  const { t } = useI18n()
+  return (
+    <div className="container-responsive py-12 space-y-10">
+      <header className="space-y-3">
+        <h1 className="text-3xl font-semibold">Swiss Life — B2B2C UX Research</h1>
+        <p className="text-muted-foreground">Rolle: Senior UX Researcher (2020–2022).</p>
+      </header>
+
+      <section className="space-y-3">
+        <h2 className="text-xl font-semibold">Kontext & Herausforderung</h2>
+        <p className="text-muted-foreground">Digitale Versicherungsplattform mit B2B2C-Prozessen; Bedarf an klaren Entscheidungsgrundlagen für Feature-Ausbau.</p>
+      </section>
+
+      <section className="space-y-4">
+        <h2 className="text-xl font-semibold">Forschungsdesign & Methoden</h2>
+        <ul className="grid sm:grid-cols-2 gap-3">
+          <li className='card p-4'>Design Thinking Workshops (5 Iterationen)</li>
+          <li className='card p-4'>Conjoint-Analyse für Produktfeatures</li>
+          <li className='card p-4'>Customer Journey Mapping</li>
+          <li className='card p-4'>Rapid Prototyping (RITE)</li>
+        </ul>
+      </section>
+
+      <section className="space-y-6">
+        <h2 className="text-xl font-semibold">Artefakte</h2>
+
+<figure className="space-y-2">
+  <img src={ imgJourney } alt={t('captions.swissJourney')} className="w-full rounded-2xl border border-border" />
+  <figcaption className="text-sm text-muted-foreground">{t('captions.swissJourney')}</figcaption>
+</figure>
+
+
+<figure className="space-y-2">
+  <img src={ imgConjoint } alt={t('captions.swissConjoint')} className="w-full rounded-2xl border border-border" />
+  <figcaption className="text-sm text-muted-foreground">{t('captions.swissConjoint')}</figcaption>
+</figure>
+
+      </section>
+
+      <section className="space-y-3">
+        <h2 className="text-xl font-semibold">Synthese & Entscheidungen</h2>
+        <ul className="list-disc pl-6 space-y-1 text-muted-foreground">
+          <li>• Priorisierung von Features mit hoher Zahlungs-/Nutzungsbereitschaft</li>
+<li>• Optimierung kritischer Journey-Schritte mit hoher Abbruchquote</li>
+<li>• Einführung eines iterativen Validierungszyklus (RITE)</li>
+        </ul>
+      </section>
+
+      <section className="space-y-3">
+        <h2 className="text-xl font-semibold">Impact</h2>
+        <ul className="list-disc pl-6 space-y-1 text-muted-foreground">
+          <li>• 30 % kürzere Entscheidungszyklen</li>
+<li>• Höhere Klarheit bei Stakeholdern über Roadmap-Prioritäten</li>
+        </ul>
+      </section>
+    </div>
+  )
+}
+
+export default Page
+
+
+==== \src\pages\projects\UXMethodCards.tsx ====
+import React from 'react'
+
+const Page: React.FC = () => (
+  <div className="container-responsive py-12 space-y-4">
+    <h1 className="text-3xl font-semibold">UX Method Cards</h1>
+    <p className="text-muted-foreground">Content coming soon. Replace with real case details (Situation → Research → Decisions → Impact).</p>
+  </div>
+)
+export default Page
+
+
+==== \src\pages\projects\WinningUXStrategy.tsx ====
+import React from 'react'
+
+const Page: React.FC = () => (
+  <div className="container-responsive py-12 space-y-4">
+    <h1 className="text-3xl font-semibold">A Winning UX Strategy</h1>
+    <p className="text-muted-foreground">Content coming soon. Replace with real case details (Situation → Research → Decisions → Impact).</p>
+  </div>
+)
+export default Page
+
+
+==== \src\pages\projects\ZooplusPricing.tsx ====
+import React from 'react'
+import { useI18n } from '@/i18n'
+import imgMaxdiff from '@/assets/artefacts/zooplus-pricing-maxdiff.png'
+import imgHeat from '@/assets/artefacts/zooplus-pricing-heatmap.png'
+
+const Page: React.FC = () => {
+  const { t } = useI18n()
+  return (
+    <div className="container-responsive py-12 space-y-10">
+      <header className="space-y-3">
+        <h1 className="text-3xl font-semibold">zooplus — Pricing Usability Testing</h1>
+        <p className="text-muted-foreground">Rolle: UX Research Lead (2023–2024).</p>
+      </header>
+
+      <section className="space-y-3">
+        <h2 className="text-xl font-semibold">Kontext & Herausforderung</h2>
+        <p className="text-muted-foreground">Unklare Preisstruktur im Modul; Nutzer verstanden Unterschiede zwischen Plänen nicht.</p>
+      </section>
+
+      <section className="space-y-4">
+        <h2 className="text-xl font-semibold">Forschungsdesign & Methoden</h2>
+        <ul className="grid sm:grid-cols-2 gap-3">
+          <li className='card p-4'>MaxDiff Survey (n=120)</li>
+          <li className='card p-4'>Card Sorting (Navigationslogik Preisoptionen)</li>
+          <li className='card p-4'>HiFi-Prototyp-Tests (Figma)</li>
+          <li className='card p-4'>Eye-Tracking Analyse</li>
+        </ul>
+      </section>
+
+      <section className="space-y-6">
+        <h2 className="text-xl font-semibold">Artefakte</h2>
+
+<figure className="space-y-2">
+  <img src={ imgMaxdiff } alt={t('captions.pricingMaxdiff')} className="w-full rounded-2xl border border-border" />
+  <figcaption className="text-sm text-muted-foreground">{t('captions.pricingMaxdiff')}</figcaption>
+</figure>
+
+
+<figure className="space-y-2">
+  <img src={ imgHeat } alt={t('captions.pricingHeatmap')} className="w-full rounded-2xl border border-border" />
+  <figcaption className="text-sm text-muted-foreground">{t('captions.pricingHeatmap')}</figcaption>
+</figure>
+
+      </section>
+
+      <section className="space-y-3">
+        <h2 className="text-xl font-semibold">Synthese & Entscheidungen</h2>
+        <ul className="list-disc pl-6 space-y-1 text-muted-foreground">
+          <li>• Klarere Informationshierarchie & Begrifflichkeiten</li>
+<li>• Vergleichstabelle mit 3–4 differenzierenden Merkmalen</li>
+<li>• Deutliche Hervorhebung der empfohlenen Option</li>
+        </ul>
+      </section>
+
+      <section className="space-y-3">
+        <h2 className="text-xl font-semibold">Impact</h2>
+        <ul className="list-disc pl-6 space-y-1 text-muted-foreground">
+          <li>• +15 % Verständnis (SUS-Subscale)</li>
+<li>• Höhere Plan-Selektion ohne zusätzliche Erklärtexte</li>
+        </ul>
+      </section>
+    </div>
+  )
+}
+
+export default Page
+
+
+==== \src\pages\projects\ZooplusReOps.tsx ====
+import React from 'react'
+import { useI18n } from '@/i18n'
+import imgMatrix from '@/assets/artefacts/zooplus-reops-matrix.png'
+import imgDash from '@/assets/artefacts/zooplus-dashboard.png'
+
+const Page: React.FC = () => {
+  const { t } = useI18n()
+  return (
+    <div className="container-responsive py-12 space-y-10">
+      <header className="space-y-3">
+        <h1 className="text-3xl font-semibold">zooplus — ResearchOps Scaling</h1>
+        <p className="text-muted-foreground">Rolle: UX Research Lead (2022–2024).</p>
+      </header>
+
+      <section className="space-y-3">
+        <h2 className="text-xl font-semibold">Kontext & Herausforderung</h2>
+        <p className="text-muted-foreground">20+ parallele Projekte, inkonsistente Methoden, höhere Koordinationskosten – Bedarf an skalierten ResearchOps.</p>
+      </section>
+
+      <section className="space-y-4">
+        <h2 className="text-xl font-semibold">Forschungsdesign & Methoden</h2>
+        <ul className="grid sm:grid-cols-2 gap-3">
+          <li className='card p-4'>Stakeholder-Interviews (n=15)</li>
+          <li className='card p-4'>Tool-Benchmarking (Maze, Baymard, Mouseflow)</li>
+          <li className='card p-4'>Affinity-Mapping Workshops</li>
+          <li className='card p-4'>ResearchOps Maturity Matrix & Governance-Framework</li>
+        </ul>
+      </section>
+
+      <section className="space-y-6">
+        <h2 className="text-xl font-semibold">Artefakte</h2>
+
+<figure className="space-y-2">
+  <img src={ imgMatrix } alt={t('captions.reopsMatrix')} className="w-full rounded-2xl border border-border" />
+  <figcaption className="text-sm text-muted-foreground">{t('captions.reopsMatrix')}</figcaption>
+</figure>
+
+
+<figure className="space-y-2">
+  <img src={ imgDash } alt={t('captions.reopsDashboard')} className="w-full rounded-2xl border border-border" />
+  <figcaption className="text-sm text-muted-foreground">{t('captions.reopsDashboard')}</figcaption>
+</figure>
+
+      </section>
+
+      <section className="space-y-3">
+        <h2 className="text-xl font-semibold">Synthese & Entscheidungen</h2>
+        <ul className="list-disc pl-6 space-y-1 text-muted-foreground">
+          <li>• Einführung eines ReOps-Governance-Frameworks (6 Wirkungsbereiche)</li>
+<li>• Template-Library & Trainings zur Demokratisierung von Research</li>
+<li>• Definition von SLA/Intake-Prozessen für Priorisierung</li>
+        </ul>
+      </section>
+
+      <section className="space-y-3">
+        <h2 className="text-xl font-semibold">Impact</h2>
+        <ul className="list-disc pl-6 space-y-1 text-muted-foreground">
+          <li>• +40 % Nutzung der Templates</li>
+<li>• 25 % schnellere Insight-Zyklen</li>
+<li>• Höhere Konsistenz & Qualität der Studien</li>
+        </ul>
+      </section>
+    </div>
+  )
+}
+
+export default Page
+
+
+==== \src\pages\About.tsx ====
+import React from 'react'
+import { useI18n } from '@/i18n'
+
+const About: React.FC = () => {
+  const { t } = useI18n()
+  return (
+    <div className="container-responsive py-12 space-y-8">
+      <h1 className="text-3xl font-semibold">{t('about.title')}</h1>
+      <p className="text-lg text-muted-foreground">{t('about.lead')}</p>
+
+      <section>
+        <h2 className="text-xl font-semibold mb-4">{t('about.pillarsTitle')}</h2>
+        <div className="grid sm:grid-cols-3 gap-4">
+          {t('about.pillars').split ? null : null}
+        </div>
+        <div className="grid sm:grid-cols-3 gap-4">
+          {/** Hardcode 3 cards for simplicity using translations */}
+          <div className="card p-4">Empowerment</div>
+          <div className="card p-4">Impact Orientation</div>
+          <div className="card p-4">Continuous Learning</div>
+        </div>
+      </section>
+
+      <section>
+        <h2 className="text-xl font-semibold mb-4">Experience</h2>
+        <ul className="space-y-3">
+          <li className="card p-4">ATOSS — UXR Lead (01/2025–05/2025)</li>
+          <li className="card p-4">zooplus — UXR Lead (07/2022–12/2024)</li>
+          <li className="card p-4">Swiss Life — Sr UXR (05/2020–06/2022)</li>
+          <li className="card p-4">Kaiser X Labs — UXR (08/2018–04/2020)</li>
+          <li className="card p-4">empiriecom — UXR (02/2016–07/2018)</li>
+        </ul>
+      </section>
+    </div>
+  )
+}
+export default About
+
+
+==== \src\pages\Contact.tsx ====
+import React from 'react'
+
+const Contact: React.FC = () => (
+  <div className="container-responsive py-12 space-y-6">
+    <h1 className="text-3xl font-semibold">Contact</h1>
+    <p className="text-muted-foreground">Happy to connect. Reach out via email or LinkedIn.</p>
+    <div className="flex gap-3">
+      <a className="btn" href="mailto:felix.bruckmeier@gmail.com">Email</a>
+      <a className="btn btn-secondary" href="https://www.linkedin.com/in/felix-bruckmeier" target="_blank" rel="noreferrer">LinkedIn</a>
+    </div>
+  </div>
+)
+export default Contact
+
+
+==== \src\pages\Craft.tsx ====
+import React from 'react'
+
+const Page: React.FC = () => (
+  <div className="container-responsive py-12 space-y-4">
+    <h1 className="text-3xl font-semibold">Craft & Research</h1>
+    <p className="text-muted-foreground">Content coming soon. Replace with real case details (Situation → Research → Decisions → Impact).</p>
+  </div>
+)
+export default Page
+
+
+==== \src\pages\CV.tsx ====
+export default function CV() {
+  return (
+    <main className="min-h-screen bg-background text-foreground">
+      <section className="container-responsive py-10">
+        <h1 className="text-3xl font-extrabold">CV</h1>
+        <p className="mt-2 text-muted-foreground">Full résumé (embedded PDF) and quick facts.</p>
+        <div className="mt-6 grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
+          <div className="rounded-2xl border border-border overflow-hidden">
+            <object data="/Felix_Bruckmeier_CV.pdf" type="application/pdf" width="100%" height="800px">
+              <p className="p-4">
+                Your browser can't display PDFs.{" "}
+                <a className="underline" href="/Felix_Bruckmeier_CV.pdf" target="_blank" rel="noopener">
+                  Open the PDF
+                </a>.
+              </p>
+            </object>
+          </div>
+          <aside className="rounded-2xl border border-border p-5">
+            <h2 className="font-semibold mb-3">Snapshot</h2>
+            <ul className="space-y-2 text-sm text-muted-foreground">
+              <li>Lead / Director UX Research</li>
+              <li>ResearchOps setup & scaling</li>
+              <li>OKR-linked research roadmaps</li>
+              <li>Coaching & enablement</li>
+            </ul>
+            <a
+              href="/Felix_Bruckmeier_CV.pdf"
+              target="_blank"
+              rel="noopener"
+              className="mt-4 inline-flex items-center rounded-2xl px-4 py-2 text-sm font-semibold border border-border hover:bg-muted"
+            >
+              Download PDF
+            </a>
+          </aside>
+        </div>
+      </section>
+    </main>
+  );
+}
+
+
+==== \src\pages\Expertise.tsx ====
+import React from 'react'
+import { Link } from 'react-router-dom'
+import { useI18n } from '@/i18n'
+
+const tiles = [
+  { to: '/expertise/ux-strategy', title: 'UX Strategy', desc: 'Double Diamond, prioritization & decision systems' },
+  { to: '/expertise/researchops', title: 'ResearchOps', desc: 'Maturity, governance, tooling, enablement' },
+  { to: '/expertise/impact-measurement', title: 'Impact Measurement', desc: 'CLTV & churn models, HEART' },
+  { to: '/expertise/team-leadership', title: 'Team Leadership', desc: 'Role clarity, mentoring, communities' },
+  { to: '/expertise/strategic-ux-research', title: 'Strategic UX Research', desc: 'OKRs, strategic studies, RITE' },
+]
+
+const Expertise: React.FC = () => {
+  const { t } = useI18n()
+  return (
+    <div className="container-responsive py-12">
+      <h1 className="text-3xl font-semibold mb-6">{t('expertise.title')}</h1>
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {tiles.map(tile => (
+          <Link key={tile.to} to={tile.to} className="card p-5 hover:shadow-lg transition-shadow">
+            <h3 className="text-lg font-semibold">{tile.title}</h3>
+            <p className="text-sm text-muted-foreground mt-1">{tile.desc}</p>
+          </Link>
+        ))}
+      </div>
+    </div>
+  )
+}
+export default Expertise
+
+
+==== \src\pages\Home.tsx ====
+import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
+import HouseDiagram from "@/components/HouseDiagram";
+import CVPreview from "@/components/CVPreview";
+import profileImg from "@/assets/profile-felix.png";
+import calendarImg from "@/assets/calendar-discovery.png";
+
+export default function Home() {
+  const { t } = useTranslation();
+
+  useEffect(() => {
+    const scrollToHash = () => {
+      if (location.hash) {
+        const id = location.hash.replace("#", "");
+        const el = document.getElementById(id);
+        if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    };
+    scrollToHash();
+    window.addEventListener("hashchange", scrollToHash);
+    return () => window.removeEventListener("hashchange", scrollToHash);
+  }, []);
+
+  return (
+    <main className="min-h-screen bg-background text-foreground">
+      {/* hero */}
+      <section
+        id="header"
+        className="scroll-mt-24 container-responsive py-14 md:py-20 grid gap-10 md:grid-cols-[1.1fr_0.9fr] items-center"
+      >
+        <div>
+          <h1 className="text-4xl md:text-5xl font-extrabold leading-tight tracking-tight">
+            Felix Bruckmeier
+          </h1>
+          <p className="mt-3 text-base md:text-lg opacity-90">{t("hero.claim")}</p>
+          <p className="mt-6 text-muted-foreground max-w-2xl">{t("hero.intro")}</p>
+        </div>
+        <div className="flex justify-center md:justify-end">
+          <img
+            src={profileImg}
+            alt="Portrait of Felix Bruckmeier"
+            className="w-full max-w-sm rounded-3xl border border-border shadow-lg object-cover"
+          />
+        </div>
+      </section>
+
+      {/* about */}
+      <section id="about" className="scroll-mt-24 border-t border-border">
+        <div className="container-responsive py-12">
+          <h2 className="text-2xl font-bold">{t("about.title")}</h2>
+          <p className="mt-2 max-w-3xl text-muted-foreground">{t("about.text")}</p>
+        </div>
+      </section>
+
+      {/* expertise */}
+      <section id="expertise" className="scroll-mt-24 border-t border-border">
+        <div className="container-responsive py-12">
+          <h2 className="text-2xl font-bold">{t("expertise.title")}</h2>
+          <HouseDiagram />
+        </div>
+      </section>
+
+      {/* CV timeline */}
+      <CVPreview />
+
+      {/* projects */}
+      <section id="projects" className="scroll-mt-24 border-t border-border">
+        <div className="container-responsive py-12">
+          <h2 className="text-2xl font-bold">{t("projects.title")}</h2>
+          <div className="mt-6 grid gap-6 md:grid-cols-2">
+            <Link
+              to="/projects/car-insurance"
+              className="rounded-2xl border border-border p-5 hover:bg-muted/40 transition block"
+            >
+              <div className="font-semibold">{t("projects.adac")}</div>
+              <p className="mt-2 text-sm text-muted-foreground">
+                Reduced friction and improved conversion.
+              </p>
+            </Link>
+            <Link
+              to="/projects/zooplus-reops"
+              className="rounded-2xl border border-border p-5 hover:bg-muted/40 transition block"
+            >
+              <div className="font-semibold">{t("projects.reops")}</div>
+              <p className="mt-2 text-sm text-muted-foreground">
+                Governance, templates & enablement at scale.
+              </p>
+            </Link>
+            <Link
+              to="/projects/swiss-life-b2b2c"
+              className="rounded-2xl border border-border p-5 hover:bg-muted/40 transition block"
+            >
+              <div className="font-semibold">{t("projects.sl")}</div>
+              <p className="mt-2 text-sm text-muted-foreground">
+                Qual & quant insights aligned to business goals.
+              </p>
+            </Link>
+            <Link
+              to="/projects/zooplus-pricing"
+              className="rounded-2xl border border-border p-5 hover:bg-muted/40 transition block"
+            >
+              <div className="font-semibold">{t("projects.pricing")}</div>
+              <p className="mt-2 text-sm text-muted-foreground">
+                Clarity in pricing components and PDP details.
+              </p>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* craft */}
+      <section id="craft" className="scroll-mt-24 border-t border-border">
+        <div className="container-responsive py-12">
+          <h2 className="text-2xl font-bold">Craft</h2>
+          <p className="mt-2 max-w-3xl text-muted-foreground">
+            Research as craft: repeatable, improvable practice with strong quality standards.
+          </p>
+        </div>
+      </section>
+
+      {/* contact */}
+      <section id="contact" className="scroll-mt-24 border-t border-border">
+        <div className="container-responsive py-12">
+          <h2 className="text-2xl font-bold">Contact</h2>
+          <p className="mt-2 text-muted-foreground max-w-3xl">{t("contact.cta")}</p>
+          <div className="mt-6">
+            <a
+              href="https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ0oPGXHnWXdq3-zK6GQhHm2ESA4SVlsx5ziYevEBxKE7MXlGBWgUN9yuCUp9TsirOrT9kR459cC"
+              target="_blank"
+              rel="noopener"
+              className="block rounded-2xl overflow-hidden border border-border hover:shadow-lg transition"
+            >
+              <img
+                src={calendarImg}
+                alt="Schedule a Discovery Call"
+                className="w-full h-auto"
+              />
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+  );
+}
+
+
+==== \src\pages\Imprint.tsx ====
+import React from 'react'
+
+const Page: React.FC = () => (
+  <div className="container-responsive py-12 space-y-4">
+    <h1 className="text-3xl font-semibold">Imprint</h1>
+    <p className="text-muted-foreground">Content coming soon. Replace with real case details (Situation → Research → Decisions → Impact).</p>
+  </div>
+)
+export default Page
+
+
+==== \src\pages\NotFound.tsx ====
+export default function NotFound() {
+  return (
+    <main className="min-h-[60vh] grid place-items-center px-6">
+      <div className="text-center">
+        <h1 className="text-3xl font-bold">404 — Not Found</h1>
+        <p className="mt-2 text-muted-foreground">
+          Sorry, die Seite gibt’s nicht. Zurück zur Startseite?
+        </p>
+        <a
+          href="/"
+          className="btn mt-4 inline-flex"
+        >
+          Home
+        </a>
+      </div>
+    </main>
+  );
+}
+
+
+==== \src\pages\Privacy.tsx ====
+import React from 'react'
+
+const Page: React.FC = () => (
+  <div className="container-responsive py-12 space-y-4">
+    <h1 className="text-3xl font-semibold">Privacy</h1>
+    <p className="text-muted-foreground">Content coming soon. Replace with real case details (Situation → Research → Decisions → Impact).</p>
+  </div>
+)
+export default Page
+
+
+==== \src\pages\Projects - Kopie.tsx ====
+import React from 'react'
+import { Link } from 'react-router-dom'
+
+const Projects: React.FC = () => {
+  const cards = [
+    { to: '/projects/adac', title: 'ADAC — Car Insurance Quote Flow', desc: 'Pricing-Komponente, Heatmaps, Conversion +12%' },
+    { to: '/projects/zooplus-reops', title: 'zooplus — ResearchOps Scaling', desc: 'Governance, Templates, +25% schnellere Insights' },
+    { to: '/projects/swiss-life', title: 'Swiss Life — B2B2C UX Research', desc: 'Journey Mapping, Conjoint, -30% Entscheidungszeit' },
+    { to: '/projects/zooplus-pricing', title: 'zooplus — Pricing Usability', desc: 'MaxDiff, Eye-Tracking, SUS +15%' },
+  ]
+
+  return (
+    <div className="container-responsive py-12">
+      <header className="mb-6">
+        <h1 className="text-3xl font-semibold">Projects</h1>
+        <p className="text-muted-foreground">Ausgewählte Case Studies mit Kontext → Vorgehen → Impact.</p>
+      </header>
+
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {cards.map(card => (
+          <Link key={card.to} to={card.to} className="card p-5 hover:shadow-lg transition-shadow">
+            <h3 className="text-lg font-semibold">{card.title}</h3>
+            <p className="text-sm text-muted-foreground mt-1">{card.desc}</p>
+          </Link>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+export default Projects
+
+
+==== \src\pages\Projects.tsx ====
+import React from 'react'
+import { Link } from 'react-router-dom'
+
+const Projects: React.FC = () => {
+  const cards = [
+    { to: '/projects/adac', title: 'ADAC — Car Insurance Quote Flow', desc: 'Pricing-Komponente, Heatmaps, Conversion +12%' },
+    { to: '/projects/zooplus-reops', title: 'zooplus — ResearchOps Scaling', desc: 'Governance, Templates, +25% schnellere Insights' },
+    { to: '/projects/swiss-life', title: 'Swiss Life — B2B2C UX Research', desc: 'Journey Mapping, Conjoint, -30% Entscheidungszeit' },
+    { to: '/projects/zooplus-pricing', title: 'zooplus — Pricing Usability', desc: 'MaxDiff, Eye-Tracking, SUS +15%' },
+  ]
+
+  return (
+    <div className="container-responsive py-12">
+      <header className="mb-6">
+        <h1 className="text-3xl font-semibold">Projects</h1>
+        <p className="text-muted-foreground">Ausgewählte Case Studies mit Kontext → Vorgehen → Impact.</p>
+      </header>
+
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {cards.map(card => (
+          <Link key={card.to} to={card.to} className="card p-5 hover:shadow-lg transition-shadow">
+            <h3 className="text-lg font-semibold">{card.title}</h3>
+            <p className="text-sm text-muted-foreground mt-1">{card.desc}</p>
+          </Link>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+export default Projects
+
+
+==== \src\App.tsx ====
+import { Routes, Route, Navigate } from "react-router-dom";
+import AppLayout from "@/AppLayout";
+import Home from "@/pages/Home";
+import CV from "@/pages/CV";
+
+// Projektseiten
+import CarInsurance from "@/pages/projects/CarInsurance";
+import SwissLife from "@/pages/projects/SwissLife";
+import ZooplusReOps from "@/pages/projects/ZooplusReOps";
+import ZooplusPricing from "@/pages/projects/ZooplusPricing";
+import UXMethodCards from "@/pages/projects/UXMethodCards";
+import WinningUXStrategy from "@/pages/projects/WinningUXStrategy";
+
+// Expertise-Seiten
+import UXStrategy from "@/pages/expertise/UXStrategy";
+import StrategicUXResearch from "@/pages/expertise/StrategicUXResearch";
+import ResearchOps from "@/pages/expertise/ResearchOps";
+import TeamLeadership from "@/pages/expertise/TeamLeadership";
+import ImpactMeasurement from "@/pages/expertise/ImpactMeasurement";
+
+export default function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<AppLayout />}>
+        <Route index element={<Home />} />
+        <Route path="cv" element={<CV />} />
+
+        {/* Projekt-Routen (nur die 6 gültigen) */}
+        <Route path="projects/car-insurance" element={<CarInsurance />} />
+        <Route path="projects/swiss-life-b2b2c" element={<SwissLife />} />
+        <Route path="projects/zooplus-reops" element={<ZooplusReOps />} />
+        <Route path="projects/zooplus-pricing" element={<ZooplusPricing />} />
+        <Route path="projects/ux-method-cards" element={<UXMethodCards />} />
+        <Route path="projects/winning-ux-strategy" element={<WinningUXStrategy />} />
+
+        {/* Expertise-Routen */}
+        <Route path="expertise/ux-strategy" element={<UXStrategy />} />
+        <Route path="expertise/strategic-ux-research" element={<StrategicUXResearch />} />
+        <Route path="expertise/researchops" element={<ResearchOps />} />
+        <Route path="expertise/team-leadership" element={<TeamLeadership />} />
+        <Route path="expertise/impact-measurement" element={<ImpactMeasurement />} />
+
+        {/* Fallback */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Route>
+    </Routes>
+  );
+}
+
+
+==== \src\AppLayout.tsx ====
+import { Outlet } from "react-router-dom";
+import NavBar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+
+export default function AppLayout() {
+  return (
+    <div className="min-h-screen bg-background text-foreground flex flex-col">
+      <NavBar />
+      <main className="flex-1">
+        <Outlet />
+      </main>
+      <Footer />
+    </div>
+  );
+}
+
+
+==== \src\i18n.ts ====
+// src/i18n.ts
+import i18n from "i18next";
+import { initReactI18next, useTranslation } from "react-i18next";
+import de from "@/locales/de.json";
+import en from "@/locales/en.json";
+
+if (!i18n.isInitialized) {
+  void i18n.use(initReactI18next).init({
+    resources: { de: { translation: de }, en: { translation: en } },
+    lng: "en",
+    fallbackLng: "en",
+    interpolation: { escapeValue: false },
+  });
+}
+
+export type Lang = "de" | "en";
+export const useI18n = () => {
+  const { t, i18n } = useTranslation();
+  const lang: Lang = i18n.language?.startsWith("de") ? "de" : "en";
+  const setLang = (l: Lang) => i18n.changeLanguage(l);
+  return { t, i18n, lang, setLang };
+};
+
+export default i18n;
+
+
+==== \src\index.css ====
+@import "tailwindcss";
+
+/* Tailwind v4: eigene Tokens.
+   WICHTIG: Breakpoints wieder definieren, sonst sind sm:, md:, ... "unbekannt". */
+@theme {
+  /* Breakpoints (Default-Werte) */
+  --breakpoint-sm: 40rem;   /* 640px  */
+  --breakpoint-md: 48rem;   /* 768px  */
+  --breakpoint-lg: 64rem;   /* 1024px */
+  --breakpoint-xl: 80rem;   /* 1280px */
+  --breakpoint-2xl: 96rem;  /* 1536px */
+
+  /* Light-Theme Farben */
+  --color-background: #ffffff;
+  --color-foreground: #0a0a0a;
+  --color-border: oklch(0.86 0 0 / 1);
+  --color-muted: oklch(0.96 0 0 / 1);
+  --color-muted-foreground: oklch(0.45 0 0 / 1);
+}
+
+/* Dark-Overrides (hellerer Kontrast) */
+.dark {
+  --color-background: #0b0b0b;
+  --color-foreground: #f8f8f8;                /* heller */
+  --color-border: oklch(0.32 0 0 / 1);
+  --color-muted: oklch(0.18 0 0 / 1);         /* etwas dunkleres Card-Grau */
+  --color-muted-foreground: oklch(0.88 0 0);  /* deutlich heller für Fließtexte */
+}
+
+/* Global */
+:root { color-scheme: light dark; }
+html { scroll-behavior: smooth; }
+
+/* Mini-Designsystem: wiederverwendete Utilities/Components */
+@layer components {
+  .container-responsive {
+    @apply mx-auto max-w-6xl px-4 sm:px-6 lg:px-8;
+  }
+  .card {
+    @apply rounded-2xl border border-border bg-white dark:bg-neutral-950;
+  }
+  .btn {
+    @apply inline-flex items-center rounded-2xl px-4 py-2 text-sm font-semibold border border-border;
+  }
+  .btn-secondary {
+    @apply inline-flex items-center rounded-2xl px-4 py-2 text-sm font-semibold border border-border bg-muted text-foreground;
+  }
+}
+
+
+==== \src\main.tsx ====
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { StrictMode } from "react";
+import { BrowserRouter } from "react-router-dom";
+import App from "@/App";
+import "@/i18n";
+import "./index.css";
+
+/* GitHub Pages 404 Redirect → ursprünglichen Pfad wiederherstellen */
+const redirect = sessionStorage.getItem("redirect");
+if (redirect) {
+  sessionStorage.removeItem("redirect");
+  // Wichtig: vor dem ersten Render, damit BrowserRouter direkt die richtige URL nimmt
+  const url = new URL(redirect, window.location.origin);
+  window.history.replaceState(null, "", url.pathname + url.search);
+}
+
+ReactDOM.createRoot(document.getElementById("root")!).render(
+  <StrictMode>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </StrictMode>
+);
+
+
+==== \src\vite-env.d.ts ====
+declare module "*.png" {
+  const value: string;
+  export default value;
+}
+declare module "*.svg" {
+  const value: string;
+  export default value;
+}
+
+
+==== \index.html ====
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- Theme bootstrapping: setzt .dark auf <html>, bevor CSS rendert -->
+    <script>
+      (() => {
+        try {
+          const stored = localStorage.getItem('theme');
+          const prefers = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          const theme = stored ?? (prefers ? 'dark' : 'light');
+          const root = document.documentElement;
+          if (theme === 'dark') { root.classList.add('dark'); root.style.colorScheme = 'dark'; }
+          else { root.classList.remove('dark'); root.style.colorScheme = 'light'; }
+        } catch {}
+      })();
+    </script>
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Felix Bruckmeier – UX Research</title>
+  </head>
+  <!-- WICHTIG: Tokens statt feste Farben -->
+  <body class="min-h-screen bg-background text-foreground">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+
+
+==== \package-lock.json ====
 {
   "name": "uxr-portfolio-felix",
   "version": "1.0.0",
@@ -8,7 +2041,6 @@
       "name": "uxr-portfolio-felix",
       "version": "1.0.0",
       "dependencies": {
-        "framer-motion": "^12.23.16",
         "i18next": "^23.16.8",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
@@ -1725,33 +3757,6 @@
         "url": "https://github.com/sponsors/rawify"
       }
     },
-    "node_modules/framer-motion": {
-      "version": "12.23.16",
-      "resolved": "https://registry.npmjs.org/framer-motion/-/framer-motion-12.23.16.tgz",
-      "integrity": "sha512-N81A8hiHqVsexOzI3wzkibyLURW1nEJsZaRuctPhG4AdbbciYu+bKJq9I2lQFzAO4Bx3h4swI6pBbF/Hu7f7BA==",
-      "license": "MIT",
-      "dependencies": {
-        "motion-dom": "^12.23.12",
-        "motion-utils": "^12.23.6",
-        "tslib": "^2.4.0"
-      },
-      "peerDependencies": {
-        "@emotion/is-prop-valid": "*",
-        "react": "^18.0.0 || ^19.0.0",
-        "react-dom": "^18.0.0 || ^19.0.0"
-      },
-      "peerDependenciesMeta": {
-        "@emotion/is-prop-valid": {
-          "optional": true
-        },
-        "react": {
-          "optional": true
-        },
-        "react-dom": {
-          "optional": true
-        }
-      }
-    },
     "node_modules/fsevents": {
       "version": "2.3.3",
       "resolved": "https://registry.npmjs.org/fsevents/-/fsevents-2.3.3.tgz",
@@ -2168,21 +4173,6 @@
         "url": "https://github.com/sponsors/isaacs"
       }
     },
-    "node_modules/motion-dom": {
-      "version": "12.23.12",
-      "resolved": "https://registry.npmjs.org/motion-dom/-/motion-dom-12.23.12.tgz",
-      "integrity": "sha512-RcR4fvMCTESQBD/uKQe49D5RUeDOokkGRmz4ceaJKDBgHYtZtntC/s2vLvY38gqGaytinij/yi3hMcWVcEF5Kw==",
-      "license": "MIT",
-      "dependencies": {
-        "motion-utils": "^12.23.6"
-      }
-    },
-    "node_modules/motion-utils": {
-      "version": "12.23.6",
-      "resolved": "https://registry.npmjs.org/motion-utils/-/motion-utils-12.23.6.tgz",
-      "integrity": "sha512-eAWoPgr4eFEOFfg2WjIsMoqJTW6Z8MTUCgn/GZ3VRpClWBdnbjryiA3ZSNLyxCTmCQx4RmYX6jX1iWHbenUPNQ==",
-      "license": "MIT"
-    },
     "node_modules/ms": {
       "version": "2.1.3",
       "resolved": "https://registry.npmjs.org/ms/-/ms-2.1.3.tgz",
@@ -2477,12 +4467,6 @@
         "node": ">=18"
       }
     },
-    "node_modules/tslib": {
-      "version": "2.8.1",
-      "resolved": "https://registry.npmjs.org/tslib/-/tslib-2.8.1.tgz",
-      "integrity": "sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==",
-      "license": "0BSD"
-    },
     "node_modules/typescript": {
       "version": "5.9.2",
       "resolved": "https://registry.npmjs.org/typescript/-/typescript-5.9.2.tgz",
@@ -2613,3 +4597,186 @@
     }
   }
 }
+
+
+==== \package.json ====
+{
+  "name": "uxr-portfolio-felix",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "i18next": "^23.16.8",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-i18next": "^13.5.0",
+    "react-router-dom": "^6.26.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.0.0",
+    "@types/node": "^24.5.2",
+    "@types/react": "^18.2.66",
+    "@types/react-dom": "^18.2.22",
+    "@vitejs/plugin-react": "^4.3.4",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.47",
+    "tailwindcss": "^4.0.0",
+    "typescript": "^5.4.0",
+    "vite": "^5.4.19"
+  }
+}
+
+
+==== \postcss.config.js ====
+export default {
+  plugins: {
+    "@tailwindcss/postcss": {},
+  },
+};
+
+
+==== \tailwind.config.js ====
+/**** Tailwind v4 minimal config ****/
+export default {
+  darkMode: "class",
+};
+
+
+==== \tsconfig.app.json ====
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": [
+      "ES2020",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    "module": "ESNext",
+    "skipLibCheck": true,
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "strict": false,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    }
+  },
+  "include": [
+    "src"
+  ]
+}
+
+
+==== \tsconfig.json ====
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "esModuleInterop": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    },
+    "types": ["node"]
+  },
+  "include": ["src", "src/vite-env.d.ts"],
+  "references": [
+    {
+      "path": "./tsconfig.node.json"
+    }
+  ]
+}
+
+
+==== \tsconfig.node.json ====
+{
+  "compilerOptions": {
+    "composite": true,
+    "skipLibCheck": true,
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "allowSyntheticDefaultImports": true,
+    "types": ["node"]   
+  },
+  "include": ["vite.config.ts"]
+}
+
+
+==== \vite.config.d.ts ====
+declare const _default: import("vite").UserConfig;
+export default _default;
+
+
+==== \vite.config.js ====
+// vite.config.ts
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import { fileURLToPath } from "node:url";
+import { dirname, resolve } from "node:path";
+// __dirname in ESM nachbauen
+var __filename = fileURLToPath(import.meta.url);
+var __dirname = dirname(__filename);
+// Prüfen, ob wir in GitHub Actions laufen
+var isActions = process.env.GITHUB_ACTIONS === "true";
+export default defineConfig({
+    plugins: [react()],
+    base: "/", // User/Org Pages: Root
+    build: {
+        outDir: isActions ? "dist" : "docs", // Actions → dist, lokal → docs
+    },
+    resolve: {
+        alias: {
+            "@": resolve(__dirname, "src"),
+        },
+    },
+});
+
+
+==== \vite.config.ts ====
+// vite.config.ts
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import { fileURLToPath } from "node:url";
+import { dirname, resolve } from "node:path";
+
+// __dirname in ESM nachbauen
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+// Prüfen, ob wir in GitHub Actions laufen
+const isActions = process.env.GITHUB_ACTIONS === "true";
+
+export default defineConfig({
+  plugins: [react()],
+  base: "/", // User/Org Pages: Root
+  build: {
+    outDir: isActions ? "dist" : "docs", // Actions → dist, lokal → docs
+  },
+  resolve: {
+    alias: {
+      "@": resolve(__dirname, "src"),
+    },
+  },
+});
+
+

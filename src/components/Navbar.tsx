@@ -6,6 +6,25 @@ import LangToggle from "@/components/LanguageToggle";
 
 const NAV = ["about","expertise","projects","cv","craft","contact"] as const;
 
+const SUBNAV: Record<string, { id: string; labelKey: string; path: string }[]> = {
+  projects: [
+    { id: "car-insurance", labelKey: "projects.adac", path: "/projects/car-insurance" },
+    { id: "zooplus-reops", labelKey: "projects.reops", path: "/projects/zooplus-reops" },
+    { id: "swiss-life", labelKey: "projects.sl", path: "/projects/swiss-life-b2b2c" },
+    { id: "zooplus-pricing", labelKey: "projects.pricing", path: "/projects/zooplus-pricing" },
+  ],
+  expertise: [
+    { id: "ux-strategy", labelKey: "expertise.uxStrategy", path: "/expertise/ux-strategy" },
+    { id: "strategic-ux-research", labelKey: "expertise.strategicUxResearch", path: "/expertise/strategic-ux-research" },
+    { id: "researchops", labelKey: "expertise.researchOps", path: "/expertise/researchops" },
+    { id: "team-leadership", labelKey: "expertise.teamLeadership", path: "/expertise/team-leadership" },
+    { id: "impact-measurement", labelKey: "expertise.impactMeasurement", path: "/expertise/impact-measurement" },
+  ],
+  cv: [
+    { id: "cv-full", labelKey: "nav.cvFull", path: "/cv" }
+  ]
+};
+
 export default function NavBar() {
   const { t } = useTranslation();
   const { pathname, hash } = useLocation();
@@ -44,7 +63,7 @@ export default function NavBar() {
     <header className="sticky top-0 z-50 border-b border-neutral-200 dark:border-neutral-800 bg-white/80 dark:bg-[var(--color-bg-dark)]/80 backdrop-blur">
       <nav className="container-responsive h-16 flex items-center justify-between">
         <Link
-          to="/"
+          to="/#header"
           className="flex items-center gap-2 font-bold text-sm md:text-base
                      text-neutral-800 dark:text-neutral-200"
         >
@@ -54,7 +73,7 @@ export default function NavBar() {
 
         <ul className="hidden md:flex items-center gap-4 text-sm">
           {NAV.map((id) => (
-            <li key={id}>
+            <li key={id} className="relative group">
               <a
                 href={hrefFor(id)}
                 aria-current={active === id ? "page" : undefined}
@@ -63,6 +82,20 @@ export default function NavBar() {
               >
                 {t(`nav.${id}`)}
               </a>
+              {SUBNAV[id] && (
+                <ul className="absolute left-0 top-full hidden group-hover:block bg-white dark:bg-neutral-900 shadow-lg rounded-md mt-1 py-2 w-56 border border-border">
+                  {SUBNAV[id].map((sub) => (
+                    <li key={sub.id}>
+                      <Link
+                        to={sub.path}
+                        className="block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800"
+                      >
+                        {t(sub.labelKey)}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </li>
           ))}
           <li className="pl-2"><LangToggle /></li>
@@ -87,7 +120,22 @@ export default function NavBar() {
         <div className="md:hidden border-t border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[var(--color-bg-dark)]">
           <div className="container-responsive py-3 space-y-2">
             {NAV.map((id) => (
-              <a key={id} href={hrefFor(id)} className="block py-2 text-neutral-800 dark:text-neutral-200">{t(`nav.${id}`)}</a>
+              <div key={id}>
+                <a href={hrefFor(id)} className="block py-2 text-neutral-800 dark:text-neutral-200">{t(`nav.${id}`)}</a>
+                {SUBNAV[id] && (
+                  <div className="pl-4 space-y-1">
+                    {SUBNAV[id].map((sub) => (
+                      <Link
+                        key={sub.id}
+                        to={sub.path}
+                        className="block py-1 text-sm text-neutral-700 dark:text-neutral-300"
+                      >
+                        {t(sub.labelKey)}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
             ))}
             <div className="flex gap-3 pt-2"><LangToggle /><ThemeToggle /></div>
           </div>

@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 
 type Role = {
-  id: string;              // für Deep Links (#exp-...)
+  id: string;
   company: string;
   role: string;
   period: string;
@@ -70,45 +70,45 @@ const ROLES: Role[] = [
   },
 ];
 
-const allTags = Array.from(new Set(ROLES.flatMap(r => r.tags))).sort();
+const allTags = Array.from(new Set(ROLES.flatMap((r) => r.tags))).sort();
 
 export default function CVPreview() {
-  // ausgewählte Tags (ODER-Logik)
   const [selected, setSelected] = useState<Set<string>>(new Set());
-
-  // welche Details sind offen?
   const [openIds, setOpenIds] = useState<Set<string>>(new Set());
+  const [activeId, setActiveId] = useState<string | null>(null);
 
   const detailsRefs = useRef<Map<string, HTMLDetailsElement>>(new Map());
   const summaryRefs = useRef<Map<string, HTMLElement>>(new Map());
   const listRef = useRef<HTMLOListElement | null>(null);
 
   const filtered = useMemo(() => {
-    // ODER-Logik: passt, wenn kein Filter aktiv ODER mind. ein Tag matcht
-    return ROLES.filter((r) => selected.size === 0 || Array.from(selected).some(tag => r.tags.includes(tag)));
+    return ROLES.filter(
+      (r) => selected.size === 0 || Array.from(selected).some((tag) => r.tags.includes(tag))
+    );
   }, [selected]);
 
-  // ist für die gefilterten Einträge alles geöffnet?
-  const allOpen = useMemo(() => filtered.length > 0 && filtered.every(r => openIds.has(r.id)), [filtered, openIds]);
+  const allOpen = useMemo(
+    () => filtered.length > 0 && filtered.every((r) => openIds.has(r.id)),
+    [filtered, openIds]
+  );
 
-  // Deep-link: #exp-zooplus etc.
   useEffect(() => {
     const id = location.hash?.replace("#", "");
     if (!id) return;
     const el = detailsRefs.current.get(id);
     if (el) {
       el.open = true;
-      setOpenIds(prev => new Set(prev).add(id));
+      setOpenIds((prev) => new Set(prev).add(id));
+      setActiveId(id);
       setTimeout(() => el.scrollIntoView({ behavior: "smooth", block: "center" }), 10);
     }
   }, []);
 
-  // Arrow key navigation (optional, nice to have)
   const handleKeyNav = (e: React.KeyboardEvent) => {
     if (!["ArrowDown", "ArrowUp", "Home", "End"].includes(e.key)) return;
     e.preventDefault();
-    const ids = filtered.map(r => r.id);
-    const currentIndex = ids.findIndex(id => summaryRefs.current.get(id) === document.activeElement);
+    const ids = filtered.map((r) => r.id);
+    const currentIndex = ids.findIndex((id) => summaryRefs.current.get(id) === document.activeElement);
     const focusAt = (idx: number) => summaryRefs.current.get(ids[idx])?.focus();
     if (e.key === "Home") return focusAt(0);
     if (e.key === "End") return focusAt(ids.length - 1);
@@ -118,9 +118,10 @@ export default function CVPreview() {
   };
 
   const toggleTag = (tag: string) => {
-    setSelected(prev => {
+    setSelected((prev) => {
       const next = new Set(prev);
-      if (next.has(tag)) next.delete(tag); else next.add(tag);
+      if (next.has(tag)) next.delete(tag);
+      else next.add(tag);
       return next;
     });
   };
@@ -128,25 +129,32 @@ export default function CVPreview() {
   const clearFilters = () => setSelected(new Set());
 
   const setAllOpenState = (open: boolean) => {
-    filtered.forEach(r => {
+    filtered.forEach((r) => {
       const d = detailsRefs.current.get(r.id);
       if (d) d.open = open;
     });
-    setOpenIds(prev => {
+    setOpenIds((prev) => {
       const next = new Set(prev);
-      filtered.forEach(r => (open ? next.add(r.id) : next.delete(r.id)));
+      filtered.forEach((r) => (open ? next.add(r.id) : next.delete(r.id)));
       return next;
     });
+    setActiveId(open ? filtered[0]?.id ?? null : null);
   };
 
   const onToggle = (id: string, isOpen: boolean) => {
-    setOpenIds(prev => {
+    setOpenIds((prev) => {
       const next = new Set(prev);
-      if (isOpen) next.add(id); else next.delete(id);
+      if (isOpen) next.add(id);
+      else next.delete(id);
       return next;
     });
-    if (isOpen) history.replaceState(null, "", `#${id}`);
-    else if (location.hash === `#${id}`) history.replaceState(null, "", " ");
+    if (isOpen) {
+      setActiveId(id); // nur wenn offen
+      history.replaceState(null, "", `#${id}`);
+    } else {
+      if (activeId === id) setActiveId(null); // beim Schließen wieder dünn
+      if (location.hash === `#${id}`) history.replaceState(null, "", " ");
+    }
   };
 
   return (
@@ -156,7 +164,8 @@ export default function CVPreview() {
           <div>
             <h2 className="text-2xl font-bold">CV snapshot</h2>
             <p className="mt-2 text-muted-foreground max-w-3xl">
-              Filter by tags. Tip: use <span className="font-mono">↑/↓</span> to move, <span className="font-mono">Enter</span> to open.
+              Filter by tags. Tip: use <span className="font-mono">↑/↓</span> to move,{" "}
+              <span className="font-mono">Enter</span> to open.
             </p>
           </div>
           <div className="flex items-center gap-2">
@@ -179,7 +188,7 @@ export default function CVPreview() {
           </div>
         </header>
 
-        {/* Tag Filter (ODER-Logik) */}
+        {/* Tag Filter */}
         <div className="mb-5 flex flex-wrap gap-2">
           {allTags.map((tag) => {
             const active = selected.has(tag);
@@ -187,8 +196,8 @@ export default function CVPreview() {
               <button
                 key={tag}
                 onClick={() => toggleTag(tag)}
-                className={`rounded-full border px-3 py-1.5 text-xs transition
-                ${active
+                className={`rounded-full border px-3 py-1.5 text-xs transition ${
+                  active
                     ? "border-neutral-900 bg-neutral-900 text-white dark:border-white dark:bg-white dark:text-neutral-900"
                     : "border-neutral-300 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-900"
                 }`}
@@ -203,24 +212,35 @@ export default function CVPreview() {
         {/* Timeline */}
         <ol
           ref={listRef}
-          className="relative border-l border-neutral-200 dark:border-neutral-800 pl-6 space-y-5"
+          className="relative border-l border-neutral-200 dark:border-neutral-800 pl-8 space-y-5"
           onKeyDown={handleKeyNav}
         >
           {filtered.map((r) => (
-            <li key={r.id} className="relative">
+            <li key={r.id} className="relative pl-6">
+              {/* Bullet auf der Timeline */}
               <span
-                className="absolute -left-[9px] top-2 h-2.5 w-2.5 rounded-full bg-neutral-400 dark:bg-neutral-600"
+                className="absolute left-0 top-6 -translate-x-1/2 h-2.5 w-2.5 rounded-full bg-neutral-400 dark:bg-neutral-600"
                 aria-hidden
               />
               <details
-                ref={(el) => { if (el) detailsRefs.current.set(r.id, el); }}
+                ref={(el) => {
+                  if (el) detailsRefs.current.set(r.id, el);
+                }}
                 id={r.id}
-                className="group rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white/60 dark:bg-neutral-950/60 backdrop-blur transition"
+                className={`group w-full rounded-xl bg-white/60 dark:bg-neutral-950/60 backdrop-blur transition 
+                  ${
+                    activeId === r.id
+                      ? "border-2 border-neutral-400 dark:border-neutral-600"
+                      : "border border-neutral-200 dark:border-neutral-800"
+                  }`}
                 onToggle={(e) => onToggle(r.id, (e.target as HTMLDetailsElement).open)}
               >
                 <summary
-                  ref={(el) => { if (el) summaryRefs.current.set(r.id, el); }}
-                  className="list-none cursor-pointer px-4 py-3 flex items-center justify-between gap-4 outline-none focus:ring-2 focus:ring-neutral-400 dark:focus:ring-neutral-600 rounded-xl"
+                  ref={(el) => {
+                    if (el) summaryRefs.current.set(r.id, el);
+                  }}
+                  className="list-none cursor-pointer px-4 py-3 flex items-center justify-between gap-4 
+                             outline-none focus:ring-2 focus:ring-neutral-400 dark:focus:ring-neutral-600 rounded-xl"
                   tabIndex={0}
                 >
                   <div className="min-w-0">
@@ -229,14 +249,22 @@ export default function CVPreview() {
                       {r.role} · {r.period}
                     </div>
                     <div className="mt-1 flex flex-wrap gap-1.5">
-                      {r.tags.map(t => (
-                        <span key={t} className="inline-flex items-center rounded-full border border-neutral-300 dark:border-neutral-700 px-2 py-0.5 text-[11px]">
+                      {r.tags.map((t) => (
+                        <span
+                          key={t}
+                          className="inline-flex items-center rounded-full border border-neutral-300 dark:border-neutral-700 px-2 py-0.5 text-[11px]"
+                        >
                           {t}
                         </span>
                       ))}
                     </div>
                   </div>
-                  <div className="shrink-0 transition group-open:rotate-180" aria-hidden title="Toggle details">
+                  {/* Pfeil doppelt so groß */}
+                  <div
+                    className="shrink-0 transition group-open:rotate-180 text-2xl"
+                    aria-hidden
+                    title="Toggle details"
+                  >
                     ▾
                   </div>
                 </summary>
