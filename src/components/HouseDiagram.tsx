@@ -10,7 +10,6 @@ export default function HouseDiagram() {
   const pillars =
     (t("expertise.pillars", { returnObjects: true }) as Array<{ title: string; caption?: string }>) ?? [];
 
-  // Robust: relative Routen, damit Basename/Deploy (z.B. GitHub Pages) korrekt funktionieren
   const routesByIndex = [
     "expertise/ux-strategy",
     "expertise/strategic-ux-research",
@@ -21,27 +20,21 @@ export default function HouseDiagram() {
 
   return (
     <div className="w-full" style={{ ["--tile-h" as any]: TILE_H }}>
-      {/* Roof (scharfes, gefülltes Dreieck – Höhe = Kachelhöhe) */}
-      <div className="mx-auto max-w-6xl h-[var(--tile-h)]">
+      {/* Roof */}
+      <div className="relative mx-auto max-w-6xl h-[var(--tile-h)]">
         <svg className="w-full h-full" viewBox="0 0 100 50" preserveAspectRatio="none" aria-hidden>
-          {/* Scharfes Dreieck (Polygon), keine Rundungen */}
           <polygon
             points="50,2 98,48 2,48"
             fill="currentColor"
             className="text-neutral-900 dark:text-white"
           />
-          {/* Text mittig, kleiner als vorher */}
-          <text
-            x="50"
-            y="28"
-            textAnchor="middle"
-            dominantBaseline="middle"
-            className="fill-white dark:fill-neutral-900"
-            style={{ fontSize: "clamp(10px, 1.6vw, 16px)", fontWeight: 700 }}
-          >
-            {t("expertise.roof")}
-          </text>
         </svg>
+        {/* Overlay-Text */}
+        <div className="absolute inset-0 flex items-center justify-center">
+          <span className="text-base font-semibold text-white dark:text-neutral-900">
+            {t("expertise.roof")}
+          </span>
+        </div>
       </div>
 
       {/* Tiles */}
@@ -51,7 +44,7 @@ export default function HouseDiagram() {
           return (
             <Link
               key={i}
-              to={to} // relative Pfade -> funktionieren mit BrowserRouter *und* Basename
+              to={to}
               className="block focus:outline-none focus:ring-2 focus:ring-neutral-400 dark:focus:ring-neutral-600 rounded-2xl"
             >
               <div
@@ -63,7 +56,7 @@ export default function HouseDiagram() {
                   dark:bg-neutral-950 dark:text-neutral-100
                 "
               >
-                <div className="font-semibold leading-snug">{p.title}</div>
+                <div className="text-base font-semibold leading-snug">{p.title}</div>
                 {p.caption ? (
                   <div className="mt-2 text-sm text-neutral-600 dark:text-neutral-300">
                     {p.caption}
@@ -81,21 +74,23 @@ export default function HouseDiagram() {
           className="
             mx-auto max-w-6xl
             rounded-full
-            text-center font-semibold
-            border border-border
+            text-center border border-border
             bg-neutral-900 text-white
             dark:bg-white dark:text-neutral-900
+            text-base font-semibold
           "
-          style={{ height: "calc(var(--tile-h) / 2)", display: "grid", placeItems: "center" }}
+          style={{
+            height: "calc(var(--tile-h) / 2)",
+            display: "grid",
+            placeItems: "center",
+          }}
         >
-          <span className="px-4">
-            {t("expertise.foundation")}
-          </span>
+          <span className="px-4">{t("expertise.foundation")}</span>
         </div>
       </div>
 
       {/* Value Proposition */}
-      <p className="mt-4 text-center text-sm text-muted-foreground max-w-3xl mx-auto">
+      <p className="mt-4 text-center text-base font-semibold text-muted-foreground max-w-3xl mx-auto">
         {t("expertise.valueProp")}
       </p>
     </div>

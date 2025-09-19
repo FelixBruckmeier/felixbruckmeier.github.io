@@ -4,17 +4,19 @@ import Home from "@/pages/Home";
 import CV from "@/pages/CV";
 
 // Projektseiten
-import ADAC from "@/pages/projects/ADAC";
 import CarInsurance from "@/pages/projects/CarInsurance";
 import SwissLife from "@/pages/projects/SwissLife";
 import ZooplusReOps from "@/pages/projects/ZooplusReOps";
 import ZooplusPricing from "@/pages/projects/ZooplusPricing";
-import PricingUsability from "@/pages/projects/PricingUsability";
 import UXMethodCards from "@/pages/projects/UXMethodCards";
 import WinningUXStrategy from "@/pages/projects/WinningUXStrategy";
 
-// Optional: Falls du eine NotFound-Seite hast, kannst du sie hier aktivieren
-// import NotFound from "@/pages/NotFound";
+// Expertise-Seiten
+import UXStrategy from "@/pages/expertise/UXStrategy";
+import StrategicUXResearch from "@/pages/expertise/StrategicUXResearch";
+import ResearchOps from "@/pages/expertise/ResearchOps";
+import TeamLeadership from "@/pages/expertise/TeamLeadership";
+import ImpactMeasurement from "@/pages/expertise/ImpactMeasurement";
 
 export default function App() {
   return (
@@ -23,23 +25,23 @@ export default function App() {
         <Route index element={<Home />} />
         <Route path="cv" element={<CV />} />
 
-        {/* Projekt-Routen */}
-        <Route path="projects/adac" element={<ADAC />} />
-        <Route path="projects/adac-car-insurance" element={<ADAC />} /> {/* Alias */}
+        {/* Projekt-Routen (nur die 6 gültigen) */}
         <Route path="projects/car-insurance" element={<CarInsurance />} />
-        <Route path="projects/swiss-life" element={<SwissLife />} />
+        <Route path="projects/swiss-life-b2b2c" element={<SwissLife />} />
         <Route path="projects/zooplus-reops" element={<ZooplusReOps />} />
         <Route path="projects/zooplus-pricing" element={<ZooplusPricing />} />
-        <Route path="projects/pricing-usability" element={<PricingUsability />} />
         <Route path="projects/ux-method-cards" element={<UXMethodCards />} />
         <Route path="projects/winning-ux-strategy" element={<WinningUXStrategy />} />
 
+        {/* Expertise-Routen */}
+        <Route path="expertise/ux-strategy" element={<UXStrategy />} />
+        <Route path="expertise/strategic-ux-research" element={<StrategicUXResearch />} />
+        <Route path="expertise/researchops" element={<ResearchOps />} />
+        <Route path="expertise/team-leadership" element={<TeamLeadership />} />
+        <Route path="expertise/impact-measurement" element={<ImpactMeasurement />} />
+
         {/* Fallback */}
         <Route path="*" element={<Navigate to="/" replace />} />
-
-        {/* Wenn du NotFound nutzen willst:
-            <Route path="404" element={<NotFound />} />
-            <Route path="*" element={<Navigate to="/404" replace />} /> */}
       </Route>
     </Routes>
   );
