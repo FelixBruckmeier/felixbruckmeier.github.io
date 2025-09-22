@@ -2,7 +2,7 @@ import { Link, useLocation } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import ThemeToggle from "@/components/ThemeToggle";
-import LangToggle from "@/components/LanguageToggle";
+import LanguageToggle from "@/components/LanguageToggle";
 
 const NAV = ["about","expertise","projects","cv","craft","contact"] as const;
 
@@ -12,6 +12,7 @@ const SUBNAV: Record<string, { id: string; labelKey: string; path: string }[]> =
     { id: "zooplus-reops", labelKey: "projects.reops", path: "/projects/zooplus-reops" },
     { id: "swiss-life", labelKey: "projects.sl", path: "/projects/swiss-life-b2b2c" },
     { id: "zooplus-pricing", labelKey: "projects.pricing", path: "/projects/zooplus-pricing" },
+    { id: "delete-case", labelKey: "projects.deleteCase", path: "/projects/delete-case" }, // 👈 neu
   ],
   expertise: [
     { id: "ux-strategy", labelKey: "expertise.uxStrategy", path: "/expertise/ux-strategy" },
@@ -98,7 +99,7 @@ export default function NavBar() {
               )}
             </li>
           ))}
-          <li className="pl-2"><LangToggle /></li>
+          <li className="pl-2"><LanguageToggle /></li>
           <li><ThemeToggle /></li>
         </ul>
 
@@ -137,7 +138,7 @@ export default function NavBar() {
                 )}
               </div>
             ))}
-            <div className="flex gap-3 pt-2"><LangToggle /><ThemeToggle /></div>
+            <div className="flex gap-3 pt-2"><LanguageToggle /><ThemeToggle /></div>
           </div>
         </div>
       )}

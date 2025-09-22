@@ -208,6 +208,16 @@ export default function Home() {
                 Clarity in pricing components and PDP details.
               </p>
             </Link>
+            {/* 👇 Neu: Delete Case */}
+            <Link
+              to="/projects/delete-case"
+              className="rounded-2xl border border-border p-5 hover:bg-muted/40 transition block"
+            >
+              <div className="font-semibold">{t("projects.deleteCase")}</div>
+              <p className="mt-2 text-sm text-muted-foreground">
+                A micro-interaction that saves 231 years of lost user time.
+              </p>
+            </Link>
           </div>
         </div>
       </section>

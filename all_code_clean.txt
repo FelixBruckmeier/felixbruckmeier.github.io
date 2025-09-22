@@ -40,11 +40,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "framer-motion": "^12.23.18",
     "i18next": "^23.16.8",
+    "lucide-react": "^0.544.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-i18next": "^13.5.0",
-    "react-router-dom": "^6.26.0"
+    "react-router-dom": "^6.26.0",
+    "recharts": "^3.2.1"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.0.0",
@@ -186,6 +189,882 @@ jobs:
 
 ==== \public\404.html ====
 <!doctype html><html><head><meta charset="UTF-8"><meta http-equiv="refresh" content="0;url=/" /><script>sessionStorage.redirect=location.pathname+location.search</script><title>Redirecting…</title></head><body>Redirecting…</body></html>
+
+
+==== \src\components\CarInsurance\BeforeAfter_Car.tsx ====
+import React from "react";
+
+type Props = {
+  before: string[];
+  after: string[];
+};
+
+export default function BeforeAfter({ before, after }: Props) {
+  return (
+    <div className="grid md:grid-cols-2 gap-6">
+      <div className="rounded-xl border bg-red-50 p-6 shadow-sm">
+        <h4 className="font-semibold text-red-700 mb-3">Before</h4>
+        <ul className="list-disc list-inside space-y-1 text-sm text-gray-700">
+          {before.map((b, i) => (
+            <li key={i}>{b}</li>
+          ))}
+        </ul>
+      </div>
+      <div className="rounded-xl border bg-green-50 p-6 shadow-sm">
+        <h4 className="font-semibold text-green-700 mb-3">After</h4>
+        <ul className="list-disc list-inside space-y-1 text-sm text-gray-700">
+          {after.map((a, i) => (
+            <li key={i}>{a}</li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  );
+}
+
+
+==== \src\components\CarInsurance\ImpactGrid_Car.tsx ====
+import React, { ReactNode } from "react";
+
+type Metric = {
+  label: string;
+  description: ReactNode; // <-- erlaubt Texte ODER Komponenten
+};
+
+type Props = {
+  metrics: Metric[];
+};
+
+export default function ImpactGrid_Car({ metrics }: Props) {
+  return (
+    <div className="grid md:grid-cols-2 gap-6">
+      {metrics.map((m, i) => (
+        <div
+          key={i}
+          className="rounded-xl border bg-white p-6 shadow-sm hover:shadow-md transition"
+        >
+          <h4 className="font-semibold text-blue-700 mb-2">{m.label}</h4>
+          <div className="text-sm text-gray-600 space-y-4">{m.description}</div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+
+==== \src\components\CarInsurance\JourneyMap_Car.tsx ====
+import React from "react";
+import { ResponsiveContainer, LineChart, Line } from "recharts";
+
+// Touchpoints
+const stages = [
+  {
+    key: "tp1",
+    label: "Kundenanliegen verstehen",
+    action: "Bedarf klären: Fahrzeug, Zweck, grobe Tarifrichtung (Basis vs. Premium).",
+  },
+  {
+    key: "tp2",
+    label: "Informationseingabe",
+    action: "Alle Daten ins Tool eintragen (Fahrzeug, Kunde, Details).",
+  },
+  {
+    key: "tp3",
+    label: "Ergebnisseite besprechen",
+    action: "Tarifvorschlag mit dem Kunden durchgehen.",
+  },
+  {
+    key: "tp4",
+    label: "Anpassungen",
+    action: "Eingaben ändern, um Tarif neu zu berechnen.",
+  },
+  {
+    key: "tp5",
+    label: "Vertragsabschluss",
+    action: "Kunde wählt Tarif, Vertrag wird abgeschlossen.",
+  },
+];
+
+// Emotions-Kurve (1=negativ, 2=neutral, 3=positiv)
+const emotions = [
+  { value: 3, emoji: "🙂" }, // Einstieg positiv
+  { value: 1, emoji: "😠" }, // Eingabe frustrierend
+  { value: 2, emoji: "😐" }, // Ergebnisse schwer erklärbar
+  { value: 1, emoji: "😤" }, // Anpassungen mühsam
+  { value: 3, emoji: "🎉" }, // Abschluss positiv
+];
+
+export default function JourneyMap_Car() {
+  return (
+    <div className="w-full overflow-x-auto border border-border rounded-2xl p-4 bg-background shadow-sm">
+      {/* Desktop-Version */}
+      <div className="hidden md:block">
+        <table className="min-w-full text-sm text-center rounded-2xl overflow-hidden">
+          <thead>
+            <tr className="bg-muted/40">
+              <th className="border border-border p-3 w-32"></th>
+              {stages.map((s) => (
+                <th
+                  key={s.key}
+                  className="border border-border p-3 font-semibold"
+                >
+                  {s.label}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {/* Actions */}
+            <tr>
+              <td className="border border-border font-medium p-3">Actions</td>
+              {stages.map((s) => (
+                <td key={s.key} className="border border-border p-3 align-top">
+                  <p>{s.action}</p>
+                </td>
+              ))}
+            </tr>
+
+            {/* Emotions */}
+            <tr>
+              <td className="border border-border font-medium p-3">Emotions</td>
+              <td colSpan={stages.length} className="border border-border p-3">
+                <div className="h-40 relative">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart
+                      data={emotions.map((e, i) => ({ idx: i, value: e.value }))}
+                    >
+                      <Line
+                        type="monotone"
+                        dataKey="value"
+                        stroke="#2563EB"
+                        strokeWidth={3}
+                        dot={{ r: 0 }}
+                        isAnimationActive={false}
+                      />
+                    </LineChart>
+                  </ResponsiveContainer>
+                  {/* Smileys exakt auf Linie platzieren */}
+                  <div className="absolute inset-0 grid grid-cols-5">
+                    {emotions.map((e, i) => (
+                      <div
+                        key={i}
+                        className="flex justify-center"
+                        style={{
+                          transform: `translateY(${(3 - e.value) * 25}px)`,
+                        }}
+                      >
+                        <span className="text-2xl">{e.emoji}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </td>
+            </tr>
+
+            {/* Pain Points */}
+            <tr>
+              <td className="border border-border font-medium p-3">Pain Points</td>
+              {stages.map((s, i) => (
+                <td key={s.key} className="border border-border p-3 align-top">
+                  {i === 0 && "Keine großen Probleme."}
+                  {i === 1 &&
+                    "Starres Abfragen aller Felder, unklare Eingaben, Dauer zu lang."}
+                  {i === 2 &&
+                    "Schwer erklärbar, welche Eingabe welchen Preis beeinflusst."}
+                  {i === 3 &&
+                    "Umständliches Zurückspringen im Tool, Prozess neu durchlaufen."}
+                  {i === 4 && "Kaum Probleme, Abschluss meist erfolgreich."}
+                </td>
+              ))}
+            </tr>
+
+            {/* Opportunities */}
+            <tr>
+              <td className="border border-border font-medium p-3">Opportunities</td>
+              {stages.map((s, i) => (
+                <td key={s.key} className="border border-border p-3 align-top">
+                  {i === 0 && "Strukturierte Gesprächsleitfäden für neue Berater:innen."}
+                  {i === 1 && "Adaptive Abkürzungen, Pre-Fill, Klartext statt Fachjargon."}
+                  {i === 2 &&
+                    "Transparente Preislogik, visuelle Hervorhebung relevanter Eingaben."}
+                  {i === 3 &&
+                    "Flexible Änderungen, direkter Einfluss auf Tarif sichtbar."}
+                  {i === 4 &&
+                    "Positives Erlebnis nutzen, Zusatzfeatures anbieten."}
+                </td>
+              ))}
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      {/* Mobile-Version */}
+      <div className="md:hidden space-y-6">
+        {stages.map((s, i) => (
+          <div
+            key={s.key}
+            className="border border-border rounded-2xl p-4 space-y-3"
+          >
+            {/* Nummerierter Kreis + Überschrift */}
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 flex items-center justify-center rounded-full bg-blue-600 text-white font-bold">
+                {i + 1}
+              </div>
+              <h3 className="font-semibold">{s.label}</h3>
+            </div>
+
+            <div>
+              <p className="font-medium">Actions</p>
+              <span>{s.action}</span>
+            </div>
+            <div>
+              <p className="font-medium">Emotions</p>
+              <span className="text-2xl">{emotions[i].emoji}</span>
+            </div>
+            <div>
+              <p className="font-medium">Pain Points</p>
+              <p className="text-sm text-muted-foreground">
+                {i === 0 && "Keine großen Probleme."}
+                {i === 1 &&
+                  "Starres Abfragen, unklare Felder, sehr zeitaufwendig."}
+                {i === 2 &&
+                  "Unklare Preislogik, schwer für Kunden verständlich."}
+                {i === 3 &&
+                  "Umständliches Zurückspringen, Prozess neu starten nötig."}
+                {i === 4 && "Kaum Probleme beim Abschluss."}
+              </p>
+            </div>
+            <div>
+              <p className="font-medium">Opportunities</p>
+              <p className="text-sm text-muted-foreground">
+                {i === 0 && "Gesprächsleitfäden für neue Berater:innen."}
+                {i === 1 &&
+                  "Adaptive Eingaben, Pre-Fill Felder, klare Sprache."}
+                {i === 2 &&
+                  "Bessere Preislogik visualisieren, Transparenz schaffen."}
+                {i === 3 &&
+                  "Flexible Eingabeänderungen ermöglichen."}
+                {i === 4 && "Positive Abschlussmomente verstärken."}
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+
+==== \src\components\CarInsurance\PersonaCards_Car - Kopie.tsx ====
+import React from "react";
+
+type Persona = {
+  name: string;
+  role: string;
+  goals: string[];
+  pains: string[];
+};
+
+type Props = {
+  personas: Persona[];
+};
+
+export default function PersonaCards({ personas }: Props) {
+  return (
+    <div className="grid md:grid-cols-2 gap-6">
+      {personas.map((p, i) => (
+        <div
+          key={i}
+          className="rounded-2xl border bg-white p-6 shadow-md space-y-4"
+        >
+          <h3 className="text-xl font-semibold">{p.name}</h3>
+          <p className="text-sm text-muted-foreground">{p.role}</p>
+          <div>
+            <h4 className="font-semibold text-blue-600">🎯 Goals</h4>
+            <ul className="list-disc list-inside text-sm">
+              {p.goals.map((g, j) => (
+                <li key={j}>{g}</li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-semibold text-red-600">⚡ Pain Points</h4>
+            <ul className="list-disc list-inside text-sm">
+              {p.pains.map((pain, j) => (
+                <li key={j}>{pain}</li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+
+==== \src\components\CarInsurance\PersonaCards_Car.tsx ====
+import React from "react";
+
+type Persona = {
+  name: string;
+  role: string;
+  goals: string[];
+  pains: string[];
+};
+
+type Props = {
+  personas: Persona[];
+};
+
+export default function PersonaCards({ personas }: Props) {
+  return (
+    <div className="grid md:grid-cols-2 gap-6">
+      {personas.map((p, i) => (
+        <div
+          key={i}
+          className="rounded-2xl border bg-white p-6 shadow-md space-y-4"
+        >
+          <h3 className="text-xl font-semibold">{p.name}</h3>
+          <p className="text-sm text-muted-foreground">{p.role}</p>
+          <div>
+            <h4 className="font-semibold text-blue-600">🎯 Goals</h4>
+            <ul className="list-disc list-inside text-sm">
+              {p.goals.map((g, j) => (
+                <li key={j}>{g}</li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-semibold text-red-600">⚡ Pain Points</h4>
+            <ul className="list-disc list-inside text-sm">
+              {p.pains.map((pain, j) => (
+                <li key={j}>{pain}</li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+
+==== \src\components\CarInsurance\PrototypeAnimation.tsx ====
+import React from "react";
+import { motion } from "framer-motion";
+
+export default function PrototypeAnimation() {
+  return (
+    <div className="flex items-center justify-center gap-8 bg-gray-50 p-6 rounded-xl border">
+      {/* Mock Desktop App */}
+      <div className="w-80 h-56 bg-white rounded-lg shadow-md border flex flex-col">
+        {/* Header */}
+        <div className="h-6 bg-gray-200 rounded-t-lg flex items-center px-2">
+          <div className="w-3 h-3 bg-red-400 rounded-full mr-1" />
+          <div className="w-3 h-3 bg-yellow-400 rounded-full mr-1" />
+          <div className="w-3 h-3 bg-green-400 rounded-full" />
+        </div>
+        {/* Body */}
+        <div className="flex-1 p-4 space-y-3">
+          <motion.div
+            className="h-6 bg-gray-100 rounded"
+            animate={{ backgroundColor: ["#f3f4f6", "#bfdbfe", "#f3f4f6"] }}
+            transition={{ repeat: Infinity, duration: 3 }}
+          />
+          <motion.div
+            className="h-6 bg-gray-100 rounded w-2/3"
+            animate={{ backgroundColor: ["#f3f4f6", "#bfdbfe", "#f3f4f6"] }}
+            transition={{ repeat: Infinity, duration: 3, delay: 1 }}
+          />
+          <motion.button
+            className="h-8 bg-blue-500 text-white rounded px-3"
+            animate={{ scale: [1, 0.95, 1] }}
+            transition={{ repeat: Infinity, duration: 3, delay: 2 }}
+          >
+            Submit
+          </motion.button>
+        </div>
+      </div>
+
+      {/* Figuren schematisch */}
+      <div className="flex flex-col items-center space-y-6">
+        {/* Interviewer */}
+        <div className="flex items-center gap-2">
+          <div className="w-10 h-10 bg-gray-300 rounded-full" />
+          <motion.div
+            className="bg-gray-200 px-3 py-1 rounded-lg text-sm"
+            animate={{ opacity: [0, 1, 0] }}
+            transition={{ repeat: Infinity, duration: 6, delay: 0 }}
+          >
+            Can you explain this?
+          </motion.div>
+        </div>
+
+        {/* Teilnehmer */}
+        <div className="flex items-center gap-2">
+          <div className="w-10 h-10 bg-gray-400 rounded-full" />
+          <motion.div
+            className="bg-blue-100 px-3 py-1 rounded-lg text-sm"
+            animate={{ opacity: [0, 1, 0] }}
+            transition={{ repeat: Infinity, duration: 6, delay: 3 }}
+          >
+            I’d click here…
+          </motion.div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+==== \src\components\CarInsurance\PrototypeAnimationDetailed.tsx ====
+import React, { useEffect, useState } from "react";
+import { motion, useAnimation } from "framer-motion";
+
+export default function PrototypeAnimationDetailed() {
+  const [selectedVehicle, setSelectedVehicle] = useState<string | null>(null);
+  const [selectedInsurance, setSelectedInsurance] = useState<string | null>(null);
+
+  const cursorControls = useAnimation();
+
+  // Ablaufsteuerung
+  useEffect(() => {
+    const runSequence = async () => {
+      // Reset
+      setSelectedVehicle(null);
+      setSelectedInsurance(null);
+
+      // Cursor sichtbar machen
+      await cursorControls.start({ opacity: 1, x: 20, y: 40, transition: { duration: 0 } });
+
+      // Step 1: zu Motorrad fahren
+      await cursorControls.start({ x: 120, y: 40, transition: { duration: 1.5 } });
+      setSelectedVehicle("Motorrad");
+
+      // Klick-Animation
+      await cursorControls.start({ scale: 1.3, transition: { duration: 0.2 } });
+      await cursorControls.start({ scale: 1, transition: { duration: 0.2 } });
+
+      // Step 2: zu Haftpflicht fahren
+      await cursorControls.start({ x: 40, y: 120, transition: { duration: 1.5 } });
+      setSelectedInsurance("Haftpflicht");
+
+      await cursorControls.start({ scale: 1.3, transition: { duration: 0.2 } });
+      await cursorControls.start({ scale: 1, transition: { duration: 0.2 } });
+
+      // Step 3: zum Button fahren
+      await cursorControls.start({ x: 160, y: 200, transition: { duration: 1.5 } });
+
+      await cursorControls.start({ scale: 1.3, transition: { duration: 0.2 } });
+      await cursorControls.start({ scale: 1, transition: { duration: 0.2 } });
+
+      // Kurze Pause
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      // Wiederholen
+      runSequence();
+    };
+
+    runSequence();
+  }, [cursorControls]);
+
+  return (
+    <div className="flex flex-col md:flex-row items-start gap-8 bg-gray-50 p-6 rounded-xl border shadow-sm">
+      {/* Formular */}
+      <div className="relative w-full max-w-md bg-white rounded-lg shadow-md border p-6 space-y-6 overflow-hidden">
+        {/* Fahrzeugtyp */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Fahrzeugtyp</label>
+          <div className="flex gap-2">
+            {["PKW", "Motorrad", "Wohnmobil"].map((type) => (
+              <div
+                key={type}
+                className={`px-3 py-1 rounded-md text-sm border transition-colors ${
+                  selectedVehicle === type
+                    ? "bg-blue-500 text-white border-blue-500"
+                    : "bg-gray-100 border-gray-300"
+                }`}
+              >
+                {type}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Versicherung */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Versicherung</label>
+          <div className="flex gap-2">
+            {["Haftpflicht", "Teilkasko", "Vollkasko"].map((type) => (
+              <div
+                key={type}
+                className={`px-3 py-1 rounded-md text-sm border transition-colors ${
+                  selectedInsurance === type
+                    ? "bg-blue-500 text-white border-blue-500"
+                    : "bg-gray-100 border-gray-300"
+                }`}
+              >
+                {type}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Button */}
+        <button
+          className={`mt-4 px-4 py-2 rounded transition-colors ${
+            selectedVehicle && selectedInsurance
+              ? "bg-blue-500 text-white"
+              : "bg-gray-300 text-gray-600"
+          }`}
+        >
+          Weiter
+        </button>
+
+        {/* Cursor als SVG */}
+        <motion.svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          className="absolute w-6 h-6 fill-black"
+          initial={{ opacity: 0 }}
+          animate={cursorControls}
+        >
+          <path d="M3 2L21 12L13 14L15 22L7 10L3 2Z" />
+        </motion.svg>
+      </div>
+
+      {/* Figuren & Sprechblasen */}
+      <div className="flex flex-col items-start space-y-6">
+        <div className="flex items-center gap-2">
+          <div className="w-12 h-12 bg-gray-300 rounded-full" />
+          <motion.div
+            className="bg-gray-200 px-3 py-1 rounded-lg text-sm shadow-sm"
+            animate={{ opacity: [0, 1, 0] }}
+            transition={{ repeat: Infinity, duration: 6, delay: 0 }}
+          >
+            Welchen Fahrzeugtyp haben Sie?
+          </motion.div>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <div className="w-12 h-12 bg-gray-400 rounded-full" />
+          <motion.div
+            className="bg-blue-100 px-3 py-1 rounded-lg text-sm shadow-sm"
+            animate={{ opacity: [0, 1, 0] }}
+            transition={{ repeat: Infinity, duration: 6, delay: 1.5 }}
+          >
+            Ich würde Motorrad wählen.
+          </motion.div>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <div className="w-12 h-12 bg-gray-300 rounded-full" />
+          <motion.div
+            className="bg-gray-200 px-3 py-1 rounded-lg text-sm shadow-sm"
+            animate={{ opacity: [0, 1, 0] }}
+            transition={{ repeat: Infinity, duration: 6, delay: 3 }}
+          >
+            Und welche Versicherungsart bevorzugen Sie?
+          </motion.div>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <div className="w-12 h-12 bg-gray-400 rounded-full" />
+          <motion.div
+            className="bg-blue-100 px-3 py-1 rounded-lg text-sm shadow-sm"
+            animate={{ opacity: [0, 1, 0] }}
+            transition={{ repeat: Infinity, duration: 6, delay: 4.5 }}
+          >
+            Eine Haftpflicht.
+          </motion.div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+==== \src\components\CarInsurance\WorkshopAnimation_Car.tsx ====
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+
+export default function WorkshopAnimation_Car() {
+  const [phase, setPhase] = useState<"affinity" | "journey">("affinity");
+
+  // Wechsel alle 10 Sekunden
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setPhase((prev) => (prev === "affinity" ? "journey" : "affinity"));
+    }, 10000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const affinityClusters = [
+    {
+      title: "Pain Points",
+      notes: [
+        { text: "Formulare zu lang", prio: 1 },
+        { text: "Unklare Felder", prio: 3 },
+        { text: "Kunde wird verwirrt", prio: 5 },
+      ],
+      color: "#FECACA", // rot
+    },
+    {
+      title: "Needs",
+      notes: [
+        { text: "Schneller Abschluss", prio: 2 },
+        { text: "Transparenz", prio: 4 },
+        { text: "Einfache Sprache", prio: null },
+      ],
+      color: "#BBF7D0", // grün
+    },
+    {
+      title: "Ideen",
+      notes: [
+        { text: "Adaptive Eingabe", prio: null },
+        { text: "Tooltips", prio: null },
+        { text: "Online-Verfügbarkeit", prio: null },
+      ],
+      color: "#FEF08A", // gelb
+    },
+  ];
+
+  const journeySteps = [
+    {
+      step: "Kundenanliegen verstehen",
+      pain: "Berater muss alles manuell abfragen",
+      opp: "Frühe Orientierung, adaptive Fragen",
+      pos: { top: "10%", left: "10%" },
+    },
+    {
+      step: "Eingabe im Tool",
+      pain: "Alle Felder zwingend, auch irrelevante",
+      opp: "Autom. Vorauswahl, Pflichtfelder reduzieren",
+      pos: { top: "30%", left: "55%" }, // höher gesetzt
+    },
+    {
+      step: "Tarif-Besprechung",
+      pain: "Schwer erklärbare Fachbegriffe",
+      opp: "Einfache Sprache, visuelle Vergleichshilfe",
+      pos: { top: "70%", left: "20%" },
+    },
+    {
+      step: "Abschluss",
+      pain: "Umständliche Anpassungen im Tool",
+      opp: "Flexible Nachbearbeitung ohne Neustart",
+      pos: { top: "65%", left: "70%" },
+    },
+  ];
+
+  return (
+    <div className="w-full flex flex-col items-center space-y-6">
+      <div className="relative w-full max-w-4xl h-96 border rounded-xl bg-white shadow-lg overflow-hidden">
+        <AnimatePresence mode="wait">
+          {/* Affinity Map */}
+          {phase === "affinity" && (
+            <motion.div
+              key="affinity"
+              className="w-full h-full p-6 grid grid-cols-3 gap-4"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              {affinityClusters.map((cluster, i) => (
+                <div key={i} className="flex flex-col items-start space-y-2">
+                  <h4 className="text-sm font-semibold">{cluster.title}</h4>
+                  {cluster.notes.map((note, j) => (
+                    <motion.div
+                      key={j}
+                      className="relative w-32 h-16 rounded-md shadow-sm flex items-center text-xs text-center px-2"
+                      style={{ backgroundColor: cluster.color }}
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: j * 0.3 }}
+                    >
+                      {note.text}
+                      {/* Prio Tags 1–5 */}
+                      {note.prio && (
+                        <motion.div
+                          className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] px-2 py-0.5 rounded-full shadow"
+                          initial={{ scale: 0, opacity: 0 }}
+                          animate={{ scale: 1, opacity: 1 }}
+                          transition={{ delay: j * 0.3 + 0.6 }}
+                        >
+                          Prio {note.prio}
+                        </motion.div>
+                      )}
+                    </motion.div>
+                  ))}
+                </div>
+              ))}
+            </motion.div>
+          )}
+
+          {/* Journey Map */}
+          {phase === "journey" && (
+            <motion.div
+              key="journey"
+              className="w-full h-full relative"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              {journeySteps.map((s, i) => (
+                <motion.div
+                  key={i}
+                  className="absolute flex flex-col space-y-2"
+                  style={{ top: s.pos.top, left: s.pos.left }}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: i * 0.5 }}
+                >
+                  {/* Step */}
+                  <div className="w-48 h-12 bg-blue-100 rounded-md shadow flex items-center text-center font-medium px-2">
+                    {s.step}
+                  </div>
+                  {/* Pain & Opportunity */}
+                  <div className="flex space-x-2">
+                    <div className="w-36 h-10 bg-red-100 rounded-md shadow text-[11px] flex items-center text-center px-2">
+                      ❌ {s.pain}
+                    </div>
+                    <div className="w-36 h-10 bg-green-100 rounded-md shadow text-[11px] flex items-center text-center px-2">
+                      ✅ {s.opp}
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
+      <p className="text-sm text-gray-500 text-center max-w-lg">
+        Workshop-Artefakte: Affinity Maps mit Clustern & Priorisierung (1–5)
+        sowie eine Customer Journey mit Pain Points & Opportunities.
+      </p>
+    </div>
+  );
+}
+
+
+==== \src\components\ActionIcons.tsx ====
+import React from "react";
+
+export function IconRealizeProblem() {
+  return (
+    <div className="flex justify-center">
+      <svg width="80" height="60" viewBox="0 0 80 60" fill="none">
+        {/* Textfeld-Karte */}
+        <rect x="5" y="15" width="60" height="30" rx="6" fill="#F3F4F6" stroke="#374151" strokeWidth="2" />
+        <text x="15" y="35" fontSize="12" fill="#111827">Text...</text>
+        {/* Alert-Badge */}
+        <circle cx="65" cy="40" r="8" fill="#EF4444" />
+        <text
+          x="65"
+          y="40"
+          fontSize="12"
+          fill="white"
+          fontWeight="bold"
+          textAnchor="middle"
+          dominantBaseline="central"
+        >
+          !
+        </text>
+      </svg>
+    </div>
+  );
+}
+
+/** Workaround: Google-Suchleiste mit Lupe (größer, ohne Überschneidung) */
+export function IconWorkaround() {
+  return (
+    <div className="flex justify-center">
+      <svg width="120" height="60" viewBox="0 0 120 60" fill="none">
+        {/* Suchfeld */}
+        <rect x="10" y="18" width="100" height="24" rx="12" fill="#FFFFFF" stroke="#374151" strokeWidth="2" />
+        {/* Platzhalter-Text – beginnt links und endet deutlich vor der Lupe */}
+        <text x="20" y="34" fontSize="12" fill="#9CA3AF">google search…</text>
+        {/* Lupe rechts im Feld */}
+        <circle cx="96" cy="30" r="7" stroke="#2563EB" strokeWidth="2" />
+        <line x1="100" y1="34" x2="108" y2="42" stroke="#2563EB" strokeWidth="2" />
+      </svg>
+    </div>
+  );
+}
+
+export function IconManualDelete() {
+  return (
+    <div className="flex justify-center">
+      <svg width="80" height="60" viewBox="0 0 80 60" fill="none">
+        <rect x="5" y="15" width="70" height="30" rx="6" fill="#F3F4F6" stroke="#374151" strokeWidth="2" />
+        <rect x="15" y="28" width="40" height="6" fill="#60A5FA" />
+        <line x1="55" y1="25" x2="55" y2="45" stroke="#2563EB" strokeWidth="3" markerEnd="url(#arrow)" />
+        <defs>
+          <marker id="arrow" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L6,3 z" fill="#2563EB" />
+          </marker>
+        </defs>
+      </svg>
+    </div>
+  );
+}
+
+export function IconEmptyField() {
+  return (
+    <div className="flex justify-center">
+      <svg width="80" height="60" viewBox="0 0 80 60" fill="none">
+        {/* Gleiche Karte wie bei Icon 1 */}
+        <rect x="5" y="15" width="60" height="30" rx="6" fill="#F3F4F6" stroke="#374151" strokeWidth="2" />
+        <text x="15" y="35" fontSize="12" fill="#111827">Text...</text>
+        {/* Grünes Success-Badge (zentrierter Haken) */}
+        <circle cx="65" cy="40" r="8" fill="#22C55E" />
+        <text
+          x="65"
+          y="40"
+          fontSize="12"
+          fill="white"
+          fontWeight="bold"
+          textAnchor="middle"
+          dominantBaseline="central"
+        >
+          ✓
+        </text>
+      </svg>
+    </div>
+  );
+}
+
+
+==== \src\components\BeforeAfter.tsx ====
+import React from "react";
+
+type BeforeAfterProps = {
+  before: string[];
+  after: string[];
+};
+
+export default function BeforeAfter({ before, after }: BeforeAfterProps) {
+  return (
+    <div className="grid md:grid-cols-2 gap-6">
+      <div className="rounded-xl border bg-red-50 p-6">
+        <h4 className="font-semibold text-red-700 mb-3">Before</h4>
+        <ul className="list-disc list-inside space-y-1 text-sm text-gray-700">
+          {before.map((b, i) => (
+            <li key={i}>{b}</li>
+          ))}
+        </ul>
+      </div>
+      <div className="rounded-xl border bg-green-50 p-6">
+        <h4 className="font-semibold text-green-700 mb-3">After</h4>
+        <ul className="list-disc list-inside space-y-1 text-sm text-gray-700">
+          {after.map((a, i) => (
+            <li key={i}>{a}</li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  );
+}
 
 
 ==== \src\components\CVPreview.tsx ====
@@ -497,6 +1376,67 @@ export default function CVPreview() {
 }
 
 
+==== \src\components\DoubleDiamond.tsx ====
+import React from "react";
+import { motion } from "framer-motion";
+
+type Phase = "discover" | "define" | "develop" | "deliver";
+
+type Props = {
+  active: Phase;
+};
+
+export default function DoubleDiamond({ active }: Props) {
+  const phases: { key: Phase; label: string }[] = [
+    { key: "discover", label: "Discover" },
+    { key: "define", label: "Define" },
+    { key: "develop", label: "Develop" },
+    { key: "deliver", label: "Deliver" },
+  ];
+
+  return (
+    <div className="relative w-full my-12 md:my-32">
+      {/* Balken als Trennlinie */}
+      <div className="absolute top-1/2 left-0 w-full h-20 md:h-32 bg-gray-100 rounded-md -translate-y-1/2" />
+
+      {/* Diamonds */}
+      <div className="flex justify-between items-center relative px-6 md:px-16">
+        {phases.map((p) => {
+          const isActive = active === p.key;
+          return (
+            <motion.div
+              key={p.key}
+              className="w-14 h-14 md:w-20 md:h-20 rotate-45 flex items-center justify-center border-2 shadow-sm rounded-md"
+              animate={{
+                backgroundColor: isActive ? "#2563EB" : "#E5E7EB", // grau wenn inaktiv
+                borderColor: isActive ? "#2563EB" : "#D1D5DB",
+                scale: isActive ? 1.15 : 1,
+              }}
+              transition={{
+                duration: 0.5,
+                delay: isActive ? 0.15 : 0, // Verzögerung nur beim Aktivieren
+                ease: "easeInOut",
+                type: "spring",
+                stiffness: 200,
+                damping: 20,
+              }}
+            >
+              <span
+                className={`rotate-[-45deg] font-medium ${
+                  isActive ? "text-white" : "text-gray-600"
+                } text-xs md:text-sm`}
+              >
+                {p.label}
+              </span>
+            </motion.div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+
 ==== \src\components\Footer.tsx ====
 import { Link } from "react-router-dom";
 
@@ -629,13 +1569,392 @@ export default function HouseDiagram() {
 }
 
 
-==== \src\components\LangToggle.tsx ====
-import { useTranslation } from "react-i18next";
-export default function LangToggle() {
-  const { i18n } = useTranslation();
-  const curr = i18n.language.startsWith("de") ? "de" : "en";
-  const next = curr === "de" ? "en" : "de";
-  return <button aria-label="Toggle language" onClick={()=>i18n.changeLanguage(next)} className="rounded-md border border-neutral-300 dark:border-neutral-700 px-2 py-1 text-xs">{curr.toUpperCase()}</button>;
+==== \src\components\ImpactCalculator.tsx ====
+import React, { useState } from "react";
+
+export default function ImpactCalculator() {
+  const [usersPerDay, setUsersPerDay] = useState<number>(1000000); // Default
+  const [affectedPercent, setAffectedPercent] = useState<number>(2); // Default 2 %
+  const [secondsLost, setSecondsLost] = useState<number>(10); // Default 10 Sek
+  const [costPerMonth, setCostPerMonth] = useState<number>(5000); // Default € pro Person-Monat
+
+  const [result, setResult] = useState<{
+    years: number;
+    months: number;
+    cost: number;
+  } | null>(null);
+
+  const calculate = () => {
+    const affectedUsers = usersPerDay * (affectedPercent / 100);
+    const secondsPerDay = affectedUsers * secondsLost;
+    const secondsPerYear = secondsPerDay * 365;
+
+    const years = secondsPerYear / (60 * 60 * 24 * 365); // Sekunden → Jahre
+    const months = years * 12; // Jahre → Monate
+    const cost = months * costPerMonth; // Personenmonate * €
+
+    setResult({
+      years,
+      months,
+      cost,
+    });
+  };
+
+  return (
+    <div className="rounded-2xl border border-border p-6 space-y-6">
+      <h3 className="text-lg font-semibold">Impact Calculator</h3>
+
+      {/* Eingaben */}
+      <div className="grid md:grid-cols-2 gap-4">
+        <label className="flex flex-col text-sm text-left">
+          Nutzer pro Tag
+          <input
+            type="number"
+            value={usersPerDay}
+            onChange={(e) => setUsersPerDay(Number(e.target.value))}
+            className="mt-1 border rounded-md p-2"
+          />
+        </label>
+
+        <label className="flex flex-col text-sm text-left">
+          Anteil betroffen (%) 
+          <input
+            type="number"
+            value={affectedPercent}
+            onChange={(e) => setAffectedPercent(Number(e.target.value))}
+            className="mt-1 border rounded-md p-2"
+          />
+        </label>
+
+        <label className="flex flex-col text-sm text-left">
+          Zeitverlust pro Fall (Sekunden)
+          <input
+            type="number"
+            value={secondsLost}
+            onChange={(e) => setSecondsLost(Number(e.target.value))}
+            className="mt-1 border rounded-md p-2"
+          />
+        </label>
+
+        <label className="flex flex-col text-sm text-left">
+          Kosten pro Personen-Monat (€)
+          <input
+            type="number"
+            value={costPerMonth}
+            onChange={(e) => setCostPerMonth(Number(e.target.value))}
+            className="mt-1 border rounded-md p-2"
+          />
+        </label>
+      </div>
+
+      {/* Button */}
+      <button
+        onClick={calculate}
+        className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md shadow"
+      >
+        Berechnen
+      </button>
+
+      {/* Ergebnis */}
+      {result && (
+        <div className="p-4 rounded-lg bg-muted/40 border border-border text-center space-y-2">
+          <p className="text-xl font-bold">
+            ≈ {result.years.toFixed(0)} Jahre pro Jahr
+          </p>
+          <p className="text-sm text-muted-foreground">
+            (entspricht ≈ {result.months.toFixed(0)} Personen-Monaten <br />
+            ≈ {result.cost.toLocaleString("de-DE", {
+              style: "currency",
+              currency: "EUR",
+              maximumFractionDigits: 0,
+            })})
+          </p>
+        </div>
+      )}
+    </div>
+  );
+}
+
+
+==== \src\components\ImpactGrid.tsx ====
+import React from "react";
+
+type Metric = {
+  label: string;
+  description: string;
+};
+
+type Props = {
+  metrics: Metric[];
+};
+
+export default function ImpactGrid({ metrics }: Props) {
+  return (
+    <div className="grid md:grid-cols-2 gap-6">
+      {metrics.map((m, i) => (
+        <div
+          key={i}
+          className="rounded-xl border bg-white p-6 shadow-sm hover:shadow-md transition"
+        >
+          <h4 className="font-semibold text-blue-700 mb-2">{m.label}</h4>
+          <p className="text-sm text-gray-600">{m.description}</p>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+
+==== \src\components\InsightCard.tsx ====
+import React from "react";
+
+type InsightProps = {
+  title: string;
+  evidence: string;
+  implication: string;
+};
+
+export default function InsightCard({ title, evidence, implication }: InsightProps) {
+  return (
+    <div className="rounded-2xl border bg-white p-6 shadow-md space-y-4">
+      <h4 className="text-lg font-bold text-blue-700">{title}</h4>
+      <div>
+        <p className="font-semibold text-gray-800">Evidence</p>
+        <p className="text-sm text-gray-600">{evidence}</p>
+      </div>
+      <div>
+        <p className="font-semibold text-gray-800">Implication</p>
+        <p className="text-sm text-gray-600">{implication}</p>
+      </div>
+    </div>
+  );
+}
+
+
+==== \src\components\JourneyMap.tsx ====
+import React from "react";
+import { ResponsiveContainer, LineChart, Line } from "recharts";
+import {
+  IconRealizeProblem,
+  IconWorkaround,
+  IconManualDelete,
+  IconEmptyField,
+} from "./ActionIcons";
+
+const stages = [
+  {
+    key: "realize",
+    label: "Realize Problem",
+    action: "Bemerkung: Nachricht zu lang",
+    icon: <IconRealizeProblem />,
+  },
+  {
+    key: "workaround",
+    label: "Workaround suchen",
+    action: "User googelt Shortcut oder Hilfe",
+    icon: <IconWorkaround />,
+  },
+  {
+    key: "manual",
+    label: "Manuell löschen",
+    action: "Alles markieren & scrollen",
+    icon: <IconManualDelete />,
+  },
+  {
+    key: "empty",
+    label: "Feld ist leer",
+    action: "Neu anfangen zu tippen",
+    icon: <IconEmptyField />,
+  },
+];
+
+// Emotions-Verlauf + Smileys
+const emotions = [
+  { value: 2, emoji: "😐" }, // neutral
+  { value: 1, emoji: "😠" }, // negativ
+  { value: 1, emoji: "😠" }, // negativ
+  { value: 3, emoji: "🙂" }, // positiv
+];
+
+export default function UserJourneyMap() {
+  return (
+    <div className="w-full overflow-x-auto border border-border rounded-2xl p-4 bg-background shadow-sm">
+      {/* Desktop-Version */}
+      <div className="hidden md:block">
+        <table className="min-w-full text-sm text-center rounded-2xl overflow-hidden">
+          <thead>
+            <tr className="bg-muted/40">
+              <th className="border border-border p-3 w-32"></th>
+              {stages.map((s) => (
+                <th key={s.key} className="border border-border p-3 font-semibold">
+                  {s.label}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {/* Actions */}
+            <tr>
+              <td className="border border-border font-medium p-3">Actions</td>
+              {stages.map((s) => (
+                <td key={s.key} className="border border-border p-3 align-top">
+                  {s.icon}
+                  <p className="mt-2">{s.action}</p>
+                </td>
+              ))}
+            </tr>
+
+            {/* Emotions */}
+            <tr>
+              <td className="border border-border font-medium p-3">Emotions</td>
+              <td colSpan={stages.length} className="border border-border p-3">
+                <div className="h-40 relative">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={emotions.map((e, i) => ({ idx: i, value: e.value }))}>
+                      <Line
+                        type="monotone"
+                        dataKey="value"
+                        stroke="#2563EB"
+                        strokeWidth={3}
+                        dot={{ r: 0 }}
+                        isAnimationActive={false}
+                      />
+                    </LineChart>
+                  </ResponsiveContainer>
+                  {/* Smileys exakt auf Linie platzieren */}
+                  <div className="absolute inset-0 grid grid-cols-4">
+                    {emotions.map((e, i) => (
+                      <div
+                        key={i}
+                        className="flex justify-center"
+                        style={{
+                          transform: `translateY(${(3 - e.value) * 25}px)`,
+                        }}
+                      >
+                        <span className="text-2xl">{e.emoji}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </td>
+            </tr>
+
+            {/* Pain Points */}
+            <tr>
+              <td className="border border-border font-medium p-3">Pain Points</td>
+              {stages.map((s, i) => (
+                <td key={s.key} className="border border-border p-3 align-top">
+                  {i === 0 && "Keine Delete-Funktion sichtbar"}
+                  {i === 1 && "Zeitverlust durch Googeln"}
+                  {i === 2 && "Mühsames Scrollen & Markieren"}
+                  {i === 3 && "Erneute Eingabe nötig"}
+                </td>
+              ))}
+            </tr>
+
+            {/* Opportunities */}
+            <tr>
+              <td className="border border-border font-medium p-3">Opportunities</td>
+              {stages.map((s, i) => (
+                <td key={s.key} className="border border-border p-3 align-top">
+                  {i === 0 && "Frühes Feedback zur Textlänge"}
+                  {i === 1 && "Hilfestellungen direkt im UI"}
+                  {i === 2 && "Besserer Input-Reset-Mechanismus"}
+                  {i === 3 && "Motivation für Delete-Button"}
+                </td>
+              ))}
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      {/* Mobile-Version */}
+      <div className="md:hidden space-y-6">
+        {stages.map((s, i) => (
+          <div key={s.key} className="border border-border rounded-2xl p-4 space-y-3">
+            {/* Nummerierter Kreis + Überschrift */}
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 flex items-center justify-center rounded-full bg-blue-600 text-white font-bold">
+                {i + 1}
+              </div>
+              <h3 className="font-semibold">{s.label}</h3>
+            </div>
+
+            <div>
+              <p className="font-medium">Actions</p>
+              <div className="flex items-center gap-2">
+                {s.icon}
+                <span>{s.action}</span>
+              </div>
+            </div>
+            <div>
+              <p className="font-medium">Emotions</p>
+              <span className="text-2xl">{emotions[i].emoji}</span>
+            </div>
+            <div>
+              <p className="font-medium">Pain Points</p>
+              <p className="text-sm text-muted-foreground">
+                {i === 0 && "Keine Delete-Funktion sichtbar"}
+                {i === 1 && "Zeitverlust durch Googeln"}
+                {i === 2 && "Mühsames Scrollen & Markieren"}
+                {i === 3 && "Erneute Eingabe nötig"}
+              </p>
+            </div>
+            <div>
+              <p className="font-medium">Opportunities</p>
+              <p className="text-sm text-muted-foreground">
+                {i === 0 && "Frühes Feedback zur Textlänge"}
+                {i === 1 && "Hilfestellungen direkt im UI"}
+                {i === 2 && "Besserer Input-Reset-Mechanismus"}
+                {i === 3 && "Motivation für Delete-Button"}
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+
+==== \src\components\JourneyPoster.tsx ====
+import React from "react";
+
+type Step = {
+  phase: string;
+  pain: string;
+  opportunity: string;
+};
+
+type JourneyProps = {
+  title: string;
+  steps: Step[];
+};
+
+export default function JourneyPoster({ title, steps }: JourneyProps) {
+  return (
+    <div className="rounded-2xl border bg-white p-8 shadow-lg space-y-8">
+      <h3 className="text-2xl font-bold">{title}</h3>
+      <div className="grid md:grid-cols-5 gap-4">
+        {steps.map((s, i) => (
+          <div
+            key={i}
+            className="flex flex-col justify-between rounded-xl border bg-gray-50 p-4"
+          >
+            <h4 className="font-semibold text-lg text-gray-800 mb-2">
+              {s.phase}
+            </h4>
+            <div>
+              <p className="text-red-600 font-medium">Pain:</p>
+              <p className="text-sm text-gray-700 mb-2">{s.pain}</p>
+              <p className="text-green-600 font-medium">Opportunity:</p>
+              <p className="text-sm text-gray-700">{s.opportunity}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 }
 
 
@@ -666,7 +1985,7 @@ import { Link, useLocation } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import ThemeToggle from "@/components/ThemeToggle";
-import LangToggle from "@/components/LanguageToggle";
+import LanguageToggle from "@/components/LanguageToggle";
 
 const NAV = ["about","expertise","projects","cv","craft","contact"] as const;
 
@@ -676,6 +1995,7 @@ const SUBNAV: Record<string, { id: string; labelKey: string; path: string }[]> =
     { id: "zooplus-reops", labelKey: "projects.reops", path: "/projects/zooplus-reops" },
     { id: "swiss-life", labelKey: "projects.sl", path: "/projects/swiss-life-b2b2c" },
     { id: "zooplus-pricing", labelKey: "projects.pricing", path: "/projects/zooplus-pricing" },
+    { id: "delete-case", labelKey: "projects.deleteCase", path: "/projects/delete-case" }, // 👈 neu
   ],
   expertise: [
     { id: "ux-strategy", labelKey: "expertise.uxStrategy", path: "/expertise/ux-strategy" },
@@ -762,7 +2082,7 @@ export default function NavBar() {
               )}
             </li>
           ))}
-          <li className="pl-2"><LangToggle /></li>
+          <li className="pl-2"><LanguageToggle /></li>
           <li><ThemeToggle /></li>
         </ul>
 
@@ -801,11 +2121,338 @@ export default function NavBar() {
                 )}
               </div>
             ))}
-            <div className="flex gap-3 pt-2"><LangToggle /><ThemeToggle /></div>
+            <div className="flex gap-3 pt-2"><LanguageToggle /><ThemeToggle /></div>
           </div>
         </div>
       )}
     </header>
+  );
+}
+
+
+==== \src\components\PersonaCard - Kopie.tsx ====
+import React from "react";
+
+type PersonaProps = {
+  name: string;
+  role: string;
+  age: number;
+  location: string;
+  quote: string;
+  goals: string[];
+  pains: string[];
+  needs: string[];
+};
+
+const PersonaPoster: React.FC<PersonaProps> = ({
+  name,
+  role,
+  age,
+  location,
+  quote,
+  goals,
+  pains,
+  needs,
+}) => {
+  return (
+    <div className="rounded-2xl border bg-white p-8 shadow-lg max-w-4xl mx-auto space-y-8">
+      {/* Header */}
+      <div className="flex flex-col md:flex-row items-start gap-6">
+        {/* Avatar */}
+        <div className="w-32 h-32 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 text-lg font-semibold">
+          Foto
+        </div>
+        {/* Basics */}
+        <div className="flex-1 space-y-2">
+          <h3 className="text-2xl font-bold">{name}</h3>
+          <p className="text-gray-600">
+            {role} · {age} Jahre · {location}
+          </p>
+          <blockquote className="italic text-blue-700 border-l-4 border-blue-400 pl-4 mt-4">
+            „{quote}“
+          </blockquote>
+        </div>
+      </div>
+
+      {/* Details */}
+      <div className="grid md:grid-cols-3 gap-6">
+        <div className="bg-blue-50 rounded-xl p-4 border border-blue-100">
+          <h4 className="font-semibold text-blue-700 mb-2">🎯 Goals</h4>
+          <ul className="list-disc list-inside space-y-1 text-sm text-gray-700">
+            {goals.map((g, i) => (
+              <li key={i}>{g}</li>
+            ))}
+          </ul>
+        </div>
+        <div className="bg-red-50 rounded-xl p-4 border border-red-100">
+          <h4 className="font-semibold text-red-700 mb-2">⚡ Pain Points</h4>
+          <ul className="list-disc list-inside space-y-1 text-sm text-gray-700">
+            {pains.map((p, i) => (
+              <li key={i}>{p}</li>
+            ))}
+          </ul>
+        </div>
+        <div className="bg-green-50 rounded-xl p-4 border border-green-100">
+          <h4 className="font-semibold text-green-700 mb-2">✅ Needs</h4>
+          <ul className="list-disc list-inside space-y-1 text-sm text-gray-700">
+            {needs.map((n, i) => (
+              <li key={i}>{n}</li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default PersonaPoster;
+
+
+==== \src\components\PersonaCard.tsx ====
+import React from "react";
+
+type PersonaProps = {
+  name: string;
+  role: string;
+  age: number;
+  location: string;
+  goals: string[];
+  pains: string[];
+  needs: string[];
+};
+
+export default function PersonaCard({
+  name,
+  role,
+  age,
+  location,
+  goals,
+  pains,
+  needs,
+}: PersonaProps) {
+  return (
+    <div className="rounded-2xl border bg-white p-6 shadow-sm hover:shadow-md transition">
+      <h3 className="text-xl font-semibold mb-1">{name}</h3>
+      <p className="text-sm text-gray-500 mb-4">
+        {role} · {age} · {location}
+      </p>
+
+      <div className="grid md:grid-cols-3 gap-6">
+        <div>
+          <h4 className="font-semibold mb-2 text-blue-600">🎯 Goals</h4>
+          <ul className="list-disc list-inside space-y-1 text-sm text-gray-700">
+            {goals.map((g, i) => (
+              <li key={i}>{g}</li>
+            ))}
+          </ul>
+        </div>
+        <div>
+          <h4 className="font-semibold mb-2 text-red-600">⚡ Pain Points</h4>
+          <ul className="list-disc list-inside space-y-1 text-sm text-gray-700">
+            {pains.map((p, i) => (
+              <li key={i}>{p}</li>
+            ))}
+          </ul>
+        </div>
+        <div>
+          <h4 className="font-semibold mb-2 text-green-600">✅ Needs</h4>
+          <ul className="list-disc list-inside space-y-1 text-sm text-gray-700">
+            {needs.map((n, i) => (
+              <li key={i}>{n}</li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+==== \src\components\PersonaPoster - Kopie.tsx ====
+import React from "react";
+
+type PersonaProps = {
+  name: string;
+  role: string;
+  age: number;
+  location: string;
+  quote: string;
+  goals: string[];
+  pains: string[];
+  needs: string[];
+};
+
+const PersonaPoster: React.FC<PersonaProps> = ({
+  name,
+  role,
+  age,
+  location,
+  quote,
+  goals,
+  pains,
+  needs,
+}) => {
+  return (
+    <div className="rounded-2xl border bg-white p-8 shadow-lg max-w-4xl mx-auto space-y-8">
+      {/* Header */}
+      <div className="flex flex-col md:flex-row items-start gap-6">
+        {/* Avatar */}
+        <div className="w-32 h-32 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 text-lg font-semibold">
+          Foto
+        </div>
+        {/* Basics */}
+        <div className="flex-1 space-y-2">
+          <h3 className="text-2xl font-bold">{name}</h3>
+          <p className="text-gray-600">
+            {role} · {age} Jahre · {location}
+          </p>
+          <blockquote className="italic text-blue-700 border-l-4 border-blue-400 pl-4 mt-4">
+            „{quote}“
+          </blockquote>
+        </div>
+      </div>
+
+      {/* Details */}
+      <div className="grid md:grid-cols-3 gap-6">
+        <div className="bg-blue-50 rounded-xl p-4 border border-blue-100">
+          <h4 className="font-semibold text-blue-700 mb-2">🎯 Goals</h4>
+          <ul className="list-disc list-inside space-y-1 text-sm text-gray-700">
+            {goals.map((g, i) => (
+              <li key={i}>{g}</li>
+            ))}
+          </ul>
+        </div>
+        <div className="bg-red-50 rounded-xl p-4 border border-red-100">
+          <h4 className="font-semibold text-red-700 mb-2">⚡ Pain Points</h4>
+          <ul className="list-disc list-inside space-y-1 text-sm text-gray-700">
+            {pains.map((p, i) => (
+              <li key={i}>{p}</li>
+            ))}
+          </ul>
+        </div>
+        <div className="bg-green-50 rounded-xl p-4 border border-green-100">
+          <h4 className="font-semibold text-green-700 mb-2">✅ Needs</h4>
+          <ul className="list-disc list-inside space-y-1 text-sm text-gray-700">
+            {needs.map((n, i) => (
+              <li key={i}>{n}</li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default PersonaPoster;
+
+
+==== \src\components\PersonaPoster.tsx ====
+import React from "react";
+
+type PersonaProps = {
+  name: string;
+  role: string;
+  age: number;
+  location: string;
+  quote: string;
+  goals: string[];
+  pains: string[];
+  needs: string[];
+};
+
+const PersonaPoster: React.FC<PersonaProps> = ({
+  name,
+  role,
+  age,
+  location,
+  quote,
+  goals,
+  pains,
+  needs,
+}) => {
+  return (
+    <div className="rounded-2xl border bg-white p-8 shadow-lg max-w-4xl mx-auto space-y-8">
+      {/* Header */}
+      <div className="flex flex-col md:flex-row items-start gap-6">
+        {/* Avatar */}
+        <div className="w-32 h-32 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 text-lg font-semibold">
+          Foto
+        </div>
+        {/* Basics */}
+        <div className="flex-1 space-y-2">
+          <h3 className="text-2xl font-bold">{name}</h3>
+          <p className="text-gray-600">
+            {role} · {age} Jahre · {location}
+          </p>
+          <blockquote className="italic text-blue-700 border-l-4 border-blue-400 pl-4 mt-4">
+            „{quote}“
+          </blockquote>
+        </div>
+      </div>
+
+      {/* Details */}
+      <div className="grid md:grid-cols-3 gap-6">
+        <div className="bg-blue-50 rounded-xl p-4 border border-blue-100">
+          <h4 className="font-semibold text-blue-700 mb-2">🎯 Goals</h4>
+          <ul className="list-disc list-inside space-y-1 text-sm text-gray-700">
+            {goals.map((g, i) => (
+              <li key={i}>{g}</li>
+            ))}
+          </ul>
+        </div>
+        <div className="bg-red-50 rounded-xl p-4 border border-red-100">
+          <h4 className="font-semibold text-red-700 mb-2">⚡ Pain Points</h4>
+          <ul className="list-disc list-inside space-y-1 text-sm text-gray-700">
+            {pains.map((p, i) => (
+              <li key={i}>{p}</li>
+            ))}
+          </ul>
+        </div>
+        <div className="bg-green-50 rounded-xl p-4 border border-green-100">
+          <h4 className="font-semibold text-green-700 mb-2">✅ Needs</h4>
+          <ul className="list-disc list-inside space-y-1 text-sm text-gray-700">
+            {needs.map((n, i) => (
+              <li key={i}>{n}</li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default PersonaPoster;
+
+
+==== \src\components\PrototypeTimeline.tsx ====
+import React from "react";
+
+type Iteration = {
+  version: string;
+  learnings: string[];
+};
+
+type Props = {
+  items: Iteration[];
+};
+
+export default function PrototypeTimeline({ items }: Props) {
+  return (
+    <div className="rounded-2xl border bg-white p-8 shadow-lg space-y-8">
+      <h3 className="text-2xl font-bold">Prototyping & Tests</h3>
+      <div className="grid md:grid-cols-3 gap-6">
+        {items.map((it, i) => (
+          <div key={i} className="rounded-xl border bg-gray-50 p-6 space-y-3">
+            <h4 className="font-semibold text-blue-700">{it.version}</h4>
+            <ul className="list-disc list-inside text-sm text-gray-700 space-y-1">
+              {it.learnings.map((l, j) => (
+                <li key={j}>{l}</li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }
 
@@ -850,6 +2497,70 @@ export default function ThemeToggle() {
 }
 
 
+==== \src\hooks\main.tsx ====
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { StrictMode } from "react";
+import { BrowserRouter } from "react-router-dom";
+import App from "@/App";
+import "@/i18n";
+import "./index.css";
+
+/* GitHub Pages 404 Redirect → ursprünglichen Pfad wiederherstellen */
+const redirect = sessionStorage.getItem("redirect");
+if (redirect) {
+  sessionStorage.removeItem("redirect");
+  // Wichtig: vor dem ersten Render, damit BrowserRouter direkt die richtige URL nimmt
+  const url = new URL(redirect, window.location.origin);
+  window.history.replaceState(null, "", url.pathname + url.search);
+}
+
+ReactDOM.createRoot(document.getElementById("root")!).render(
+  <StrictMode>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </StrictMode>
+);
+
+
+==== \src\hooks\useActivePhase.ts ====
+import { useEffect, useState } from "react";
+
+export function useActivePhase() {
+  const [active, setActive] = useState<"discover" | "define" | "develop" | "deliver">("discover");
+
+  useEffect(() => {
+    const sections = ["discover", "define", "develop", "deliver"];
+
+    const observers = sections.map((id) => {
+      const el = document.getElementById(id);
+      if (!el) return null;
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              setActive(id as typeof active);
+            }
+          });
+        },
+        { threshold: 0.3 } // aktiv wenn mind. 30% sichtbar
+      );
+
+      observer.observe(el);
+      return observer;
+    });
+
+    return () => {
+      observers.forEach((o) => o?.disconnect());
+    };
+  }, []);
+
+  return active;
+}
+
+
 ==== \src\i18n\de.json ====
 {
   "captions": {
@@ -891,8 +2602,8 @@ export default function ThemeToggle() {
     "contact": "Contact"
   },
   "hero": {
-    "claim": "UXR + Design Thinking + ResearchOps",
-    "intro": "Ich übersetze tiefe Nutzer:innen-Insights in umsetzbare Strategien, die Entscheidungen beschleunigen und Produktvision schärfen. Ich skaliere ResearchOps, enable Teams und belege Wirkung mit Metriken."
+    "claim": "UX Research Leadership mit Fokus auf Strategie, ResearchOps & Wirkungsmessung",
+    "intro": "Ich leite Research-Teams, skaliere ResearchOps und verankere die Nutzer:innen-Perspektive in der Produktstrategie. Mein Fokus: Entscheidungen beschleunigen, Wirkung belegen und nachhaltige Produkte gestalten."
   },
   "about": {
     "title": "About",
@@ -970,8 +2681,8 @@ export default function ThemeToggle() {
     "contact": "Contact"
   },
   "hero": {
-    "claim": "UXR + Design Thinking + ResearchOps",
-    "intro": "I translate deep user insights into actionable strategies that accelerate decisions and sharpen product vision. I scale ResearchOps, empower teams, and prove impact with measurement."
+    "claim": "UX Research Leadership with focus on Strategy, ResearchOps & Impact Measurement",
+    "intro": "I lead research teams, scale ResearchOps, and embed the user perspective into product strategy. My focus: accelerating decisions, proving impact, and building sustainable products."
   },
   "about": {
     "title": "About",
@@ -1099,85 +2810,441 @@ export default Page
 
 
 ==== \src\pages\projects\CarInsurance.tsx ====
-import React from 'react'
-import { useI18n } from '@/i18n'
-import imgPricing from '@/assets/artefacts/adac-pricing.png'
-import imgHeat from '@/assets/artefacts/adac-heatmap.png'
+import React from "react";
+import DoubleDiamond from "@/components/DoubleDiamond";
+import JourneyMap_Car from "@/components/CarInsurance/JourneyMap_Car";
+import BeforeAfter_Car from "@/components/CarInsurance/BeforeAfter_Car";
+import ImpactGrid_Car from "@/components/CarInsurance/ImpactGrid_Car";
+import PrototypeAnimationDetailed from "@/components/CarInsurance/PrototypeAnimationDetailed";
+import WorkshopAnimation_Car from "@/components/CarInsurance/WorkshopAnimation_Car";
+import { useActivePhase } from "@/hooks/useActivePhase";
 
-const Page: React.FC = () => {
-  const { t } = useI18n()
+export default function CarInsurance() {
+  const activePhase = useActivePhase();
+
   return (
-    <div className="container-responsive py-12 space-y-10">
-      <header className="space-y-3">
-        <h1 className="text-3xl font-semibold">Car Insurance — Quote Flow</h1>
-        <p className="text-muted-foreground">Rolle: UX Researcher (2019).</p>
+    <div className="container-responsive py-16 space-y-40">
+      {/* Header */}
+      <header className="space-y-6">
+        <h1 className="text-4xl font-bold">
+          🚗 ADAC – Enhancing the Performance of Insurance Advisors
+        </h1>
+        <p className="text-foreground max-w-3xl leading-relaxed">
+          We collaborated with ADAC to modernize their outdated Kfz insurance
+          advisory software, focusing on usability, efficiency, and user trust.
+        </p>
       </header>
 
-      <section className="space-y-3">
-        <h2 className="text-xl font-semibold">Kontext & Herausforderung</h2>
-        <p className="text-muted-foreground">
-          Hohe Abbruchraten im Angebotsprozess; Nutzer fanden die Preisoptionen schwer vergleichbar.
+      {/* Kontext & Herausforderung */}
+      <section className="space-y-6">
+        <h2 className="text-2xl font-semibold">📌 Kontext & Herausforderung</h2>
+        <p className="text-foreground leading-relaxed">
+          ADAC advisors in branches used an outdated tool to guide customers
+          through Kfz insurance consultations. This led to long, intransparent
+          sessions, unclear form fields, and high cognitive load in busy branch
+          environments.
         </p>
       </section>
 
-      <section className="space-y-4">
-        <h2 className="text-xl font-semibold">Forschungsdesign & Methoden</h2>
-        <ul className="grid sm:grid-cols-2 gap-3">
-          <li className="card p-4">Remote moderierte Usability Tests (n=12)</li>
-          <li className="card p-4">Contextual Inquiries (Beratungssituation)</li>
-          <li className="card p-4">Kano-Analyse zur Feature-Priorisierung</li>
-          <li className="card p-4">Mouseflow-Heatmaps & Clicktracking</li>
-        </ul>
-      </section>
-
+      {/* Einführung ins Vorgehen */}
       <section className="space-y-6">
-        <h2 className="text-xl font-semibold">Artefakte</h2>
-
-        <figure className="space-y-2">
-          <img
-            src={imgPricing}
-            alt={t('captions.adacPricing')}
-            className="w-full rounded-2xl border border-border"
-          />
-          <figcaption className="text-sm text-muted-foreground">
-            {t('captions.adacPricing')}
-          </figcaption>
-        </figure>
-
-        <figure className="space-y-2">
-          <img
-            src={imgHeat}
-            alt={t('captions.adacHeatmap')}
-            className="w-full rounded-2xl border border-border"
-          />
-          <figcaption className="text-sm text-muted-foreground">
-            {t('captions.adacHeatmap')}
-          </figcaption>
-        </figure>
+        <h2 className="text-2xl font-semibold">
+          🌍 Produktentwicklung mit Design Thinking: Ein ganzheitlicher Ansatz
+        </h2>
+        <p className="text-foreground max-w-3xl leading-relaxed">
+          The Design Thinking process is a flexible, iterative, user-centric
+          framework to tackle complex challenges through deep user understanding
+          and continuous prototyping. In our case, we follow the Double Diamond
+          model: exploring the problem space (Discover & Define) and iterating
+          in the solution space (Develop & Deliver).
+        </p>
       </section>
 
-      <section className="space-y-3">
-        <h2 className="text-xl font-semibold">Synthese & Entscheidungen</h2>
-        <ul className="list-disc pl-6 space-y-1 text-muted-foreground">
-          <li>• Redesign der Pricing-Komponente in drei klaren Paketen (Basic/Standard/Premium)</li>
-          <li>• Zusatzleistungen in Tooltips & Sekundärinformationen ausgelagert</li>
-          <li>• Primäre CTAs visuell priorisiert; sekundäre Aktionen entlastet</li>
-        </ul>
+      {/* Sticky DoubleDiamond – nur Desktop */}
+      <div className="hidden md:block sticky top-22 z-40 bg-white shadow-md">
+        <DoubleDiamond active={activePhase} />
+      </div>
+
+      {/* Discover */}
+      <section id="discover" className="space-y-10">
+        <div className="md:hidden mb-6">
+          <DoubleDiamond active="discover" />
+        </div>
+
+        <h2 className="text-2xl font-semibold">🔍 Discover – Research Approach</h2>
+
+        {/* Methodik */}
+        <div className="space-y-6">
+          <h3 className="text-xl font-semibold">Methodik: Kontextuelle Interviews</h3>
+          <p className="text-foreground leading-relaxed">
+            Um den realen Beratungskontext zu verstehen, führten wir deutschlandweit
+            kontextuelle Interviews direkt in ADAC-Filialen durch. Dabei nahmen wir an
+            echten Beratungsgesprächen teil, beobachteten die Nutzung der bestehenden
+            Software und hielten detaillierte Notizen fest. Jedes Interview dauerte
+            zwischen 90 und 120 Minuten und folgte einem strukturierten Leitfaden.
+          </p>
+          <p className="text-foreground leading-relaxed">
+            Ziel war es, die alltäglichen Arbeitsbedingungen der Beraterinnen und Berater
+            abzubilden – inklusive Zeitdruck, Kundenerwartungen und den Herausforderungen
+            einer oft unruhigen Filialumgebung.
+          </p>
+        </div>
+
+        {/* Leitfragen */}
+        <div className="space-y-6 mt-8">
+          <h3 className="text-xl font-semibold">Leitfragen</h3>
+          <ul className="list-disc list-inside space-y-2 text-muted-foreground">
+            <li>Wie navigieren Beraterinnen und Berater Kunden Schritt für Schritt durch das Tool?</li>
+            <li>Welche Aufgaben und Eingaben sind für den Abschluss einer Kfz-Versicherung kritisch?</li>
+            <li>Wo treten Reibungen, Missverständnisse oder Verzögerungen auf?</li>
+            <li>Wie wirkt sich die Umgebung (Lautstärke, Zeitdruck) auf das Gespräch aus?</li>
+            <li>Welche Strategien wenden Beraterinnen und Berater an, um Probleme im Gespräch zu umgehen?</li>
+          </ul>
+        </div>
       </section>
 
-      <section className="space-y-3">
-        <h2 className="text-xl font-semibold">Impact</h2>
-        <ul className="list-disc pl-6 space-y-1 text-muted-foreground">
-          <li>• +18 % Completion Rate im Flow</li>
-          <li>• +12 % Conversion</li>
-          <li>• Weniger Support-Nachfragen zur Preislogik</li>
-        </ul>
+      {/* Define */}
+      <section id="define" className="space-y-10">
+        <div className="md:hidden mb-6">
+          <DoubleDiamond active="define" />
+        </div>
+        <h2 className="text-2xl font-semibold">🗺 Define Phase</h2>
+        <p className="text-foreground leading-relaxed">
+          From the research data we synthesized personas and created a detailed
+          Counseling Journey Map to visualize advisor workflows, pain points,
+          and opportunities.
+        </p>
+        <JourneyMap_Car />
       </section>
+
+      {/* Develop */}
+      <section id="develop" className="space-y-10">
+        <div className="md:hidden mb-6">
+          <DoubleDiamond active="develop" />
+        </div>
+        <h2 className="text-2xl font-semibold">🎨 Develop – From Insights to Design</h2>
+
+        {/* Workshops */}
+        <div className="space-y-6">
+          <h3 className="text-xl font-semibold">Stakeholder Workshops</h3>
+          <p className="text-foreground leading-relaxed">
+            We ran workshops with ADAC stakeholders to ensure transparency,
+            share research findings, answer questions, and prioritize key
+            opportunities. This created strong alignment across teams.
+          </p>
+          <WorkshopAnimation_Car />
+        </div>
+
+        {/* Design Principles */}
+        <div className="space-y-6">
+          <h3 className="text-xl font-semibold">Design Principles</h3>
+          <ul className="list-disc list-inside space-y-2 text-muted-foreground">
+            <li>Pre-fill fields to reduce manual input</li>
+            <li>Support orientation with clear navigation</li>
+            <li>Reduce complexity of forms and workflows</li>
+            <li>Minimize drop-offs with smooth, intuitive flows</li>
+          </ul>
+        </div>
+
+        {/* Prototyping */}
+        <div className="space-y-6">
+          <h3 className="text-xl font-semibold">Prototyping</h3>
+          <p className="text-foreground leading-relaxed">
+            We iteratively moved from low-fidelity wireframes to interactive
+            click dummies, validating each step with ADAC advisors through
+            usability tests. Feedback guided refinements in navigation,
+            language, and structure.
+          </p>
+          <PrototypeAnimationDetailed />
+        </div>
+      </section>
+
+      {/* Deliver */}
+      <section id="deliver" className="space-y-10">
+        <div className="md:hidden mb-6">
+          <DoubleDiamond active="deliver" />
+        </div>
+
+        <h2 className="text-2xl font-semibold">📈 Deliver & Impact</h2>
+
+        <div className="grid md:grid-cols-2 gap-6">
+          {/* Advisor Confidence mit Before/After */}
+          <div className="rounded-xl border bg-white p-6 shadow-sm hover:shadow-md transition">
+            <h4 className="font-semibold text-blue-700 mb-2">
+              🧑‍💻 Advisor Confidence
+            </h4>
+            <div className="text-sm text-foreground space-y-4">
+              <p>Klare Masken, weniger Blind-Eingaben.</p>
+              <BeforeAfter_Car
+                before={[
+                  "Starre Fragebögen – alle Felder zwingend auszufüllen",
+                  "Unklare Fachbegriffe",
+                  "Langsame, fehleranfällige Navigation",
+                ]}
+                after={[
+                  "Adaptiver Ablauf – kontextsensitive Fragen",
+                  "Einfache, verständliche Sprache",
+                  "Vereinfachte Navigation mit klaren Schritten",
+                ]}
+              />
+            </div>
+          </div>
+
+          {/* Drei kompaktere Impacts */}
+          <div className="space-y-6">
+            <div className="rounded-xl border bg-white p-6 shadow-sm hover:shadow-md transition">
+              <h4 className="font-semibold text-blue-700 mb-2">
+                ⏱ Gesprächsdauer
+              </h4>
+              <p className="text-sm text-foreground">
+                Reduziert von 60–90 Minuten auf 30–45 Minuten.
+              </p>
+            </div>
+
+            <div className="rounded-xl border bg-white p-6 shadow-sm hover:shadow-md transition">
+              <h4 className="font-semibold text-blue-700 mb-2">
+                🤝 Kundenzufriedenheit
+              </h4>
+              <p className="text-sm text-foreground">
+                Transparente Beratung, höheres Vertrauen.
+              </p>
+            </div>
+
+            <div className="rounded-xl border bg-white p-6 shadow-sm hover:shadow-md transition">
+              <h4 className="font-semibold text-blue-700 mb-2">🌐 Innovation</h4>
+              <p className="text-sm text-foreground">
+                Versicherungsrechner nun auch online für Privatpersonen
+                verfügbar.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Link */}
+      <footer className="pt-12">
+        <a
+          href="https://www.adac.de/produkte/versicherungen/kfz-versicherungen/"
+          className="underline text-blue-600 hover:text-blue-800"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Live: ADAC Kfz-Versicherung
+        </a>
+      </footer>
     </div>
-  )
+  );
 }
 
-export default Page
+
+==== \src\pages\projects\DeleteCase.tsx ====
+import React, { useState } from "react";
+import { useI18n } from "@/i18n";
+import UserJourneyMap from "@/components/JourneyMap";
+import InsightCard from "@/components/InsightCard";
+
+// Hilfsfunktion für Zeitformatierung
+function formatTime(seconds: number): string {
+  if (seconds < 60) return `${seconds.toFixed(0)} Sekunden`;
+  const minutes = seconds / 60;
+  if (minutes < 60) return `${minutes.toFixed(0)} Minuten`;
+  const hours = minutes / 60;
+  if (hours < 24) return `${hours.toFixed(0)} Stunden`;
+  const days = hours / 24;
+  if (days < 30) return `${days.toFixed(0)} Tage`;
+  const months = days / 30;
+  if (months < 12) return `${months.toFixed(0)} Monate`;
+  const years = months / 12;
+  if (years < 10) {
+    const y = Math.floor(years);
+    const m = Math.round((years - y) * 12);
+    return `${y} Jahre ${m > 0 ? `und ${m} Monate` : ""}`;
+  }
+  return `${years.toFixed(0)} Jahre`;
+}
+
+const DeleteCase: React.FC = () => {
+  const { t } = useI18n();
+
+  const [users, setUsers] = useState<number | undefined>(100); // default 100
+  const [timeLoss, setTimeLoss] = useState<number | undefined>(10); // default 10 Sekunden
+  const [costPerDay, setCostPerDay] = useState<number | undefined>(400); // default 400 €/Tag
+  const [result, setResult] = useState<{ time: string; cost: number } | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  const calculate = () => {
+    if (!users && !timeLoss) {
+      setError("Bitte Anzahl der User und Zeitverlust eingeben.");
+      setResult(null);
+      return;
+    }
+    if (!users) {
+      setError("Bitte Anzahl der User eingeben.");
+      setResult(null);
+      return;
+    }
+    if (!timeLoss) {
+      setError("Bitte Zeitverlust pro User eingeben.");
+      setResult(null);
+      return;
+    }
+
+    setError(null);
+
+    // Gesamtzeitverlust in Sekunden (pro Jahr)
+    const lostSeconds = users * timeLoss * 365;
+
+    // Formatierte Zeit
+    const formattedTime = formatTime(lostSeconds);
+
+    // Kosten: verlorene Zeit in Arbeitstage (1 Tag = 8h)
+    let cost = 0;
+    if (costPerDay && costPerDay > 0) {
+      const lostWorkDays = lostSeconds / (60 * 60 * 8);
+      cost = lostWorkDays * costPerDay;
+    }
+
+    setResult({
+      time: formattedTime,
+      cost,
+    });
+  };
+
+  return (
+    <div className="container-responsive py-16 space-y-16">
+      {/* Header */}
+      <header className="space-y-3">
+        <h1 className="text-3xl font-semibold">Delete Message Button – UX Case</h1>
+        <p className="text-muted-foreground">
+          Rolle: UX Researcher · Beispiel für Micro-Interaction mit großem Impact.
+        </p>
+      </header>
+
+      {/* Kontext */}
+      <section className="space-y-6">
+        <h2 className="text-2xl font-bold">Kontext</h2>
+        <p className="text-muted-foreground">
+          Nutzer:innen haben aktuell keine Möglichkeit, eine begonnene Eingabe
+          schnell zu löschen. Stattdessen müssen sie Workarounds finden wie
+          Scrollen, Alles markieren, oder mühsames Entfernen. Dieser kleine
+          Friktionspunkt summiert sich zu einem massiven Zeitverlust auf
+          Millionen von Usern pro Tag.
+        </p>
+      </section>
+
+      {/* Journey Map */}
+      <section className="space-y-6">
+        <h2 className="text-2xl font-bold">User Journey</h2>
+        <UserJourneyMap />
+      </section>
+
+      {/* Insights */}
+      <section className="space-y-6">
+        <h2 className="text-2xl font-bold">User Insights</h2>
+        <div className="grid md:grid-cols-3 gap-6">
+          <InsightCard
+            title="Hohe Frustration"
+            evidence="User berichten: 'Es nervt, alles manuell löschen zu müssen.'"
+            implication="Delete-Button reduziert Frust und steigert Zufriedenheit."
+          />
+          <InsightCard
+            title="Zeitverlust"
+            evidence="Ø 10 Sekunden pro Fall; hochgerechnet enorm."
+            implication="Ein Klick spart Millionen Stunden jährlich."
+          />
+          <InsightCard
+            title="Workarounds belasten"
+            evidence="Suchen nach Shortcuts oder Googeln unterbricht Flow."
+            implication="Inline-Lösungen sind schneller und nahtlos."
+          />
+        </div>
+      </section>
+
+      {/* Impact */}
+      <section className="space-y-6">
+        <h2 className="text-2xl font-bold">Impact</h2>
+        <p className="text-muted-foreground">
+          Selbst konservativ geschätzt summiert sich der Zeitverlust auf über{" "}
+          <strong>231 Jahre</strong>. Ein einzelner Delete-Button vermeidet
+          unnötige Reibung und verbessert die User Experience drastisch.
+        </p>
+
+        {/* Interaktiver Rechner */}
+        <div className="p-6 border border-border rounded-2xl bg-muted/30 space-y-4">
+          <h3 className="font-semibold">Interaktiver Impact-Rechner</h3>
+          <div className="grid md:grid-cols-3 gap-4">
+            <label className="flex flex-col text-sm">
+              Anzahl User pro Tag
+              <input
+                type="number"
+                value={users ?? ""}
+                onChange={(e) =>
+                  setUsers(e.target.value ? Number(e.target.value) : undefined)
+                }
+                className="mt-1 p-2 border border-border rounded-md"
+                placeholder="z. B. 100"
+              />
+            </label>
+            <label className="flex flex-col text-sm">
+              Zeitverlust pro User (Sekunden)
+              <input
+                type="number"
+                value={timeLoss ?? ""}
+                onChange={(e) =>
+                  setTimeLoss(e.target.value ? Number(e.target.value) : undefined)
+                }
+                className="mt-1 p-2 border border-border rounded-md"
+                placeholder="z. B. 10"
+              />
+            </label>
+            <label className="flex flex-col text-sm">
+              Kosten pro Person/Tag (€)
+              <input
+                type="number"
+                value={costPerDay ?? ""}
+                onChange={(e) =>
+                  setCostPerDay(e.target.value ? Number(e.target.value) : undefined)
+                }
+                className="mt-1 p-2 border border-border rounded-md"
+                placeholder="z. B. 400"
+              />
+            </label>
+          </div>
+
+          <button
+            onClick={calculate}
+            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md shadow"
+          >
+            Berechnen
+          </button>
+
+          {error && <p className="text-red-600 text-sm">{error}</p>}
+
+          {result && !error && (
+            <div className="p-4 rounded-lg bg-white dark:bg-neutral-900 border border-border text-center space-y-2">
+              <p className="text-xl font-bold">
+                Geschätzter Zeitverlust: {result.time} pro Jahr
+              </p>
+              {result.cost > 0 && (
+                <p className="text-sm text-muted-foreground">
+                  (≈{" "}
+                  {result.cost.toLocaleString("de-DE", {
+                    style: "currency",
+                    currency: "EUR",
+                    maximumFractionDigits: 0,
+                  })}{" "}
+                  jährliche Kosten)
+                </p>
+              )}
+            </div>
+          )}
+        </div>
+      </section>
+    </div>
+  );
+};
+
+export default DeleteCase;
 
 
 ==== \src\pages\projects\SwissLife.tsx ====
@@ -1413,43 +3480,62 @@ export default Page
 
 
 ==== \src\pages\About.tsx ====
-import React from 'react'
-import { useI18n } from '@/i18n'
+import React from "react";
+import { useI18n } from "@/i18n";
 
 const About: React.FC = () => {
-  const { t } = useI18n()
+  const { t } = useI18n();
+
   return (
-    <div className="container-responsive py-12 space-y-8">
-      <h1 className="text-3xl font-semibold">{t('about.title')}</h1>
-      <p className="text-lg text-muted-foreground">{t('about.lead')}</p>
-
-      <section>
-        <h2 className="text-xl font-semibold mb-4">{t('about.pillarsTitle')}</h2>
-        <div className="grid sm:grid-cols-3 gap-4">
-          {t('about.pillars').split ? null : null}
-        </div>
-        <div className="grid sm:grid-cols-3 gap-4">
-          {/** Hardcode 3 cards for simplicity using translations */}
-          <div className="card p-4">Empowerment</div>
-          <div className="card p-4">Impact Orientation</div>
-          <div className="card p-4">Continuous Learning</div>
-        </div>
+    <main className="min-h-screen bg-background text-foreground">
+      {/* Header */}
+      <section className="container-responsive py-14 md:py-20 border-b border-border">
+        <h1 className="text-4xl md:text-5xl font-extrabold leading-tight tracking-tight">
+          {t("about.title")}
+        </h1>
+        <p className="mt-3 text-muted-foreground max-w-3xl">{t("about.lead")}</p>
       </section>
 
-      <section>
-        <h2 className="text-xl font-semibold mb-4">Experience</h2>
-        <ul className="space-y-3">
-          <li className="card p-4">ATOSS — UXR Lead (01/2025–05/2025)</li>
-          <li className="card p-4">zooplus — UXR Lead (07/2022–12/2024)</li>
-          <li className="card p-4">Swiss Life — Sr UXR (05/2020–06/2022)</li>
-          <li className="card p-4">Kaiser X Labs — UXR (08/2018–04/2020)</li>
-          <li className="card p-4">empiriecom — UXR (02/2016–07/2018)</li>
-        </ul>
+      {/* Kacheln */}
+      <section className="container-responsive py-12 grid gap-6 md:grid-cols-3">
+        {/* Career Interests */}
+        <div className="rounded-2xl border border-border p-6">
+          <h2 className="text-lg font-semibold">Career Interests</h2>
+          <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
+            I am passionate about scaling ResearchOps, advancing UX maturity in
+            organizations, and integrating user-centered decision making at
+            strategic levels. My interests include leadership in research,
+            triangulation of methods, and sustainable product development.
+          </p>
+        </div>
+
+        {/* Background */}
+        <div className="rounded-2xl border border-border p-6">
+          <h2 className="text-lg font-semibold">Background</h2>
+          <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
+            I hold a Master’s degree in Economics from the University of Augsburg.
+            Over the past decade, I have worked across industries including
+            e-commerce, insurance, and finance, driving research strategies,
+            leading teams, and building organizational capabilities in UX
+            Research.
+          </p>
+        </div>
+
+        {/* Personal Note */}
+        <div className="rounded-2xl border border-border p-6">
+          <h2 className="text-lg font-semibold">Personal Note</h2>
+          <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
+            I see research as both <strong>craft and strategy</strong>: it is
+            repeatable, improvable, and essential for enabling confident,
+            user-centered product decisions.
+          </p>
+        </div>
       </section>
-    </div>
-  )
-}
-export default About
+    </main>
+  );
+};
+
+export default About;
 
 
 ==== \src\pages\Contact.tsx ====
@@ -1484,37 +3570,131 @@ export default Page
 export default function CV() {
   return (
     <main className="min-h-screen bg-background text-foreground">
-      <section className="container-responsive py-10">
-        <h1 className="text-3xl font-extrabold">CV</h1>
-        <p className="mt-2 text-muted-foreground">Full résumé (embedded PDF) and quick facts.</p>
-        <div className="mt-6 grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
-          <div className="rounded-2xl border border-border overflow-hidden">
-            <object data="/Felix_Bruckmeier_CV.pdf" type="application/pdf" width="100%" height="800px">
-              <p className="p-4">
-                Your browser can't display PDFs.{" "}
-                <a className="underline" href="/Felix_Bruckmeier_CV.pdf" target="_blank" rel="noopener">
-                  Open the PDF
-                </a>.
-              </p>
-            </object>
-          </div>
-          <aside className="rounded-2xl border border-border p-5">
-            <h2 className="font-semibold mb-3">Snapshot</h2>
-            <ul className="space-y-2 text-sm text-muted-foreground">
-              <li>Lead / Director UX Research</li>
-              <li>ResearchOps setup & scaling</li>
-              <li>OKR-linked research roadmaps</li>
-              <li>Coaching & enablement</li>
+      {/* Header */}
+      <section className="container-responsive py-14 md:py-20 border-b border-border">
+        <h1 className="text-4xl md:text-5xl font-extrabold leading-tight tracking-tight">
+          Curriculum Vitae
+        </h1>
+        <p className="mt-3 text-muted-foreground max-w-3xl">
+          UX Research Leadership · Strategy · ResearchOps · Impact Measurement
+        </p>
+      </section>
+
+      {/* Content Grid */}
+      <section className="container-responsive py-12 grid gap-12 md:grid-cols-[0.8fr_1.2fr]">
+        {/* Sidebar */}
+        <aside className="space-y-10">
+          {/* Strengths */}
+          <div>
+            <h2 className="text-xl font-bold">Strengths & Focus</h2>
+            <ul className="mt-3 space-y-2 text-muted-foreground text-sm">
+              <li>Approach: Asking the right questions, clarity in research</li>
+              <li>Expertise: Mixed-methods, strategy alignment, ResearchOps</li>
+              <li>Engagement: Empowering teams, stakeholder collaboration</li>
             </ul>
-            <a
-              href="/Felix_Bruckmeier_CV.pdf"
-              target="_blank"
-              rel="noopener"
-              className="mt-4 inline-flex items-center rounded-2xl px-4 py-2 text-sm font-semibold border border-border hover:bg-muted"
-            >
-              Download PDF
-            </a>
-          </aside>
+          </div>
+
+          {/* Tools */}
+          <div>
+            <h2 className="text-xl font-bold">Tools</h2>
+            <ul className="mt-3 space-y-2 text-muted-foreground text-sm">
+              <li>Testing: Maze, Lookback, UserZoom</li>
+              <li>Design & Collaboration: Figma, Miro, Jira, Confluence</li>
+              <li>Survey & Quant: Qualtrics, Alchemer, Excel, R, SPSS</li>
+            </ul>
+          </div>
+
+          {/* Education */}
+          <div>
+            <h2 className="text-xl font-bold">Education</h2>
+            <ul className="mt-3 space-y-2 text-muted-foreground text-sm">
+              <li>
+                <strong>Master of Science in Economics</strong>  
+                University of Regensburg, 2014
+              </li>
+              <li>
+                <strong>Bachelor of Science in Economics</strong>  
+                University of Regensburg, 2012
+              </li>
+            </ul>
+          </div>
+
+          {/* Supported by */}
+          <div>
+            <h2 className="text-xl font-bold">Supported by</h2>
+            <ul className="mt-3 space-y-2 text-muted-foreground text-sm">
+              <li>ResearchOps Community</li>
+              <li>Experience Leadership Club</li>
+            </ul>
+          </div>
+        </aside>
+
+        {/* Experience */}
+        <div className="space-y-12">
+          <div>
+            <h2 className="text-xl font-bold">Professional Experience</h2>
+          </div>
+
+          {/* ATOSS */}
+          <div>
+            <h3 className="font-semibold">
+              Lead UX Research (Freelance) — ATOSS · Jan 2025 – May 2025
+            </h3>
+            <ul className="mt-2 text-sm text-muted-foreground space-y-1">
+              <li>Established research strategy and ResearchOps practices</li>
+              <li>Ran discovery and usability studies across enterprise software</li>
+              <li>Collaborated with product and design leadership on UX maturity</li>
+            </ul>
+          </div>
+
+          {/* zooplus */}
+          <div>
+            <h3 className="font-semibold">
+              Lead UX Research — zooplus · Jul 2022 – Dec 2024
+            </h3>
+            <ul className="mt-2 text-sm text-muted-foreground space-y-1">
+              <li>Built and scaled ResearchOps framework and governance</li>
+              <li>Conducted mixed-methods studies (conjoint, MaxDiff, usability)</li>
+              <li>Led Communities of Practice and mentored junior researchers</li>
+              <li>Aligned research roadmap with OKRs and product vision</li>
+            </ul>
+          </div>
+
+          {/* Swiss Life */}
+          <div>
+            <h3 className="font-semibold">
+              Senior UX Researcher — Swiss Life · May 2020 – Jun 2022
+            </h3>
+            <ul className="mt-2 text-sm text-muted-foreground space-y-1">
+              <li>Planned and executed strategic research in B2B2C domain</li>
+              <li>Delivered insights to de-risk product decisions</li>
+              <li>Embedded user voice into strategy through qualitative & quantitative methods</li>
+            </ul>
+          </div>
+
+          {/* Kaiser X Labs */}
+          <div>
+            <h3 className="font-semibold">
+              UX Researcher — Kaiser X Labs (Allianz) · Aug 2018 – Apr 2020
+            </h3>
+            <ul className="mt-2 text-sm text-muted-foreground space-y-1">
+              <li>Supported product teams with discovery and evaluative research</li>
+              <li>Applied Design Thinking methods in innovation context</li>
+              <li>Ran usability testing and interviews with cross-national participants</li>
+            </ul>
+          </div>
+
+          {/* empiriecom */}
+          <div>
+            <h3 className="font-semibold">
+              UX Researcher — empiriecom (BAUR/OTTO Group) · Feb 2016 – Jul 2018
+            </h3>
+            <ul className="mt-2 text-sm text-muted-foreground space-y-1">
+              <li>Delivered UX insights for e-commerce platforms</li>
+              <li>Developed survey designs, user interviews, and analytics reports</li>
+              <li>Collaborated with designers and PMs on product improvements</li>
+            </ul>
+          </div>
         </div>
       </section>
     </main>
@@ -1555,13 +3735,121 @@ export default Expertise
 
 
 ==== \src\pages\Home.tsx ====
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import HouseDiagram from "@/components/HouseDiagram";
 import CVPreview from "@/components/CVPreview";
 import profileImg from "@/assets/profile-felix.png";
 import calendarImg from "@/assets/calendar-discovery.png";
+
+function AboutSection() {
+  const boxesRef = useRef<(HTMLDivElement | null)[]>([]);
+  const leftRef = useRef<HTMLDivElement | null>(null);
+
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const [offsetY, setOffsetY] = useState(0);
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  // check viewport size (>= md breakpoint = 768px)
+  useEffect(() => {
+    const checkSize = () => setIsDesktop(window.innerWidth >= 768);
+    checkSize();
+    window.addEventListener("resize", checkSize);
+    return () => window.removeEventListener("resize", checkSize);
+  }, []);
+
+  useEffect(() => {
+    if (!isDesktop) return; // disable scroll effect on mobile
+
+    const handleScroll = () => {
+      const viewportCenter = window.innerHeight / 2;
+      let closestIndex: number | null = null;
+      let closestDistance = Infinity;
+
+      boxesRef.current.forEach((box, index) => {
+        if (!box) return;
+        const rect = box.getBoundingClientRect();
+        const boxCenter = rect.top + rect.height / 2;
+        const distance = Math.abs(viewportCenter - boxCenter);
+        if (distance < closestDistance) {
+          closestDistance = distance;
+          closestIndex = index;
+        }
+      });
+
+      setActiveIndex(closestIndex);
+
+      if (closestIndex !== null) {
+        const targetEl = boxesRef.current[closestIndex];
+        const parentEl = targetEl?.parentElement;
+        if (targetEl && parentEl) {
+          const rect = targetEl.getBoundingClientRect();
+          const parentRect = parentEl.getBoundingClientRect();
+          setOffsetY(rect.top - parentRect.top);
+        }
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("resize", handleScroll);
+    handleScroll();
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleScroll);
+    };
+  }, [isDesktop]);
+
+  return (
+    <section id="about" className="scroll-mt-24 border-t border-border">
+      <div className="container-responsive py-12 grid md:grid-cols-[1fr_1fr] gap-12 items-start">
+        {/* Left: About Me */}
+        <div
+          ref={leftRef}
+          className="transition-transform duration-500 ease-out"
+          style={{ transform: isDesktop ? `translateY(${offsetY}px)` : "none" }}
+        >
+          <h2 className="text-2xl font-bold">About Me</h2>
+          <p className="mt-4 max-w-lg text-muted-foreground leading-relaxed">
+            I am a UX Research Leader with a background in econometrics and
+            product development. My work bridges qualitative depth and
+            quantitative rigor, with a focus on ResearchOps, strategy alignment,
+            and measurable impact.
+          </p>
+        </div>
+
+        {/* Right: Boxes */}
+        <div className="space-y-8">
+          {[
+            {
+              title: "Career Interests",
+              text: "Scaling ResearchOps, advancing UX maturity, integrating user-centered decision making.",
+            },
+            {
+              title: "Background",
+              text: "Master’s degree in Economics from Augsburg, 10+ years of experience in UX Research across industries.",
+            },
+            {
+              title: "Personal Note",
+              text: "I see research as both craft and strategy: repeatable, improvable, and essential for confident decisions.",
+            },
+          ].map((item, i) => (
+            <div
+              key={i}
+              ref={(el) => (boxesRef.current[i] = el)}
+              className={`rounded-2xl border border-border p-6 transition-colors duration-300 ${
+                activeIndex === i && isDesktop ? "bg-muted/30" : "bg-background"
+              }`}
+            >
+              <h3 className="text-lg font-semibold">{item.title}</h3>
+              <p className="mt-2 text-sm text-muted-foreground">{item.text}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
 
 export default function Home() {
   const { t } = useTranslation();
@@ -1603,12 +3891,7 @@ export default function Home() {
       </section>
 
       {/* about */}
-      <section id="about" className="scroll-mt-24 border-t border-border">
-        <div className="container-responsive py-12">
-          <h2 className="text-2xl font-bold">{t("about.title")}</h2>
-          <p className="mt-2 max-w-3xl text-muted-foreground">{t("about.text")}</p>
-        </div>
-      </section>
+      <AboutSection />
 
       {/* expertise */}
       <section id="expertise" className="scroll-mt-24 border-t border-border">
@@ -1660,6 +3943,16 @@ export default function Home() {
               <div className="font-semibold">{t("projects.pricing")}</div>
               <p className="mt-2 text-sm text-muted-foreground">
                 Clarity in pricing components and PDP details.
+              </p>
+            </Link>
+            {/* 👇 Neu: Delete Case */}
+            <Link
+              to="/projects/delete-case"
+              className="rounded-2xl border border-border p-5 hover:bg-muted/40 transition block"
+            >
+              <div className="font-semibold">{t("projects.deleteCase")}</div>
+              <p className="mt-2 text-sm text-muted-foreground">
+                A micro-interaction that saves 231 years of lost user time.
               </p>
             </Link>
           </div>
@@ -1828,6 +4121,7 @@ import ZooplusReOps from "@/pages/projects/ZooplusReOps";
 import ZooplusPricing from "@/pages/projects/ZooplusPricing";
 import UXMethodCards from "@/pages/projects/UXMethodCards";
 import WinningUXStrategy from "@/pages/projects/WinningUXStrategy";
+import DeleteCase from "@/pages/projects/DeleteCase"; // 👈 neu
 
 // Expertise-Seiten
 import UXStrategy from "@/pages/expertise/UXStrategy";
@@ -1843,13 +4137,14 @@ export default function App() {
         <Route index element={<Home />} />
         <Route path="cv" element={<CV />} />
 
-        {/* Projekt-Routen (nur die 6 gültigen) */}
+        {/* Projekt-Routen */}
         <Route path="projects/car-insurance" element={<CarInsurance />} />
         <Route path="projects/swiss-life-b2b2c" element={<SwissLife />} />
         <Route path="projects/zooplus-reops" element={<ZooplusReOps />} />
         <Route path="projects/zooplus-pricing" element={<ZooplusPricing />} />
         <Route path="projects/ux-method-cards" element={<UXMethodCards />} />
         <Route path="projects/winning-ux-strategy" element={<WinningUXStrategy />} />
+        <Route path="projects/delete-case" element={<DeleteCase />} /> {/* 👈 neu */}
 
         {/* Expertise-Routen */}
         <Route path="expertise/ux-strategy" element={<UXStrategy />} />
@@ -2041,11 +4336,14 @@ declare module "*.svg" {
       "name": "uxr-portfolio-felix",
       "version": "1.0.0",
       "dependencies": {
+        "framer-motion": "^12.23.18",
         "i18next": "^23.16.8",
+        "lucide-react": "^0.544.0",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
         "react-i18next": "^13.5.0",
-        "react-router-dom": "^6.26.0"
+        "react-router-dom": "^6.26.0",
+        "recharts": "^3.2.1"
       },
       "devDependencies": {
         "@tailwindcss/postcss": "^4.0.0",
@@ -2832,6 +5130,32 @@ declare module "*.svg" {
         "@jridgewell/sourcemap-codec": "^1.4.14"
       }
     },
+    "node_modules/@reduxjs/toolkit": {
+      "version": "2.9.0",
+      "resolved": "https://registry.npmjs.org/@reduxjs/toolkit/-/toolkit-2.9.0.tgz",
+      "integrity": "sha512-fSfQlSRu9Z5yBkvsNhYF2rPS8cGXn/TZVrlwN1948QyZ8xMZ0JvP50S2acZNaf+o63u6aEeMjipFyksjIcWrog==",
+      "license": "MIT",
+      "dependencies": {
+        "@standard-schema/spec": "^1.0.0",
+        "@standard-schema/utils": "^0.3.0",
+        "immer": "^10.0.3",
+        "redux": "^5.0.1",
+        "redux-thunk": "^3.1.0",
+        "reselect": "^5.1.0"
+      },
+      "peerDependencies": {
+        "react": "^16.9.0 || ^17.0.0 || ^18 || ^19",
+        "react-redux": "^7.2.1 || ^8.1.3 || ^9.0.0"
+      },
+      "peerDependenciesMeta": {
+        "react": {
+          "optional": true
+        },
+        "react-redux": {
+          "optional": true
+        }
+      }
+    },
     "node_modules/@remix-run/router": {
       "version": "1.23.0",
       "resolved": "https://registry.npmjs.org/@remix-run/router/-/router-1.23.0.tgz",
@@ -3141,6 +5465,18 @@ declare module "*.svg" {
       "os": [
         "win32"
       ]
+    },
+    "node_modules/@standard-schema/spec": {
+      "version": "1.0.0",
+      "resolved": "https://registry.npmjs.org/@standard-schema/spec/-/spec-1.0.0.tgz",
+      "integrity": "sha512-m2bOd0f2RT9k8QJx1JN85cZYyH1RqFBdlwtkSlf4tBDYLCiiZnv1fIIwacK6cqwXavOydf0NPToMQgpKq+dVlA==",
+      "license": "MIT"
+    },
+    "node_modules/@standard-schema/utils": {
+      "version": "0.3.0",
+      "resolved": "https://registry.npmjs.org/@standard-schema/utils/-/utils-0.3.0.tgz",
+      "integrity": "sha512-e7Mew686owMaPJVNNLs55PUvgz371nKgwsc4vxE49zsODpJEnxgxRo2y/OKrqueavXgZNMDVj3DdHFlaSAeU8g==",
+      "license": "MIT"
     },
     "node_modules/@tailwindcss/node": {
       "version": "4.1.13",
@@ -3463,6 +5799,69 @@ declare module "*.svg" {
         "@babel/types": "^7.28.2"
       }
     },
+    "node_modules/@types/d3-array": {
+      "version": "3.2.2",
+      "resolved": "https://registry.npmjs.org/@types/d3-array/-/d3-array-3.2.2.tgz",
+      "integrity": "sha512-hOLWVbm7uRza0BYXpIIW5pxfrKe0W+D5lrFiAEYR+pb6w3N2SwSMaJbXdUfSEv+dT4MfHBLtn5js0LAWaO6otw==",
+      "license": "MIT"
+    },
+    "node_modules/@types/d3-color": {
+      "version": "3.1.3",
+      "resolved": "https://registry.npmjs.org/@types/d3-color/-/d3-color-3.1.3.tgz",
+      "integrity": "sha512-iO90scth9WAbmgv7ogoq57O9YpKmFBbmoEoCHDB2xMBY0+/KVrqAaCDyCE16dUspeOvIxFFRI+0sEtqDqy2b4A==",
+      "license": "MIT"
+    },
+    "node_modules/@types/d3-ease": {
+      "version": "3.0.2",
+      "resolved": "https://registry.npmjs.org/@types/d3-ease/-/d3-ease-3.0.2.tgz",
+      "integrity": "sha512-NcV1JjO5oDzoK26oMzbILE6HW7uVXOHLQvHshBUW4UMdZGfiY6v5BeQwh9a9tCzv+CeefZQHJt5SRgK154RtiA==",
+      "license": "MIT"
+    },
+    "node_modules/@types/d3-interpolate": {
+      "version": "3.0.4",
+      "resolved": "https://registry.npmjs.org/@types/d3-interpolate/-/d3-interpolate-3.0.4.tgz",
+      "integrity": "sha512-mgLPETlrpVV1YRJIglr4Ez47g7Yxjl1lj7YKsiMCb27VJH9W8NVM6Bb9d8kkpG/uAQS5AmbA48q2IAolKKo1MA==",
+      "license": "MIT",
+      "dependencies": {
+        "@types/d3-color": "*"
+      }
+    },
+    "node_modules/@types/d3-path": {
+      "version": "3.1.1",
+      "resolved": "https://registry.npmjs.org/@types/d3-path/-/d3-path-3.1.1.tgz",
+      "integrity": "sha512-VMZBYyQvbGmWyWVea0EHs/BwLgxc+MKi1zLDCONksozI4YJMcTt8ZEuIR4Sb1MMTE8MMW49v0IwI5+b7RmfWlg==",
+      "license": "MIT"
+    },
+    "node_modules/@types/d3-scale": {
+      "version": "4.0.9",
+      "resolved": "https://registry.npmjs.org/@types/d3-scale/-/d3-scale-4.0.9.tgz",
+      "integrity": "sha512-dLmtwB8zkAeO/juAMfnV+sItKjlsw2lKdZVVy6LRr0cBmegxSABiLEpGVmSJJ8O08i4+sGR6qQtb6WtuwJdvVw==",
+      "license": "MIT",
+      "dependencies": {
+        "@types/d3-time": "*"
+      }
+    },
+    "node_modules/@types/d3-shape": {
+      "version": "3.1.7",
+      "resolved": "https://registry.npmjs.org/@types/d3-shape/-/d3-shape-3.1.7.tgz",
+      "integrity": "sha512-VLvUQ33C+3J+8p+Daf+nYSOsjB4GXp19/S/aGo60m9h1v6XaxjiT82lKVWJCfzhtuZ3yD7i/TPeC/fuKLLOSmg==",
+      "license": "MIT",
+      "dependencies": {
+        "@types/d3-path": "*"
+      }
+    },
+    "node_modules/@types/d3-time": {
+      "version": "3.0.4",
+      "resolved": "https://registry.npmjs.org/@types/d3-time/-/d3-time-3.0.4.tgz",
+      "integrity": "sha512-yuzZug1nkAAaBlBBikKZTgzCeA+k1uy4ZFwWANOfKw5z5LRhV0gNA7gNkKm7HoK+HRN0wX3EkxGk0fpbWhmB7g==",
+      "license": "MIT"
+    },
+    "node_modules/@types/d3-timer": {
+      "version": "3.0.2",
+      "resolved": "https://registry.npmjs.org/@types/d3-timer/-/d3-timer-3.0.2.tgz",
+      "integrity": "sha512-Ps3T8E8dZDam6fUyNiMkekK3XUsaUEik+idO9/YjPtfj2qruF8tFBXS7XhtE4iIXBLxhmLjP3SXpLhVf21I9Lw==",
+      "license": "MIT"
+    },
     "node_modules/@types/estree": {
       "version": "1.0.8",
       "resolved": "https://registry.npmjs.org/@types/estree/-/estree-1.0.8.tgz",
@@ -3484,14 +5883,14 @@ declare module "*.svg" {
       "version": "15.7.15",
       "resolved": "https://registry.npmjs.org/@types/prop-types/-/prop-types-15.7.15.tgz",
       "integrity": "sha512-F6bEyamV9jKGAFBEmlQnesRPGOQqS2+Uwi0Em15xenOxHaf2hv6L8YCVn3rPdPJOiJfPiCnLIRyvwVaqMY3MIw==",
-      "dev": true,
+      "devOptional": true,
       "license": "MIT"
     },
     "node_modules/@types/react": {
       "version": "18.3.24",
       "resolved": "https://registry.npmjs.org/@types/react/-/react-18.3.24.tgz",
       "integrity": "sha512-0dLEBsA1kI3OezMBF8nSsb7Nk19ZnsyE1LLhB8r27KbgU5H4pvuqZLdtE+aUkJVoXgTVuA+iLIwmZ0TuK4tx6A==",
-      "dev": true,
+      "devOptional": true,
       "license": "MIT",
       "dependencies": {
         "@types/prop-types": "*",
@@ -3507,6 +5906,12 @@ declare module "*.svg" {
       "peerDependencies": {
         "@types/react": "^18.0.0"
       }
+    },
+    "node_modules/@types/use-sync-external-store": {
+      "version": "0.0.6",
+      "resolved": "https://registry.npmjs.org/@types/use-sync-external-store/-/use-sync-external-store-0.0.6.tgz",
+      "integrity": "sha512-zFDAD+tlpf2r4asuHEj0XH6pY6i0g5NeAHPn+15wk3BV6JA69eERFXC1gyGThDkVa1zCyKr5jox1+2LbV/AMLg==",
+      "license": "MIT"
     },
     "node_modules/@vitejs/plugin-react": {
       "version": "4.7.0",
@@ -3631,6 +6036,15 @@ declare module "*.svg" {
         "node": ">=18"
       }
     },
+    "node_modules/clsx": {
+      "version": "2.1.1",
+      "resolved": "https://registry.npmjs.org/clsx/-/clsx-2.1.1.tgz",
+      "integrity": "sha512-eYm0QWBtUrBWZWG0d386OGAw16Z995PiOVo2B7bjWSbHedGl5e0ZWaq65kOGgUSNesEIDkB9ISbTg/JK9dhCZA==",
+      "license": "MIT",
+      "engines": {
+        "node": ">=6"
+      }
+    },
     "node_modules/convert-source-map": {
       "version": "2.0.0",
       "resolved": "https://registry.npmjs.org/convert-source-map/-/convert-source-map-2.0.0.tgz",
@@ -3642,8 +6056,129 @@ declare module "*.svg" {
       "version": "3.1.3",
       "resolved": "https://registry.npmjs.org/csstype/-/csstype-3.1.3.tgz",
       "integrity": "sha512-M1uQkMl8rQK/szD0LNhtqxIPLpimGm8sOBwU7lLnCpSbTyY3yeU1Vc7l4KT5zT4s/yOxHH5O7tIuuLOCnLADRw==",
-      "dev": true,
+      "devOptional": true,
       "license": "MIT"
+    },
+    "node_modules/d3-array": {
+      "version": "3.2.4",
+      "resolved": "https://registry.npmjs.org/d3-array/-/d3-array-3.2.4.tgz",
+      "integrity": "sha512-tdQAmyA18i4J7wprpYq8ClcxZy3SC31QMeByyCFyRt7BVHdREQZ5lpzoe5mFEYZUWe+oq8HBvk9JjpibyEV4Jg==",
+      "license": "ISC",
+      "dependencies": {
+        "internmap": "1 - 2"
+      },
+      "engines": {
+        "node": ">=12"
+      }
+    },
+    "node_modules/d3-color": {
+      "version": "3.1.0",
+      "resolved": "https://registry.npmjs.org/d3-color/-/d3-color-3.1.0.tgz",
+      "integrity": "sha512-zg/chbXyeBtMQ1LbD/WSoW2DpC3I0mpmPdW+ynRTj/x2DAWYrIY7qeZIHidozwV24m4iavr15lNwIwLxRmOxhA==",
+      "license": "ISC",
+      "engines": {
+        "node": ">=12"
+      }
+    },
+    "node_modules/d3-ease": {
+      "version": "3.0.1",
+      "resolved": "https://registry.npmjs.org/d3-ease/-/d3-ease-3.0.1.tgz",
+      "integrity": "sha512-wR/XK3D3XcLIZwpbvQwQ5fK+8Ykds1ip7A2Txe0yxncXSdq1L9skcG7blcedkOX+ZcgxGAmLX1FrRGbADwzi0w==",
+      "license": "BSD-3-Clause",
+      "engines": {
+        "node": ">=12"
+      }
+    },
+    "node_modules/d3-format": {
+      "version": "3.1.0",
+      "resolved": "https://registry.npmjs.org/d3-format/-/d3-format-3.1.0.tgz",
+      "integrity": "sha512-YyUI6AEuY/Wpt8KWLgZHsIU86atmikuoOmCfommt0LYHiQSPjvX2AcFc38PX0CBpr2RCyZhjex+NS/LPOv6YqA==",
+      "license": "ISC",
+      "engines": {
+        "node": ">=12"
+      }
+    },
+    "node_modules/d3-interpolate": {
+      "version": "3.0.1",
+      "resolved": "https://registry.npmjs.org/d3-interpolate/-/d3-interpolate-3.0.1.tgz",
+      "integrity": "sha512-3bYs1rOD33uo8aqJfKP3JWPAibgw8Zm2+L9vBKEHJ2Rg+viTR7o5Mmv5mZcieN+FRYaAOWX5SJATX6k1PWz72g==",
+      "license": "ISC",
+      "dependencies": {
+        "d3-color": "1 - 3"
+      },
+      "engines": {
+        "node": ">=12"
+      }
+    },
+    "node_modules/d3-path": {
+      "version": "3.1.0",
+      "resolved": "https://registry.npmjs.org/d3-path/-/d3-path-3.1.0.tgz",
+      "integrity": "sha512-p3KP5HCf/bvjBSSKuXid6Zqijx7wIfNW+J/maPs+iwR35at5JCbLUT0LzF1cnjbCHWhqzQTIN2Jpe8pRebIEFQ==",
+      "license": "ISC",
+      "engines": {
+        "node": ">=12"
+      }
+    },
+    "node_modules/d3-scale": {
+      "version": "4.0.2",
+      "resolved": "https://registry.npmjs.org/d3-scale/-/d3-scale-4.0.2.tgz",
+      "integrity": "sha512-GZW464g1SH7ag3Y7hXjf8RoUuAFIqklOAq3MRl4OaWabTFJY9PN/E1YklhXLh+OQ3fM9yS2nOkCoS+WLZ6kvxQ==",
+      "license": "ISC",
+      "dependencies": {
+        "d3-array": "2.10.0 - 3",
+        "d3-format": "1 - 3",
+        "d3-interpolate": "1.2.0 - 3",
+        "d3-time": "2.1.1 - 3",
+        "d3-time-format": "2 - 4"
+      },
+      "engines": {
+        "node": ">=12"
+      }
+    },
+    "node_modules/d3-shape": {
+      "version": "3.2.0",
+      "resolved": "https://registry.npmjs.org/d3-shape/-/d3-shape-3.2.0.tgz",
+      "integrity": "sha512-SaLBuwGm3MOViRq2ABk3eLoxwZELpH6zhl3FbAoJ7Vm1gofKx6El1Ib5z23NUEhF9AsGl7y+dzLe5Cw2AArGTA==",
+      "license": "ISC",
+      "dependencies": {
+        "d3-path": "^3.1.0"
+      },
+      "engines": {
+        "node": ">=12"
+      }
+    },
+    "node_modules/d3-time": {
+      "version": "3.1.0",
+      "resolved": "https://registry.npmjs.org/d3-time/-/d3-time-3.1.0.tgz",
+      "integrity": "sha512-VqKjzBLejbSMT4IgbmVgDjpkYrNWUYJnbCGo874u7MMKIWsILRX+OpX/gTk8MqjpT1A/c6HY2dCA77ZN0lkQ2Q==",
+      "license": "ISC",
+      "dependencies": {
+        "d3-array": "2 - 3"
+      },
+      "engines": {
+        "node": ">=12"
+      }
+    },
+    "node_modules/d3-time-format": {
+      "version": "4.1.0",
+      "resolved": "https://registry.npmjs.org/d3-time-format/-/d3-time-format-4.1.0.tgz",
+      "integrity": "sha512-dJxPBlzC7NugB2PDLwo9Q8JiTR3M3e4/XANkreKSUxF8vvXKqm1Yfq4Q5dl8budlunRVlUUaDUgFt7eA8D6NLg==",
+      "license": "ISC",
+      "dependencies": {
+        "d3-time": "1 - 3"
+      },
+      "engines": {
+        "node": ">=12"
+      }
+    },
+    "node_modules/d3-timer": {
+      "version": "3.0.1",
+      "resolved": "https://registry.npmjs.org/d3-timer/-/d3-timer-3.0.1.tgz",
+      "integrity": "sha512-ndfJ/JxxMd3nw31uyKoY2naivF+r29V+Lc0svZxe1JvvIRmi8hUsrMvdOwgS1o6uBHmiz91geQ0ylPP0aj1VUA==",
+      "license": "ISC",
+      "engines": {
+        "node": ">=12"
+      }
     },
     "node_modules/debug": {
       "version": "4.4.1",
@@ -3662,6 +6197,12 @@ declare module "*.svg" {
           "optional": true
         }
       }
+    },
+    "node_modules/decimal.js-light": {
+      "version": "2.5.1",
+      "resolved": "https://registry.npmjs.org/decimal.js-light/-/decimal.js-light-2.5.1.tgz",
+      "integrity": "sha512-qIMFpTMZmny+MMIitAB6D7iVPEorVw6YQRWkvarTkT4tBeSLLiHzcwj6q0MmYSFCiVpiqPJTJEYIrpcPzVEIvg==",
+      "license": "MIT"
     },
     "node_modules/detect-libc": {
       "version": "2.0.4",
@@ -3693,6 +6234,16 @@ declare module "*.svg" {
       "engines": {
         "node": ">=10.13.0"
       }
+    },
+    "node_modules/es-toolkit": {
+      "version": "1.39.10",
+      "resolved": "https://registry.npmjs.org/es-toolkit/-/es-toolkit-1.39.10.tgz",
+      "integrity": "sha512-E0iGnTtbDhkeczB0T+mxmoVlT4YNweEKBLq7oaU4p11mecdsZpNWOglI4895Vh4usbQ+LsJiuLuI2L0Vdmfm2w==",
+      "license": "MIT",
+      "workspaces": [
+        "docs",
+        "benchmarks"
+      ]
     },
     "node_modules/esbuild": {
       "version": "0.21.5",
@@ -3743,6 +6294,12 @@ declare module "*.svg" {
         "node": ">=6"
       }
     },
+    "node_modules/eventemitter3": {
+      "version": "5.0.1",
+      "resolved": "https://registry.npmjs.org/eventemitter3/-/eventemitter3-5.0.1.tgz",
+      "integrity": "sha512-GWkBvjiSZK87ELrYOSESUYeVIc9mvLLf/nXalMOS5dYrgZq9o5OVkbZAVM06CVxYsCwH9BDZFPlQTlPA1j4ahA==",
+      "license": "MIT"
+    },
     "node_modules/fraction.js": {
       "version": "4.3.7",
       "resolved": "https://registry.npmjs.org/fraction.js/-/fraction.js-4.3.7.tgz",
@@ -3755,6 +6312,33 @@ declare module "*.svg" {
       "funding": {
         "type": "patreon",
         "url": "https://github.com/sponsors/rawify"
+      }
+    },
+    "node_modules/framer-motion": {
+      "version": "12.23.18",
+      "resolved": "https://registry.npmjs.org/framer-motion/-/framer-motion-12.23.18.tgz",
+      "integrity": "sha512-HBVXBL5x3nk/0WrYM5G4VgjBey99ytVYET5AX17s/pcnlH90cyaxVUqgoN8cpF4+PqZRVOhwWsv28F+hxA9Tzg==",
+      "license": "MIT",
+      "dependencies": {
+        "motion-dom": "^12.23.18",
+        "motion-utils": "^12.23.6",
+        "tslib": "^2.4.0"
+      },
+      "peerDependencies": {
+        "@emotion/is-prop-valid": "*",
+        "react": "^18.0.0 || ^19.0.0",
+        "react-dom": "^18.0.0 || ^19.0.0"
+      },
+      "peerDependenciesMeta": {
+        "@emotion/is-prop-valid": {
+          "optional": true
+        },
+        "react": {
+          "optional": true
+        },
+        "react-dom": {
+          "optional": true
+        }
       }
     },
     "node_modules/fsevents": {
@@ -3819,6 +6403,25 @@ declare module "*.svg" {
       "license": "MIT",
       "dependencies": {
         "@babel/runtime": "^7.23.2"
+      }
+    },
+    "node_modules/immer": {
+      "version": "10.1.3",
+      "resolved": "https://registry.npmjs.org/immer/-/immer-10.1.3.tgz",
+      "integrity": "sha512-tmjF/k8QDKydUlm3mZU+tjM6zeq9/fFpPqH9SzWmBnVVKsPBg/V66qsMwb3/Bo90cgUN+ghdVBess+hPsxUyRw==",
+      "license": "MIT",
+      "funding": {
+        "type": "opencollective",
+        "url": "https://opencollective.com/immer"
+      }
+    },
+    "node_modules/internmap": {
+      "version": "2.0.3",
+      "resolved": "https://registry.npmjs.org/internmap/-/internmap-2.0.3.tgz",
+      "integrity": "sha512-5Hh7Y1wQbvY5ooGgPbDaL5iYLAPzMTUrjMulskHLH6wnv/A+1q5rgEaiuqEjB+oxGXIVZs1FF+R/KPN3ZSQYYg==",
+      "license": "ISC",
+      "engines": {
+        "node": ">=12"
       }
     },
     "node_modules/jiti": {
@@ -4124,6 +6727,15 @@ declare module "*.svg" {
         "yallist": "^3.0.2"
       }
     },
+    "node_modules/lucide-react": {
+      "version": "0.544.0",
+      "resolved": "https://registry.npmjs.org/lucide-react/-/lucide-react-0.544.0.tgz",
+      "integrity": "sha512-t5tS44bqd825zAW45UQxpG2CvcC4urOwn2TrwSH8u+MjeE+1NnWl6QqeQ/6NdjMqdOygyiT9p3Ev0p1NJykxjw==",
+      "license": "ISC",
+      "peerDependencies": {
+        "react": "^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0"
+      }
+    },
     "node_modules/magic-string": {
       "version": "0.30.18",
       "resolved": "https://registry.npmjs.org/magic-string/-/magic-string-0.30.18.tgz",
@@ -4172,6 +6784,21 @@ declare module "*.svg" {
       "funding": {
         "url": "https://github.com/sponsors/isaacs"
       }
+    },
+    "node_modules/motion-dom": {
+      "version": "12.23.18",
+      "resolved": "https://registry.npmjs.org/motion-dom/-/motion-dom-12.23.18.tgz",
+      "integrity": "sha512-9piw3uOcP6DpS0qpnDF95bLDzmgMxLOg/jghLnHwYJ0YFizzuvbH/L8106dy39JNgHYmXFUTztoP9JQvUqlBwQ==",
+      "license": "MIT",
+      "dependencies": {
+        "motion-utils": "^12.23.6"
+      }
+    },
+    "node_modules/motion-utils": {
+      "version": "12.23.6",
+      "resolved": "https://registry.npmjs.org/motion-utils/-/motion-utils-12.23.6.tgz",
+      "integrity": "sha512-eAWoPgr4eFEOFfg2WjIsMoqJTW6Z8MTUCgn/GZ3VRpClWBdnbjryiA3ZSNLyxCTmCQx4RmYX6jX1iWHbenUPNQ==",
+      "license": "MIT"
     },
     "node_modules/ms": {
       "version": "2.1.3",
@@ -4306,6 +6933,36 @@ declare module "*.svg" {
         }
       }
     },
+    "node_modules/react-is": {
+      "version": "19.1.1",
+      "resolved": "https://registry.npmjs.org/react-is/-/react-is-19.1.1.tgz",
+      "integrity": "sha512-tr41fA15Vn8p4X9ntI+yCyeGSf1TlYaY5vlTZfQmeLBrFo3psOPX6HhTDnFNL9uj3EhP0KAQ80cugCl4b4BERA==",
+      "license": "MIT",
+      "peer": true
+    },
+    "node_modules/react-redux": {
+      "version": "9.2.0",
+      "resolved": "https://registry.npmjs.org/react-redux/-/react-redux-9.2.0.tgz",
+      "integrity": "sha512-ROY9fvHhwOD9ySfrF0wmvu//bKCQ6AeZZq1nJNtbDC+kk5DuSuNX/n6YWYF/SYy7bSba4D4FSz8DJeKY/S/r+g==",
+      "license": "MIT",
+      "dependencies": {
+        "@types/use-sync-external-store": "^0.0.6",
+        "use-sync-external-store": "^1.4.0"
+      },
+      "peerDependencies": {
+        "@types/react": "^18.2.25 || ^19",
+        "react": "^18.0 || ^19",
+        "redux": "^5.0.0"
+      },
+      "peerDependenciesMeta": {
+        "@types/react": {
+          "optional": true
+        },
+        "redux": {
+          "optional": true
+        }
+      }
+    },
     "node_modules/react-refresh": {
       "version": "0.17.0",
       "resolved": "https://registry.npmjs.org/react-refresh/-/react-refresh-0.17.0.tgz",
@@ -4347,6 +7004,54 @@ declare module "*.svg" {
         "react": ">=16.8",
         "react-dom": ">=16.8"
       }
+    },
+    "node_modules/recharts": {
+      "version": "3.2.1",
+      "resolved": "https://registry.npmjs.org/recharts/-/recharts-3.2.1.tgz",
+      "integrity": "sha512-0JKwHRiFZdmLq/6nmilxEZl3pqb4T+aKkOkOi/ZISRZwfBhVMgInxzlYU9D4KnCH3KINScLy68m/OvMXoYGZUw==",
+      "license": "MIT",
+      "dependencies": {
+        "@reduxjs/toolkit": "1.x.x || 2.x.x",
+        "clsx": "^2.1.1",
+        "decimal.js-light": "^2.5.1",
+        "es-toolkit": "^1.39.3",
+        "eventemitter3": "^5.0.1",
+        "immer": "^10.1.1",
+        "react-redux": "8.x.x || 9.x.x",
+        "reselect": "5.1.1",
+        "tiny-invariant": "^1.3.3",
+        "use-sync-external-store": "^1.2.2",
+        "victory-vendor": "^37.0.2"
+      },
+      "engines": {
+        "node": ">=18"
+      },
+      "peerDependencies": {
+        "react": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0",
+        "react-dom": "^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0",
+        "react-is": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0"
+      }
+    },
+    "node_modules/redux": {
+      "version": "5.0.1",
+      "resolved": "https://registry.npmjs.org/redux/-/redux-5.0.1.tgz",
+      "integrity": "sha512-M9/ELqF6fy8FwmkpnF0S3YKOqMyoWJ4+CS5Efg2ct3oY9daQvd/Pc71FpGZsVsbl3Cpb+IIcjBDUnnyBdQbq4w==",
+      "license": "MIT"
+    },
+    "node_modules/redux-thunk": {
+      "version": "3.1.0",
+      "resolved": "https://registry.npmjs.org/redux-thunk/-/redux-thunk-3.1.0.tgz",
+      "integrity": "sha512-NW2r5T6ksUKXCabzhL9z+h206HQw/NJkcLm1GPImRQ8IzfXwRGqjVhKJGauHirT0DAuyy6hjdnMZaRoAcy0Klw==",
+      "license": "MIT",
+      "peerDependencies": {
+        "redux": "^5.0.0"
+      }
+    },
+    "node_modules/reselect": {
+      "version": "5.1.1",
+      "resolved": "https://registry.npmjs.org/reselect/-/reselect-5.1.1.tgz",
+      "integrity": "sha512-K/BG6eIky/SBpzfHZv/dd+9JBFiS4SWV7FIujVyJRux6e45+73RaUHXLmIR1f7WOMaQ0U1km6qwklRQxpJJY0w==",
+      "license": "MIT"
     },
     "node_modules/rollup": {
       "version": "4.50.0",
@@ -4467,6 +7172,18 @@ declare module "*.svg" {
         "node": ">=18"
       }
     },
+    "node_modules/tiny-invariant": {
+      "version": "1.3.3",
+      "resolved": "https://registry.npmjs.org/tiny-invariant/-/tiny-invariant-1.3.3.tgz",
+      "integrity": "sha512-+FbBPE1o9QAYvviau/qC5SE3caw21q3xkvWKBtja5vgqOWIHHJ3ioaq1VPfn/Szqctz2bU/oYeKd9/z5BL+PVg==",
+      "license": "MIT"
+    },
+    "node_modules/tslib": {
+      "version": "2.8.1",
+      "resolved": "https://registry.npmjs.org/tslib/-/tslib-2.8.1.tgz",
+      "integrity": "sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==",
+      "license": "0BSD"
+    },
     "node_modules/typescript": {
       "version": "5.9.2",
       "resolved": "https://registry.npmjs.org/typescript/-/typescript-5.9.2.tgz",
@@ -4517,6 +7234,37 @@ declare module "*.svg" {
       },
       "peerDependencies": {
         "browserslist": ">= 4.21.0"
+      }
+    },
+    "node_modules/use-sync-external-store": {
+      "version": "1.5.0",
+      "resolved": "https://registry.npmjs.org/use-sync-external-store/-/use-sync-external-store-1.5.0.tgz",
+      "integrity": "sha512-Rb46I4cGGVBmjamjphe8L/UnvJD+uPPtTkNvX5mZgqdbavhI4EbgIWJiIHXJ8bc/i9EQGPRh4DwEURJ552Do0A==",
+      "license": "MIT",
+      "peerDependencies": {
+        "react": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0"
+      }
+    },
+    "node_modules/victory-vendor": {
+      "version": "37.3.6",
+      "resolved": "https://registry.npmjs.org/victory-vendor/-/victory-vendor-37.3.6.tgz",
+      "integrity": "sha512-SbPDPdDBYp+5MJHhBCAyI7wKM3d5ivekigc2Dk2s7pgbZ9wIgIBYGVw4zGHBml/qTFbexrofXW6Gu4noGxrOwQ==",
+      "license": "MIT AND ISC",
+      "dependencies": {
+        "@types/d3-array": "^3.0.3",
+        "@types/d3-ease": "^3.0.0",
+        "@types/d3-interpolate": "^3.0.1",
+        "@types/d3-scale": "^4.0.2",
+        "@types/d3-shape": "^3.1.0",
+        "@types/d3-time": "^3.0.0",
+        "@types/d3-timer": "^3.0.0",
+        "d3-array": "^3.1.6",
+        "d3-ease": "^3.0.1",
+        "d3-interpolate": "^3.0.1",
+        "d3-scale": "^4.0.2",
+        "d3-shape": "^3.1.0",
+        "d3-time": "^3.0.0",
+        "d3-timer": "^3.0.1"
       }
     },
     "node_modules/vite": {
@@ -4611,11 +7359,14 @@ declare module "*.svg" {
     "preview": "vite preview"
   },
   "dependencies": {
+    "framer-motion": "^12.23.18",
     "i18next": "^23.16.8",
+    "lucide-react": "^0.544.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-i18next": "^13.5.0",
-    "react-router-dom": "^6.26.0"
+    "react-router-dom": "^6.26.0",
+    "recharts": "^3.2.1"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.0.0",

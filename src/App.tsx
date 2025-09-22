@@ -10,6 +10,7 @@ import ZooplusReOps from "@/pages/projects/ZooplusReOps";
 import ZooplusPricing from "@/pages/projects/ZooplusPricing";
 import UXMethodCards from "@/pages/projects/UXMethodCards";
 import WinningUXStrategy from "@/pages/projects/WinningUXStrategy";
+import DeleteCase from "@/pages/projects/DeleteCase"; // 👈 neu
 
 // Expertise-Seiten
 import UXStrategy from "@/pages/expertise/UXStrategy";
@@ -25,13 +26,14 @@ export default function App() {
         <Route index element={<Home />} />
         <Route path="cv" element={<CV />} />
 
-        {/* Projekt-Routen (nur die 6 gültigen) */}
+        {/* Projekt-Routen */}
         <Route path="projects/car-insurance" element={<CarInsurance />} />
         <Route path="projects/swiss-life-b2b2c" element={<SwissLife />} />
         <Route path="projects/zooplus-reops" element={<ZooplusReOps />} />
         <Route path="projects/zooplus-pricing" element={<ZooplusPricing />} />
         <Route path="projects/ux-method-cards" element={<UXMethodCards />} />
         <Route path="projects/winning-ux-strategy" element={<WinningUXStrategy />} />
+        <Route path="projects/delete-case" element={<DeleteCase />} /> {/* 👈 neu */}
 
         {/* Expertise-Routen */}
         <Route path="expertise/ux-strategy" element={<UXStrategy />} />
