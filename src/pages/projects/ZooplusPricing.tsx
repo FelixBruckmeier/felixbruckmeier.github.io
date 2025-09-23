@@ -1,66 +1,118 @@
-import React from 'react'
-import { useI18n } from '@/i18n'
-import imgMaxdiff from '@/assets/artefacts/zooplus-pricing-maxdiff.png'
-import imgHeat from '@/assets/artefacts/zooplus-pricing-heatmap.png'
+import React from "react";
+import Background from "@/components/ZooplusPricing/Background";
+import Methods from "@/components/ZooplusPricing/Methods";
+import Hypotheses from "@/components/ZooplusPricing/Hypotheses";
+import DiscussionGuide from "@/components/ZooplusPricing/DiscussionGuide";
+import UserJourney_P from "@/components/ZooplusPricing/UserJourney_P";
+import VisAWI from "@/components/ZooplusPricing/VisAWI";
+import Heatmap from "@/components/ZooplusPricing/Heatmap";
+import Findings from "@/components/ZooplusPricing/Findings";
+import Impact from "@/components/ZooplusPricing/Impact";
+import SectionIcon from "@/components/ZooplusPricing/SectionIcon";
 
-const Page: React.FC = () => {
-  const { t } = useI18n()
+const ZooplusPricing: React.FC = () => {
   return (
-    <div className="container-responsive py-12 space-y-10">
-      <header className="space-y-3">
-        <h1 className="text-3xl font-semibold">zooplus — Pricing Usability Testing</h1>
-        <p className="text-muted-foreground">Rolle: UX Research Lead (2023–2024).</p>
-      </header>
-
-      <section className="space-y-3">
-        <h2 className="text-xl font-semibold">Kontext & Herausforderung</h2>
-        <p className="text-muted-foreground">Unklare Preisstruktur im Modul; Nutzer verstanden Unterschiede zwischen Plänen nicht.</p>
-      </section>
-
-      <section className="space-y-4">
-        <h2 className="text-xl font-semibold">Forschungsdesign & Methoden</h2>
-        <ul className="grid sm:grid-cols-2 gap-3">
-          <li className='card p-4'>MaxDiff Survey (n=120)</li>
-          <li className='card p-4'>Card Sorting (Navigationslogik Preisoptionen)</li>
-          <li className='card p-4'>HiFi-Prototyp-Tests (Figma)</li>
-          <li className='card p-4'>Eye-Tracking Analyse</li>
-        </ul>
-      </section>
-
+    <article className="container-responsive py-16 space-y-20">
+      {/* Hero / Intro */}
       <section className="space-y-6">
-        <h2 className="text-xl font-semibold">Artefakte</h2>
-
-<figure className="space-y-2">
-  <img src={ imgMaxdiff } alt={t('captions.pricingMaxdiff')} className="w-full rounded-2xl border border-border" />
-  <figcaption className="text-sm text-muted-foreground">{t('captions.pricingMaxdiff')}</figcaption>
-</figure>
-
-
-<figure className="space-y-2">
-  <img src={ imgHeat } alt={t('captions.pricingHeatmap')} className="w-full rounded-2xl border border-border" />
-  <figcaption className="text-sm text-muted-foreground">{t('captions.pricingHeatmap')}</figcaption>
-</figure>
-
+        <div className="flex items-center gap-3">
+          <SectionIcon name="title" />
+          <h1 className="text-4xl font-bold">zooplus — Pricing Usability Testing</h1>
+        </div>
+        <p className="text-muted-foreground">
+          Rolle: UX Research Lead (2023–2024) · Studientyp:{" "}
+          <strong>Summative Usability Evaluation (vergleichend)</strong> mit
+          formativen Elementen.
+        </p>
+        <p className="max-w-3xl text-base text-muted-foreground">
+          Vergleichendes Usability Testing mehrerer Preisdarstellungsvarianten
+          im Rahmen des Redesigns. Ziel: herausfinden, welche Darstellung
+          Nutzer:innen am besten verstehen und der Preislogik am meisten vertrauen.
+        </p>
       </section>
 
-      <section className="space-y-3">
-        <h2 className="text-xl font-semibold">Synthese & Entscheidungen</h2>
-        <ul className="list-disc pl-6 space-y-1 text-muted-foreground">
-          <li>• Klarere Informationshierarchie & Begrifflichkeiten</li>
-<li>• Vergleichstabelle mit 3–4 differenzierenden Merkmalen</li>
-<li>• Deutliche Hervorhebung der empfohlenen Option</li>
-        </ul>
+      {/* Projektüberblick */}
+      <section className="space-y-12">
+        <h2 className="flex items-center text-2xl font-semibold">
+          <SectionIcon name="context" /> Kontext & Zielsetzung
+        </h2>
+        <Background />
       </section>
 
-      <section className="space-y-3">
-        <h2 className="text-xl font-semibold">Impact</h2>
-        <ul className="list-disc pl-6 space-y-1 text-muted-foreground">
-          <li>• +15 % Verständnis (SUS-Subscale)</li>
-<li>• Höhere Plan-Selektion ohne zusätzliche Erklärtexte</li>
-        </ul>
-      </section>
-    </div>
-  )
-}
+      {/* Vorgehen */}
+      <section className="space-y-12">
+        <h2 className="flex items-center text-2xl font-semibold">
+          <SectionIcon name="methods" /> Vorgehen & Methoden
+        </h2>
+        <Methods />
+        <Hypotheses />
 
-export default Page
+        {/* Diskussionsleitfaden */}
+        <div className="space-y-4">
+          <h3 className="text-xl font-semibold">Diskussionsleitfaden</h3>
+          <DiscussionGuide />
+        </div>
+      </section>
+
+      {/* Outputs & Artefacts */}
+      <section className="space-y-12">
+        <h2 className="flex items-center text-2xl font-semibold">
+          <SectionIcon name="journey" /> Outputs & Artefacts
+        </h2>
+
+        {/* Journey */}
+        <div>
+          <h3 className="text-xl font-semibold mb-3">User Journey (Pricing Perception)</h3>
+          <p className="text-muted-foreground mb-4">
+            Darstellung der Wahrnehmung entlang der Journey – von der Homepage über
+            PLP und PDP bis zum Warenkorb. Zeigt, wo Preise verstanden werden und
+            wo Missverständnisse entstehen.
+          </p>
+          <UserJourney_P />
+        </div>
+
+        {/* VisAWI */}
+        <div>
+          <h3 className="text-xl font-semibold mb-3">VisAWI Ergebnisse</h3>
+          <p className="text-muted-foreground mb-4">
+            Neben der funktionalen Prüfung wurde die visuelle Qualität bewertet.
+            Dies dient als Rückversicherung, dass die getestete Variante auch
+            ästhetisch konsistent und vertrauenswürdig wirkt.
+          </p>
+          <VisAWI />
+        </div>
+
+        {/* Heatmap */}
+        <div>
+          <h3 className="text-xl font-semibold mb-3">PDP-Heatmap (simuliert)</h3>
+          <p className="text-muted-foreground mb-4">
+            Die simulierte Heatmap zeigt, welche Bereiche auf der
+            Produktdetailseite am stärksten fixiert wurden. Ziel war es zu prüfen,
+            ob Preiskomponenten (Abo, Promo, durchgestrichene Preise) klar erfasst
+            werden oder hinter Produktbildern zurücktreten.
+          </p>
+          <Heatmap />
+        </div>
+      </section>
+
+      {/* Insights & Synthese */}
+      <section className="space-y-12">
+        <h2 className="flex items-center text-2xl font-semibold">
+          <SectionIcon name="insights" /> Insights & Synthese
+        </h2>
+        <Findings />
+      </section>
+
+      {/* Impact & Nächste Schritte */}
+      <section className="space-y-12">
+        <h2 className="flex items-center text-2xl font-semibold">
+          <SectionIcon name="impact" /> Impact & Nächste Schritte
+        </h2>
+        <Impact />
+      </section>
+    </article>
+  );
+};
+
+export default ZooplusPricing;
+

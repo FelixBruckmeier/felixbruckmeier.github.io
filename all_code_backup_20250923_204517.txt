@@ -2985,35 +2985,9 @@ type Phase = "discover" | "define" | "develop" | "deliver";
 
 type Props = {
   active: Phase;
-  /** Optional: kompaktere Darstellung ohne das globale Default zu ändern */
-  size?: "lg" | "md" | "sm";
 };
 
-const PRESETS = {
-  lg: {
-    bar: "h-20 md:h-32",
-    diamond: "w-14 h-14 md:w-20 md:h-20",
-    text: "text-xs md:text-sm",
-    margin: "my-12 md:my-32",
-    px: "px-6 md:px-16",
-  },
-  md: {
-    bar: "h-12 md:h-20",
-    diamond: "w-12 h-12 md:w-16 md:h-16",
-    text: "text-[11px] md:text-xs",
-    margin: "my-10 md:my-24",
-    px: "px-6 md:px-12",
-  },
-  sm: {
-    bar: "h-8 md:h-12",
-    diamond: "w-10 h-10 md:w-12 md:h-12",
-    text: "text-[10px] md:text-[11px]",
-    margin: "my-8 md:my-16",
-    px: "px-5 md:px-10",
-  },
-} as const;
-
-export default function DoubleDiamond({ active, size = "lg" }: Props) {
+export default function DoubleDiamond({ active }: Props) {
   const phases: { key: Phase; label: string }[] = [
     { key: "discover", label: "Discover" },
     { key: "define", label: "Define" },
@@ -3021,31 +2995,27 @@ export default function DoubleDiamond({ active, size = "lg" }: Props) {
     { key: "deliver", label: "Deliver" },
   ];
 
-  const preset = PRESETS[size];
-
   return (
-    <div className={`relative w-full ${preset.margin}`}>
+    <div className="relative w-full my-12 md:my-32">
       {/* Balken als Trennlinie */}
-      <div
-        className={`absolute top-1/2 left-0 w-full ${preset.bar} bg-gray-100 rounded-md -translate-y-1/2`}
-      />
+      <div className="absolute top-1/2 left-0 w-full h-20 md:h-32 bg-gray-100 rounded-md -translate-y-1/2" />
 
       {/* Diamonds */}
-      <div className={`flex justify-between items-center relative ${preset.px}`}>
+      <div className="flex justify-between items-center relative px-6 md:px-16">
         {phases.map((p) => {
           const isActive = active === p.key;
           return (
             <motion.div
               key={p.key}
-              className={`${preset.diamond} rotate-45 flex items-center justify-center border-2 shadow-sm rounded-md`}
+              className="w-14 h-14 md:w-20 md:h-20 rotate-45 flex items-center justify-center border-2 shadow-sm rounded-md"
               animate={{
-                backgroundColor: isActive ? "#2563EB" : "#E5E7EB",
+                backgroundColor: isActive ? "#2563EB" : "#E5E7EB", // grau wenn inaktiv
                 borderColor: isActive ? "#2563EB" : "#D1D5DB",
                 scale: isActive ? 1.15 : 1,
               }}
               transition={{
                 duration: 0.5,
-                delay: isActive ? 0.15 : 0,
+                delay: isActive ? 0.15 : 0, // Verzögerung nur beim Aktivieren
                 ease: "easeInOut",
                 type: "spring",
                 stiffness: 200,
@@ -3055,7 +3025,7 @@ export default function DoubleDiamond({ active, size = "lg" }: Props) {
               <span
                 className={`rotate-[-45deg] font-medium ${
                   isActive ? "text-white" : "text-gray-600"
-                } ${preset.text}`}
+                } text-xs md:text-sm`}
               >
                 {p.label}
               </span>
@@ -4737,47 +4707,55 @@ import Model from "@/components/SwissLife/Model";
 import Impact from "@/components/SwissLife/Impact";
 
 const SwissLife: React.FC = () => {
-  // identisch zum Muster in CarInsurance: Hook bestimmt aktive Phase per Scroll
+  // Gleiche Logik wie in CarInsurance: bestimmt anhand des Scroll-Kontexts die aktive Phase
   const activePhase = useActivePhase();
 
   return (
     <article className="container-responsive py-16 space-y-40">
-      {/* Hero */}
+      {/* Header */}
       <header className="space-y-6">
-        <h1 className="text-4xl font-bold">Swiss Life — B2B2C UX Research (Makler:innen)</h1>
+        <h1 className="text-4xl font-bold">🏦 Swiss Life — B2B2C UX Research (Makler:innen)</h1>
         <p className="text-foreground max-w-3xl leading-relaxed">
-          Kontextuelle Interviews & Feldbesuche, Synthese mit Clustern (Grounded Theory),
-          Priorisierung per Kano — als Design-Thinking Use Case entlang des Double Diamond.
+          Kontextuelle Interviews & Feldbesuche bei Makler:innen, Synthese mit
+          Infinity-Map/Clustern (Grounded Theory), Ableitung priorisierter
+          Handlungsfelder und Validierung per Quant (Kano) — als Design-Thinking
+          Use Case entlang des Double-Diamond.
         </p>
       </header>
 
       {/* Kontext & Zielsetzung */}
       <section className="space-y-6" id="context">
-        <h2 className="text-2xl font-semibold">Kontext & Zielsetzung</h2>
+        <h2 className="text-2xl font-semibold">📌 Kontext & Zielsetzung</h2>
         <Background />
       </section>
 
-      {/* Vorgehen (Info) */}
+      {/* Einordnung Vorgehen */}
       <section className="space-y-6">
-        <h2 className="text-2xl font-semibold">Vorgehen im Design-Thinking-Rahmen</h2>
+        <h2 className="text-2xl font-semibold">🌍 Vorgehen im Design-Thinking-Rahmen</h2>
         <p className="text-foreground max-w-3xl leading-relaxed">
-          Double Diamond: Problemraum (Discover/Define) → Lösungsraum (Develop/Deliver).
-          So kombinieren wir tiefes Prozessverständnis mit priorisierten Maßnahmen.
+          Wir folgen dem Double-Diamond: Problemraum (Discover/Define) → Lösungsraum
+          (Develop/Deliver). So verbinden wir tiefes Verständnis der Maklerpraxis
+          mit pragmatischen, priorisierten Maßnahmen.
         </p>
       </section>
 
-      {/* Sticky DoubleDiamond – wie in CarInsurance: KEINE Box / KEIN bg / KEIN border */}
-      <div className="hidden md:block sticky top-20 z-40">
+      {/* Sticky DoubleDiamond – Desktop */}
+      <div className="hidden md:block sticky top-22 z-40 bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/60 border border-border rounded-2xl shadow-sm">
         <DoubleDiamond active={activePhase} />
       </div>
 
       {/* DISCOVER */}
       <section id="discover" className="space-y-10 scroll-mt-28">
-        {/* Mobile: schmaler Diamond */}
+        {/* Mobile: kleine Statusanzeige */}
         <div className="md:hidden mb-6">
           <DoubleDiamond active="discover" />
         </div>
-        <h2 className="text-2xl font-semibold">Discover — Kontextuelle Interviews & Feldbesuche</h2>
+        <h2 className="text-2xl font-semibold">🔍 Discover — Kontextuelle Interviews & Feldbesuche</h2>
+        <p className="text-foreground max-w-3xl leading-relaxed">
+          Vor-Ort-Interviews bei Makler:innen: Arbeitsweise, Hürden in
+          Systemlandschaften (Schnittstellen, asynchrone Infoflüsse), Dokumentationspflichten
+          und Kundenkommunikation verstehen.
+        </p>
         <Methods />
       </section>
 
@@ -4786,9 +4764,12 @@ const SwissLife: React.FC = () => {
         <div className="md:hidden mb-6">
           <DoubleDiamond active="define" />
         </div>
-        <h2 className="text-2xl font-semibold">Define — Synthese & Priorisierung</h2>
+        <h2 className="text-2xl font-semibold">🎯 Define — Synthese & Priorisierung</h2>
+        <p className="text-foreground max-w-3xl leading-relaxed">
+          Auswertung via Coding/Clustering (Infinity-Map) → Pain Points, Bedürfnisse,
+          Chancen. Priorisierung & Validierung über Kano, um Nutzen/Dringlichkeit zu schärfen.
+        </p>
         <Insights />
-        <Model />
       </section>
 
       {/* DEVELOP */}
@@ -4796,10 +4777,16 @@ const SwissLife: React.FC = () => {
         <div className="md:hidden mb-6">
           <DoubleDiamond active="develop" />
         </div>
-        <h2 className="text-2xl font-semibold">Develop — Artefakte & Modelle</h2>
+        <h2 className="text-2xl font-semibold">🧪 Develop — Artefakte & Modelle</h2>
+        <p className="text-foreground max-w-3xl leading-relaxed">
+          Aus den Erkenntnissen abgeleitete Outputs zur gemeinsamen Entscheidungsfindung:
+          Personas (Arbeitsprofile), Journey (Makler-Alltag) und ein einfaches Modell
+          zur Einordnung von Beratungsqualität vs. operativer Belastung.
+        </p>
         <div className="space-y-10">
           <Personas />
           <Journey />
+          <Model />
         </div>
       </section>
 
@@ -4808,7 +4795,11 @@ const SwissLife: React.FC = () => {
         <div className="md:hidden mb-6">
           <DoubleDiamond active="deliver" />
         </div>
-        <h2 className="text-2xl font-semibold">Deliver — Impact & Nächste Schritte</h2>
+        <h2 className="text-2xl font-semibold">🚀 Deliver — Impact & Nächste Schritte</h2>
+        <p className="text-foreground max-w-3xl leading-relaxed">
+          Konkrete Maßnahmenbündel für kurzfristige Verbesserungen (Quick Wins) und
+          strategische Initiativen. Anschließend quantitative Tests/ABs zur Wirkungsmessung.
+        </p>
         <Impact />
       </section>
     </article>

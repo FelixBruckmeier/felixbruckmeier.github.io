@@ -1,66 +1,93 @@
-import React from 'react'
-import { useI18n } from '@/i18n'
-import imgJourney from '@/assets/artefacts/swisslife-journey.png'
-import imgConjoint from '@/assets/artefacts/swisslife-conjoint.png'
+import React from "react";
+import DoubleDiamond from "@/components/DoubleDiamond";
+import { useActivePhase } from "@/hooks/useActivePhase";
 
-const Page: React.FC = () => {
-  const { t } = useI18n()
+// SwissLife-spezifische Bausteine
+import Background from "@/components/SwissLife/Background";
+import Methods from "@/components/SwissLife/Methods";
+import Insights from "@/components/SwissLife/Insights";
+import Personas from "@/components/SwissLife/Personas";
+import Journey from "@/components/SwissLife/Journey";
+import Model from "@/components/SwissLife/Model";
+import Impact from "@/components/SwissLife/Impact";
+
+const SwissLife: React.FC = () => {
+  // identisch zum Muster in CarInsurance: Hook bestimmt aktive Phase per Scroll
+  const activePhase = useActivePhase();
+
   return (
-    <div className="container-responsive py-12 space-y-10">
-      <header className="space-y-3">
-        <h1 className="text-3xl font-semibold">Swiss Life — B2B2C UX Research</h1>
-        <p className="text-muted-foreground">Rolle: Senior UX Researcher (2020–2022).</p>
+    <article className="container-responsive py-16 space-y-40">
+      {/* Hero */}
+      <header className="space-y-6">
+        <h1 className="text-4xl font-bold">Swiss Life — B2B2C UX Research (Makler:innen)</h1>
+        <p className="text-foreground max-w-3xl leading-relaxed">
+          Kontextuelle Interviews & Feldbesuche, Synthese mit Clustern (Grounded Theory),
+          Priorisierung per Kano — als Design-Thinking Use Case entlang des Double Diamond.
+        </p>
       </header>
 
-      <section className="space-y-3">
-        <h2 className="text-xl font-semibold">Kontext & Herausforderung</h2>
-        <p className="text-muted-foreground">Digitale Versicherungsplattform mit B2B2C-Prozessen; Bedarf an klaren Entscheidungsgrundlagen für Feature-Ausbau.</p>
+      {/* Kontext & Zielsetzung */}
+      <section className="space-y-6" id="context">
+        <h2 className="text-2xl font-semibold">Kontext & Zielsetzung</h2>
+        <Background />
       </section>
 
-      <section className="space-y-4">
-        <h2 className="text-xl font-semibold">Forschungsdesign & Methoden</h2>
-        <ul className="grid sm:grid-cols-2 gap-3">
-          <li className='card p-4'>Design Thinking Workshops (5 Iterationen)</li>
-          <li className='card p-4'>Conjoint-Analyse für Produktfeatures</li>
-          <li className='card p-4'>Customer Journey Mapping</li>
-          <li className='card p-4'>Rapid Prototyping (RITE)</li>
-        </ul>
-      </section>
-
+      {/* Vorgehen (Info) */}
       <section className="space-y-6">
-        <h2 className="text-xl font-semibold">Artefakte</h2>
-
-<figure className="space-y-2">
-  <img src={ imgJourney } alt={t('captions.swissJourney')} className="w-full rounded-2xl border border-border" />
-  <figcaption className="text-sm text-muted-foreground">{t('captions.swissJourney')}</figcaption>
-</figure>
-
-
-<figure className="space-y-2">
-  <img src={ imgConjoint } alt={t('captions.swissConjoint')} className="w-full rounded-2xl border border-border" />
-  <figcaption className="text-sm text-muted-foreground">{t('captions.swissConjoint')}</figcaption>
-</figure>
-
+        <h2 className="text-2xl font-semibold">Vorgehen im Design-Thinking-Rahmen</h2>
+        <p className="text-foreground max-w-3xl leading-relaxed">
+          Double Diamond: Problemraum (Discover/Define) → Lösungsraum (Develop/Deliver).
+          So kombinieren wir tiefes Prozessverständnis mit priorisierten Maßnahmen.
+        </p>
       </section>
 
-      <section className="space-y-3">
-        <h2 className="text-xl font-semibold">Synthese & Entscheidungen</h2>
-        <ul className="list-disc pl-6 space-y-1 text-muted-foreground">
-          <li>• Priorisierung von Features mit hoher Zahlungs-/Nutzungsbereitschaft</li>
-<li>• Optimierung kritischer Journey-Schritte mit hoher Abbruchquote</li>
-<li>• Einführung eines iterativen Validierungszyklus (RITE)</li>
-        </ul>
+      {/* Sticky DoubleDiamond – wie in CarInsurance: KEINE Box / KEIN bg / KEIN border */}
+      <div className="hidden md:block sticky top-20 z-40">
+        <DoubleDiamond active={activePhase} />
+      </div>
+
+      {/* DISCOVER */}
+      <section id="discover" className="space-y-10 scroll-mt-28">
+        {/* Mobile: schmaler Diamond */}
+        <div className="md:hidden mb-6">
+          <DoubleDiamond active="discover" />
+        </div>
+        <h2 className="text-2xl font-semibold">Discover — Kontextuelle Interviews & Feldbesuche</h2>
+        <Methods />
       </section>
 
-      <section className="space-y-3">
-        <h2 className="text-xl font-semibold">Impact</h2>
-        <ul className="list-disc pl-6 space-y-1 text-muted-foreground">
-          <li>• 30 % kürzere Entscheidungszyklen</li>
-<li>• Höhere Klarheit bei Stakeholdern über Roadmap-Prioritäten</li>
-        </ul>
+      {/* DEFINE */}
+      <section id="define" className="space-y-10 scroll-mt-28">
+        <div className="md:hidden mb-6">
+          <DoubleDiamond active="define" />
+        </div>
+        <h2 className="text-2xl font-semibold">Define — Synthese & Priorisierung</h2>
+        <Insights />
+        <Model />
       </section>
-    </div>
-  )
-}
 
-export default Page
+      {/* DEVELOP */}
+      <section id="develop" className="space-y-10 scroll-mt-28">
+        <div className="md:hidden mb-6">
+          <DoubleDiamond active="develop" />
+        </div>
+        <h2 className="text-2xl font-semibold">Develop — Artefakte & Modelle</h2>
+        <div className="space-y-10">
+          <Personas />
+          <Journey />
+        </div>
+      </section>
+
+      {/* DELIVER */}
+      <section id="deliver" className="space-y-10 scroll-mt-28">
+        <div className="md:hidden mb-6">
+          <DoubleDiamond active="deliver" />
+        </div>
+        <h2 className="text-2xl font-semibold">Deliver — Impact & Nächste Schritte</h2>
+        <Impact />
+      </section>
+    </article>
+  );
+};
+
+export default SwissLife;
