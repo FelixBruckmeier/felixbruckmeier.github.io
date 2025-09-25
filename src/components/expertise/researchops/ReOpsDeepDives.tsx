@@ -1,5 +1,3 @@
-import MaturityBar from "@/components/expertise/researchops/MaturityBar";
-
 export default function ReOpsDeepDives() {
   const areas = [
     {
@@ -40,7 +38,7 @@ export default function ReOpsDeepDives() {
         <div key={i} className="flex flex-col gap-4">
           <h3 className="text-xl font-semibold">{a.title}</h3>
           <p className="text-gray-700 max-w-3xl">{a.text}</p>
-          <MaturityBar level={a.level} />
+          {/* MaturityBar entfernt – kann später neu gebaut werden */}
         </div>
       ))}
     </div>
