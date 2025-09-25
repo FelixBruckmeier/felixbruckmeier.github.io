@@ -11,6 +11,7 @@ import ZooplusPricing from "@/pages/projects/ZooplusPricing";
 import UXMethodCards from "@/pages/projects/UXMethodCards";
 import WinningUXStrategy from "@/pages/projects/WinningUXStrategy";
 import DeleteCase from "@/pages/projects/DeleteCase"; // 👈 neu
+import AtossReOps from "@/pages/projects/AtossReOps";   // 👈 HINZUGEFÜGT
 
 // Expertise-Seiten
 import UXStrategy from "@/pages/expertise/UXStrategy";
@@ -34,6 +35,7 @@ export default function App() {
         <Route path="projects/ux-method-cards" element={<UXMethodCards />} />
         <Route path="projects/winning-ux-strategy" element={<WinningUXStrategy />} />
         <Route path="projects/delete-case" element={<DeleteCase />} /> {/* 👈 neu */}
+        <Route path="projects/atoss-reops" element={<AtossReOps />} />   {/* 👈 HINZUGEFÜGT */}
 
         {/* Expertise-Routen */}
         <Route path="expertise/ux-strategy" element={<UXStrategy />} />
