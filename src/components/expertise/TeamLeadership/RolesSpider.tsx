@@ -7,6 +7,7 @@ import {
   Filler,
   Tooltip,
   Legend,
+  ChartOptions,
 } from "chart.js";
 import { Radar } from "react-chartjs-2";
 
@@ -45,7 +46,6 @@ const groupColors: Record<Role["group"], string> = {
   Spezialisiert: "rgba(139, 92, 246, 0.6)",
 };
 
-// Gruppenerklärungen
 const groupDescriptions: Record<Role["group"], string> = {
   Research:
     "Hier liegt mein Fokus auf Nutzer- und Kundenverständnis: Bedürfnisse erforschen, Kontexte analysieren, Hypothesen validieren und datenbasierte Insights liefern.",
@@ -58,7 +58,6 @@ const groupDescriptions: Record<Role["group"], string> = {
 };
 
 export default function RolesSpider() {
-  // Sortieren alphabetisch innerhalb der Gruppen
   const groups: (Role["group"])[] = ["Research", "Design", "Strategie & Management", "Spezialisiert"];
   const groupedRoles = groups.map((g) => ({
     group: g,
@@ -80,7 +79,8 @@ export default function RolesSpider() {
     ],
   };
 
-  const options = {
+  // ✅ Options mit korrektem Typ
+  const options: ChartOptions<"radar"> = {
     scales: {
       r: {
         angleLines: { color: "#cbd5e1", lineWidth: 1 },
@@ -88,7 +88,10 @@ export default function RolesSpider() {
         suggestedMin: 0,
         suggestedMax: 5,
         ticks: { stepSize: 1, backdropColor: "transparent", color: "#475569" },
-        pointLabels: { color: "#1e293b", font: { size: 12, weight: "600" } },
+        pointLabels: {
+          color: "#1e293b",
+          font: { size: 12, weight: "bold" as const }, // <--- FIX
+        },
       },
     },
     plugins: { legend: { display: false } },
@@ -96,12 +99,10 @@ export default function RolesSpider() {
 
   return (
     <div className="space-y-12">
-      {/* Chart */}
       <div className="w-full h-[600px]">
         <Radar data={data} options={options} />
       </div>
 
-      {/* Rollenbeschreibungen nach Gruppen */}
       <div className="space-y-12">
         {groupedRoles.map((g) => (
           <div key={g.group}>
