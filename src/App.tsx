@@ -10,8 +10,8 @@ import ZooplusReOps from "@/pages/projects/ZooplusReOps";
 import ZooplusPricing from "@/pages/projects/ZooplusPricing";
 import UXMethodCards from "@/pages/projects/UXMethodCards";
 import WinningUXStrategy from "@/pages/projects/WinningUXStrategy";
-import DeleteCase from "@/pages/projects/DeleteCase"; // 👈 neu
-import AtossReOps from "@/pages/projects/AtossReOps";   // 👈 HINZUGEFÜGT
+import DeleteCase from "@/pages/projects/DeleteCase";
+import AtossReOps from "@/pages/projects/AtossReOps";
 
 // Expertise-Seiten
 import UXStrategy from "@/pages/expertise/UXStrategy";
@@ -19,6 +19,7 @@ import StrategicUXResearch from "@/pages/expertise/StrategicUXResearch";
 import ResearchOps from "@/pages/expertise/ResearchOps";
 import TeamLeadership from "@/pages/expertise/TeamLeadership";
 import ImpactMeasurement from "@/pages/expertise/ImpactMeasurement";
+import Skillmap from "@/pages/expertise/Skillmap"; // 👈 NEU hinzugefügt
 
 export default function App() {
   return (
@@ -34,8 +35,8 @@ export default function App() {
         <Route path="projects/zooplus-pricing" element={<ZooplusPricing />} />
         <Route path="projects/ux-method-cards" element={<UXMethodCards />} />
         <Route path="projects/winning-ux-strategy" element={<WinningUXStrategy />} />
-        <Route path="projects/delete-case" element={<DeleteCase />} /> {/* 👈 neu */}
-        <Route path="projects/atoss-reops" element={<AtossReOps />} />   {/* 👈 HINZUGEFÜGT */}
+        <Route path="projects/delete-case" element={<DeleteCase />} />
+        <Route path="projects/atoss-reops" element={<AtossReOps />} />
 
         {/* Expertise-Routen */}
         <Route path="expertise/ux-strategy" element={<UXStrategy />} />
@@ -43,6 +44,7 @@ export default function App() {
         <Route path="expertise/researchops" element={<ResearchOps />} />
         <Route path="expertise/team-leadership" element={<TeamLeadership />} />
         <Route path="expertise/impact-measurement" element={<ImpactMeasurement />} />
+        <Route path="expertise/skillmap" element={<Skillmap />} /> {/* 👈 NEU */}
 
         {/* Fallback */}
         <Route path="*" element={<Navigate to="/" replace />} />
