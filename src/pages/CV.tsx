@@ -1,129 +1,115 @@
+// src/pages/CV.tsx
+import { H1, H2, H3, IntroText, Small } from "@/components/ui/Tokens";
+import { layout, sectionSpacing, spacing, colors } from "@/lib/tokens";
+import { cn } from "@/lib/utils";
+
 export default function CV() {
   return (
     <main className="min-h-screen bg-background text-foreground">
-      {/* Header */}
-      <section className="container-responsive py-14 md:py-20 border-b border-border">
-        <h1 className="text-4xl md:text-5xl font-extrabold leading-tight tracking-tight">
-          Curriculum Vitae
-        </h1>
-        <p className="mt-3 text-muted-foreground max-w-3xl">
+      <section
+        className={cn(layout.container, sectionSpacing.lg, "border-b", colors.border)}
+      >
+        <H1>Curriculum Vitae</H1>
+        <IntroText className="max-w-3xl">
           UX Research Leadership · Strategy · ResearchOps · Impact Measurement
-        </p>
+        </IntroText>
       </section>
 
-      {/* Content Grid */}
-      <section className="container-responsive py-12 grid gap-12 md:grid-cols-[0.8fr_1.2fr]">
-        {/* Sidebar */}
+      <section
+        className={cn(
+          layout.container,
+          sectionSpacing.md,
+          "grid gap-12 md:grid-cols-[0.8fr_1.2fr]"
+        )}
+      >
         <aside className="space-y-10">
-          {/* Strengths */}
           <div>
-            <h2 className="text-xl font-bold">Strengths & Focus</h2>
-            <ul className="mt-3 space-y-2 text-muted-foreground text-sm">
-              <li>Approach: Asking the right questions, clarity in research</li>
-              <li>Expertise: Mixed-methods, strategy alignment, ResearchOps</li>
-              <li>Engagement: Empowering teams, stakeholder collaboration</li>
+            <H2>Strengths &amp; Focus</H2>
+            <ul className={cn(spacing.mt3, spacing.stackSm)}>
+              <Small>Approach: Asking the right questions, clarity in research</Small>
+              <Small>Expertise: Mixed-methods, strategy alignment, ResearchOps</Small>
+              <Small>Engagement: Empowering teams, stakeholder collaboration</Small>
             </ul>
           </div>
 
-          {/* Tools */}
           <div>
-            <h2 className="text-xl font-bold">Tools</h2>
-            <ul className="mt-3 space-y-2 text-muted-foreground text-sm">
-              <li>Testing: Maze, Lookback, UserZoom</li>
-              <li>Design & Collaboration: Figma, Miro, Jira, Confluence</li>
-              <li>Survey & Quant: Qualtrics, Alchemer, Excel, R, SPSS</li>
+            <H2>Tools</H2>
+            <ul className={cn(spacing.mt3, spacing.stackSm)}>
+              <Small>Testing: Maze, Lookback, UserZoom</Small>
+              <Small>Design &amp; Collaboration: Figma, Miro, Jira, Confluence</Small>
+              <Small>Survey &amp; Quant: Qualtrics, Alchemer, Excel, R, SPSS</Small>
             </ul>
           </div>
 
-          {/* Education */}
           <div>
-            <h2 className="text-xl font-bold">Education</h2>
-            <ul className="mt-3 space-y-2 text-muted-foreground text-sm">
+            <H2>Education</H2>
+            <ul className={cn(spacing.mt3, spacing.stackSm)}>
               <li>
-                <strong>Master of Science in Economics</strong>  
-                University of Regensburg, 2014
+                <strong>Master of Science in Economics</strong> <br />
+                <Small>University of Regensburg, 2014</Small>
               </li>
               <li>
-                <strong>Bachelor of Science in Economics</strong>  
-                University of Regensburg, 2012
+                <strong>Bachelor of Science in Economics</strong> <br />
+                <Small>University of Regensburg, 2012</Small>
               </li>
             </ul>
           </div>
 
-          {/* Supported by */}
           <div>
-            <h2 className="text-xl font-bold">Supported by</h2>
-            <ul className="mt-3 space-y-2 text-muted-foreground text-sm">
-              <li>ResearchOps Community</li>
-              <li>Experience Leadership Club</li>
+            <H2>Supported by</H2>
+            <ul className={cn(spacing.mt3, spacing.stackSm)}>
+              <Small>ResearchOps Community</Small>
+              <Small>Experience Leadership Club</Small>
             </ul>
           </div>
         </aside>
 
-        {/* Experience */}
         <div className="space-y-12">
-          <div>
-            <h2 className="text-xl font-bold">Professional Experience</h2>
-          </div>
+          <H2>Professional Experience</H2>
 
-          {/* ATOSS */}
           <div>
-            <h3 className="font-semibold">
-              Lead UX Research (Freelance) — ATOSS · Jan 2025 – May 2025
-            </h3>
-            <ul className="mt-2 text-sm text-muted-foreground space-y-1">
-              <li>Established research strategy and ResearchOps practices</li>
-              <li>Ran discovery and usability studies across enterprise software</li>
-              <li>Collaborated with product and design leadership on UX maturity</li>
+            <H3>Lead UX Research (Freelance) — ATOSS · Jan 2025 – May 2025</H3>
+            <ul className={cn(spacing.mt2, spacing.stackXs)}>
+              <Small>Established research strategy and ResearchOps practices</Small>
+              <Small>Ran discovery and usability studies across enterprise software</Small>
+              <Small>Collaborated with product and design leadership on UX maturity</Small>
             </ul>
           </div>
 
-          {/* zooplus */}
           <div>
-            <h3 className="font-semibold">
-              Lead UX Research — zooplus · Jul 2022 – Dec 2024
-            </h3>
-            <ul className="mt-2 text-sm text-muted-foreground space-y-1">
-              <li>Built and scaled ResearchOps framework and governance</li>
-              <li>Conducted mixed-methods studies (conjoint, MaxDiff, usability)</li>
-              <li>Led Communities of Practice and mentored junior researchers</li>
-              <li>Aligned research roadmap with OKRs and product vision</li>
+            <H3>Lead UX Research — zooplus · Jul 2022 – Dec 2024</H3>
+            <ul className={cn(spacing.mt2, spacing.stackXs)}>
+              <Small>Built and scaled ResearchOps framework and governance</Small>
+              <Small>Conducted mixed-methods studies (conjoint, MaxDiff, usability)</Small>
+              <Small>Led Communities of Practice and mentored junior researchers</Small>
+              <Small>Aligned research roadmap with OKRs and product vision</Small>
             </ul>
           </div>
 
-          {/* Swiss Life */}
           <div>
-            <h3 className="font-semibold">
-              Senior UX Researcher — Swiss Life · May 2020 – Jun 2022
-            </h3>
-            <ul className="mt-2 text-sm text-muted-foreground space-y-1">
-              <li>Planned and executed strategic research in B2B2C domain</li>
-              <li>Delivered insights to de-risk product decisions</li>
-              <li>Embedded user voice into strategy through qualitative & quantitative methods</li>
+            <H3>Senior UX Researcher — Swiss Life · May 2020 – Jun 2022</H3>
+            <ul className={cn(spacing.mt2, spacing.stackXs)}>
+              <Small>Planned and executed strategic research in B2B2C domain</Small>
+              <Small>Delivered insights to de-risk product decisions</Small>
+              <Small>Embedded user voice into strategy through qualitative &amp; quantitative methods</Small>
             </ul>
           </div>
 
-          {/* Kaiser X Labs */}
           <div>
-            <h3 className="font-semibold">
-              UX Researcher — Kaiser X Labs (Allianz) · Aug 2018 – Apr 2020
-            </h3>
-            <ul className="mt-2 text-sm text-muted-foreground space-y-1">
-              <li>Supported product teams with discovery and evaluative research</li>
-              <li>Applied Design Thinking methods in innovation context</li>
-              <li>Ran usability testing and interviews with cross-national participants</li>
+            <H3>UX Researcher — Kaiser X Labs (Allianz) · Aug 2018 – Apr 2020</H3>
+            <ul className={cn(spacing.mt2, spacing.stackXs)}>
+              <Small>Supported product teams with discovery and evaluative research</Small>
+              <Small>Applied Design Thinking methods in innovation context</Small>
+              <Small>Ran usability testing and interviews with cross-national participants</Small>
             </ul>
           </div>
 
-          {/* empiriecom */}
           <div>
-            <h3 className="font-semibold">
-              UX Researcher — empiriecom (BAUR/OTTO Group) · Feb 2016 – Jul 2018
-            </h3>
-            <ul className="mt-2 text-sm text-muted-foreground space-y-1">
-              <li>Delivered UX insights for e-commerce platforms</li>
-              <li>Developed survey designs, user interviews, and analytics reports</li>
-              <li>Collaborated with designers and PMs on product improvements</li>
+            <H3>UX Researcher — empiriecom (BAUR/OTTO Group) · Feb 2016 – Jul 2018</H3>
+            <ul className={cn(spacing.mt2, spacing.stackXs)}>
+              <Small>Delivered UX insights for e-commerce platforms</Small>
+              <Small>Developed survey designs, user interviews, and analytics reports</Small>
+              <Small>Collaborated with designers and PMs on product improvements</Small>
             </ul>
           </div>
         </div>

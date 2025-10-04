@@ -1,0 +1,58 @@
+ich gebe dir den code zu meiner ux resarch portfolio website in 4 blöcken danach das designsystem dazu dann die ordnerstktur in der die seite aufgebaut ist und einen promt bitt noch nichtgs dazu sagen, abwarten
+
+
+zunächst, schau dir den code in den 4 blöcken genau an, den musst du kennen, denn das ist die basis mit der wir jetzt arbeiten werden, wenn du änderungen machst
+
+wichtig, wenn wir änderungen in den codes machen, dann nur für die betreffende stelle, bitte nicht eigensändig dinge ändern, von denen ich dann nichts weiß0, das endet im chaos, also nicht eigenmächtig handeln
+
+du kennst jetzt den code, die files, die file namen, die ordnerstktur wo diese liegen
+das design system und weißt sicher was wir als nächstes in angriff nehmen müssen
+
+ich schlage vor wir stellen sicher, dass auch die anderen pages die tokens nutzen und als sections eingeteilt werden.
+
+
+
+
+Prompt für zukünftige Nutzung:
+
+Kontext:
+Wir haben in unserem Frontend ein zentrales Design-System, das in tokens.ts liegt. Dort werden alle zentralen Tokens definiert, u.a.:
+
+Farben (colors, inklusive muted, primary, secondary, accent)
+
+Typografie (typography, z.B. subtitle, body, hero)
+
+Buttons (buttonVariants)
+
+Abstände, Rundungen, Schatten, Transitionen usw.
+
+Wir nutzen zusätzlich Tokens.tsx, also UI-Komponenten (H1, H2, Subtitle, Body, Small, ButtonPrimary, etc.), die diese Tokens referenzieren. Das erlaubt Master-Tokenisierung, d.h. alle Farb-, Größen- oder Gewicht-Änderungen werden zentral übernommen.
+
+Problemstellung:
+Aktuell gibt es Sections und Components, die nicht vollständig auf Tokens referenzieren:
+
+Farben, Gewicht oder Größe werden in manchen Sections hartkodiert (z. B. HouseDiagram, ProjectsSection).
+
+Dadurch bricht die Konsistenz und zentrale Steuerung über tokens.ts funktioniert nicht überall.
+
+Aufgabe:
+
+Gehe alle Sections und Komponenten durch.
+
+Stelle sicher, dass alle Texte und Boxen über Tokens gerendert werden (Subtitle, Body, MutedText, Tile, Card, ButtonPrimary, …).
+
+Wenn ein Token bereits existiert (z. B. typography.subtitle.color), verwende ihn immer.
+
+Nur wenn kein passendes Token existiert, darf ein eigener Style definiert werden.
+
+Alles, was direkt Tailwind-Klassen oder Hex-Farben nutzt, sollte auf die Tokens umgestellt werden.
+
+Hover-, Shadow- und Transition-Effekte ebenfalls aus den zentralen Tokens verwenden.
+
+Ziel:
+
+Vollständige Master-Tokenisierung: Farbe, Gü+ewicht, Größe, Hover-Effekte und Abstände für alle UI-Elemente zentral steuerbar.
+
+Konsistente Darstellung aller Sections, Boxen, Buttons und Texte.
+
+Nur im Ausnahmefall individuelle Stile außerhalb des Tokens-Systems.

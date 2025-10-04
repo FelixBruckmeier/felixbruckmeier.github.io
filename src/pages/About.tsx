@@ -1,56 +1,50 @@
-import React from "react";
-import { useI18n } from "@/i18n";
+// src/pages/About.tsx
+import Section from "@/components/ui/Section";
+import Tile from "@/components/ui/Tile";
+import { IntroText, Subtitle, Body } from "@/components/ui/Tokens";
+import { layout, sectionInnerSpacing } from "@/lib/tokens";
 
-const About: React.FC = () => {
-  const { t } = useI18n();
-
+export default function About() {
   return (
     <main className="min-h-screen bg-background text-foreground">
-      {/* Header */}
-      <section className="container-responsive py-14 md:py-20 border-b border-border">
-        <h1 className="text-4xl md:text-5xl font-extrabold leading-tight tracking-tight">
-          {t("about.title")}
-        </h1>
-        <p className="mt-3 text-muted-foreground max-w-3xl">{t("about.lead")}</p>
-      </section>
+      {/* Intro */}
+      <Section id="about" title="About Me">
+        <IntroText className="max-w-3xl">
+          I am a UX Research Leader with a background in econometrics and
+          product development. My work bridges qualitative depth and
+          quantitative rigor, with a focus on ResearchOps, strategy alignment,
+          and measurable impact.
+        </IntroText>
+      </Section>
 
-      {/* Kacheln */}
-      <section className="container-responsive py-12 grid gap-6 md:grid-cols-3">
-        {/* Career Interests */}
-        <div className="rounded-2xl border border-border p-6">
-          <h2 className="text-lg font-semibold">Career Interests</h2>
-          <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
-            I am passionate about scaling ResearchOps, advancing UX maturity in
-            organizations, and integrating user-centered decision making at
-            strategic levels. My interests include leadership in research,
-            triangulation of methods, and sustainable product development.
-          </p>
-        </div>
+      {/* Kacheln (static) */}
+      <Section id="about-tiles" border={false}>
+        <div className={`grid ${layout.gridCols3} ${layout.gridGap}`}>
+          <Tile variant="static">
+            <Subtitle>Career Interests</Subtitle>
+            <Body className={sectionInnerSpacing.subtitleMargin}>
+              Scaling ResearchOps, advancing UX maturity, integrating
+              user-centered decision making.
+            </Body>
+          </Tile>
 
-        {/* Background */}
-        <div className="rounded-2xl border border-border p-6">
-          <h2 className="text-lg font-semibold">Background</h2>
-          <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
-            I hold a Master’s degree in Economics from the University of Augsburg.
-            Over the past decade, I have worked across industries including
-            e-commerce, insurance, and finance, driving research strategies,
-            leading teams, and building organizational capabilities in UX
-            Research.
-          </p>
-        </div>
+          <Tile variant="static">
+            <Subtitle>Background</Subtitle>
+            <Body className={sectionInnerSpacing.subtitleMargin}>
+              Master’s degree in Economics from Augsburg, 10+ years of
+              experience in UX Research across industries.
+            </Body>
+          </Tile>
 
-        {/* Personal Note */}
-        <div className="rounded-2xl border border-border p-6">
-          <h2 className="text-lg font-semibold">Personal Note</h2>
-          <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
-            I see research as both <strong>craft and strategy</strong>: it is
-            repeatable, improvable, and essential for enabling confident,
-            user-centered product decisions.
-          </p>
+          <Tile variant="static">
+            <Subtitle>Personal Note</Subtitle>
+            <Body className={sectionInnerSpacing.subtitleMargin}>
+              I see research as both <strong>craft and strategy</strong>:
+              repeatable, improvable, and essential for confident decisions.
+            </Body>
+          </Tile>
         </div>
-      </section>
+      </Section>
     </main>
   );
-};
-
-export default About;
+}

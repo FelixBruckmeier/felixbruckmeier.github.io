@@ -8,8 +8,6 @@ import CarInsurance from "@/pages/projects/CarInsurance";
 import SwissLife from "@/pages/projects/SwissLife";
 import ZooplusReOps from "@/pages/projects/ZooplusReOps";
 import ZooplusPricing from "@/pages/projects/ZooplusPricing";
-import UXMethodCards from "@/pages/projects/UXMethodCards";
-import WinningUXStrategy from "@/pages/projects/WinningUXStrategy";
 import DeleteCase from "@/pages/projects/DeleteCase";
 import AtossReOps from "@/pages/projects/AtossReOps";
 
@@ -19,7 +17,11 @@ import StrategicUXResearch from "@/pages/expertise/StrategicUXResearch";
 import ResearchOps from "@/pages/expertise/ResearchOps";
 import TeamLeadership from "@/pages/expertise/TeamLeadership";
 import ImpactMeasurement from "@/pages/expertise/ImpactMeasurement";
-import Skillmap from "@/pages/expertise/Skillmap"; // 👈 NEU hinzugefügt
+import Skills from "@/pages/expertise/TeamLeadership/skills";
+
+// ✅ Neue Imports für Footer-Seiten
+import Imprint from "@/pages/Imprint";
+import Privacy from "@/pages/Privacy";
 
 export default function App() {
   return (
@@ -33,8 +35,6 @@ export default function App() {
         <Route path="projects/swiss-life-b2b2c" element={<SwissLife />} />
         <Route path="projects/zooplus-reops" element={<ZooplusReOps />} />
         <Route path="projects/zooplus-pricing" element={<ZooplusPricing />} />
-        <Route path="projects/ux-method-cards" element={<UXMethodCards />} />
-        <Route path="projects/winning-ux-strategy" element={<WinningUXStrategy />} />
         <Route path="projects/delete-case" element={<DeleteCase />} />
         <Route path="projects/atoss-reops" element={<AtossReOps />} />
 
@@ -43,8 +43,12 @@ export default function App() {
         <Route path="expertise/strategic-ux-research" element={<StrategicUXResearch />} />
         <Route path="expertise/researchops" element={<ResearchOps />} />
         <Route path="expertise/team-leadership" element={<TeamLeadership />} />
+        <Route path="expertise/team-leadership/skills" element={<Skills />} />
         <Route path="expertise/impact-measurement" element={<ImpactMeasurement />} />
-        <Route path="expertise/skillmap" element={<Skillmap />} /> {/* 👈 NEU */}
+
+        {/* ✅ Footer-Seiten */}
+        <Route path="imprint" element={<Imprint />} />
+        <Route path="privacy" element={<Privacy />} />
 
         {/* Fallback */}
         <Route path="*" element={<Navigate to="/" replace />} />

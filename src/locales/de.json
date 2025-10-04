@@ -41,14 +41,21 @@
         "title": "Proving ROI",
         "caption": "Wirkung messen & kommunizieren"
       }
-    ]
+    ],
+    "uxStrategy": "UX Strategy",
+    "strategicUxResearch": "Strategic UX Research",
+    "researchOps": "ResearchOps",
+    "teamLeadership": "Leadership & Mentoring",
+    "impactMeasurement": "Impact Measurement"
   },
   "projects": {
     "title": "Projects",
     "adac": "ADAC — Car Insurance Quote Flow",
     "reops": "zooplus — ResearchOps Scaling",
     "sl": "Swiss Life — B2B2C UX Research",
-    "pricing": "zooplus — Pricing Usability Testing"
+    "pricing": "zooplus — Pricing Usability Testing",
+    "deleteCase": "Delete Case — Data Deletion Flow",
+    "atossReops": "ATOSS — ResearchOps Strategy"
   },
   "cv": {
     "title": "CV",

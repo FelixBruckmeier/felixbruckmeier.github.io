@@ -7,11 +7,18 @@
       (() => {
         try {
           const stored = localStorage.getItem('theme');
-          const prefers = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          const prefers =
+            window.matchMedia &&
+            window.matchMedia('(prefers-color-scheme: dark)').matches;
           const theme = stored ?? (prefers ? 'dark' : 'light');
           const root = document.documentElement;
-          if (theme === 'dark') { root.classList.add('dark'); root.style.colorScheme = 'dark'; }
-          else { root.classList.remove('dark'); root.style.colorScheme = 'light'; }
+          if (theme === 'dark') {
+            root.classList.add('dark');
+            root.style.colorScheme = 'dark';
+          } else {
+            root.classList.remove('dark');
+            root.style.colorScheme = 'light';
+          }
         } catch {}
       })();
     </script>
