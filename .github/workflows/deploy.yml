@@ -31,10 +31,11 @@ jobs:
       - name: Build
         run: npm run build
 
+      # 👇 Hier angepasst: docs statt dist
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./dist
+          path: ./docs
 
   deploy:
     environment:
