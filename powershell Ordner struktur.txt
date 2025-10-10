@@ -1,0 +1,28 @@
+﻿# Root-Ordner
+$root = "C:\Users\felix\Documents\GitHub\felixbruckmeier.github.io"
+
+# Ausgabedatei
+$outFile = "$root\ordnerstruktur.txt"
+
+# Ordner, die ignoriert werden sollen
+$exclude = @("node_modules", ".git", ".github")
+
+# Vorherige Datei löschen, falls vorhanden
+if (Test-Path $outFile) { Remove-Item $outFile }
+
+# Root-Ordner einmal als Überschrift schreiben
+Add-Content -Path $outFile -Value (Split-Path $root -Leaf)
+
+# Inhalte rekursiv auflisten
+Get-ChildItem -Recurse -Force -Path $root |
+    Where-Object {
+        # Prüfen, ob einer der Ausschlussordner im Pfad steckt
+        -not ($_.FullName -match "\\(?:$($exclude -join '|'))(\\|$)")
+    } |
+    ForEach-Object {
+        # Relativer Pfad ab Root
+        $relative = $_.FullName.Substring($root.Length).TrimStart('\')
+        if ($relative) { Add-Content -Path $outFile -Value $relative }
+    }
+
+Write-Host "Ordnerstruktur gespeichert in: $outFile"

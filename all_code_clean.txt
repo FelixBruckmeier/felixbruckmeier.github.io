@@ -1,0 +1,2609 @@
+==== \.github\workflows\deploy.yml ====
+name: Deploy Vite site to GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+
+==== \scripts\check-missing-translations-reverse.js ====
+// scripts/translate-missing-translations.js
+// ---------------------------------------------------------
+// 🧭 Felix Bruckmeier Portfolio – OpenAI Übersetzer (EN → DE)
+// Ergänzt fehlende deutsche Übersetzungen automatisch via GPT-5
+// ---------------------------------------------------------
+
+import fs from "fs";
+import path from "path";
+import OpenAI from "openai";
+import dotenv from "dotenv";
+
+dotenv.config();
+
+const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
+// --- Pfade ---
+const localesPath = path.resolve("./src/locales");
+const enPath = path.join(localesPath, "en.json");
+const dePath = path.join(localesPath, "de.json");
+const termsPath = path.resolve("./scripts/keep-terms.json");
+
+// --- Dateien laden ---
+const en = JSON.parse(fs.readFileSync(enPath, "utf-8"));
+const de = JSON.parse(fs.readFileSync(dePath, "utf-8"));
+const keepTerms = JSON.parse(fs.readFileSync(termsPath, "utf-8"));
+
+// --- Hilfsfunktion zum Finden fehlender Keys ---
+function findMissing(base, compare, prefix = "") {
+  let missing = {};
+
+  for (const key in base) {
+    const fullKey = prefix ? `${prefix}.${key}` : key;
+    const baseValue = base[key];
+    const compareValue = compare?.[key];
+
+    if (typeof baseValue === "object" && !Array.isArray(baseValue)) {
+      const deeper = findMissing(baseValue, compareValue || {}, fullKey);
+      Object.assign(missing, deeper);
+    } else if (
+      compareValue === undefined ||
+      (typeof compareValue === "string" && compareValue.startsWith("[MISSING"))
+    ) {
+      missing[fullKey] = baseValue;
+    }
+  }
+
+  return missing;
+}
+
+const missing = findMissing(en, de);
+
+if (Object.keys(missing).length === 0) {
+  console.log("✅ Keine fehlenden Übersetzungen in de.json gefunden!");
+  process.exit(0);
+}
+
+// --- Backup ---
+const backupName = `de_backup_${new Date().toISOString().split("T")[0]}.json`;
+fs.copyFileSync(dePath, path.join(localesPath, backupName));
+console.log(`💾 Backup erstellt: ${backupName}`);
+
+// --- Prompt zusammenbauen ---
+const prompt = `
+You are a professional UX translator. 
+Translate the following JSON keys and values from English to German.
+Keep the UX, tech, and business terms in English if they appear in this list:
+${keepTerms.join(", ")}
+
+Return valid JSON with the same keys and translated values.
+Do not add comments or explanations.
+`;
+
+const textToTranslate = JSON.stringify(missing, null, 2);
+
+// --- API-Aufruf ---
+async function translate() {
+  console.log("⚙️  Sende Anfrage an OpenAI …");
+
+  const response = await client.chat.completions.create({
+    model: "gpt-4o-mini", // GPT-5-kompatibel / effizient
+    messages: [
+      { role: "system", content: prompt },
+      { role: "user", content: textToTranslate },
+    ],
+    temperature: 0.3,
+  });
+
+  const output = response.choices[0].message.content;
+
+  try {
+    const translated = JSON.parse(output);
+
+    // Übersetzungen in de.json einfügen
+    function applyTranslations(target, source, prefix = "") {
+      for (const key in source) {
+        const fullKey = prefix ? `${prefix}.${key}` : key;
+        const value = source[key];
+
+        if (typeof value === "object") {
+          if (!target[key]) target[key] = {};
+          applyTranslations(target[key], value, fullKey);
+        } else {
+          const pathParts = fullKey.split(".");
+          let ref = target;
+          for (let i = 0; i < pathParts.length - 1; i++) {
+            const part = pathParts[i];
+            if (!ref[part]) ref[part] = {};
+            ref = ref[part];
+          }
+          ref[pathParts[pathParts.length - 1]] = value;
+        }
+      }
+    }
+
+    applyTranslations(de, translated);
+
+    fs.writeFileSync(dePath, JSON.stringify(de, null, 2), "utf-8");
+
+    console.log("✅ Übersetzungen erfolgreich eingefügt!");
+    console.log(`📘 ${Object.keys(missing).length} neue Einträge wurden ergänzt.`);
+  } catch (err) {
+    console.error("❌ Fehler beim Parsen der OpenAI-Antwort:", err.message);
+    console.error("Antwort war:", output);
+  }
+}
+
+translate().catch((err) => {
+  console.error("❌ OpenAI API-Fehler:", err);
+});
+
+
+==== \scripts\check-missing-translations.js ====
+// scripts/check-missing-translations.js
+// ---------------------------------------------------------
+// 🧭 Felix Bruckmeier Portfolio – i18n Checker & Filler
+// Vergleicht en.json & de.json und fügt fehlende Keys mit Platzhaltern hinzu.
+// ---------------------------------------------------------
+
+import fs from "fs";
+import path from "path";
+
+// --- Pfade zu den Sprachdateien ---
+const localesPath = path.resolve("./src/locales");
+const enPath = path.join(localesPath, "en.json");
+const dePath = path.join(localesPath, "de.json");
+
+// --- Dateien laden ---
+const en = JSON.parse(fs.readFileSync(enPath, "utf-8"));
+const de = JSON.parse(fs.readFileSync(dePath, "utf-8"));
+
+// --- Rekursive Funktion zum Suchen & Ergänzen ---
+function fillMissingKeys(base, compare, prefix = "") {
+  let missing = [];
+
+  for (const key in base) {
+    const fullKey = prefix ? `${prefix}.${key}` : key;
+    const baseValue = base[key];
+    const compareValue = compare?.[key];
+
+    if (typeof baseValue === "object" && !Array.isArray(baseValue)) {
+      // rekursiv tiefer gehen
+      if (typeof compareValue !== "object" || Array.isArray(compareValue)) {
+        compare[key] = {};
+      }
+      const deeperMissing = fillMissingKeys(baseValue, compare[key], fullKey);
+      missing = missing.concat(deeperMissing);
+    } else if (compareValue === undefined) {
+      compare[key] = `[MISSING: ${fullKey}]`;
+      missing.push(fullKey);
+    }
+  }
+
+  return missing;
+}
+
+// --- Hauptlogik ---
+const missing = fillMissingKeys(en, de);
+
+// --- Ergebnisse speichern ---
+fs.writeFileSync(dePath, JSON.stringify(de, null, 2), "utf-8");
+
+if (missing.length === 0) {
+  console.log("✅ Alle Keys aus en.json sind bereits in de.json vorhanden!");
+} else {
+  console.log(`⚠️ ${missing.length} fehlende Übersetzungen wurden in de.json ergänzt:\n`);
+  missing.forEach((k) => console.log(" - " + k));
+  console.log("\n💡 Platzhalter wurden im Format [MISSING: key] hinzugefügt.");
+}
+
+console.log("\n✅ Fertig!");
+
+
+==== \scripts\smart-translate-optimize.js ====
+// scripts/smart-translate-optimize.js
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+import dotenv from "dotenv";
+import OpenAI from "openai";
+
+// Setup
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+dotenv.config({ path: path.join(__dirname, "..", ".env") });
+
+const localesDir = path.join(__dirname, "..", "src", "locales");
+const enPath = path.join(localesDir, "en.json");
+const dePath = path.join(localesDir, "de.json");
+const keepTermsPath = path.join(__dirname, "keep-terms.json");
+
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
+if (!process.env.OPENAI_API_KEY) {
+  console.error("❌ Kein OPENAI_API_KEY gefunden (.env im Projektroot?)");
+  process.exit(1);
+}
+
+// CLI options
+const argv = process.argv.slice(2);
+const getArg = (name) => {
+  const match = argv.find((a) => a.startsWith(`--${name}=`));
+  return match ? match.split("=")[1] : undefined;
+};
+const TARGET = getArg("target") || "de"; // de oder en
+const DRY = argv.includes("--dry");
+const PREFIX = getArg("prefix");
+
+// Load data
+const en = JSON.parse(fs.readFileSync(enPath, "utf-8"));
+const de = JSON.parse(fs.readFileSync(dePath, "utf-8"));
+const keepTerms = JSON.parse(fs.readFileSync(keepTermsPath, "utf-8"));
+
+// Utility
+const isObject = (v) => v && typeof v === "object" && !Array.isArray(v);
+
+const pathToString = (pathArr) =>
+  pathArr.map((p) => (typeof p === "number" ? `[${p}]` : p)).join(".");
+
+function getAtPath(root, pathArr) {
+  return pathArr.reduce((acc, key) => (acc ? acc[key] : undefined), root);
+}
+
+function setAtPath(root, pathArr, value) {
+  let ref = root;
+  for (let i = 0; i < pathArr.length - 1; i++) {
+    const seg = pathArr[i];
+    if (!ref[seg]) ref[seg] = typeof pathArr[i + 1] === "number" ? [] : {};
+    ref = ref[seg];
+  }
+  ref[pathArr[pathArr.length - 1]] = value;
+}
+
+function collectStrings(obj, prefix = []) {
+  const out = [];
+  for (const key in obj) {
+    const val = obj[key];
+    const pathArr = [...prefix, key];
+    if (isObject(val)) {
+      out.push(...collectStrings(val, pathArr));
+    } else if (Array.isArray(val)) {
+      val.forEach((v, i) => {
+        if (isObject(v)) out.push(...collectStrings(v, [...pathArr, i]));
+        else if (typeof v === "string") out.push({ path: [...pathArr, i], text: v });
+      });
+    } else if (typeof val === "string") {
+      out.push({ path: pathArr, text: val });
+    }
+  }
+  return out;
+}
+
+// Language detection heuristic
+function detectLang(text) {
+  if (!text) return "unknown";
+  const deWords = ["und", "der", "die", "das", "mit", "für", "auf", "ist", "nicht"];
+  const enWords = ["the", "and", "with", "for", "is", "user", "research"];
+  const deCount = deWords.filter((w) => text.toLowerCase().includes(w)).length;
+  const enCount = enWords.filter((w) => text.toLowerCase().includes(w)).length;
+  return deCount > enCount ? "de" : "en";
+}
+
+async function translateSmart(text, targetLang) {
+  const prompt = `
+You are a professional UX Research and Product Strategy editor.
+Your task:
+- Detect the language of the text.
+- If it's not in ${targetLang === "de" ? "German" : "English"}, translate it naturally and professionally.
+- If it is already in ${targetLang === "de" ? "German" : "English"}, slightly optimize tone and style for clarity.
+- Keep UX/tech terms unchanged if they appear in this list:
+${keepTerms.join(", ")}.
+- Maintain a confident, concise tone suitable for a UX portfolio.
+Return only the final ${targetLang === "de" ? "German" : "English"} text, no explanations.
+
+Text:
+${text}
+  `.trim();
+
+  const resp = await openai.responses.create({
+    model: "gpt-4o-mini",
+    input: prompt,
+    temperature: 0.3,
+  });
+
+  return resp.output_text.trim();
+}
+
+async function main() {
+  console.log(`🌍 Smart Translate → Target: ${TARGET.toUpperCase()} ${DRY ? "(Dry Run)" : ""}`);
+  const base = TARGET === "de" ? de : en;
+  const ref = TARGET === "de" ? en : de;
+
+  const all = collectStrings(base);
+  const changed = [];
+
+  for (const entry of all) {
+    if (PREFIX && !pathToString(entry.path).startsWith(PREFIX)) continue;
+
+    const text = entry.text;
+    const lang = detectLang(text);
+
+    if (!text.trim() || text.startsWith("[MISSING")) {
+      const refText = getAtPath(ref, entry.path);
+      if (!refText) continue;
+      console.log(`🔸 Missing → translating from reference: ${pathToString(entry.path)}`);
+      const translated = await translateSmart(refText, TARGET);
+      if (!DRY) setAtPath(base, entry.path, translated);
+      changed.push({ path: entry.path, from: refText, to: translated });
+    } else if ((TARGET === "de" && lang === "en") || (TARGET === "en" && lang === "de")) {
+      console.log(`🔁 Language mismatch (${lang}) → ${TARGET}: ${pathToString(entry.path)}`);
+      const translated = await translateSmart(text, TARGET);
+      if (!DRY) setAtPath(base, entry.path, translated);
+      changed.push({ path: entry.path, from: text, to: translated });
+    } else if (lang === TARGET) {
+      console.log(`✨ Optimizing style: ${pathToString(entry.path)}`);
+      const optimized = await translateSmart(text, TARGET);
+      if (!DRY) setAtPath(base, entry.path, optimized);
+      changed.push({ path: entry.path, from: text, to: optimized });
+    }
+  }
+
+  if (!DRY) {
+    const outPath = TARGET === "de" ? dePath : enPath;
+    fs.writeFileSync(outPath, JSON.stringify(base, null, 2), "utf-8");
+  }
+
+  console.log(`\n✅ ${changed.length} Einträge ${DRY ? "analysiert" : "aktualisiert"}.`);
+}
+
+main().catch((e) => {
+  console.error("❌ Fehler:", e);
+});
+
+
+==== \scripts\translate-missing-translations-dryrun.js ====
+// scripts/translate-missing-translations-dryrun.js
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+import dotenv from "dotenv";
+import OpenAI from "openai";
+
+// 🧭 ESM-kompatibles dirname ermitteln
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// 🔑 .env explizit aus dem Projektroot laden
+dotenv.config({ path: path.join(__dirname, "..", ".env") });
+
+// Testausgabe – zeigt, ob dein Key gefunden wurde
+console.log("🔑 OPENAI_API_KEY loaded:", process.env.OPENAI_API_KEY ? "✅ found" : "❌ missing");
+
+// 📁 Pfade zu Übersetzungsdateien
+const enPath = path.join(__dirname, "..", "src", "locales", "en.json");
+const dePath = path.join(__dirname, "..", "src", "locales", "de.json");
+const keepTermsPath = path.join(__dirname, "keep-terms.json");
+
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
+async function main() {
+  const en = JSON.parse(fs.readFileSync(enPath, "utf-8"));
+  const de = JSON.parse(fs.readFileSync(dePath, "utf-8"));
+  const keepTerms = JSON.parse(fs.readFileSync(keepTermsPath, "utf-8"));
+
+  console.log("🌍 Dry Run: Checking English → German translations\n");
+
+  const missing = [];
+
+  function walk(objEn, objDe, prefix = "") {
+    for (const key of Object.keys(objEn)) {
+      const fullKey = prefix ? `${prefix}.${key}` : key;
+      if (typeof objEn[key] === "object") {
+        if (!objDe[key]) objDe[key] = {};
+        walk(objEn[key], objDe[key], fullKey);
+      } else if (!objDe[key] || objDe[key].includes("[MISSING:")) {
+        missing.push({ key: fullKey, text: objEn[key] });
+      }
+    }
+  }
+
+  walk(en, de);
+
+  if (missing.length === 0) {
+    console.log("✅ No missing translations found!");
+    return;
+  }
+
+  console.log(`📝 Found ${missing.length} missing entries:\n`);
+
+  for (const m of missing) {
+    const prompt = `
+Translate the following text from English to German in a UX/product research context.
+Keep all technical or UX-related terms unchanged if they appear in the following list:
+${keepTerms.join(", ")}.
+Return only the German translation without quotes.
+
+Text:
+${m.text}
+`;
+
+    const completion = await openai.responses.create({
+      model: "gpt-4o-mini",
+      input: prompt,
+    });
+
+    const translation = completion.output_text.trim();
+
+    console.log(`🔹 ${m.key}`);
+    console.log(`   EN: ${m.text}`);
+    console.log(`   DE: ${translation}\n`);
+  }
+
+  console.log("🧪 Dry run complete — no files were modified.");
+}
+
+main().catch((err) => {
+  console.error("❌ Error during translation:", err);
+});
+
+
+==== \scripts\translate-missing-translations.js ====
+// scripts/translate-missing-translations.js
+// ---------------------------------------------------------
+// 🧭 Felix Bruckmeier Portfolio – OpenAI Übersetzer (EN → DE)
+// Ergänzt fehlende deutsche Übersetzungen automatisch via GPT-5
+// ---------------------------------------------------------
+
+import fs from "fs";
+import path from "path";
+import OpenAI from "openai";
+import dotenv from "dotenv";
+
+dotenv.config();
+
+const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
+// --- Pfade ---
+const localesPath = path.resolve("./src/locales");
+const enPath = path.join(localesPath, "en.json");
+const dePath = path.join(localesPath, "de.json");
+const termsPath = path.resolve("./scripts/keep-terms.json");
+
+// --- Dateien laden ---
+const en = JSON.parse(fs.readFileSync(enPath, "utf-8"));
+const de = JSON.parse(fs.readFileSync(dePath, "utf-8"));
+const keepTerms = JSON.parse(fs.readFileSync(termsPath, "utf-8"));
+
+// --- Hilfsfunktion zum Finden fehlender Keys ---
+function findMissing(base, compare, prefix = "") {
+  let missing = {};
+
+  for (const key in base) {
+    const fullKey = prefix ? `${prefix}.${key}` : key;
+    const baseValue = base[key];
+    const compareValue = compare?.[key];
+
+    if (typeof baseValue === "object" && !Array.isArray(baseValue)) {
+      const deeper = findMissing(baseValue, compareValue || {}, fullKey);
+      Object.assign(missing, deeper);
+    } else if (
+      compareValue === undefined ||
+      (typeof compareValue === "string" && compareValue.startsWith("[MISSING"))
+    ) {
+      missing[fullKey] = baseValue;
+    }
+  }
+
+  return missing;
+}
+
+const missing = findMissing(en, de);
+
+if (Object.keys(missing).length === 0) {
+  console.log("✅ Keine fehlenden Übersetzungen in de.json gefunden!");
+  process.exit(0);
+}
+
+// --- Backup ---
+const backupName = `de_backup_${new Date().toISOString().split("T")[0]}.json`;
+fs.copyFileSync(dePath, path.join(localesPath, backupName));
+console.log(`💾 Backup erstellt: ${backupName}`);
+
+// --- Prompt zusammenbauen ---
+const prompt = `
+You are a professional UX translator. 
+Translate the following JSON keys and values from English to German.
+Keep the UX, tech, and business terms in English if they appear in this list:
+${keepTerms.join(", ")}
+
+Return valid JSON with the same keys and translated values.
+Do not add comments or explanations.
+`;
+
+const textToTranslate = JSON.stringify(missing, null, 2);
+
+// --- API-Aufruf ---
+async function translate() {
+  console.log("⚙️  Sende Anfrage an OpenAI …");
+
+  const response = await client.chat.completions.create({
+    model: "gpt-4o-mini", // GPT-5-kompatibel / effizient
+    messages: [
+      { role: "system", content: prompt },
+      { role: "user", content: textToTranslate },
+    ],
+    temperature: 0.3,
+  });
+
+  const output = response.choices[0].message.content;
+
+  try {
+    const translated = JSON.parse(output);
+
+    // Übersetzungen in de.json einfügen
+    function applyTranslations(target, source, prefix = "") {
+      for (const key in source) {
+        const fullKey = prefix ? `${prefix}.${key}` : key;
+        const value = source[key];
+
+        if (typeof value === "object") {
+          if (!target[key]) target[key] = {};
+          applyTranslations(target[key], value, fullKey);
+        } else {
+          const pathParts = fullKey.split(".");
+          let ref = target;
+          for (let i = 0; i < pathParts.length - 1; i++) {
+            const part = pathParts[i];
+            if (!ref[part]) ref[part] = {};
+            ref = ref[part];
+          }
+          ref[pathParts[pathParts.length - 1]] = value;
+        }
+      }
+    }
+
+    applyTranslations(de, translated);
+
+    fs.writeFileSync(dePath, JSON.stringify(de, null, 2), "utf-8");
+
+    console.log("✅ Übersetzungen erfolgreich eingefügt!");
+    console.log(`📘 ${Object.keys(missing).length} neue Einträge wurden ergänzt.`);
+  } catch (err) {
+    console.error("❌ Fehler beim Parsen der OpenAI-Antwort:", err.message);
+    console.error("Antwort war:", output);
+  }
+}
+
+translate().catch((err) => {
+  console.error("❌ OpenAI API-Fehler:", err);
+});
+
+
+==== \src\assets\visuals\researchops\reopsData.ts ====
+/* eslint-disable react/no-unknown-property */
+import { reopsColors } from "@/lib/tokens";
+
+export type Area = {
+  name: string;
+  description: string;
+  recommendation: string;
+  color: string;
+};
+
+export type Stage = {
+  level: "Foundational" | "Emerging" | "Integrated" | "Optimized";
+  label: string;
+  description: string;
+  areas: Area[];
+};
+
+export const stages: Stage[] = [
+  {
+    level: "Foundational",
+    label: "Stage 1",
+    description:
+      "At the Foundational stage, research is fragmented and ad-hoc. There are few roles, responsibilities, or consistent processes. Risks arise from the lack of governance, structure, and shared visibility.",
+    areas: [
+      {
+        name: "Governance & Standards",
+        description:
+          "There are no consistent standards for ethics, privacy, or consent. Research is conducted without clear rules, which increases legal risks and reduces stakeholder trust.",
+        recommendation:
+          "Start small: create lightweight consent and privacy templates, define basic responsibilities, and raise awareness for ethical research. Small standards build trust and clarity.",
+        color: reopsColors.governance,
+      },
+      {
+        name: "People & Roles",
+        description:
+          "Research is driven by individuals. There’s no community, no onboarding, and limited shared knowledge. Work depends heavily on single experts.",
+        recommendation:
+          "Establish onboarding materials and small community formats like Lunch & Learn or internal meetups. The goal is to create a foundation for shared learning and collaboration.",
+        color: reopsColors.knowledge,
+      },
+      {
+        name: "Knowledge Management",
+        description:
+          "Insights are scattered across decks, docs, and personal drives. Findings are hard to find, disconnected, and rarely reused — knowledge gets lost quickly.",
+        recommendation:
+          "Create a single source of truth — even a simple shared folder or wiki. Ensure research is findable, documented, and accessible. That’s the first step toward reuse.",
+        color: reopsColors.participant,
+      },
+      {
+        name: "Tools & Infrastructure",
+        description:
+          "Teams use different tools, often with redundant licenses and no integration. This leads to inefficiency and higher costs.",
+        recommendation:
+          "Consolidate core tools and provide shared access. Centralize licenses to reduce costs and enable collaboration across teams.",
+        color: reopsColors.tools,
+      },
+      {
+        name: "Enablement & Training",
+        description:
+          "Processes are undocumented and inconsistent. There’s little shared understanding of what good research looks like.",
+        recommendation:
+          "Document a few repeatable workflows for recruiting, consent, or reporting. Consistency builds quality and trust.",
+        color: reopsColors.enablement,
+      },
+      {
+        name: "Culture & Advocacy",
+        description:
+          "Research has little visibility or influence. Stakeholders see it as tactical or optional rather than strategic.",
+        recommendation:
+          "Start showing value early — share small but concrete wins. Visibility is the first step toward credibility.",
+        color: reopsColors.culture,
+      },
+    ],
+  },
+  {
+    level: "Emerging",
+    label: "Stage 2",
+    description:
+      "At the Emerging stage, research gains visibility. Roles and basic standards appear, and tools become more consistent. Research starts to influence — but not yet scale.",
+    areas: [
+      {
+        name: "Governance & Standards",
+        description:
+          "Initial policies and ownership appear. Privacy and ethics are considered but not yet standardized.",
+        recommendation:
+          "Document existing policies and make them part of daily work. Assign clear ownership for governance — consistent accountability reduces risks.",
+        color: reopsColors.governance,
+      },
+      {
+        name: "People & Roles",
+        description:
+          "Communities of practice form, and training emerges. Roles are clearer, but learning remains optional.",
+        recommendation:
+          "Establish mentoring and promote UX literacy across functions. Broader research fluency reduces dependency on single experts.",
+        color: reopsColors.knowledge,
+      },
+      {
+        name: "Knowledge Management",
+        description:
+          "Repositories appear, giving partial visibility into insights. Structure and taxonomy are inconsistent.",
+        recommendation:
+          "Introduce metadata standards and tagging to improve findability. A repository must enable reuse, not just storage.",
+        color: reopsColors.participant,
+      },
+      {
+        name: "Tools & Infrastructure",
+        description:
+          "Shared tools are emerging, but integrations are missing — silos persist.",
+        recommendation:
+          "Define tool governance, security standards, and start integrating platforms to streamline research workflows.",
+        color: reopsColors.tools,
+      },
+      {
+        name: "Enablement & Training",
+        description:
+          "Researchers start collaborating and sharing methods, but operational guidance is still informal.",
+        recommendation:
+          "Create basic playbooks and operational templates for recurring tasks. Scale what works across teams.",
+        color: reopsColors.enablement,
+      },
+      {
+        name: "Culture & Advocacy",
+        description:
+          "Research becomes visible and starts connecting with business outcomes, but buy-in varies across departments.",
+        recommendation:
+          "Host research readouts and align findings to product or marketing KPIs. Relevance drives adoption.",
+        color: reopsColors.culture,
+      },
+    ],
+  },
+  {
+    level: "Integrated",
+    label: "Stage 3",
+    description:
+      "At the Integrated stage, research is recognized as a strategic capability. Roles, tools, and processes are standardized across teams, creating efficiency and impact.",
+    areas: [
+      {
+        name: "Governance & Standards",
+        description:
+          "Policies and ethical standards are well-defined and actively applied across teams.",
+        recommendation:
+          "Implement continuous improvement loops and audits to keep governance evolving with the organization.",
+        color: reopsColors.governance,
+      },
+      {
+        name: "People & Roles",
+        description:
+          "Clear career paths and ongoing development programs exist. Researchers are embedded in cross-functional teams.",
+        recommendation:
+          "Introduce certification and leadership programs to strengthen engagement and long-term growth.",
+        color: reopsColors.knowledge,
+      },
+      {
+        name: "Knowledge Management",
+        description:
+          "Centralized repositories are used daily. Insights are reused across teams and directly inform product and business decisions.",
+        recommendation:
+          "Automate tagging, reporting, and distribution of insights. Connect knowledge systems to product roadmaps.",
+        color: reopsColors.participant,
+      },
+      {
+        name: "Tools & Infrastructure",
+        description:
+          "Central toolchains are integrated and secure. Workflows are efficient and collaborative.",
+        recommendation:
+          "Evaluate scalability and new technologies regularly to maintain a future-proof tool ecosystem.",
+        color: reopsColors.tools,
+      },
+      {
+        name: "Enablement & Training",
+        description:
+          "Training and onboarding are structured and inclusive. ResearchOps roles support all teams.",
+        recommendation:
+          "Evolve enablement into continuous learning — shared documentation, advanced tool training, and data literacy.",
+        color: reopsColors.enablement,
+      },
+      {
+        name: "Culture & Advocacy",
+        description:
+          "Research is part of roadmaps and OKRs. Cross-functional collaboration is natural.",
+        recommendation:
+          "Embed research into strategy discussions and quarterly reviews. This cements its value at leadership level.",
+        color: reopsColors.culture,
+      },
+    ],
+  },
+  {
+    level: "Optimized",
+    label: "Stage 4",
+    description:
+      "At the Optimized stage, research is fully embedded, continuously improved, and drives competitive advantage. ResearchOps is proactive and visionary.",
+    areas: [
+      {
+        name: "Governance & Standards",
+        description:
+          "Governance is part of company culture. Standards evolve through active feedback and benchmarking.",
+        recommendation:
+          "Use peer reviews and external benchmarks to ensure governance remains adaptive and innovative.",
+        color: reopsColors.governance,
+      },
+      {
+        name: "People & Roles",
+        description:
+          "A strong, distributed research community exists. Leadership in research is visible internally and externally.",
+        recommendation:
+          "Promote thought leadership and external speaking opportunities to elevate credibility and attract talent.",
+        color: reopsColors.knowledge,
+      },
+      {
+        name: "Knowledge Management",
+        description:
+          "Repositories integrate predictive analytics and AI for trend detection and proactive decision support.",
+        recommendation:
+          "Leverage automation and data modeling to forecast user needs and influence long-term strategy.",
+        color: reopsColors.participant,
+      },
+      {
+        name: "Tools & Infrastructure",
+        description:
+          "Toolchains are global, automated, and adaptive. Efficiency and reliability are maximized.",
+        recommendation:
+          "Continuously pilot emerging technologies to ensure flexibility and innovation readiness.",
+        color: reopsColors.tools,
+      },
+      {
+        name: "Enablement & Training",
+        description:
+          "Learning is continuous, embedded in daily work, and supported by Ops leadership.",
+        recommendation:
+          "Establish global knowledge-sharing programs and rotational Ops roles to sustain expertise.",
+        color: reopsColors.enablement,
+      },
+      {
+        name: "Culture & Advocacy",
+        description:
+          "Research is a strategic driver for innovation and differentiation. The organization is insight-led by design.",
+        recommendation:
+          "Celebrate research impact widely — through stories, dashboards, and executive alignment. Culture is the flywheel.",
+        color: reopsColors.culture,
+      },
+    ],
+  },
+];
+
+
+
+==== \src\assets\visuals\teamleadership\skillassessment\skillAssessmentData.ts ====
+export const themes: Record<string, { name: string; description: string }[]> = {
+  "Coordination & Data Management": [
+    { name: "Data Capture", description: "Daten systematisch erfassen, dokumentieren und strukturieren." },
+    { name: "Well-Managed Data", description: "Rohdaten klar organisieren, sodass sie nachvollziehbar und wiederverwendbar bleiben." },
+  ],
+  "Evaluative Testing": [
+    { name: "Heuristic Analysis", description: "Interface anhand etablierter Heuristiken bewerten." },
+    { name: "Usability Test", description: "Gezielte Tests zur Identifikation von Problemen und Chancen." },
+  ],
+};
+
+export const themeColors: Record<string, string> = {
+  "Coordination & Data Management": "#E8ECF7",
+  "Evaluative Testing": "#EAF7F1",
+  "Debrief & Analysis": "#FFF3E6",
+  "Interview Planning & Execution": "#E9F2FF",
+  "Basic Quantitative Work": "#F9E8EE",
+  "Synthesis": "#F2F0FA",
+  "Stakeholder Engagement": "#FFD6E0",
+  "Structured Modeling": "#E0F7FA",
+  "Integration in Service Delivery": "#FCE4EC",
+  "Broadcasting": "#FFF9C4",
+  "Business Alignment": "#DCEDC8",
+  "Amplify the Practice": "#D1C4E9",
+  "Strategic Direction": "#B3E5FC",
+};
+
+
+==== \src\assets\visuals\teamleadership\skillassessment\SkillmapChart.tsx ====
+import {
+  ScatterChart,
+  Scatter,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  Label,
+} from "recharts";
+import Tile from "@/components/ui/Tile";
+import { Body, Subtitle } from "@/components/ui/Tokens";
+import { colors, layout, radii, spacing } from "@/lib/tokens";
+import { themeColors } from "@/lib/SkillmapColors";
+import { useEffect, useState } from "react";
+
+interface SkillmapChartProps {
+  data: {
+    theme: string;
+    mastery: number;
+    influence: number;
+  }[];
+}
+
+/**
+ * Responsive Skillmap Chart
+ * - X = Skill Level (0–4)
+ * - Y = Relevance (0–5)
+ * - On smaller screens, height and spacing shrink dynamically
+ */
+export default function SkillmapChart({ data }: SkillmapChartProps) {
+  const [chartHeight, setChartHeight] = useState(520);
+  const [yTicks, setYTicks] = useState<number[]>([0, 1, 2, 3, 4, 5]);
+
+  // Dynamically adjust Y-axis visual spacing for screen size
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 640) {
+        setChartHeight(360);
+        setYTicks([0, 1, 2, 3, 4, 5]);
+      } else if (window.innerWidth < 1024) {
+        setChartHeight(440);
+        setYTicks([0, 1, 2, 3, 4, 5]);
+      } else {
+        setChartHeight(520);
+        setYTicks([0, 1, 2, 3, 4, 5]); // same ticks, just more vertical space
+      }
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  if (!data || !data.length) return null;
+
+  return (
+    <Tile
+      variant="static"
+      className={`${layout.fullWidth} ${spacing.p8} ${radii.xl} ${colors.tile.bg} ${colors.tile.text} ${spacing.mb12}`}
+    >
+      <div className={`${layout.flexColCenter} ${spacing.blockGapMd}`}>
+        <Subtitle>Skillmap Overview</Subtitle>
+        <Body className="text-muted-foreground max-w-text text-center">
+          Average scores per topic – plotted along{" "}
+          <strong>Skill Level (X)</strong> and{" "}
+          <strong>Relevance (Y)</strong> dimensions.
+        </Body>
+      </div>
+
+      <div
+        className={`${spacing.mt10} ${layout.fullWidth}`}
+        style={{ height: chartHeight }}
+      >
+        <ResponsiveContainer width="100%" height="100%">
+          <ScatterChart
+            margin={{
+              top: 30,
+              right: 40,
+              left: 50,
+              bottom: 50,
+            }}
+          >
+            {/* === Grid === */}
+            <CartesianGrid strokeDasharray="3 3" stroke="#d1d5db" strokeWidth={1.2} />
+
+            {/* === X-Axis === */}
+            <XAxis
+              type="number"
+              dataKey="mastery"
+              name="Skill Level"
+              domain={[0, 4]}
+              tickCount={5}
+              tickLine={false}
+              axisLine={{ stroke: "#9ca3af", strokeWidth: 1.5 }}
+              tick={{ fontSize: 12, fill: "#6b7280" }}
+            >
+              <Label
+                value="Skill Level"
+                offset={-25}
+                position="insideBottom"
+                style={{
+                  fill: "#374151",
+                  fontSize: 14,
+                  fontWeight: 600,
+                  fontFamily: "var(--font-sans)",
+                }}
+              />
+            </XAxis>
+
+            {/* === Y-Axis (fixed domain 0–5, but taller chart = bigger spacing) === */}
+            <YAxis
+              type="number"
+              dataKey="influence"
+              name="Relevance"
+              domain={[0, 5]}
+              ticks={yTicks}
+              tickLine={false}
+              axisLine={{ stroke: "#9ca3af", strokeWidth: 1.5 }}
+              tick={{ fontSize: 12, fill: "#6b7280" }}
+            >
+              <Label
+                value="Relevance"
+                angle={-90}
+                position="insideLeft"
+                style={{
+                  fill: "#374151",
+                  fontSize: 14,
+                  fontWeight: 600,
+                  fontFamily: "var(--font-sans)",
+                }}
+              />
+            </YAxis>
+
+            {/* === Tooltip === */}
+            <Tooltip
+              cursor={{ strokeDasharray: "3 3", strokeWidth: 1 }}
+              contentStyle={{
+                backgroundColor: "#ffffff",
+                borderRadius: "12px",
+                border: "1px solid #e5e7eb",
+                boxShadow: "0 4px 8px rgba(0,0,0,0.06)",
+                padding: "10px 14px",
+              }}
+              formatter={(value, name, props) => [
+                value?.toFixed ? value.toFixed(2) : value,
+                name === "mastery"
+                  ? "Skill Level"
+                  : name === "influence"
+                  ? "Relevance"
+                  : props.payload.theme,
+              ]}
+            />
+
+            {/* === Points (theme colors) === */}
+            {Object.entries(themeColors).map(([theme, colorSet]) => (
+              <Scatter
+                key={theme}
+                name={theme}
+                data={data.filter((d) => d.theme === theme)}
+                fill={colorSet.hex}
+                stroke={colorSet.hex}
+                strokeWidth={1.5}
+                r={8}
+              />
+            ))}
+          </ScatterChart>
+        </ResponsiveContainer>
+      </div>
+    </Tile>
+  );
+}
+
+
+==== \src\assets\visuals\teamleadership\skillassessment\SkillmapColors.ts ====
+// src/components/skillmap/SkillmapColors.ts
+import { colors } from "@/lib/tokens";
+
+export const themeColors: Record<string, string> = {
+  "Coordination & Data Management": colors.notion.gray.bg,
+  "Evaluative Testing": colors.notion.orange.bg,
+  "Debrief & Analysis": colors.notion.brown.bg,
+  "Interview Planning & Execution": colors.notion.blue.bg,
+  "Basic Quantitative Work": colors.notion.yellow.bg,
+  Synthesis: colors.notion.purple.bg,
+  "Stakeholder Engagement": colors.notion.pink.bg,
+  "Structured Modeling": colors.notion.green.bg,
+  "Integration in Service Delivery": colors.notion.default.bg,
+  Broadcasting: colors.notion.red.bg,
+  "Business Alignment": colors.notion.yellow.bg,
+  "Amplify the Practice": colors.notion.purple.bg,
+  "Strategic Direction": colors.notion.orange.bg,
+};
+
+
+==== \src\assets\visuals\teamleadership\skillassessment\SkillmapForm.tsx ====
+import { useState } from "react";
+import { ChevronDown, ChevronUp } from "lucide-react";
+import jsPDF from "jspdf";
+import { Subtitle, MutedText } from "@/components/ui/Tokens"; 
+import { cn } from "@/lib/utils";
+
+const roleProfiles: Record<string, string[]> = {
+  Junior: [
+    "Coordination & Data Management",
+    "Evaluative Testing",
+    "Debrief & Analysis",
+    "Interview Planning & Execution",
+    "Basic Quantitative Work",
+    "Synthesis",
+    "Stakeholder Engagement",
+  ],
+  "Mid-Level": [
+    "Coordination & Data Management",
+    "Evaluative Testing",
+    "Debrief & Analysis",
+    "Interview Planning & Execution",
+    "Basic Quantitative Work",
+    "Synthesis",
+    "Stakeholder Engagement",
+    "Structured Modeling",
+    "Integration in Service Delivery",
+  ],
+  Senior: [
+    "Coordination & Data Management",
+    "Evaluative Testing",
+    "Debrief & Analysis",
+    "Interview Planning & Execution",
+    "Basic Quantitative Work",
+    "Synthesis",
+    "Stakeholder Engagement",
+    "Structured Modeling",
+    "Integration in Service Delivery",
+    "Broadcasting",
+    "Business Alignment",
+  ],
+  Lead: [
+    "Coordination & Data Management",
+    "Evaluative Testing",
+    "Debrief & Analysis",
+    "Interview Planning & Execution",
+    "Basic Quantitative Work",
+    "Synthesis",
+    "Stakeholder Engagement",
+    "Structured Modeling",
+    "Integration in Service Delivery",
+    "Broadcasting",
+    "Business Alignment",
+    "Amplify the Practice",
+    "Strategic Direction",
+  ],
+  Individuell: [],
+};
+
+const themes: Record<string, { name: string; description: string }[]> = {
+  "Coordination & Data Management": [
+    { name: "Data Capture", description: "Daten systematisch erfassen, dokumentieren und strukturieren." },
+    { name: "Well-Managed Data", description: "Rohdaten klar organisieren, sodass sie nachvollziehbar und wiederverwendbar bleiben." },
+  ],
+  "Evaluative Testing": [
+    { name: "Heuristic Analysis", description: "Interface anhand etablierter Heuristiken bewerten." },
+    { name: "Usability Test", description: "Gezielte Tests, um Nutzerfreundlichkeit und Probleme zu erkennen." },
+    { name: "Information Architecture Study", description: "Struktur und Navigation von Inhalten untersuchen." },
+    { name: "Concept Test", description: "Ideen und Prototypen frühzeitig mit Nutzern validieren." },
+    { name: "Bug & Defect Tracking", description: "Nutzungsprobleme und Fehler dokumentieren und nachverfolgen." },
+  ],
+  "Debrief & Analysis": [
+    { name: "Interview Debrief", description: "Nach Interviews Erkenntnisse austauschen und sichern." },
+    { name: "Video Analysis", description: "Videoaufzeichnungen systematisch analysieren." },
+    { name: "Affinity Map", description: "Ergebnisse clustern, um Muster und Themen sichtbar zu machen." },
+    { name: "Data Wall", description: "Visuelle Datenpunkte zur gemeinsamen Synthese im Team nutzen." },
+  ],
+  "Interview Planning & Execution": [
+    { name: "Study Plan", description: "Ablauf und Ziele einer Studie planen und dokumentieren." },
+    { name: "Participant Segments & Screening", description: "Zielgruppen definieren und passende Teilnehmer auswählen." },
+    { name: "User Interview", description: "Gespräche führen, um Einblicke in Nutzerbedürfnisse zu gewinnen." },
+    { name: "Field Interview", description: "Interviews im Nutzungskontext durchführen." },
+    { name: "Experience Sample / Diary Study", description: "Langfristige Studien, in denen Nutzer ihre Erlebnisse festhalten." },
+    { name: "Interview Protocol", description: "Leitfaden für Interviews entwickeln und einsetzen." },
+    { name: "Actionable Research Question", description: "Forschungsfragen formulieren, die konkrete Handlungen ermöglichen." },
+  ],
+  "Basic Quantitative Work": [
+    { name: "Surveys & Questionnaires", description: "Fragebögen entwickeln und auswerten." },
+    { name: "Exploratory Quantitative Analysis", description: "Zahlen und Metriken untersuchen, um Muster zu erkennen." },
+    { name: "Product Analytics", description: "Nutzungsdaten analysieren, um Verhalten zu verstehen." },
+  ],
+  Synthesis: [
+    { name: "Exploratory Research", description: "Neue Themenbereiche untersuchen, um Chancen zu identifizieren." },
+    { name: "Exploratory Qualitative Analysis", description: "Qualitative Daten interpretieren und in Erkenntnisse überführen." },
+    { name: "Journey Map", description: "Erfahrungen entlang der Customer Journey visualisieren." },
+    { name: "Sensemaking Workshop", description: "Im Team Daten reflektieren und Muster ableiten." },
+    { name: "Conceptual Model", description: "Abstrakte Modelle entwickeln, um komplexe Systeme zu erklären." },
+  ],
+  "Stakeholder Engagement": [
+    { name: "Stakeholder Interview", description: "Interviews mit Stakeholdern zur Klärung von Annahmen und Zielen." },
+    { name: "Stakeholder Assumption Workshop", description: "Workshops, um Hypothesen und Annahmen gemeinsam zu prüfen." },
+  ],
+  "Structured Modeling": [
+    { name: "Service Blueprint", description: "Darstellung von Abläufen und Berührungspunkten einer Dienstleistung." },
+    { name: "User Personas", description: "Typische Nutzerprofile erstellen, um Bedürfnisse zu repräsentieren." },
+    { name: "Jobs to be Done", description: "Analyse der ‚Aufgaben‘, die Nutzer mit Produkten lösen wollen." },
+  ],
+  "Integration in Service Delivery": [
+    { name: "Research-Driven Design Project", description: "Designentscheidungen durch Forschungsergebnisse leiten." },
+    { name: "A/B Test", description: "Varianten von Produkten testen und vergleichen." },
+    { name: "Beta Test", description: "Produkt vor Veröffentlichung mit realen Nutzern testen." },
+    { name: "Development Cycle Coupling", description: "Research in agile Entwicklungszyklen integrieren." },
+    { name: "Design Sprint", description: "Kurze Innovationszyklen mit Nutzerfeedback verbinden." },
+    { name: "Cadenced User Studies", description: "Regelmäßig wiederkehrende Nutzerstudien durchführen." },
+  ],
+  Broadcasting: [
+    { name: "Effective Reporting", description: "Ergebnisse klar und überzeugend kommunizieren." },
+    { name: "Research Evangelization", description: "Research sichtbar machen und für dessen Wert werben." },
+  ],
+  "Business Alignment": [
+    { name: "Customer Advisory Council", description: "Kunden regelmäßig einbeziehen, um Feedback zu sichern." },
+    { name: "Front-Line Collaboration", description: "Mit Kundensupport oder Vertrieb zusammenarbeiten, um Insights zu gewinnen." },
+  ],
+  "Amplify the Practice": [
+    { name: "Research Training", description: "Teams und Kollegen in Research-Methoden schulen." },
+    { name: "Public Project Index", description: "Zentrale Übersicht über Forschungsprojekte bereitstellen." },
+  ],
+  "Strategic Direction": [
+    { name: "Product Roadmap", description: "Forschung in langfristige Produktplanung einbringen." },
+    { name: "User Needs Inception", description: "Grundlegende Nutzerbedürfnisse frühzeitig erfassen." },
+    { name: "Product & Design Strategy", description: "Forschungsergebnisse in strategische Ausrichtungen übersetzen." },
+  ],
+};
+
+export default function SkillmapForm({ onDataChange }: { onDataChange: (data: any[]) => void }) {
+  const [ratings, setRatings] = useState<{ [key: string]: { mastery: number | null; relevance: number | null } }>({});
+  const [openSkill, setOpenSkill] = useState<string | null>(null);
+  const [role, setRole] = useState<string>("");
+  const [aggregatedData, setAggregatedData] = useState<any[] | null>(null);
+
+  const masteryScale = [0, 1, 2, 3, 4];
+  const relevanceScale = [0, 1, 2, 3, 4, 5];
+
+  const handleChange = (skill: string, type: "mastery" | "relevance", value: number) => {
+    setRatings((prev) => ({
+      ...prev,
+      [skill]: { ...prev[skill], [type]: value },
+    }));
+  };
+
+  // ✅ Nur noch Rollenpflicht, keine Pflicht zur Bewertung
+  const isComplete = () => !!role;
+
+  const generateMap = () => {
+    const requiredThemes = role === "Individuell" ? Object.keys(themes) : roleProfiles[role];
+    const aggregated = requiredThemes.map((theme) => {
+      const skills = themes[theme] || [];
+      const avgMastery =
+        skills.filter((s) => ratings[s.name]?.mastery !== null).reduce((sum, s) => sum + (ratings[s.name]?.mastery || 0), 0) /
+        skills.length;
+      const avgRelevance =
+        skills.filter((s) => ratings[s.name]?.relevance !== null).reduce((sum, s) => sum + (ratings[s.name]?.relevance || 0), 0) /
+        skills.length;
+      return { theme, mastery: avgMastery || 0, influence: avgRelevance || 0 };
+    });
+    setAggregatedData(aggregated);
+    onDataChange(aggregated);
+  };
+
+  const downloadPDF = () => {
+    if (!aggregatedData) return;
+    const doc = new jsPDF();
+    doc.setFontSize(18);
+    doc.text("Skillmap Ergebnis", 14, 20);
+    doc.setFontSize(12);
+    doc.text(`Rolle: ${role}`, 14, 30);
+    let y = 40;
+    doc.setFont("helvetica", "bold");
+    doc.text("Thema", 14, y);
+    doc.text("Mastery", 100, y);
+    doc.text("Relevanz", 150, y);
+    doc.setFont("helvetica", "normal");
+    y += 10;
+    aggregatedData.forEach((d) => {
+      doc.text(d.theme, 14, y);
+      doc.text(d.mastery.toFixed(2), 100, y);
+      doc.text(d.influence.toFixed(2), 150, y);
+      y += 10;
+      if (y > 270) {
+        doc.addPage();
+        y = 20;
+      }
+    });
+    doc.save("skillmap.pdf");
+  };
+
+  return (
+    <div className="space-y-8 px-4 sm:px-6 md:px-0 md:mx-auto md:max-w-4xl">
+      {/* Rollen-Auswahl */}
+      <div className="mb-6 space-y-2">
+        <label className="block font-medium">Bitte wähle deine Rolle:</label>
+        <select value={role} onChange={(e) => setRole(e.target.value)} className="border rounded-lg px-3 py-2">
+          <option value="">-- Rolle auswählen --</option>
+          {Object.keys(roleProfiles).map((r) => (
+            <option key={r} value={r}>{r}</option>
+          ))}
+        </select>
+      </div>
+
+      {/* Erklärung */}
+      {role && (
+        <p className="text-gray-700 mt-4">
+          Bitte bewerten Sie die folgenden Skills und Aufgabengebiete: <br />
+          <strong>Mastery:</strong> 0 = keine Kenntnisse, 1 = Grundkenntnisse, 2 = arbeitet unter Anleitung, 3 = selbstständig, 4 = Experte. <br />
+          <strong>Relevanz:</strong> 0 = nicht relevant, 5 = sehr hohe Relevanz für Ihre Rolle/Aufgaben.
+        </p>
+      )}
+
+      {/* Skills */}
+      {role &&
+        (role === "Individuell" ? Object.entries(themes) : Object.entries(themes).filter(([theme]) => roleProfiles[role].includes(theme))).map(([theme, skills]) => (
+          <div key={theme} className="space-y-6 md:px-0 px-2">
+            <Subtitle className="mb-1">{theme}</Subtitle>
+
+            {/* Labels Desktop */}
+            <div className="hidden md:grid grid-cols-2 gap-8 w-2/3 ml-auto mb-2">
+              <div className="text-center text-sm font-medium text-gray-600">Mastery</div>
+              <div className="text-center text-sm font-medium text-gray-600">Relevanz</div>
+            </div>
+
+            {skills.map((skill) => (
+              <div key={skill.name} className="pb-4">
+                <div
+                  className="flex flex-col md:flex-row justify-between items-start md:items-center cursor-pointer gap-4"
+                  onClick={() => setOpenSkill(openSkill === skill.name ? null : skill.name)}
+                >
+                  <div className="flex items-center justify-between w-full md:w-1/3">
+                    <MutedText className="font-medium truncate" title={skill.name}>{skill.name}</MutedText>
+                    {openSkill === skill.name ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full md:w-2/3">
+                    {/* Mastery */}
+                    <div className="flex flex-col items-center w-full">
+                      <span className="text-xs text-gray-500 md:hidden mb-1">Mastery</span>
+                      <div className="flex gap-2 justify-center w-full flex-nowrap overflow-x-hidden">
+                        {masteryScale.map((val) => (
+                          <button
+                            key={val}
+                            type="button"
+                            onClick={(e) => { e.stopPropagation(); handleChange(skill.name, "mastery", val); }}
+                            className={`px-3 py-1 rounded-lg border text-sm whitespace-nowrap ${
+                              ratings[skill.name]?.mastery === val ? "bg-blue-600 text-white border-blue-600" : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
+                            }`}
+                          >{val}</button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Relevanz */}
+                    <div className="flex flex-col items-center w-full">
+                      <span className="text-xs text-gray-500 md:hidden mb-1">Relevanz</span>
+                      <div className="flex gap-2 justify-center w-full flex-nowrap overflow-x-hidden">
+                        {relevanceScale.map((val) => (
+                          <button
+                            key={val}
+                            type="button"
+                            onClick={(e) => { e.stopPropagation(); handleChange(skill.name, "relevance", val); }}
+                            className={`px-3 py-1 rounded-lg border text-sm whitespace-nowrap ${
+                              ratings[skill.name]?.relevance === val ? "bg-green-600 text-white border-green-600" : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
+                            }`}
+                          >{val}</button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div
+                  className={cn(
+                    "transition-all duration-300 overflow-hidden",
+                    openSkill === skill.name ? "max-h-40 mt-2" : "max-h-0"
+                  )}
+                >
+                  <p className="text-sm text-gray-600">{skill.description}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        ))}
+
+      {/* Buttons */}
+      {role && (
+        <div className="flex justify-center mt-8 gap-4">
+          <button
+            onClick={generateMap}
+            disabled={!role}
+            className={`px-6 py-3 rounded-xl font-medium transition ${
+              role ? "bg-blue-600 text-white hover:bg-blue-700" : "bg-gray-300 text-gray-500 cursor-not-allowed"
+            }`}
+          >
+            Map erstellen
+          </button>
+
+          {aggregatedData && (
+            <button
+              onClick={downloadPDF}
+              className="px-6 py-3 rounded-xl font-medium bg-green-600 text-white hover:bg-green-700 transition"
+            >
+              Download PDF
+            </button>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+
+==== \src\assets\visuals\teamleadership\skillassessment\SkillmapLegend.tsx ====
+import Tile from "@/components/ui/Tile";
+import { Body, Subtitle } from "@/components/ui/Tokens";
+import { colors, layout, spacing, radii } from "@/lib/tokens";
+import { themeColors } from "@/lib/SkillmapColors";
+
+/**
+ * Legend explaining the Skillmap visualization.
+ * Shows color meaning, axis descriptions (in English), and interpretation below.
+ */
+export default function SkillmapLegend() {
+  const legendItems = Object.entries(themeColors);
+
+  return (
+    <>
+      {/* === Grey Box (Legend) === */}
+      <Tile
+        variant="static"
+        className={`${layout.fullWidth} ${spacing.p8} ${radii.xl} ${colors.tile.bg} ${colors.tile.text}`}
+      >
+        <div className={`${layout.flexCol} ${spacing.blockGapMd}`}>
+          <Subtitle>Legend & Axes</Subtitle>
+
+          <Body className="text-muted-foreground max-w-text">
+            The <strong>Skillmap</strong> shows the average of your self-assessment across key themes.
+          </Body>
+
+          {/* === Axis Explanation === */}
+          <div className={`${layout.gridCols2} ${spacing.gap6} ${spacing.mt4}`}>
+            <div>
+              <Body>
+                <strong>X-Axis: Skill Level</strong>
+              </Body>
+              <Body className="text-muted-foreground">
+                How confident you feel in a specific theme — from{" "}
+                <strong>0 (no experience)</strong> to{" "}
+                <strong>4 (expert)</strong>.
+              </Body>
+            </div>
+
+            <div>
+              <Body>
+                <strong>Y-Axis: Relevance</strong>
+              </Body>
+              <Body className="text-muted-foreground">
+                How important this theme currently is in your role — from{" "}
+                <strong>0 (not relevant)</strong> to{" "}
+                <strong>5 (very high)</strong>.
+              </Body>
+            </div>
+          </div>
+
+          {/* === Color Legend === */}
+          <div className={`${spacing.mt8}`}>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-3">
+              {legendItems.map(([label, { hex }]) => (
+                <div key={label} className={`${layout.flexBetween} ${colors.tile.text}`}>
+                  <div className="flex items-center gap-3">
+                    <span
+                      className="w-4 h-4 rounded-full border border-border"
+                      style={{ backgroundColor: hex }}
+                    />
+                    <Body>{label}</Body>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* === Note === */}
+          <div className={`${spacing.mt10} ${layout.flexColCenter}`}>
+            <Body className="text-muted-foreground text-center max-w-text">
+              Fields in the <strong>upper-right quadrant</strong> represent{" "}
+              <strong>high skill</strong> and{" "}
+              <strong>high relevance</strong> — your potential{" "}
+              <em>impact areas</em>.
+            </Body>
+          </div>
+        </div>
+      </Tile>
+
+      {/* === Interpretation (white background) === */}
+      <div className={`${spacing.mt10} bg-white py-6`}>
+        <Subtitle>How to read the Skillmap</Subtitle>
+        <Body className="text-muted-foreground max-w-text">
+          The Skillmap represents a snapshot of your current research practice — a visual reflection of
+          which skills you rely on most, and how confident you feel using them.
+          <br />
+          <br />
+          As your work evolves, your map evolves too. Early in your career,{" "}
+          <strong>methodological skills</strong> tend to rank higher in relevance, as they directly support
+          hands-on research activities. Over time, as you gain mastery and experience, these skills often{" "}
+          <strong>move rightward</strong> (higher skill) and{" "}
+          <strong>downward</strong> (less central to daily work), while{" "}
+          <strong>strategic and leadership skills</strong> rise in relevance.
+          <br />
+          <br />
+          The map therefore not only highlights your <strong>current strengths</strong>, but also hints at
+          your <strong>trajectory of growth</strong> — showing where your expertise is established, where it
+          is developing, and where new opportunities for impact may emerge.
+        </Body>
+
+        <Body className="text-sm text-muted-foreground mt-4 italic">
+          Tip: Revisit your map every few months to observe how your focus and skill relevance shift over
+          time.
+        </Body>
+
+        {/* === External Reference === */}
+        <Body className="text-sm text-muted-foreground mt-6">
+          For a deeper dive into how the Skillmap framework was developed and how to use it in your own
+          practice, visit{" "}
+          <a
+            href="https://www.researchskills.net/tool/skill-map"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-600 hover:underline"
+          >
+            researchskills.net/tool/skill-map
+          </a>
+          .
+        </Body>
+      </div>
+    </>
+  );
+}
+
+
+==== \src\assets\visuals\teamleadership\SkillProgressionChart.tsx ====
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+
+const data = [
+  { stage: "Learn", value: 3 },
+  { stage: "Practice", value: 5 },
+  { stage: "Consolidate", value: 2 },
+];
+
+export default function SkillProgressionChart() {
+  return (
+    <div className="w-full h-64">
+      <ResponsiveContainer>
+        <BarChart data={data} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
+          <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+          <XAxis dataKey="stage" />
+          <YAxis />
+          <Tooltip />
+          <Bar dataKey="value" fill="#2563eb" radius={[6, 6, 0, 0]} barSize={50} />
+        </BarChart>
+      </ResponsiveContainer>
+    </div>
+  );
+}
+
+
+==== \src\components\artefacts\DoubleDiamond.tsx ====
+import React from "react";
+import { motion } from "framer-motion";
+
+type Phase = "discover" | "define" | "develop" | "deliver";
+
+type Props = {
+  active: Phase;
+  /** Optional: kompaktere Darstellung ohne das globale Default zu ändern */
+  size?: "lg" | "md" | "sm";
+};
+
+const PRESETS = {
+  lg: {
+    bar: "h-20 md:h-32",
+    diamond: "w-14 h-14 md:w-20 md:h-20",
+    text: "text-xs md:text-sm",
+    margin: "my-12 md:my-32",
+    px: "px-6 md:px-16",
+  },
+  md: {
+    bar: "h-12 md:h-20",
+    diamond: "w-12 h-12 md:w-16 md:h-16",
+    text: "text-[11px] md:text-xs",
+    margin: "my-10 md:my-24",
+    px: "px-6 md:px-12",
+  },
+  sm: {
+    bar: "h-8 md:h-12",
+    diamond: "w-10 h-10 md:w-12 md:h-12",
+    text: "text-[10px] md:text-[11px]",
+    margin: "my-8 md:my-16",
+    px: "px-5 md:px-10",
+  },
+} as const;
+
+export default function DoubleDiamond({ active, size = "lg" }: Props) {
+  const phases: { key: Phase; label: string }[] = [
+    { key: "discover", label: "Discover" },
+    { key: "define", label: "Define" },
+    { key: "develop", label: "Develop" },
+    { key: "deliver", label: "Deliver" },
+  ];
+
+  const preset = PRESETS[size];
+
+  return (
+    <div className={`relative w-full ${preset.margin}`}>
+      {/* Balken als Trennlinie */}
+      <div
+        className={`absolute top-1/2 left-0 w-full ${preset.bar} bg-gray-100 rounded-md -translate-y-1/2`}
+      />
+
+      {/* Diamonds */}
+      <div className={`flex justify-between items-center relative ${preset.px}`}>
+        {phases.map((p) => {
+          const isActive = active === p.key;
+          return (
+            <motion.div
+              key={p.key}
+              className={`${preset.diamond} rotate-45 flex items-center justify-center border-2 shadow-sm rounded-md`}
+              animate={{
+                backgroundColor: isActive ? "#2563EB" : "#E5E7EB",
+                borderColor: isActive ? "#2563EB" : "#D1D5DB",
+                scale: isActive ? 1.15 : 1,
+              }}
+              transition={{
+                duration: 0.5,
+                delay: isActive ? 0.15 : 0,
+                ease: "easeInOut",
+                type: "spring",
+                stiffness: 200,
+                damping: 20,
+              }}
+            >
+              <span
+                className={`rotate-[-45deg] font-medium ${
+                  isActive ? "text-white" : "text-gray-600"
+                } ${preset.text}`}
+              >
+                {p.label}
+              </span>
+            </motion.div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+
+==== \src\components\common\ActionIcons.tsx ====
+// src/components/ui/ActionIcons.tsx
+import React from "react";
+import { colors } from "@/lib/tokens";
+import { cn } from "@/lib/utils";
+
+interface IconProps {
+  width?: number;
+  height?: number;
+  className?: string;
+}
+
+interface BadgeIconProps extends IconProps {
+  badgeColor?: "success" | "danger" | "accent";
+  badgeText?: string;
+}
+
+export function IconRealizeProblem({ width = 80, height = 60, className, badgeColor = "danger", badgeText = "!" }: BadgeIconProps) {
+  const fill = badgeColor === "danger" ? colors.notion.red.bg : colors.notion.green.bg;
+  return (
+    <div className={cn("flex justify-center", className)}>
+      <svg width={width} height={height} viewBox="0 0 80 60" fill="none">
+        <rect x="5" y="15" width="60" height="30" rx="6" fill={colors.notion.gray.bg} stroke={colors.notion.gray.text} strokeWidth="2" />
+        <text x="15" y="35" fontSize="12" fill={colors.notion.gray.text}>Text...</text>
+        <circle cx="65" cy="40" r="8" fill={fill} />
+        <text
+          x="65"
+          y="40"
+          fontSize="12"
+          fill={colors.background.text}
+          fontWeight="bold"
+          textAnchor="middle"
+          dominantBaseline="central"
+        >
+          {badgeText}
+        </text>
+      </svg>
+    </div>
+  );
+}
+
+export function IconWorkaround({ width = 120, height = 60, className }: IconProps) {
+  return (
+    <div className={cn("flex justify-center", className)}>
+      <svg width={width} height={height} viewBox="0 0 120 60" fill="none">
+        <rect x="10" y="18" width="100" height="24" rx="12" fill={colors.background.bg} stroke={colors.notion.blue.text} strokeWidth="2" />
+        <text x="20" y="34" fontSize="12" fill={colors.muted.text}>google search…</text>
+        <circle cx="96" cy="30" r="7" stroke={colors.notion.blue.text} strokeWidth="2" />
+        <line x1="100" y1="34" x2="108" y2="42" stroke={colors.notion.blue.text} strokeWidth="2" />
+      </svg>
+    </div>
+  );
+}
+
+export function IconManualDelete({ width = 80, height = 60, className }: IconProps) {
+  return (
+    <div className={cn("flex justify-center", className)}>
+      <svg width={width} height={height} viewBox="0 0 80 60" fill="none">
+        <rect x="5" y="15" width="70" height="30" rx="6" fill={colors.notion.gray.bg} stroke={colors.notion.gray.text} strokeWidth="2" />
+        <rect x="15" y="28" width="40" height="6" fill={colors.notion.blue.bg} />
+        <line x1="55" y1="25" x2="55" y2="45" stroke={colors.notion.blue.text} strokeWidth="3" markerEnd="url(#arrow)" />
+        <defs>
+          <marker id="arrow" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L6,3 z" fill={colors.notion.blue.text} />
+          </marker>
+        </defs>
+      </svg>
+    </div>
+  );
+}
+
+export function IconEmptyField({ width = 80, height = 60, className, badgeColor = "success", badgeText = "✓" }: BadgeIconProps) {
+  const fill = badgeColor === "success" ? colors.notion.green.bg : colors.notion.red.bg;
+  return (
+    <div className={cn("flex justify-center", className)}>
+      <svg width={width} height={height} viewBox="0 0 80 60" fill="none">
+        <rect x="5" y="15" width="60" height="30" rx="6" fill={colors.notion.gray.bg} stroke={colors.notion.gray.text} strokeWidth="2" />
+        <text x="15" y="35" fontSize="12" fill={colors.notion.gray.text}>Text...</text>
+        <circle cx="65" cy="40" r="8" fill={fill} />
+        <text
+          x="65"
+          y="40"
+          fontSize="12"
+          fill={colors.background.text}
+          fontWeight="bold"
+          textAnchor="middle"
+          dominantBaseline="central"
+        >
+          {badgeText}
+        </text>
+      </svg>
+    </div>
+  );
+}
+
+
+==== \src\components\common\ScrollToTop.tsx ====
+// src/components/common/ScrollToTop.tsx
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
+
+export default function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "instant", // oder "smooth" für sanftes Scrollen
+    });
+  }, [pathname]);
+
+  return null;
+}
+
+
+==== \src\components\sections\expertise\strategicuxresearch\StrategicUXFrameworkSection.tsx ====
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Section } from "@/components/ui";
+import SectionIntro from "@/components/ui/SectionIntro";
+import { Subtitle, Body } from "@/components/ui/Tokens";
+import Button from "@/components/ui/Button";
+import { spacing, layout, radii, shadows } from "@/lib/tokens";
+import { cn } from "@/lib/utils";
+
+// Illustrationen
+import clarity from "@/assets/images/expertise/strategicuxresearch/1clarity.png";
+import questions from "@/assets/images/expertise/strategicuxresearch/2questions.png";
+import focus from "@/assets/images/expertise/strategicuxresearch/3focus.png";
+import methods from "@/assets/images/expertise/strategicuxresearch/4methods.png";
+import analysis from "@/assets/images/expertise/strategicuxresearch/5analysis.png";
+import integration from "@/assets/images/expertise/strategicuxresearch/6present.png";
+
+const story = [
+  {
+    title: "Clarity – Finding the Why",
+    subtitle: "Before diving into data, the team faces uncertainty.",
+    text: "A cluttered meeting room. Sticky notes everywhere. People talk past each other. In the middle, the researcher pauses and asks the key question: ‘What problem are we really trying to solve?’",
+    image: clarity,
+    quote: "“Before we research, we must understand why we research.”",
+  },
+  {
+    title: "Questions – Opening the Door",
+    subtitle: "From confusion to curiosity.",
+    text: "The team covers a wall with questions: Why aren’t customers returning? What confuses them? Which decision will this research support? The chaos starts to take shape.",
+    image: questions,
+    quote: "“The right questions open the door to understanding.”",
+  },
+  {
+    title: "Refinement – Sharpening Focus",
+    subtitle: "The turning point toward clarity.",
+    text: "Not every question deserves an answer now. The team decides what really matters. They strike through noise, highlight the essential, and define a single, focused hypothesis.",
+    image: focus,
+    quote: "“Focus creates clarity — prioritize what truly matters.”",
+  },
+  {
+    title: "Methods – The Fieldwork Begins",
+    subtitle: "Theory meets the real world.",
+    text: "Interviews, shadowing, quick tests. The researcher steps out of the office, listens, observes, and learns. Small insights reveal big truths.",
+    image: methods,
+    quote: "“Methods are our tools to uncover meaningful insights.”",
+  },
+  {
+    title: "Analysis & Synthesis – Connecting the Dots",
+    subtitle: "Making sense of it all.",
+    text: "Walls fill with quotes, observations, and patterns. Suddenly, the team sees the story behind the data — the ‘why’ behind behavior. A collective ‘aha!’ moment.",
+    image: analysis,
+    quote: "“Data becomes insight when we connect the dots.”",
+  },
+  {
+    title: "Integration – Making It Matter",
+    subtitle: "Turning insights into action.",
+    text: "The research findings guide new design decisions. Stakeholders nod, prototypes improve, and users smile in the next test. On the wall: a new note — ‘What do we need to learn next?’",
+    image: integration,
+    quote: "“Research never ends — it transforms into new thinking.”",
+  },
+];
+
+export default function StrategicUXFrameworkSection() {
+  const [index, setIndex] = useState(0);
+  const scene = story[index];
+
+  const next = () => setIndex((i) => (i < story.length - 1 ? i + 1 : 0));
+  const prev = () => setIndex((i) => (i > 0 ? i - 1 : story.length - 1));
+
+  return (
+    <Section id="framework" title="My Research Planning Framework" spacing="lg" fullWidth>
+      <SectionIntro>
+        Based on Erika Hall’s principles, this six-phase framework comes to life through
+        the story of a researcher navigating uncertainty, curiosity, and clarity — showing
+        how design research connects insight to real impact.
+      </SectionIntro>
+
+      <div className={cn("flex flex-col items-center w-full", spacing.mtLg)}>
+        <div
+          className={cn(
+            "relative w-full flex flex-col md:flex-row md:items-center gap-8",
+            layout.container,
+            radii.xxl,
+            shadows.lg,
+            "pb-12 md:pb-0" // mehr Platz unten auf Mobile
+          )}
+        >
+          {/* IMAGE */}
+          <div className="relative flex-1 w-full">
+            <AnimatePresence mode="wait">
+              <motion.img
+                key={scene.image}
+                src={scene.image}
+                alt={scene.title}
+                initial={{ opacity: 0, scale: 1.05 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.98 }}
+                transition={{ duration: 0.8 }}
+                className="w-full h-auto max-h-[65vh] object-contain rounded-2xl"
+              />
+            </AnimatePresence>
+
+            {/* Buttons unter dem Bild auf Mobile */}
+            <div className="flex justify-center gap-4 mt-4 md:hidden">
+              <Button variant="secondary" onClick={prev}>
+                ← Previous
+              </Button>
+              <Button variant="primary" onClick={next}>
+                Next →
+              </Button>
+            </div>
+          </div>
+
+          {/* TEXT */}
+          <motion.div
+            key={scene.title}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7 }}
+            className={cn("flex-1 text-left md:pl-8")}
+          >
+            <Subtitle>{`${index + 1}. ${scene.title}`}</Subtitle>
+            <Body className="italic text-[--color-muted] mb-2">{scene.subtitle}</Body>
+            <Body className="max-w-prose mb-4">{scene.text}</Body>
+            <Body className="italic text-[--color-foreground]">{scene.quote}</Body>
+          </motion.div>
+        </div>
+
+        {/* Buttons unter Text für Desktop */}
+        <div className="hidden md:flex justify-center gap-6 mt-10">
+          <Button variant="secondary" onClick={prev}>
+            ← Previous
+          </Button>
+          <Button variant="primary" onClick={next}>
+            Next →
+          </Button>
+        </div>
+      </div>
+    </Section>
+  );
+}
+
+
+==== \src\components\sections\expertise\strategicuxresearch\StrategicUXIntroSection.tsx ====
+import { Section } from "@/components/ui";
+import SectionIntro from "@/components/ui/SectionIntro";
+import { Body } from "@/components/ui/Tokens";
+import { colors, spacing } from "@/lib/tokens";
+import { cn } from "@/lib/utils";
+
+export default function StrategicUXIntroSection() {
+  return (
+    <Section id="intro" title="Why Strategic UX Research" spacing="lg">
+      <SectionIntro>
+        Strategic UX Research goes beyond usability studies — it connects research to business
+        outcomes, guiding teams to make confident, user-centered, and impactful decisions.
+      </SectionIntro>
+
+      <Body className={cn(colors.muted.text, spacing.mt6)}>
+        Without a strategic approach, research remains tactical and isolated. By linking insights
+        to company OKRs, research becomes a driver of alignment, innovation, and growth.
+      </Body>
+    </Section>
+  );
+}
+
+
+==== \src\components\sections\expertise\strategicuxresearch\StrategicUXOKRSection.tsx ====
+import { Section } from "@/components/ui";
+import SectionIntro from "@/components/ui/SectionIntro";
+import Tile from "@/components/ui/Tile";
+import { Subtitle, Body } from "@/components/ui/Tokens";
+import { layout, spacing, colors } from "@/lib/tokens";
+import { cn } from "@/lib/utils";
+
+/**
+ * Section: UX Research OKRs
+ * DS-konform, statische Tiles, linksbündig
+ */
+export default function StrategicUXOKRSection() {
+  const tiles = [
+    {
+      level: "Level 1",
+      title: "Supports – Aligning with OKRs",
+      text: "UX Research aligns with existing company OKRs, validating assumptions and supporting ongoing initiatives.",
+      icon: "🧩",
+    },
+    {
+      level: "Level 2",
+      title: "Influences – Informing OKRs",
+      text: "Research insights begin to inform goal-setting and define measurable impact, bridging user value and business metrics.",
+      icon: "🎯",
+    },
+    {
+      level: "Level 3",
+      title: "Defines – Driving OKRs",
+      text: "UX Research drives strategic priorities. Objectives are grounded in user evidence and organizational learning.",
+      icon: "🚀",
+    },
+  ];
+
+  return (
+    <Section
+      id="okr"
+      title="UX Research OKRs: Bridging Users & Business"
+      spacing="lg"
+    >
+      {/* --- Intro --- */}
+      <SectionIntro>
+        UX Research OKRs connect user insights directly to organizational priorities —
+        creating focus, measurable impact, and shared alignment across teams.
+        <br />
+        <br />
+        While many organizations define ambitious goals, user needs are often underrepresented.
+        UX Research bridges that gap — ensuring that objectives are grounded in real evidence,
+        not assumptions.
+      </SectionIntro>
+
+      {/* --- Tile Grid --- */}
+      <div className={cn(layout.gridCols3, spacing.gap6, spacing.mt12)}>
+        {tiles.map((item) => (
+          <Tile
+            key={item.title}
+            variant="static"
+            className={cn(
+              "h-full flex flex-col justify-start items-start",
+              spacing.p6
+            )}
+          >
+            <div className="flex items-center gap-2 mb-3">
+              <span className="text-2xl">{item.icon}</span>
+              <Subtitle className="text-foreground">{item.level}</Subtitle>
+            </div>
+
+            <Body className="font-semibold text-foreground mb-2">
+              {item.title}
+            </Body>
+            <Body className={cn(colors.muted.text, "leading-relaxed")}>
+              {item.text}
+            </Body>
+          </Tile>
+        ))}
+      </div>
+
+      {/* --- Outro Text (jetzt bündig links) --- */}
+      <div className={cn(spacing.mt16)}>
+        <Subtitle className="text-foreground mb-4">
+          From Alignment to Leadership
+        </Subtitle>
+        <Body className={cn(colors.muted.text, "leading-relaxed")}>
+          Having UX Research OKRs is good — but even better is when UX Research itself
+          contributes directly to defining company OKRs. That’s when research moves beyond
+          validation to become a strategic driver — ensuring that what the organization
+          measures truly reflects what users value.
+        </Body>
+      </div>
+    </Section>
+  );
+}
+
+
+==== \src\components\sections\expertise\strategicuxresearch\StrategicUXRITESection.tsx ====
+import { Section } from "@/components/ui";
+import SectionIntro from "@/components/ui/SectionIntro";
+import Tile from "@/components/ui/Tile";
+import { Subtitle, Body } from "@/components/ui/Tokens";
+import RITECycle from "@/assets/visuals/strategicuxresearch/RITECycle";
+import { layout, spacing, colors } from "@/lib/tokens";
+import { cn } from "@/lib/utils";
+
+/**
+ * Section: Rapid Iterative Testing & Evaluation (RITE)
+ * DS-conform — concise version
+ */
+export default function StrategicUXRITESection() {
+  const tiles = [
+    {
+      title: "Speed",
+      text: "Design changes are applied immediately — minimizing time between discovery and validation.",
+    },
+    {
+      title: "Collaboration",
+      text: "Researchers, designers, and developers observe together — fostering shared understanding and faster iteration.",
+    },
+    {
+      title: "Learning",
+      text: "Each round builds insight and confidence, turning testing into a continuous learning process.",
+    },
+    {
+      title: "Impact",
+      text: "Usability issues are solved early, saving up to 60% of design and development time.",
+    },
+    {
+      title: "Adaptability",
+      text: "Works even with incomplete requirements — feedback uncovers new needs early and reduces change requests.",
+    },
+    {
+      title: "Advocacy",
+      text: "Visible, team-based testing promotes UX awareness and strengthens research credibility across the organization.",
+    },
+  ];
+
+  return (
+    <Section id="rite" title="Rapid Iterative Testing & Evaluation (RITE)" spacing="lg">
+      {/* --- Intro --- */}
+      <SectionIntro>
+        <strong>RITE</strong> is a pragmatic approach to usability testing that blends speed with
+        learning. Instead of waiting until a study ends, teams iterate as soon as issues appear —
+        often after just a few participants. Each round feeds directly into the next, turning
+        research into a fast cycle of discovery, design, and validation.
+      </SectionIntro>
+
+      {/* --- RITE Cycle --- */}
+      <div
+        className={cn(
+          "flex flex-col justify-center items-center mx-auto w-full",
+          spacing.mt12,
+          spacing.mb12
+        )}
+      >
+        <div className="w-full max-w-4xl flex justify-center">
+          <RITECycle />
+        </div>
+        <Subtitle className={cn("italic text-center text-foreground", spacing.mt6)}>
+          “Test early. Fix fast. Learn continuously.”
+        </Subtitle>
+      </div>
+
+      {/* --- Tile Grid --- */}
+      <div className={cn(layout.gridCols3, spacing.gap6, spacing.mt12)}>
+        {tiles.map((item) => (
+          <Tile key={item.title} variant="static" className={cn("h-full", spacing.p6)}>
+            <Subtitle className={cn("mb-3 text-foreground")}>{item.title}</Subtitle>
+            <Body className={cn(colors.muted.text, "leading-relaxed")}>{item.text}</Body>
+          </Tile>
+        ))}
+      </div>
+
+      {/* --- Critical Reflection --- */}
+      <div className={cn(spacing.mt16)}>
+        <Subtitle className="text-foreground mb-4">Critical Reflection</Subtitle>
+        <Body className={cn(colors.muted.text, "leading-relaxed")}>
+          RITE isn’t meant to deliver perfect data; it’s meant to drive progress. In areas like
+          healthcare, safety-critical systems, or regulated industries, strict methodological
+          control is essential — and RITE wouldn’t be the right choice. But in many organizations,
+          especially where UX Research is still evolving, it’s often more valuable to encourage
+          participation, curiosity, and shared ownership than to insist on perfection.
+          <br />
+          <br />
+          In my own RITE practice, I often mix and match fast methods — hallway or guerrilla
+          testing, AI-based eye-tracking analysis, expert reviews, and more — sometimes even running
+          them in parallel. This keeps the process quick and adaptive, while still ensuring that
+          insights stay grounded in real user behavior.
+          <br />
+          <br />
+          Putting too much emphasis on rigor too early can make UX Research seem theoretical or
+          rigid. Used with awareness, RITE helps strike the right balance between learning fast and
+          learning well.
+        </Body>
+      </div>
+    </Section>
+  );
+}
+
+
+==== \src\components\sections\expertise\strategicuxresearch\StrategicUXValueSection.tsx ====
+import { Section } from "@/components/ui";
+import SectionIntro from "@/components/ui/SectionIntro";
+import { Tile } from "@/components/ui";
+import { Subtitle, Body } from "@/components/ui/Tokens";
+import { layout, spacing, colors } from "@/lib/tokens";
+import { cn } from "@/lib/utils";
+
+/**
+ * Section: The Value of Strategic UX Research
+ * DS-conform — unified tile style, no shadows or hover effects
+ */
+export default function StrategicUXValueSection() {
+  return (
+    <Section id="value" title="The Value of Strategic UX Research" spacing="lg" fullWidth>
+      {/* --- Storytelling Intro --- */}
+      <SectionIntro>
+        <Subtitle className="mb-4">💡 Strategic UX Research as a Countermovement</Subtitle>
+
+        <Body className={colors.muted.text}>
+          In modern product development, speed has become a religion. Sprints follow sprints,
+          backlogs grow, and features get launched — fast, efficiently, visibly. Everything seems
+          optimized for progress.
+          <br />
+          <br />
+          But when you pause for a moment, you realize: more output doesn’t mean more impact. Teams
+          deliver before they understand. They optimize existing solutions instead of discovering new
+          opportunities. They measure how fast they move, not whether they’re moving in the right
+          direction. And research? Too often, it’s brought in at the end — to validate, not to
+          question.
+        </Body>
+
+        <Subtitle className="mt-10 mb-3">⚙️ The Real Problem</Subtitle>
+        <Body className={colors.muted.text}>
+          When organizations optimize only for speed, they lose orientation. They react to
+          short-term signals — stakeholder demands, KPIs, competitors — instead of building
+          long-term understanding. That’s how products emerge that work, but don’t resonate.
+          Experiences that are well-intentioned, but not relevant. And decisions that feel right, but
+          don’t make a difference.
+          <br />
+          <br />
+          This isn’t a lack of skill — it’s a lack of clarity. Because speed is only an advantage
+          when you know where you’re going.
+        </Body>
+
+        <Subtitle className="mt-10 mb-3">🧭 Reframing Development Around Clarity</Subtitle>
+        <Body className={colors.muted.text}>
+          <strong>Strategic UX Research</strong> is the answer to this imbalance. It shifts the focus
+          from “How fast can we deliver?” to “What can we learn before we deliver?” It helps
+          organizations ask the right questions:
+          <ul className="list-disc list-inside mt-4">
+            <li>What decisions need to be made — and why?</li>
+            <li>What knowledge do we lack to make them confidently?</li>
+            <li>How can we learn before we invest?</li>
+          </ul>
+          <br />
+          Research becomes more than a validation tool — it becomes a decision-making infrastructure.
+          Not the rear-view mirror, but the navigation system.
+        </Body>
+
+        <Subtitle className="mt-10 mb-3">🚀 From Action to Intention</Subtitle>
+        <Body className={colors.muted.text}>
+          Strategic UX Research enables the shift from Feature Delivery to Strategic Discovery. It
+          gives teams a compass to move with purpose:
+          <ul className="list-disc list-inside mt-4">
+            <li>Less activity, more intent.</li>
+            <li>Less speed, more direction.</li>
+            <li>Fewer opinions, more evidence.</li>
+          </ul>
+          <br />
+          Every research effort becomes a driver of decisions — not just a generator of data. It
+          connects business goals, user needs, and design decisions into one shared understanding —
+          and that changes everything.
+        </Body>
+
+        <Subtitle className="mt-10 mb-3">🌱 The Outcome</Subtitle>
+        <Body className={colors.muted.text}>
+          Organizations that embrace Strategic UX Research don’t just develop products — they develop
+          the ability to learn. They don’t invest in faster delivery, but in better decisions. And
+          they create experiences that aren’t just used — but understood, desired, and remembered.
+        </Body>
+      </SectionIntro>
+
+      {/* --- Value Tiles (DS conform) --- */}
+      <div className={cn(layout.gridCols3, spacing.gap8, spacing.mt16)}>
+        {[
+          {
+            title: "Alignment",
+            text: "Every research effort ties directly to business OKRs and strategic goals — ensuring clarity, focus, and shared direction.",
+          },
+          {
+            title: "Impact",
+            text: "Research insights guide product and design decisions at every level — turning learning into measurable progress.",
+          },
+          {
+            title: "Confidence",
+            text: "Stakeholders trust research because it delivers evidence that drives better decisions, not just faster ones.",
+          },
+        ].map((item) => (
+          <Tile
+            key={item.title}
+            variant="static"
+            className={cn(colors.tile.bg, colors.tile.text, spacing.p6, "rounded-2xl")}
+          >
+            <Subtitle className={cn("mb-2 text-foreground")}>{item.title}</Subtitle>
+            <Body className={cn(colors.muted.text, "leading-relaxed")}>{item.text}</Body>
+          </Tile>
+        ))}
+      </div>
+
+      {/* --- Closing Quote --- */}
+      <div className={cn("text-center", spacing.mt16)}>
+        <Subtitle className="italic">
+          “Strategic UX Research turns motion into meaning — and progress into impact.”
+        </Subtitle>
+      </div>
+    </Section>
+  );
+}
+
+
+==== \src\data\skills.ts ====
+export const skills = [
+  { theme: "Coordination & Data Management", skill: "Data Capture" },
+  { theme: "Coordination & Data Management", skill: "Well-Managed Data" },
+
+  { theme: "Evaluative Testing", skill: "Heuristic Analysis" },
+  { theme: "Evaluative Testing", skill: "Usability Test" },
+  { theme: "Evaluative Testing", skill: "Information Architecture Study" },
+  { theme: "Evaluative Testing", skill: "Concept Test" },
+  { theme: "Evaluative Testing", skill: "Bug & Defect Tracking" },
+
+  { theme: "Debrief & Analysis", skill: "Interview Debrief" },
+  { theme: "Debrief & Analysis", skill: "Video Analysis" },
+  { theme: "Debrief & Analysis", skill: "Affinity Map" },
+  { theme: "Debrief & Analysis", skill: "Data Wall" },
+
+  { theme: "Interview Planning & Execution", skill: "Study Plan" },
+  { theme: "Interview Planning & Execution", skill: "Participant Segments & Screening" },
+  { theme: "Interview Planning & Execution", skill: "User Interview" },
+  { theme: "Interview Planning & Execution", skill: "Field Interview" },
+  { theme: "Interview Planning & Execution", skill: "Experience Sample / Diary Study" },
+  { theme: "Interview Planning & Execution", skill: "Interview Protocol" },
+  { theme: "Interview Planning & Execution", skill: "Actionable Research Question" },
+
+  { theme: "Basic Quantitative Work", skill: "Surveys & Questionnaires" },
+  { theme: "Basic Quantitative Work", skill: "Exploratory Quantitative Analysis" },
+  { theme: "Basic Quantitative Work", skill: "Product Analytics" },
+
+  { theme: "Synthesis", skill: "Exploratory Research" },
+  { theme: "Synthesis", skill: "Exploratory Qualitative Analysis" },
+  { theme: "Synthesis", skill: "Journey Map" },
+  { theme: "Synthesis", skill: "Sensemaking Workshop" },
+  { theme: "Synthesis", skill: "Conceptual Model" },
+
+  { theme: "Stakeholder Engagement", skill: "Stakeholder Interview" },
+  { theme: "Stakeholder Engagement", skill: "Stakeholder Assumption Workshop" },
+
+  { theme: "Structured Modeling", skill: "Service Blueprint" },
+  { theme: "Structured Modeling", skill: "User Personas" },
+  { theme: "Structured Modeling", skill: "Jobs to be Done" },
+
+  { theme: "Integration in Service Delivery", skill: "Research-Driven Design Project" },
+  { theme: "Integration in Service Delivery", skill: "A/B Test" },
+  { theme: "Integration in Service Delivery", skill: "Beta Test" },
+  { theme: "Integration in Service Delivery", skill: "Development Cycle Coupling" },
+  { theme: "Integration in Service Delivery", skill: "Design Sprint" },
+  { theme: "Integration in Service Delivery", skill: "Cadenced User Studies" },
+
+  { theme: "Broadcasting", skill: "Effective Reporting" },
+  { theme: "Broadcasting", skill: "Research Evangelization" },
+
+  { theme: "Business Alignment", skill: "Customer Advisory Council" },
+  { theme: "Business Alignment", skill: "Front-Line Collaboration" },
+
+  { theme: "Amplify the Practice", skill: "Research Training" },
+  { theme: "Amplify the Practice", skill: "Public Project Index" },
+
+  { theme: "Strategic Direction", skill: "Product Roadmap" },
+  { theme: "Strategic Direction", skill: "User Needs Inception" },
+  { theme: "Strategic Direction", skill: "Product & Design Strategy" },
+];
+
+export const themeColors: Record<string, string> = {
+  "Coordination & Data Management": "#E8ECF7",
+  "Evaluative Testing": "#EAF7F1",
+  "Debrief & Analysis": "#FFF3E6",
+  "Interview Planning & Execution": "#E9F2FF",
+  "Basic Quantitative Work": "#F9E8EE",
+  "Synthesis": "#F2F0FA",
+  "Stakeholder Engagement": "#FFD6E0",
+  "Structured Modeling": "#E0F7FA",
+  "Integration in Service Delivery": "#FCE4EC",
+  "Broadcasting": "#FFF9C4",
+  "Business Alignment": "#DCEDC8",
+  "Amplify the Practice": "#D1C4E9",
+  "Strategic Direction": "#B3E5FC",
+};
+
+
+==== \src\App.tsx ====
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { useEffect } from "react";
+import AppLayout from "@/AppLayout";
+import Home from "@/pages/Home";
+import CVPage from "@/pages/cv";
+
+// 🔹 Temporäre Projekt-Hinweisseite
+import PrivateProjects from "@/pages/projects/PrivateProjects";
+
+// Expertise-Seiten
+import UXStrategy from "@/pages/expertise/UXStrategy";
+import StrategicUXResearch from "@/pages/expertise/StrategicUXResearch";
+import ResearchOps from "@/pages/expertise/ResearchOps";
+import TeamLeadership from "@/pages/expertise/TeamLeadership";
+import ImpactMeasurement from "@/pages/expertise/ImpactMeasurement";
+import SkillAssessmentPage from "@/pages/expertise/TeamLeadership/skillassessment";
+
+// Footer-/Legal-Seiten
+import Imprint from "@/pages/shared/Imprint";
+import Privacy from "@/pages/shared/Privacy";
+
+// 🔹 Scroll-to-top Component
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "instant" });
+  }, [pathname]);
+  return null;
+}
+
+export default function App() {
+  return (
+    <>
+      <ScrollToTop />
+      <Routes>
+        <Route path="/" element={<AppLayout />}>
+          {/* 🔹 Hauptseiten */}
+          <Route index element={<Home />} />
+          <Route path="cv" element={<CVPage />} />
+
+          {/* 🔹 Projekt-Routen (aktuell gesperrt → Hinweisseite) */}
+          <Route path="projects/*" element={<PrivateProjects />} />
+
+          {/* 🔹 Expertise-Routen */}
+          <Route path="expertise/ux-strategy" element={<UXStrategy />} />
+          <Route
+            path="expertise/strategic-ux-research"
+            element={<StrategicUXResearch />}
+          />
+          <Route path="expertise/researchops" element={<ResearchOps />} />
+          <Route path="expertise/team-leadership" element={<TeamLeadership />} />
+          <Route
+            path="expertise/team-leadership/skillassessment"
+            element={<SkillAssessmentPage />}
+          />
+          <Route
+            path="expertise/impact-measurement"
+            element={<ImpactMeasurement />}
+          />
+
+          {/* 🔹 Footer-/Legal-Seiten */}
+          <Route path="imprint" element={<Imprint />} />
+          <Route path="privacy" element={<Privacy />} />
+
+          {/* 🔹 Fallback */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Route>
+      </Routes>
+    </>
+  );
+}
+
+
+
+==== \src\AppLayout.tsx ====
+// src/components/layout/AppLayout.tsx
+import { Outlet } from "react-router-dom";
+import NavBar from "@/components/common/NavBar"; // ✅ richtiger Importname!
+import Footer from "@/components/common/Footer";
+
+export default function AppLayout() {
+  return (
+    <div className="min-h-screen bg-background text-foreground flex flex-col">
+      {/* === Navigation (mit Burger-Menü) === */}
+      <NavBar />
+
+      {/* === Seiteninhalt === */}
+      <main className="flex-1">
+        <Outlet />
+      </main>
+
+      {/* === Footer === */}
+      <Footer />
+    </div>
+  );
+}
+
+
+==== \src\vite-env.d.ts ====
+declare module "*.png" {
+  const value: string;
+  export default value;
+}
+declare module "*.svg" {
+  const value: string;
+  export default value;
+}
+
+
+==== \components.json ====
+{
+  "$schema": "https://ui.shadcn.com/schema.json",
+  "style": "new-york",
+  "rsc": false,
+  "tsx": true,
+  "tailwind": {
+    "config": "tailwind.config.js",
+    "css": "src/index.css",
+    "baseColor": "neutral",
+    "cssVariables": true,
+    "prefix": ""
+  },
+  "iconLibrary": "lucide",
+  "aliases": {
+    "components": "@/components",
+    "utils": "@/lib/utils",
+    "ui": "@/components/ui",
+    "lib": "@/lib",
+    "hooks": "@/hooks"
+  },
+  "registries": {}
+}
+
+
+==== \tailwind.config.js ====
+/**** Tailwind v4 minimal config ****/
+export default {
+  darkMode: "class",
+};
+
+
+==== \tsconfig.app.json ====
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "strict": false,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": ["src"]
+}
+
+
+==== \tsconfig.json ====
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "esModuleInterop": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    },
+    "types": ["node"]
+  },
+  "include": ["src", "src/vite-env.d.ts"],
+  "references": [
+    {
+      "path": "./tsconfig.node.json"
+    }
+  ]
+}
+
+
+==== \tsconfig.node.json ====
+{
+  "compilerOptions": {
+    "composite": true,
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "skipLibCheck": true,
+    "allowSyntheticDefaultImports": true
+  },
+  "include": [
+    "vite.config.ts",
+    "vite.config.js",
+    "rollup-parseAst.d.ts"
+  ]
+}
+
+
+==== \vite.config.d.ts ====
+declare const _default: import("vite").UserConfig;
+export default _default;
+
+
+==== \vite.config.js ====
+// vite.config.ts
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import { fileURLToPath } from "node:url";
+import { dirname, resolve } from "node:path";
+// __dirname in ESM nachbauen
+var __filename = fileURLToPath(import.meta.url);
+var __dirname = dirname(__filename);
+// Prüfen, ob wir in GitHub Actions laufen
+var isActions = process.env.GITHUB_ACTIONS === "true";
+export default defineConfig({
+    plugins: [react()],
+    base: "/", // User/Org Pages: Root
+    build: {
+        outDir: isActions ? "dist" : "docs", // Actions → dist, lokal → docs
+    },
+    resolve: {
+        alias: {
+            "@": resolve(__dirname, "src"),
+        },
+    },
+});
+
+
+==== \vite.config.ts ====
+// vite.config.ts
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import { fileURLToPath } from "node:url";
+import { dirname, resolve } from "node:path";
+
+// __dirname in ESM nachbauen
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+// Prüfen, ob wir in GitHub Actions laufen
+const isActions = process.env.GITHUB_ACTIONS === "true";
+
+export default defineConfig({
+  plugins: [react()],
+  base: "/", // User/Org Pages: Root
+  build: {
+    outDir: isActions ? "dist" : "docs", // Actions → dist, lokal → docs
+  },
+  resolve: {
+    alias: {
+      "@": resolve(__dirname, "src"),
+    },
+  },
+});
+
+

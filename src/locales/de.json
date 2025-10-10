@@ -1,0 +1,102 @@
+{
+  "nav": {
+    "about": "Über mich",
+    "expertise": "Expertise",
+    "projects": "Projekte",
+    "cv": "Lebenslauf",
+    "craft": "Handwerk",
+    "contact": "Kontakt"
+  },
+  "hero": {
+    "claim": "UX Research Leadership mit Fokus auf Strategie, ResearchOps & Wirkungsmessung",
+    "intro": "Ich leite Research-Teams, skaliere ResearchOps und verankere die Nutzer:innen-Perspektive in der Produktstrategie. Mein Fokus: Entscheidungen beschleunigen, Wirkung belegen und nachhaltige Produkte gestalten."
+  },
+  "about": {
+    "title": "Über mich",
+    "text": "UX Research Leader mit Hintergrund in Ökonometrie & Produktentwicklung. Ich verbinde Qual & Quant, reduziere Risiko und verankere die Nutzer:innen-Perspektive in der Produktstrategie."
+  },
+  "expertise": {
+    "title": "Expertise",
+    "roof": "Nachhaltige Produkte",
+    "foundation": "Nutzerzentrierte Wertschöpfung",
+    "valueProp": "Ich helfe Unternehmen, nachhaltige Produkte zu entwickeln, indem ich tiefe Nutzer:innen-Insights in umsetzbare Strategien überführe. Mein Ziel: Die Stimme der Nutzer:innen skalieren und Organisationen befähigen, nutzerzentrierte Entscheidungen zu treffen.",
+    "pillars": [
+      {
+        "title": "Research Strategy",
+        "caption": "Discovery-Programme an Business-Zielen ausrichten"
+      },
+      {
+        "title": "Needs → Product Strategy",
+        "caption": "Insights in Roadmaps übersetzen"
+      },
+      {
+        "title": "Process & Tooling",
+        "caption": "Effiziente, skalierbare Praxis"
+      },
+      {
+        "title": "Team Leadership",
+        "caption": "Mentoring, Standards, Exzellenz"
+      },
+      {
+        "title": "Proving ROI",
+        "caption": "Wirkung messen & kommunizieren"
+      }
+    ],
+    "uxStrategy": "UX Strategy",
+    "strategicUxResearch": "Strategic UX Research",
+    "researchOps": "ResearchOps",
+    "teamLeadership": "Leadership & Mentoring",
+    "impactMeasurement": "Impact Measurement"
+  },
+  "projects": {
+    "title": "Projekte",
+
+    "carInsurance": {
+      "title": "Kfz-Versicherung",
+      "desc": "Weniger Reibung, bessere Conversion."
+    },
+    "reopsAgileUX": {
+      "title": "ResearchOps & Agile UX",
+      "desc": "Governance, Templates & Enablement auf Skalierungsebene."
+    },
+    "b2b2c": {
+      "title": "B2B2C-Optimierung",
+      "desc": "Qualitative & quantitative Insights an Geschäftszielen ausgerichtet."
+    },
+    "pricing": {
+      "title": "Pricing Usability Testing",
+      "desc": "Klarheit in Preis-Komponenten und PDP-Details."
+    },
+    "deleteCase": {
+      "title": "Eine Mikrointeraktion, die viel Nutzerzeit spart",
+      "desc": "Vereinfachung wiederkehrender Workflows durch UX."
+    },
+    "atossReops": {
+      "title": "ReOps-Implementierung",
+      "desc": "UX-Teams durch ResearchOps-Grundlagen befähigen."
+    }
+  },
+  "cv": {
+    "title": "Lebenslauf",
+    "teaserTitle": "Kurzprofil & Stationen",
+    "teaserList": [
+      "Lead/Director UX Research – Enterprise & B2C",
+      "ResearchOps Aufbau & Skalierung",
+      "OKR-verbundene Research-Roadmaps",
+      "Coaching & Enablement für Produktteams"
+    ],
+    "btn": "Zur CV-Seite",
+    "pageIntro": "Vollständiger Lebenslauf (als PDF eingebettet).",
+    "pdfAlt": "CV PDF"
+  },
+  "craft": {
+    "title": "Handwerk",
+    "text": "Research als Handwerk: wiederholbar, verbesserbar, mit hohen Qualitätsstandards."
+  },
+  "contact": {
+    "title": "Kontakt",
+    "cta": "📞 Kontaktiere mich – ich freue mich auf deine Herausforderungen...",
+    "cta2": "Jetzt Termin buchen – Discovery Call vereinbaren",
+    "cta3": "Buche ganz einfach einen 60-minütigen Termin direkt in meinem Kalender."
+  }
+}

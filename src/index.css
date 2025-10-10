@@ -1,0 +1,142 @@
+@import "tailwindcss";
+@plugin "tailwindcss-animate";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ================================
+   THEME TOKENS
+   ================================ */
+@theme {
+  --breakpoint-sm: 40rem;
+  --breakpoint-md: 48rem;
+  --breakpoint-lg: 64rem;
+  --breakpoint-xl: 80rem;
+  --breakpoint-2xl: 96rem;
+
+  /* Fonts */
+  --font-sans: "SF Pro Text", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "SF Pro Display", "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  /* Colors (Light) */
+  --color-background: #ffffff;
+  --color-foreground: #0a0a0a;
+  --color-border: #e5e5e5;
+
+  --color-muted: #f8f9fa;
+  --color-muted-foreground: #6b7280;
+
+  --color-primary: #0a0a0a;
+  --color-primary-foreground: #ffffff;
+
+  --color-secondary: #4a5a6a;
+  --color-secondary-foreground: #ffffff;
+
+  --color-accent: #0094c6;
+  --color-accent-foreground: #ffffff;
+}
+
+/* Dark Theme Overrides */
+.dark {
+  --color-background: #0b0b0b;
+  --color-foreground: #f8f8f8;
+  --color-border: #2a2a2a;
+
+  --color-muted: #1a1a1a;
+  --color-muted-foreground: #a1a1aa;
+
+  --color-primary: #f8f8f8;
+  --color-primary-foreground: #0a0a0a;
+
+  --color-secondary: #607080;
+  --color-secondary-foreground: #ffffff;
+
+  --color-accent: #33bde5;
+  --color-accent-foreground: #0b0b0b;
+}
+
+:root {
+  color-scheme: light dark;
+}
+
+/* ================================
+   MAP CSS VARS → UTILITIES
+   ================================ */
+@theme inline {
+  --color-card: var(--color-background);
+  --color-card-foreground: var(--color-foreground);
+  --color-popover: var(--color-background);
+  --color-popover-foreground: var(--color-foreground);
+}
+
+/* ================================
+   COMPONENT UTILITIES
+   ================================ */
+@layer components {
+  .container-responsive {
+    @apply mx-auto max-w-6xl px-4 sm:px-6 lg:px-8;
+  }
+
+  .section {
+    @apply mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-20 space-y-8;
+  }
+
+  .card {
+    @apply rounded-2xl border border-border bg-card text-card-foreground;
+  }
+
+  /* Buttons */
+  .btn {
+    @apply inline-flex items-center justify-center 
+           rounded-2xl px-5 py-2.5 text-sm font-semibold 
+           border border-border transition-colors duration-200;
+  }
+
+  .btn-primary {
+    @apply bg-primary text-primary-foreground hover:opacity-90;
+  }
+
+  .btn-secondary {
+    @apply bg-muted text-foreground hover:bg-muted/70;
+  }
+
+  .btn-ghost {
+    @apply text-foreground hover:bg-muted/40;
+  }
+
+  /* Tiles (Kacheln für HouseDiagram, About, etc.) */
+  .tile {
+    @apply rounded-xl border border-border bg-muted 
+           p-4 text-center text-sm text-muted-foreground 
+           transition-colors duration-200 
+           hover:bg-muted/70;
+  }
+}
+
+/* ================================
+   TYPOGRAPHY BASE
+   ================================ */
+@layer base {
+  body {
+    @apply bg-background text-foreground font-sans;
+  }
+
+  /* Headings: nur Font-Family + Weight + Tracking, 
+     Größe kommt aus Tokens (typography.*) */
+  h1 {
+    @apply font-display font-extrabold tracking-tight;
+  }
+  h2 {
+    @apply font-display font-bold;
+  }
+  h3 {
+    @apply font-display font-semibold;
+  }
+
+  /* Paragraphs und Kleingedrucktes */
+  p {
+    @apply leading-relaxed text-muted-foreground;
+  }
+  small {
+    @apply text-sm text-muted-foreground;
+  }
+}

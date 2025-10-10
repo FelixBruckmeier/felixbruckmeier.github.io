@@ -1,0 +1,102 @@
+{
+  "nav": {
+    "about": "About",
+    "expertise": "Expertise",
+    "projects": "Projects",
+    "cv": "CV",
+    "craft": "Craft",
+    "contact": "Contact"
+  },
+  "hero": {
+    "claim": "UX Research Leadership with focus on Strategy, ResearchOps & Impact Measurement",
+    "intro": "I lead research teams, scale ResearchOps, and embed the user perspective into product strategy. My focus: accelerating decisions, proving impact, and building sustainable products."
+  },
+  "about": {
+    "title": "About",
+    "text": "UX Research leader with a background in econometrics and product development. I combine qual & quant to de-risk decisions and embed the user's voice into product strategy."
+  },
+  "expertise": {
+    "title": "Expertise",
+    "roof": "Sustainable Products",
+    "foundation": "User-Centered Value Creation",
+    "valueProp": "I help companies build sustainable products by transforming deep user insights into actionable strategies. My mission is to scale the user's voice and empower organizations to make user-centered decisions.",
+    "pillars": [
+      {
+        "title": "Research Strategy",
+        "caption": "Discovery programs aligned to business goals"
+      },
+      {
+        "title": "Needs → Product Strategy",
+        "caption": "Translate insights into roadmaps"
+      },
+      {
+        "title": "Process & Tooling",
+        "caption": "Efficient, scalable practice"
+      },
+      {
+        "title": "Team Leadership",
+        "caption": "Mentorship, standards, excellence"
+      },
+      {
+        "title": "Proving ROI",
+        "caption": "Measure and communicate impact"
+      }
+    ],
+    "uxStrategy": "UX Strategy",
+    "strategicUxResearch": "Strategic UX Research",
+    "researchOps": "ResearchOps",
+    "teamLeadership": "Leadership & Mentoring",
+    "impactMeasurement": "Impact Measurement"
+  },
+  "projects": {
+    "title": "Projects",
+
+    "carInsurance": {
+      "title": "Car Insurance",
+      "desc": "Reduced friction and improved conversion."
+    },
+    "reopsAgileUX": {
+      "title": "ResearchOps & Agile UX",
+      "desc": "Governance, templates & enablement at scale."
+    },
+    "b2b2c": {
+      "title": "B2B2C Optimization",
+      "desc": "Qual & quant insights aligned to business goals."
+    },
+    "pricing": {
+      "title": "Pricing Usability Testing",
+      "desc": "Clarity in pricing components and PDP details."
+    },
+    "deleteCase": {
+      "title": "A micro interaction that saves lots of user time",
+      "desc": "Simplifying repetitive workflows efficiently."
+    },
+    "atossReops": {
+      "title": "ReOps Implementation",
+      "desc": "Empowering UX teams through ResearchOps foundations."
+    }
+  },
+  "cv": {
+    "title": "CV",
+    "teaserTitle": "Snapshot & Roles",
+    "teaserList": [
+      "Lead/Director UX Research – Enterprise & B2C",
+      "ResearchOps setup & scaling",
+      "OKR-linked research roadmaps",
+      "Coaching & enablement for product teams"
+    ],
+    "btn": "Go to CV page",
+    "pageIntro": "Full résumé (embedded PDF).",
+    "pdfAlt": "CV PDF"
+  },
+  "craft": {
+    "title": "Craft",
+    "text": "Research as craft: repeatable, improvable practice with strong quality standards."
+  },
+  "contact": {
+    "title": "Book a Call",
+    "cta": "📞 Contact me — I'm eager to learn about your challenges...",
+    "cta2": "Book Your Call Now — Schedule a Discovery Call",
+    "cta3": "Click to easily book a 60-minute call directly in my calendar."
+  }
+}
