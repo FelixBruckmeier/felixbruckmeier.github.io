@@ -69,6 +69,25 @@
 }
 
 /* ================================
+   GLOBAL LAYOUT FIXES
+   ================================ */
+html,
+body {
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100%;
+}
+
+/* ✅ Normale Bilder & SVGs skalieren richtig,
+   Hero-/Headerbilder mit data-hero bleiben unberührt */
+img:not([data-hero]),
+svg:not([data-hero]) {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ================================
    COMPONENT UTILITIES
    ================================ */
 @layer components {
@@ -120,8 +139,6 @@
     @apply bg-background text-foreground font-sans;
   }
 
-  /* Headings: nur Font-Family + Weight + Tracking, 
-     Größe kommt aus Tokens (typography.*) */
   h1 {
     @apply font-display font-extrabold tracking-tight;
   }
@@ -132,7 +149,6 @@
     @apply font-display font-semibold;
   }
 
-  /* Paragraphs und Kleingedrucktes */
   p {
     @apply leading-relaxed text-muted-foreground;
   }

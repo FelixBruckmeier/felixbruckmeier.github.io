@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import { cn } from "@/lib/utils";
-import { layout, sectionSpacing, typography, colors } from "@/lib/tokens";
+import { layout, sectionSpacing, typography } from "@/lib/tokens";
 
 interface PageLayoutProps {
   title?: string;
@@ -21,14 +21,15 @@ export default function PageLayout({
       {headerImage && (
         <section
           className={cn(
-            "relative w-screen min-h-[50vh] flex flex-col justify-center items-center text-center text-white overflow-hidden"
+            "relative w-full min-h-[50vh] flex flex-col justify-center items-center text-center text-white overflow-hidden"
           )}
         >
           {/* Hintergrundbild */}
           <img
             src={headerImage}
             alt=""
-            className="absolute inset-0 w-full h-full object-cover"
+            data-hero
+            className="absolute inset-0 w-full h-full object-cover object-center"
           />
 
           {/* Halbtransparenter Overlay */}
