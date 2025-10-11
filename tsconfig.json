@@ -11,10 +11,13 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "esModuleInterop": true,
-    "baseUrl": ".",
+
+    /* ✅ Korrigiert für Vite + GitHub Actions Build */
+    "baseUrl": "./src",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["*"]
     },
+
     "types": ["node"]
   },
   "include": ["src", "src/vite-env.d.ts"],

@@ -6,8 +6,19 @@ import { Body, Subtitle } from "@/components/ui/Tokens";
 import { cn } from "@/lib/utils";
 import { spacing } from "@/lib/tokens";
 import { skills, themeColors } from "@/data/skills";
-import SkillRadarChart from "@/assets/visuals/teamleadership/skillassessment/SkillRadarChart";
-import SkillProgressionChart from "@/assets/visuals/teamleadership/skillassessment/SkillProgressionChart";
+
+// 🟩 Dummy-Komponenten ersetzen fehlende Charts, bis du sie brauchst
+const SkillRadarChart = ({ data }: { data: Record<string, number> }) => (
+  <div className="flex items-center justify-center h-64 text-muted-foreground border border-dashed border-border rounded-xl">
+    <span>SkillRadarChart placeholder</span>
+  </div>
+);
+
+const SkillProgressionChart = ({ data }: { data: Record<string, number> }) => (
+  <div className="flex items-center justify-center h-64 text-muted-foreground border border-dashed border-border rounded-xl">
+    <span>SkillProgressionChart placeholder</span>
+  </div>
+);
 
 export default function Skillmap() {
   const [submitted, setSubmitted] = useState(false);
@@ -38,17 +49,11 @@ export default function Skillmap() {
     value: count ? total / count : 0,
   }));
 
-  // 🔹 Chart-Daten für Radar & Progression
   const radarData = themeAverages.reduce(
     (acc, { theme, value }) => ({ ...acc, [theme]: value }),
     {}
   );
-  const barData = Object.entries(ratings).map(([skill, value]) => ({
-    skill,
-    value,
-  }));
 
-  // 🔹 Ergebnisse anzeigen
   if (submitted) {
     return (
       <div className="text-center">

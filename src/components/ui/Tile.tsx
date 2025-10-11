@@ -3,8 +3,8 @@ import { cn } from "@/lib/utils";
 import { colors, radii, transitions, spacing, hoverEffects } from "@/lib/tokens";
 
 type TileProps = React.HTMLAttributes<HTMLDivElement> & {
-  /** interactive = Hover + Scale, static = keine Interaktion */
-  variant?: "interactive" | "static";
+  /** interactive = Hover + Scale, static = keine Interaktion, inactive = ruhig + leicht ausgegraut */
+  variant?: "interactive" | "static" | "inactive"; // ✅ erweitert
 };
 
 export default function Tile({
@@ -22,8 +22,16 @@ export default function Tile({
         transitions.default,
         variant === "interactive"
           ? cn("will-change-transform", hoverEffects.smoothLift, "cursor-pointer")
+          : variant === "inactive"
+          ? cn(
+              // ✅ leicht ausgegrauter, deaktivierter Zustand
+              "opacity-70",
+              "cursor-not-allowed",
+              "transition-none",
+              "transform-none"
+            )
           : cn(
-              // komplett ruhig: keine Hover-/Transform-Effekte
+              // statisch, aber aktiv sichtbar
               "cursor-default",
               "transition-none",
               "transform-none"

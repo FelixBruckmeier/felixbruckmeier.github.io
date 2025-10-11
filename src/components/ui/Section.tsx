@@ -17,6 +17,8 @@ interface SectionProps {
   center?: boolean;
   borderTop?: boolean;
   borderBottom?: boolean;
+  border?: boolean;     // ✅ neu (für Footer usw.)
+  compact?: boolean;    // ✅ neu (für ImpactMeasurement)
   spacing?: keyof typeof sectionSpacing;
   className?: string;
   fullWidth?: boolean;
@@ -37,6 +39,8 @@ export default function Section({
   center = false,
   borderTop = false,
   borderBottom = false,
+  border = true,
+  compact = false,
   spacing = "md",
   className,
   fullWidth = true, // ✅ Standard jetzt volle Breite
@@ -48,8 +52,9 @@ export default function Section({
         layout.scrollOffset,
         borderTop && "border-t",
         borderBottom && "border-b",
-        colors.border,
+        border && colors.border,
         sectionSpacing[spacing],
+        compact && "py-4", // ✅ kompakter Modus
         "w-full",
         className
       )}
@@ -99,3 +104,4 @@ export default function Section({
     </section>
   );
 }
+

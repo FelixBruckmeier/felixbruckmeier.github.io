@@ -1,6 +1,6 @@
 # export-clean.ps1
 # Exportiert NUR Code-Dateien (kein .git, keine node_modules, keine PNG/JPG, keine Binärdateien)
-# und schließt definierte Dateien oder ganze Ordner aus.
+# und schließt definierte Dateien oder ganze Ordner aus (präzise, ohne andere "components"-Dateien zu treffen).
 
 $projectPath = "C:\Users\felix\Documents\GitHub\felixbruckmeier.github.io"
 $outputFile = "$projectPath\all_code_clean.txt"
@@ -46,22 +46,21 @@ $excludedFilePatterns = @(
 )
 
 # Ganze Ordner (inkl. Unterordner & Dateien) ausschließen
+# ($|\\) sorgt dafür, dass NUR diese Ordner + Unterordner betroffen sind – NICHT z. B. "components/ui"
 $excludedFolderPatterns = @(
-    "\\src\\assets\\visuals\\",
-    "\\src\\assets\\visuals\\researchops\\",
-    "\\src\\assets\\visuals\\uxstrategy\\"
-    "\\src\\components\\sections\\expertise\\impactmeasurement\\"
- "\\src\\components\\sections\\expertise\\strategicuxresearch\\"
- "\\src\\components\\sections\\expertise\\reserachops\\"
-"\\src\\components\\sections\\expertise\\TeamLeadership\\"
-"\\src\\components\\sections\\expertise\\CV\\"
-"\\src\\components\\artefacts\\"
-"\\src\\components\\projects\\AtossReOps\\"
-"\\src\\components\\projects\\CarInsurance\\"
-"\\src\\components\\projects\\DeleteCase\\"
-"\\src\\components\\projects\\SwissLife\\"
-"\\src\\components\\projects\\ZooplusPricing\\"
-"\\src\\components\\projects\\ZooplusReOps\\"
+    "\\src\\assets\\visuals($|\\)",
+    "\\src\\components\\sections\\expertise\\impactmeasurement($|\\)",
+    "\\src\\components\\sections\\expertise\\strategicuxresearch($|\\)",
+    "\\src\\components\\sections\\expertise\\reserachops($|\\)",
+    "\\src\\components\\sections\\expertise\\TeamLeadership($|\\)",
+    "\\src\\components\\sections\\expertise\\CV($|\\)",
+    "\\src\\components\\artefacts($|\\)",
+    "\\src\\components\\projects\\AtossReOps($|\\)",
+    "\\src\\components\\projects\\CarInsurance($|\\)",
+    "\\src\\components\\projects\\DeleteCase($|\\)",
+    "\\src\\components\\projects\\SwissLife($|\\)",
+    "\\src\\components\\projects\\ZooplusPricing($|\\)",
+    "\\src\\components\\projects\\ZooplusReOps($|\\)"
 )
 
 # ----------------------------------------------------
@@ -75,8 +74,8 @@ Get-ChildItem -Path $projectPath -Recurse -Include $allowedExtensions |
         $_.FullName -notmatch "\\dist\\" -and
         $_.Name -ne "package-lock.json" -and
         $_.Extension -notmatch "\.png|\.jpg|\.jpeg|\.gif|\.svg|\.ico|\.pdf" -and
-        ($excludedFilePatterns -notmatch ($_.FullName -replace [regex]::Escape($projectPath), "")) -and
-        ($excludedFolderPatterns -notmatch ($_.FullName -replace [regex]::Escape($projectPath), ""))
+        -not ($excludedFilePatterns | Where-Object { $($_) -and ($_.FullName -match $_) }) -and
+        -not ($excludedFolderPatterns | Where-Object { $($_) -and ($_.FullName -match $_) })
     } |
     ForEach-Object {
         Add-Content $outputFile ("==== " + $_.FullName.Replace($projectPath, "") + " ====")

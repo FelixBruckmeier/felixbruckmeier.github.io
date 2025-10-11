@@ -1,3 +1,4 @@
+// src/assets/visuals/teamleadership/skillassessment/SkillmapChart.tsx
 import {
   ScatterChart,
   Scatter,
@@ -108,7 +109,7 @@ export default function SkillmapChart({ data }: SkillmapChartProps) {
               />
             </XAxis>
 
-            {/* === Y-Axis (fixed domain 0–5, but taller chart = bigger spacing) === */}
+            {/* === Y-Axis === */}
             <YAxis
               type="number"
               dataKey="influence"
@@ -142,14 +143,17 @@ export default function SkillmapChart({ data }: SkillmapChartProps) {
                 boxShadow: "0 4px 8px rgba(0,0,0,0.06)",
                 padding: "10px 14px",
               }}
-              formatter={(value, name, props) => [
-                value?.toFixed ? value.toFixed(2) : value,
-                name === "mastery"
-                  ? "Skill Level"
-                  : name === "influence"
-                  ? "Relevance"
-                  : props.payload.theme,
-              ]}
+              formatter={(value: unknown, name, props) => {
+                const formatted =
+                  typeof value === "number" ? value.toFixed(2) : String(value);
+                const label =
+                  name === "mastery"
+                    ? "Skill Level"
+                    : name === "influence"
+                    ? "Relevance"
+                    : props?.payload?.theme ?? "";
+                return [formatted, label];
+              }}
             />
 
             {/* === Points (theme colors) === */}

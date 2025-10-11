@@ -161,8 +161,23 @@ export function BgAccent({ children, className = "" }: { children: ReactNode; cl
   return <div className={cn(colors.accent.bg, colors.accent.text, className)}>{children}</div>;
 }
 
-export function MutedText({ children, className = "" }: { children: ReactNode; className?: string }) {
-  return <span className={cn(colors.muted.text, className)}>{children}</span>;
+/**
+ * ✅ MutedText jetzt mit title-Prop (Fix für SkillmapForm)
+ */
+export function MutedText({
+  children,
+  className = "",
+  title,
+}: {
+  children: ReactNode;
+  className?: string;
+  title?: string;
+}) {
+  return (
+    <span className={cn(colors.muted.text, className)} title={title}>
+      {children}
+    </span>
+  );
 }
 
 export function TagText({ children, className = "" }: { children: ReactNode; className?: string }) {

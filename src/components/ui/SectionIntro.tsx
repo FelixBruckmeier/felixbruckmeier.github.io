@@ -14,6 +14,7 @@ interface SectionIntroProps {
   center?: boolean;
   maxWidth?: "default" | "full";
   className?: string;
+  full?: boolean; // ✅ hinzugefügt, um Build-Error zu beheben
 }
 
 /**
@@ -22,17 +23,21 @@ interface SectionIntroProps {
  * Einheitliche Typografie & Breite für alle Intro-Texte.
  * - Bündig mit Section-Titel (Padding kommt aus Section.tsx)
  * - Standardbreite: 75 % des Containers (max-w-4xl)
+ * - Optional: `full` erzwingt volle Breite (setzt maxWidth auf "full")
  */
 export default function SectionIntro({
   children,
   center = false,
   maxWidth = "default",
   className,
+  full = false, // ✅ neues optionales Prop
 }: SectionIntroProps) {
+  const effectiveWidth = full ? "full" : maxWidth;
+
   return (
     <div
       className={cn(
-        sectionIntro[maxWidth],               // max-w-4xl (75 %)
+        sectionIntro[effectiveWidth], // max-w-4xl oder volle Breite
         typography.body.font,
         typography.body.size,
         typography.body.leading,

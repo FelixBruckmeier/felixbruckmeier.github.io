@@ -23,16 +23,11 @@ export const colors = {
   secondary: { bg: "bg-secondary", text: "text-secondary-foreground" },
   accent: { bg: "bg-accent", text: "text-accent-foreground" },
   muted: { bg: "bg-muted", text: "text-muted-foreground" },
-
-  // 🎨 Notion palette passt zu Soft-Themes
   notion: palette.notion,
-
-  // ✅ DS-konforme Tile-Farben
   tile: {
     bg: "bg-[#F9F9F9] dark:bg-[#1C1C1C]",
-    text: "text-muted-foreground", // sanfter Grundton statt schwarz
+    text: "text-muted-foreground",
   },
-
   success: { bg: "bg-green-500", text: "text-green-50" },
   warning: { bg: "bg-yellow-500", text: "text-yellow-900" },
   error: { bg: "bg-red-500", text: "text-red-50" },
@@ -66,7 +61,7 @@ export const typography = {
     size: "text-lg",
     weight: "font-semibold",
     leading: "leading-relaxed",
-    color: "text-foreground/90", // heller als body, stärker als muted
+    color: "text-foreground/90",
   },
   body: {
     font: "[font-family:var(--font-sans)]",
@@ -143,6 +138,7 @@ export const spacing = {
   mt2: "mt-2",
   mt3: "mt-3",
   mt4: "mt-4",
+  mt5: "mt-5",
   mt6: "mt-6",
   mt8: "mt-8",
   mt10: "mt-10",
@@ -151,8 +147,9 @@ export const spacing = {
   mt16: "mt-16",
   mt20: "mt-20",
   mt24: "mt-24",
-
+  mtLg: "mt-10",
   mb2: "mb-2",
+  mb3: "mb-3",
   mb4: "mb-4",
   mb6: "mb-6",
   mb8: "mb-8",
@@ -162,7 +159,6 @@ export const spacing = {
   mb16: "mb-16",
   mb20: "mb-20",
   mb24: "mb-24",
-
   pt4: "pt-4",
   pt6: "pt-6",
   pb4: "pb-4",
@@ -178,24 +174,22 @@ export const spacing = {
   py12: "py-12",
   pxSection: "px-6 md:px-8",
   pxCard: "px-4 md:px-6",
-
   gap2: "gap-2",
   gap3: "gap-3",
   gap4: "gap-4",
   gap6: "gap-6",
   gap8: "gap-8",
   gap10: "gap-10",
-
   stackXs: "space-y-1",
   stackSm: "space-y-2",
   stackMd: "space-y-4",
   stackLg: "space-y-6",
-
   blockGapSm: "space-y-6",
   blockGapMd: "space-y-10",
   blockGapLg: "space-y-16",
 } as const;
 
+// ✅ layout separat exportiert
 export const layout = {
   container: "mx-auto max-w-6xl px-4 sm:px-6 lg:px-8",
   gridGap: spacing.gap6,
