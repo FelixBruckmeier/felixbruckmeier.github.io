@@ -2,13 +2,13 @@ import { Section } from "@/components/ui";
 import SectionIntro from "@/components/ui/SectionIntro";
 import Tile from "@/components/ui/Tile";
 import { Subtitle, Body } from "@/components/ui/Tokens";
-import RITECycle from "@/assets/visuals/strategicuxresearch/RITECycle";
 import { layout, spacing, colors } from "@/lib/tokens";
 import { cn } from "@/lib/utils";
+import RITECycleChart from "@/assets/visuals/strategicuxresearch/RITECycleChart";
 
 /**
  * Section: Rapid Iterative Testing & Evaluation (RITE)
- * DS-conform — concise version
+ * DS-conform — with animated RITE cycle
  */
 export default function StrategicUXRITESection() {
   const tiles = [
@@ -43,29 +43,30 @@ export default function StrategicUXRITESection() {
       {/* --- Intro --- */}
       <SectionIntro>
         <strong>RITE</strong> is a pragmatic approach to usability testing that blends speed with
-        learning. Instead of waiting until a study ends, teams iterate as soon as issues appear —
-        often after just a few participants. Each round feeds directly into the next, turning
-        research into a fast cycle of discovery, design, and validation.
+        learning — making it particularly well-suited for <strong>Agile UX</strong> environments.
+        Instead of waiting until a study ends, teams iterate as soon as issues appear — often after
+        just a few participants. Each round feeds directly into the next, turning research into a
+        fast cycle of discovery, design, and validation.
       </SectionIntro>
 
-      {/* --- RITE Cycle --- */}
+      {/* --- Animated RITE Cycle --- */}
       <div
         className={cn(
           "flex flex-col justify-center items-center mx-auto w-full",
-          spacing.mt12,
-          spacing.mb12
+          spacing.mt16,
+          spacing.mb16
         )}
       >
         <div className="w-full max-w-4xl flex justify-center">
-          <RITECycle />
+          <RITECycleChart />
         </div>
-        <Subtitle className={cn("italic text-center text-foreground", spacing.mt6)}>
-          “Test early. Fix fast. Learn continuously.”
-        </Subtitle>
       </div>
 
+      {/* --- Key Benefits --- */}
+      <Subtitle className="text-foreground mb-6">Key Benefits</Subtitle>
+
       {/* --- Tile Grid --- */}
-      <div className={cn(layout.gridCols3, spacing.gap6, spacing.mt12)}>
+      <div className={cn(layout.gridCols3, spacing.gap6, spacing.mt8)}>
         {tiles.map((item) => (
           <Tile key={item.title} variant="static" className={cn("h-full", spacing.p6)}>
             <Subtitle className={cn("mb-3 text-foreground")}>{item.title}</Subtitle>

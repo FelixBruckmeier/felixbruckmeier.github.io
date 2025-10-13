@@ -13,7 +13,7 @@ import VennDiagram from "@/assets/visuals/uxstrategy/VennDiagram";
 export default function VisionAlignment() {
   const tiles = [
     {
-      title: "Business Alignment",
+      title: "Business Viability",
       text: "Ensuring research outcomes connect directly to measurable business impact — translating user understanding into growth and strategic clarity.",
     },
     {
@@ -21,7 +21,7 @@ export default function VisionAlignment() {
       text: "Partnering with engineering early to align desirability with feasibility — ensuring that user insights inform technical direction, not react to it.",
     },
     {
-      title: "Human Experience",
+      title: "Human Desirability",
       text: "Grounding all product decisions in empathy, behavior, and cultural context — to deliver solutions that feel intuitive, inclusive, and meaningful.",
     },
   ];

@@ -1,17 +1,15 @@
 import { Section } from "@/components/ui";
 import SectionIntro from "@/components/ui/SectionIntro";
-import { Body, Subtitle } from "@/components/ui/Tokens";
 import { cn } from "@/lib/utils";
 import { spacing, layout, colors } from "@/lib/tokens";
+import { Body, Subtitle } from "@/components/ui/Tokens";
 import HeartFramework from "@/assets/visuals/impactmeasurement/HeartFramework";
 
 /**
  * ImpactMeasurementHeartSection
  * -----------------------------
- * DS-konforme Section „HEART Framework“
- * - konsistente Abstände
- * - animiertes Visual (HeartFramework)
- * - inhaltlich auf Management-Ebene positioniert
+ * Focused on conceptual framework (Google HEART).
+ * DS-conform and management-focused.
  */
 
 export default function ImpactMeasurementHeartSection() {
@@ -21,7 +19,7 @@ export default function ImpactMeasurementHeartSection() {
       title="Measuring UX Outcomes – The HEART Framework"
       spacing="md"
     >
-      {/* Einleitung */}
+      {/* Intro text */}
       <SectionIntro className="max-w-3xl leading-relaxed text-lg">
         In many organizations, only what can be measured is considered valuable.
         That mindset systematically disadvantages user experience — because
@@ -36,12 +34,12 @@ export default function ImpactMeasurementHeartSection() {
         management-relevant outcomes.
       </Body>
 
-      {/* Animiertes Visual */}
+      {/* Visual */}
       <div className={cn("flex justify-center", spacing.mt10, spacing.mb12)}>
         <HeartFramework />
       </div>
 
-      {/* Beschreibung der Dimensionen */}
+      {/* Dimension description */}
       <Body className={cn("max-w-3xl", spacing.mb8, "leading-relaxed")}>
         The framework breaks UX into five key dimensions:
       </Body>
@@ -72,13 +70,16 @@ export default function ImpactMeasurementHeartSection() {
 
       <Body className={cn(colors.muted.text, "max-w-3xl", spacing.mt10)}>
         For each dimension, I work with cross-functional teams to define{" "}
-        <strong>Goals → Signals → Metrics</strong>. This turns vague intentions
-        like “improve satisfaction” into measurable objectives such as:
+        <strong>Goals → Signals → Metrics</strong>. This process translates broad
+        ambitions into measurable outcomes. For example:
       </Body>
 
       <Body className={cn("max-w-3xl italic", spacing.mt4)}>
-        “Increase NPS by 15 % within one quarter through improved task flow
-        clarity.”
+        <strong>Goal:</strong> Improve task success in the onboarding flow
+        <br />
+        <strong>Signal:</strong> Fewer users drop off before completing the first setup
+        <br />
+        <strong>Metric:</strong> Reduce onboarding drop-off rate from 30 % to 15 % within one quarter
       </Body>
 
       <Body className={cn(colors.muted.text, "max-w-3xl", spacing.mt10)}>
@@ -89,10 +90,9 @@ export default function ImpactMeasurementHeartSection() {
 
       <Body className={cn(colors.muted.text, "max-w-3xl", spacing.mt6)}>
         This framework enables leadership to see UX not as an aesthetic
-        investment, but as a <strong>strategic indicator of sustainable value
-        creation</strong>. It connects qualitative insights with quantitative
-        validation — helping organizations manage what truly matters: the
-        quality of the user experience itself.
+        investment, but as a{" "}
+        <strong>strategic indicator of sustainable value creation</strong>,
+        connecting qualitative insights with quantitative validation.
       </Body>
     </Section>
   );

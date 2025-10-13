@@ -35,7 +35,7 @@ jobs:
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./dist
+          path: ./docs   # ✅ geändert von ./dist auf ./docs
 
   deploy:
     environment:
@@ -702,55 +702,57 @@ export default function CostOfUX() {
 /* eslint-disable react/no-unknown-property */
 import React from "react";
 import { motion } from "framer-motion";
+import { typography } from "@/lib/tokens";
+import { cn } from "@/lib/utils";
 
 const categories = [
   {
     name: "Happiness",
-    color: "bg-[#3B82F6]", // DS Blue
+    color: "bg-[#3B82F6]",
     values: {
       Goals:
-        "Increase user satisfaction with usability and the value of the solution",
-      Signals: "Users provide positive feedback on their experience",
+        "Increase user satisfaction with usability and the value of the solution.",
+      Signals: "Users provide positive feedback on their experience.",
       Metrics:
-        "NPS (Net Promoter Score), SUS (System Usability Scale), CSAT (Customer Satisfaction Score)",
+        "NPS (Net Promoter Score), SUS (System Usability Scale), CSAT (Customer Satisfaction Score).",
     },
   },
   {
     name: "Engagement",
-    color: "bg-[#8B5CF6]", // DS Purple
+    color: "bg-[#8B5CF6]",
     values: {
-      Goals: "Ensure users interact with the solution regularly and actively",
-      Signals: "High usage frequency",
-      Metrics: "DAU (Daily Active Users), MAU (Monthly Active Users)",
+      Goals: "Ensure users interact with the solution regularly and actively.",
+      Signals: "High usage frequency.",
+      Metrics: "DAU (Daily Active Users), MAU (Monthly Active Users).",
     },
   },
   {
     name: "Adoption",
-    color: "bg-[#EF4444]", // DS Red
+    color: "bg-[#EF4444]",
     values: {
       Goals:
-        "New users should integrate the solution into their processes quickly and sustainably",
-      Signals: "Increasing number of new active users",
-      Metrics: "MAU (Monthly Active Users)",
+        "New users should integrate the solution into their processes quickly and sustainably.",
+      Signals: "Increasing number of new active users.",
+      Metrics: "MAU (Monthly Active Users).",
     },
   },
   {
     name: "Retention",
-    color: "bg-[#F59E0B]", // DS Orange
+    color: "bg-[#F59E0B]",
     values: {
-      Goals: "Ensure long-term usage of the solution",
-      Signals: "Users return and continue using the solution over time",
-      Metrics: "Stickiness (DAU/MAU Ratio)",
+      Goals: "Ensure long-term usage of the solution.",
+      Signals: "Users return and continue using the solution over time.",
+      Metrics: "Stickiness (DAU/MAU Ratio).",
     },
   },
   {
     name: "Task Success",
-    color: "bg-[#EAB308]", // DS Yellow
+    color: "bg-[#EAB308]",
     values: {
-      Goals: "Users should be able to complete their tasks efficiently",
-      Signals: "Users successfully accomplish their tasks",
+      Goals: "Users should be able to complete their tasks efficiently.",
+      Signals: "Users successfully accomplish their tasks.",
       Metrics:
-        "SUS (System Usability Scale), CSAT (Customer Satisfaction Score)",
+        "SUS (System Usability Scale), CSAT (Customer Satisfaction Score).",
     },
   },
 ];
@@ -760,30 +762,35 @@ const columns = ["Goals", "Signals", "Metrics"];
 export default function HeartFramework() {
   return (
     <div className="w-full max-w-7xl mx-auto mt-8 px-2">
+      {/* ===== DESKTOP LAYOUT ===== */}
       <motion.div
-        className="grid gap-2"
+        className="hidden md:grid gap-2"
         style={{ gridTemplateColumns: "repeat(4, 1fr)" }}
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, amount: 0.4 }}
+        viewport={{ once: true, amount: 0.3 }}
       >
-        {/* Leere Zelle oben links */}
+        {/* Leere Ecke */}
         <div></div>
 
-        {/* Kopfzeile: Goals / Signals / Metrics */}
+        {/* Kopfzeile */}
         {columns.map((col, i) => (
           <motion.div
             key={col}
-            className="text-white text-lg md:text-xl font-semibold rounded-md p-4 text-center"
+            className={cn(
+              "rounded-md p-4 text-center text-white font-semibold",
+              typography.body.font,
+              typography.body.size
+            )}
             style={{ backgroundColor: "#474747" }}
             variants={{
-              hidden: { opacity: 0, y: 30 },
+              hidden: { opacity: 0, y: 20 },
               visible: {
                 opacity: 1,
                 y: 0,
                 transition: {
-                  delay: 3.8 + i * 0.4, // leicht verzögert
-                  duration: 1.2,
+                  delay: 0.4 + i * 0.3,
+                  duration: 0.8,
                   ease: [0.33, 1.02, 0.68, 1],
                 },
               },
@@ -793,14 +800,17 @@ export default function HeartFramework() {
           </motion.div>
         ))}
 
-        {/* Zeilen: Happiness → Task Success */}
+        {/* Zeilen */}
         {categories.map((cat, rowIndex) => {
-          const baseDelay = rowIndex * 0.6;
+          const baseDelay = 1 + rowIndex * 0.5;
           return (
             <React.Fragment key={cat.name}>
-              {/* Kategorie-Zelle */}
               <motion.div
-                className={`${cat.color} text-white text-lg md:text-xl font-semibold rounded-md p-4 text-center flex items-center justify-center`}
+                className={cn(
+                  `${cat.color} text-white font-semibold rounded-md p-4 text-center flex items-center justify-center`,
+                  typography.subtitle.font,
+                  typography.subtitle.size
+                )}
                 variants={{
                   hidden: { opacity: 0, x: -40 },
                   visible: {
@@ -808,7 +818,7 @@ export default function HeartFramework() {
                     x: 0,
                     transition: {
                       delay: baseDelay,
-                      duration: 1.0,
+                      duration: 0.8,
                       ease: [0.33, 1.02, 0.68, 1],
                     },
                   },
@@ -817,28 +827,37 @@ export default function HeartFramework() {
                 {cat.name}
               </motion.div>
 
-              {/* Werte-Zellen */}
               {columns.map((col, colIndex) => (
                 <motion.div
                   key={`${cat.name}-${col}`}
-                  className="rounded-md p-4 text-sm leading-relaxed text-white"
+                  className={cn(
+                    "rounded-md p-4 leading-relaxed text-white",
+                    typography.body.font,
+                    typography.body.size
+                  )}
                   style={{ backgroundColor: "#767676" }}
                   variants={{
-                    hidden: { opacity: 0, y: 25 },
+                    hidden: { opacity: 0, y: 20 },
                     visible: {
                       opacity: 1,
                       y: 0,
                       transition: {
-                        delay:
-                          6.5 + // längere Pause nach Header
-                          rowIndex * 0.6 +
-                          colIndex * 0.4,
-                        duration: 1.2,
+                        delay: baseDelay + 0.3 + colIndex * 0.3,
+                        duration: 0.8,
                         ease: [0.33, 1.02, 0.68, 1],
                       },
                     },
                   }}
                 >
+                  <div
+                    className={cn(
+                      "font-medium text-gray-200 mb-1",
+                      typography.small.font,
+                      typography.small.size
+                    )}
+                  >
+                    {col}
+                  </div>
                   {cat.values[col]}
                 </motion.div>
               ))}
@@ -846,9 +865,70 @@ export default function HeartFramework() {
           );
         })}
       </motion.div>
+
+      {/* ===== MOBILE LAYOUT ===== */}
+      <div className="flex flex-col gap-6 md:hidden mt-6">
+        {categories.map((cat, i) => (
+          <motion.div
+            key={cat.name}
+            className="rounded-xl overflow-hidden shadow-md"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+            variants={{
+              hidden: { opacity: 0, y: 40 },
+              visible: {
+                opacity: 1,
+                y: 0,
+                transition: {
+                  delay: i * 0.5,
+                  duration: 0.9,
+                  ease: [0.33, 1.02, 0.68, 1],
+                },
+              },
+            }}
+          >
+            {/* Kategorie-Titel */}
+            <div
+              className={cn(
+                `${cat.color} text-white px-4 py-3 font-semibold`,
+                typography.subtitle.font,
+                typography.subtitle.size
+              )}
+            >
+              {cat.name}
+            </div>
+
+            {/* Inhalte */}
+            <div
+              className={cn(
+                "bg-[#767676] text-white p-4 space-y-3 leading-relaxed",
+                typography.body.font,
+                typography.body.size
+              )}
+            >
+              {columns.map((col) => (
+                <div key={`${cat.name}-${col}`}>
+                  <div
+                    className={cn(
+                      "font-medium text-gray-200 mb-1",
+                      typography.small.font,
+                      typography.small.size
+                    )}
+                  >
+                    {col}
+                  </div>
+                  {cat.values[col]}
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        ))}
+      </div>
     </div>
   );
 }
+
 
 
 ==== \src\assets\visuals\researchops\reopsData.ts ====
@@ -1454,6 +1534,7 @@ export const themeColors: Record<string, string> = {
 
 
 ==== \src\assets\visuals\teamleadership\skillassessment\SkillmapChart.tsx ====
+// src/assets/visuals/teamleadership/skillassessment/SkillmapChart.tsx
 import {
   ScatterChart,
   Scatter,
@@ -1564,7 +1645,7 @@ export default function SkillmapChart({ data }: SkillmapChartProps) {
               />
             </XAxis>
 
-            {/* === Y-Axis (fixed domain 0–5, but taller chart = bigger spacing) === */}
+            {/* === Y-Axis === */}
             <YAxis
               type="number"
               dataKey="influence"
@@ -1598,14 +1679,17 @@ export default function SkillmapChart({ data }: SkillmapChartProps) {
                 boxShadow: "0 4px 8px rgba(0,0,0,0.06)",
                 padding: "10px 14px",
               }}
-              formatter={(value, name, props) => [
-                value?.toFixed ? value.toFixed(2) : value,
-                name === "mastery"
-                  ? "Skill Level"
-                  : name === "influence"
-                  ? "Relevance"
-                  : props.payload.theme,
-              ]}
+              formatter={(value: unknown, name, props) => {
+                const formatted =
+                  typeof value === "number" ? value.toFixed(2) : String(value);
+                const label =
+                  name === "mastery"
+                    ? "Skill Level"
+                    : name === "influence"
+                    ? "Relevance"
+                    : props?.payload?.theme ?? "";
+                return [formatted, label];
+              }}
             />
 
             {/* === Points (theme colors) === */}
@@ -3313,7 +3397,7 @@ import { Link, useLocation } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import ThemeToggle from "@/components/common/ThemeToggle";
-import { typography, colors, transitions, spacing } from "@/lib/tokens";
+import { typography, colors, spacing } from "@/lib/tokens";
 import { cn } from "@/lib/utils";
 import logo from "@/assets/logo-uxr.png";
 
@@ -3344,7 +3428,6 @@ export default function NavBar() {
   const [active, setActive] = useState<string>("");
   const [open, setOpen] = useState(false);
 
-  // Smooth scrolling globally
   useEffect(() => {
     const prev = document.documentElement.style.scrollBehavior;
     document.documentElement.style.scrollBehavior = "smooth";
@@ -3353,7 +3436,6 @@ export default function NavBar() {
     };
   }, []);
 
-  // Track active section on homepage
   const observerRef = useRef<IntersectionObserver | null>(null);
   useEffect(() => {
     if (!onHome) return;
@@ -3376,30 +3458,9 @@ export default function NavBar() {
   }, [onHome]);
 
   const hrefFor = (id: string) => `/#${id}`;
-
   useEffect(() => setActive(hash.replace("#", "")), [hash]);
   useEffect(() => setOpen(false), [hash, pathname]);
 
-  // 🧭 Scroll to hash after route change (reliable)
-  useEffect(() => {
-    if (onHome && hash) {
-      const targetId = hash.replace("#", "");
-      const tryScroll = () => {
-        const el = document.getElementById(targetId);
-        if (el) {
-          el.scrollIntoView({ behavior: "smooth" });
-          return true;
-        }
-        return false;
-      };
-      let attempts = 0;
-      const interval = setInterval(() => {
-        if (tryScroll() || attempts++ > 20) clearInterval(interval);
-      }, 50);
-    }
-  }, [onHome, hash]);
-
-  // Navigation click handler (from subpages)
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
     if (!onHome) {
       e.preventDefault();
@@ -3408,139 +3469,45 @@ export default function NavBar() {
   };
 
   return (
-    <header
-      className={cn(
-        "sticky top-0 z-50 backdrop-blur border-b",
-        colors.border,
-        colors.background.bg,
-        colors.background.text
-      )}
-    >
-      <nav className="container-responsive h-16 flex items-center justify-between">
-        {/* ✅ Logo + Name */}
-        <Link
-          to="/#header"
-          onClick={(e) => {
-            if (window.location.pathname === "/") {
-              e.preventDefault();
-              window.scrollTo({ top: 0, behavior: "smooth" });
-            }
-          }}
-          className={cn(
-            "flex items-center gap-3",
-            typography.subtitle.font,
-            typography.subtitle.size,
-            "font-semibold",
-            typography.subtitle.leading,
-            colors.foreground
-          )}
-        >
-          <img src={logo} alt="Felix Bruckmeier Logo" className="h-8 w-8 object-contain rounded-md" />
-          <span>Felix Bruckmeier</span>
-        </Link>
+    <>
+      {/* === Fixed Sticky Header === */}
+      <header
+        className={cn(
+          "fixed top-0 left-0 right-0 z-[100] border-b border-border backdrop-blur-md bg-background/95 supports-[backdrop-filter]:bg-background/80"
+        )}
+      >
+        <nav className="container-responsive h-16 flex items-center justify-between">
+          {/* === Logo + Name === */}
+          <Link
+            to="/#header"
+            onClick={(e) => {
+              if (window.location.pathname === "/") {
+                e.preventDefault();
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }
+            }}
+            className={cn(
+              "flex items-center gap-3 font-semibold text-foreground",
+              typography.subtitle.font,
+              typography.subtitle.size
+            )}
+          >
+            <img src={logo} alt="Felix Bruckmeier Logo" className="h-8 w-8 object-contain rounded-md" />
+            <span>Felix Bruckmeier</span>
+          </Link>
 
-        {/* Desktop Navigation */}
-        <ul className="hidden md:flex items-center gap-6">
-          {NAV.map((id) => (
-            <li key={id} className="relative group">
-              {id === "cv" ? (
-                <Link
-                  to="/cv"
-                  className={cn(
-                    "px-1 py-2 font-semibold underline underline-offset-4 decoration-transparent",
-                    transitions.default,
-                    typography.body.font,
-                    typography.body.size,
-                    typography.body.leading,
-                    pathname === "/cv"
-                      ? "text-foreground decoration-current"
-                      : "text-muted-foreground hover:text-foreground hover:decoration-current"
-                  )}
-                >
-                  {t(`nav.${id}`)}
-                </Link>
-              ) : (
-                <a
-                  href={hrefFor(id)}
-                  onClick={(e) => handleNavClick(e, id)}
-                  aria-current={active === id ? "page" : undefined}
-                  className={cn(
-                    "px-1 py-2 font-semibold underline underline-offset-4 decoration-transparent",
-                    transitions.default,
-                    typography.body.font,
-                    typography.body.size,
-                    typography.body.leading,
-                    active === id
-                      ? "text-foreground decoration-current"
-                      : "text-muted-foreground hover:text-foreground hover:decoration-current"
-                  )}
-                >
-                  {t(`nav.${id}`)}
-                </a>
-              )}
-
-              {/* Dropdowns */}
-              {SUBNAV[id] && (
-                <ul
-                  className={cn(
-                    "absolute left-0 top-full hidden group-hover:block shadow-lg rounded-md mt-1 py-2 w-64 border bg-background",
-                    colors.border
-                  )}
-                >
-                  {SUBNAV[id].map((sub) => (
-                    <li key={sub.id}>
-                      <Link
-                        to={sub.path}
-                        className={cn(
-                          "block px-4 py-2 hover:bg-muted transition",
-                          typography.body.font,
-                          typography.body.size,
-                          "font-medium text-muted-foreground hover:text-foreground"
-                        )}
-                      >
-                        {t(sub.titleKey)}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </li>
-          ))}
-          <li className={spacing.pl4}><ThemeToggle /></li>
-        </ul>
-
-        {/* === Mobile Burger Toggle === */}
-        <button
-          aria-label="Toggle menu"
-          onClick={() => setOpen((v) => !v)}
-          className={cn(
-            "md:hidden inline-flex items-center justify-center h-10 w-10 rounded-md border transition-colors",
-            colors.border,
-            colors.foreground
-          )}
-        >
-          <div className={cn("transition-transform duration-300", open && "rotate-45")}>
-            <div className="w-5 h-0.5 bg-current mb-1"></div>
-            <div className={cn("w-5 h-0.5 bg-current", open && "opacity-0")}></div>
-            <div className="w-5 h-0.5 bg-current mt-1"></div>
-          </div>
-        </button>
-      </nav>
-
-      {/* === Mobile Menu === */}
-      {open && (
-        <div className={cn("md:hidden border-t", colors.border, colors.background.bg)}>
-          <div className="container-responsive py-3 space-y-2">
+          {/* === Desktop Navigation === */}
+          <ul className="hidden md:flex items-center gap-6">
             {NAV.map((id) => (
-              <div key={id}>
+              <li key={id} className="relative group">
                 {id === "cv" ? (
                   <Link
                     to="/cv"
                     className={cn(
-                      "block py-2 font-medium",
-                      typography.body.font,
-                      typography.body.size,
-                      colors.foreground
+                      "px-1 py-2 font-semibold underline underline-offset-4 decoration-transparent transition",
+                      pathname === "/cv"
+                        ? "text-foreground decoration-current"
+                        : "text-muted-foreground hover:text-foreground hover:decoration-current"
                     )}
                   >
                     {t(`nav.${id}`)}
@@ -3549,12 +3516,86 @@ export default function NavBar() {
                   <a
                     href={hrefFor(id)}
                     onClick={(e) => handleNavClick(e, id)}
+                    aria-current={active === id ? "page" : undefined}
                     className={cn(
-                      "block py-2 font-medium",
-                      typography.body.font,
-                      typography.body.size,
-                      colors.foreground
+                      "px-1 py-2 font-semibold underline underline-offset-4 decoration-transparent transition",
+                      active === id
+                        ? "text-foreground decoration-current"
+                        : "text-muted-foreground hover:text-foreground hover:decoration-current"
                     )}
+                  >
+                    {t(`nav.${id}`)}
+                  </a>
+                )}
+
+                {/* === Dropdowns === */}
+                {SUBNAV[id] && (
+                  <ul
+                    className={cn(
+                      "absolute left-0 top-full hidden group-hover:block shadow-lg rounded-md mt-1 py-2 w-64 border bg-background",
+                      colors.border
+                    )}
+                  >
+                    {SUBNAV[id].map((sub) => (
+                      <li key={sub.id}>
+                        <Link
+                          to={sub.path}
+                          className={cn(
+                            "block px-4 py-2 hover:bg-muted transition",
+                            typography.body.font,
+                            typography.body.size,
+                            "font-medium text-muted-foreground hover:text-foreground"
+                          )}
+                        >
+                          {t(sub.titleKey)}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </li>
+            ))}
+            <li className={spacing.pl4}>
+              <ThemeToggle />
+            </li>
+          </ul>
+
+          {/* === Mobile Right Controls === */}
+          <div className="flex items-center gap-3 md:hidden">
+            <ThemeToggle />
+            <button
+              aria-label="Toggle menu"
+              onClick={() => setOpen((v) => !v)}
+              className="inline-flex items-center justify-center h-10 w-10 rounded-md border border-border text-foreground transition"
+            >
+              <div className={cn("transition-transform duration-300", open && "rotate-45")}>
+                <div className="w-5 h-0.5 bg-current mb-1"></div>
+                <div className={cn("w-5 h-0.5 bg-current", open && "opacity-0")}></div>
+                <div className="w-5 h-0.5 bg-current mt-1"></div>
+              </div>
+            </button>
+          </div>
+        </nav>
+
+        {/* === Mobile Menu === */}
+        <div
+          className={cn(
+            "md:hidden overflow-hidden transition-[max-height,opacity] duration-300 ease-in-out border-t border-border bg-background/95 backdrop-blur-sm",
+            open ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
+          )}
+        >
+          <div className="container-responsive py-3 space-y-2">
+            {NAV.map((id) => (
+              <div key={id}>
+                {id === "cv" ? (
+                  <Link to="/cv" className="block py-2 font-medium text-foreground">
+                    {t(`nav.${id}`)}
+                  </Link>
+                ) : (
+                  <a
+                    href={hrefFor(id)}
+                    onClick={(e) => handleNavClick(e, id)}
+                    className="block py-2 font-medium text-foreground"
                   >
                     {t(`nav.${id}`)}
                   </a>
@@ -3565,12 +3606,7 @@ export default function NavBar() {
                       <Link
                         key={sub.id}
                         to={sub.path}
-                        className={cn(
-                          "block py-1",
-                          typography.small.font,
-                          typography.small.size,
-                          "text-muted-foreground hover:text-foreground"
-                        )}
+                        className="block py-1 text-sm text-muted-foreground hover:text-foreground"
                       >
                         {t(sub.titleKey)}
                       </Link>
@@ -3579,13 +3615,13 @@ export default function NavBar() {
                 )}
               </div>
             ))}
-            <div className="flex gap-3 pt-2">
-              <ThemeToggle />
-            </div>
           </div>
         </div>
-      )}
-    </header>
+      </header>
+
+      {/* Spacer to offset fixed header */}
+      <div className="h-16" />
+    </>
   );
 }
 
@@ -3747,7 +3783,7 @@ export default function ThemeToggle() {
 ==== \src\components\layout\PageLayout.tsx ====
 import { ReactNode } from "react";
 import { cn } from "@/lib/utils";
-import { layout, sectionSpacing, typography, colors } from "@/lib/tokens";
+import { layout, sectionSpacing, typography } from "@/lib/tokens";
 
 interface PageLayoutProps {
   title?: string;
@@ -3768,14 +3804,15 @@ export default function PageLayout({
       {headerImage && (
         <section
           className={cn(
-            "relative w-screen min-h-[50vh] flex flex-col justify-center items-center text-center text-white overflow-hidden"
+            "relative w-full min-h-[50vh] flex flex-col justify-center items-center text-center text-white overflow-hidden"
           )}
         >
           {/* Hintergrundbild */}
           <img
             src={headerImage}
             alt=""
-            className="absolute inset-0 w-full h-full object-cover"
+            data-hero
+            className="absolute inset-0 w-full h-full object-cover object-center"
           />
 
           {/* Halbtransparenter Overlay */}
@@ -6006,7 +6043,7 @@ export default function CVIntroSection() {
 // src/components/sections/cv/index.ts
 export { default as CVIntroSection } from "./CVIntroSection";
 export { default as ProfessionalExperienceSection } from "./ProfessionalExperienceSection";
-export { default as CoreCompetenciesSection } from "./CoreCompetenciesSection";
+// export { default as CoreCompetenciesSection } from "./CoreCompetenciesSection";
 
 
 ==== \src\components\sections\cv\PersonalExperienceSection.tsx ====
@@ -7382,8 +7419,19 @@ import { Body, Subtitle } from "@/components/ui/Tokens";
 import { cn } from "@/lib/utils";
 import { spacing } from "@/lib/tokens";
 import { skills, themeColors } from "@/data/skills";
-import SkillRadarChart from "@/assets/visuals/teamleadership/skillassessment/SkillRadarChart";
-import SkillProgressionChart from "@/assets/visuals/teamleadership/skillassessment/SkillProgressionChart";
+
+// 🟩 Dummy-Komponenten ersetzen fehlende Charts, bis du sie brauchst
+const SkillRadarChart = ({ data }: { data: Record<string, number> }) => (
+  <div className="flex items-center justify-center h-64 text-muted-foreground border border-dashed border-border rounded-xl">
+    <span>SkillRadarChart placeholder</span>
+  </div>
+);
+
+const SkillProgressionChart = ({ data }: { data: Record<string, number> }) => (
+  <div className="flex items-center justify-center h-64 text-muted-foreground border border-dashed border-border rounded-xl">
+    <span>SkillProgressionChart placeholder</span>
+  </div>
+);
 
 export default function Skillmap() {
   const [submitted, setSubmitted] = useState(false);
@@ -7414,17 +7462,11 @@ export default function Skillmap() {
     value: count ? total / count : 0,
   }));
 
-  // 🔹 Chart-Daten für Radar & Progression
   const radarData = themeAverages.reduce(
     (acc, { theme, value }) => ({ ...acc, [theme]: value }),
     {}
   );
-  const barData = Object.entries(ratings).map(([skill, value]) => ({
-    skill,
-    value,
-  }));
 
-  // 🔹 Ergebnisse anzeigen
   if (submitted) {
     return (
       <div className="text-center">
@@ -9124,6 +9166,7 @@ interface SectionIntroProps {
   center?: boolean;
   maxWidth?: "default" | "full";
   className?: string;
+  full?: boolean; // ✅ hinzugefügt, um Build-Error zu beheben
 }
 
 /**
@@ -9132,17 +9175,21 @@ interface SectionIntroProps {
  * Einheitliche Typografie & Breite für alle Intro-Texte.
  * - Bündig mit Section-Titel (Padding kommt aus Section.tsx)
  * - Standardbreite: 75 % des Containers (max-w-4xl)
+ * - Optional: `full` erzwingt volle Breite (setzt maxWidth auf "full")
  */
 export default function SectionIntro({
   children,
   center = false,
   maxWidth = "default",
   className,
+  full = false, // ✅ neues optionales Prop
 }: SectionIntroProps) {
+  const effectiveWidth = full ? "full" : maxWidth;
+
   return (
     <div
       className={cn(
-        sectionIntro[maxWidth],               // max-w-4xl (75 %)
+        sectionIntro[effectiveWidth], // max-w-4xl oder volle Breite
         typography.body.font,
         typography.body.size,
         typography.body.leading,
@@ -9208,8 +9255,8 @@ import { cn } from "@/lib/utils";
 import { colors, radii, transitions, spacing, hoverEffects } from "@/lib/tokens";
 
 type TileProps = React.HTMLAttributes<HTMLDivElement> & {
-  /** interactive = Hover + Scale, static = keine Interaktion */
-  variant?: "interactive" | "static";
+  /** interactive = Hover + Scale, static = keine Interaktion, inactive = ruhig + leicht ausgegraut */
+  variant?: "interactive" | "static" | "inactive"; // ✅ erweitert
 };
 
 export default function Tile({
@@ -9227,8 +9274,16 @@ export default function Tile({
         transitions.default,
         variant === "interactive"
           ? cn("will-change-transform", hoverEffects.smoothLift, "cursor-pointer")
+          : variant === "inactive"
+          ? cn(
+              // ✅ leicht ausgegrauter, deaktivierter Zustand
+              "opacity-70",
+              "cursor-not-allowed",
+              "transition-none",
+              "transform-none"
+            )
           : cn(
-              // komplett ruhig: keine Hover-/Transform-Effekte
+              // statisch, aber aktiv sichtbar
               "cursor-default",
               "transition-none",
               "transform-none"
@@ -9434,8 +9489,23 @@ export function BgAccent({ children, className = "" }: { children: ReactNode; cl
   return <div className={cn(colors.accent.bg, colors.accent.text, className)}>{children}</div>;
 }
 
-export function MutedText({ children, className = "" }: { children: ReactNode; className?: string }) {
-  return <span className={cn(colors.muted.text, className)}>{children}</span>;
+/**
+ * ✅ MutedText jetzt mit title-Prop (Fix für SkillmapForm)
+ */
+export function MutedText({
+  children,
+  className = "",
+  title,
+}: {
+  children: ReactNode;
+  className?: string;
+  title?: string;
+}) {
+  return (
+    <span className={cn(colors.muted.text, className)} title={title}>
+      {children}
+    </span>
+  );
 }
 
 export function TagText({ children, className = "" }: { children: ReactNode; className?: string }) {
@@ -9722,16 +9792,11 @@ export const colors = {
   secondary: { bg: "bg-secondary", text: "text-secondary-foreground" },
   accent: { bg: "bg-accent", text: "text-accent-foreground" },
   muted: { bg: "bg-muted", text: "text-muted-foreground" },
-
-  // 🎨 Notion palette passt zu Soft-Themes
   notion: palette.notion,
-
-  // ✅ DS-konforme Tile-Farben
   tile: {
     bg: "bg-[#F9F9F9] dark:bg-[#1C1C1C]",
-    text: "text-muted-foreground", // sanfter Grundton statt schwarz
+    text: "text-muted-foreground",
   },
-
   success: { bg: "bg-green-500", text: "text-green-50" },
   warning: { bg: "bg-yellow-500", text: "text-yellow-900" },
   error: { bg: "bg-red-500", text: "text-red-50" },
@@ -9765,7 +9830,7 @@ export const typography = {
     size: "text-lg",
     weight: "font-semibold",
     leading: "leading-relaxed",
-    color: "text-foreground/90", // heller als body, stärker als muted
+    color: "text-foreground/90",
   },
   body: {
     font: "[font-family:var(--font-sans)]",
@@ -9842,6 +9907,7 @@ export const spacing = {
   mt2: "mt-2",
   mt3: "mt-3",
   mt4: "mt-4",
+  mt5: "mt-5",
   mt6: "mt-6",
   mt8: "mt-8",
   mt10: "mt-10",
@@ -9850,8 +9916,9 @@ export const spacing = {
   mt16: "mt-16",
   mt20: "mt-20",
   mt24: "mt-24",
-
+  mtLg: "mt-10",
   mb2: "mb-2",
+  mb3: "mb-3",
   mb4: "mb-4",
   mb6: "mb-6",
   mb8: "mb-8",
@@ -9861,7 +9928,6 @@ export const spacing = {
   mb16: "mb-16",
   mb20: "mb-20",
   mb24: "mb-24",
-
   pt4: "pt-4",
   pt6: "pt-6",
   pb4: "pb-4",
@@ -9877,24 +9943,22 @@ export const spacing = {
   py12: "py-12",
   pxSection: "px-6 md:px-8",
   pxCard: "px-4 md:px-6",
-
   gap2: "gap-2",
   gap3: "gap-3",
   gap4: "gap-4",
   gap6: "gap-6",
   gap8: "gap-8",
   gap10: "gap-10",
-
   stackXs: "space-y-1",
   stackSm: "space-y-2",
   stackMd: "space-y-4",
   stackLg: "space-y-6",
-
   blockGapSm: "space-y-6",
   blockGapMd: "space-y-10",
   blockGapLg: "space-y-16",
 } as const;
 
+// ✅ layout separat exportiert
 export const layout = {
   container: "mx-auto max-w-6xl px-4 sm:px-6 lg:px-8",
   gridGap: spacing.gap6,
@@ -11804,6 +11868,25 @@ export default i18n;
 }
 
 /* ================================
+   GLOBAL LAYOUT FIXES
+   ================================ */
+html,
+body {
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100%;
+}
+
+/* ✅ Normale Bilder & SVGs skalieren richtig,
+   Hero-/Headerbilder mit data-hero bleiben unberührt */
+img:not([data-hero]),
+svg:not([data-hero]) {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ================================
    COMPONENT UTILITIES
    ================================ */
 @layer components {
@@ -11855,8 +11938,6 @@ export default i18n;
     @apply bg-background text-foreground font-sans;
   }
 
-  /* Headings: nur Font-Family + Weight + Tracking, 
-     Größe kommt aus Tokens (typography.*) */
   h1 {
     @apply font-display font-extrabold tracking-tight;
   }
@@ -11867,7 +11948,6 @@ export default i18n;
     @apply font-display font-semibold;
   }
 
-  /* Paragraphs und Kleingedrucktes */
   p {
     @apply leading-relaxed text-muted-foreground;
   }
@@ -11911,11 +11991,39 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 
 
 ==== \src\vite-env.d.ts ====
+/// <reference types="vite/client" />
+
+declare module "*.jpg" {
+  const value: string;
+  export default value;
+}
+
+declare module "*.jpeg" {
+  const value: string;
+  export default value;
+}
+
 declare module "*.png" {
   const value: string;
   export default value;
 }
+
 declare module "*.svg" {
+  const value: string;
+  export default value;
+}
+
+declare module "*.webp" {
+  const value: string;
+  export default value;
+}
+
+declare module "*.gif" {
+  const value: string;
+  export default value;
+}
+
+declare module "*.mp4" {
   const value: string;
   export default value;
 }

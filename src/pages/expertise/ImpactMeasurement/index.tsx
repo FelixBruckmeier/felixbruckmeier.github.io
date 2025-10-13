@@ -1,10 +1,9 @@
-// src/pages/expertise/ImpactMeasurement/index.tsx
 import PageLayout from "@/components/layout/PageLayout";
 import headerImg from "@/assets/images/expertise/impactmeasurement/impact.jpg";
 import {
   ImpactMeasurementIntroSection,
- ImpactMeasurementHeartSection,
-  ImpactMeasurementBusinessSection,
+  ImpactMeasurementUXSection,        // ✅ ersetzt BusinessSection
+  ImpactMeasurementHeartSection,
   ImpactMeasurementResearchSection,
   ImpactMeasurementSummarySection,
 } from "@/components/sections/expertise/impactmeasurement";
@@ -14,12 +13,21 @@ export default function ImpactMeasurementPage() {
     <PageLayout
       title="Impact Measurement"
       intro="Connecting UX outcomes with business, user, and research value."
-      headerImage={headerImg} // ✅ Headerbild hinzugefügt
+      headerImage={headerImg}
     >
+      {/* 1️⃣ Intro */}
       <ImpactMeasurementIntroSection />
- <ImpactMeasurementHeartSection />
-      <ImpactMeasurementBusinessSection />
+
+      {/* 2️⃣ Measuring UX Impact – with 1–4 + Pragmatic Approach */}
+      <ImpactMeasurementUXSection />
+
+      {/* 3️⃣ Measuring UX Outcomes – The HEART Framework */}
+      <ImpactMeasurementHeartSection />
+
+      {/* 4️⃣ Research Impact */}
       <ImpactMeasurementResearchSection />
+
+      {/* 5️⃣ Summary */}
       <ImpactMeasurementSummarySection />
     </PageLayout>
   );
