@@ -16,7 +16,7 @@ export default function Home() {
   return (
     <PageLayout
       title="Felix Bruckmeier"
-      intro="Bridging insight, design, and strategy to create user-centered digital products that deliver measurable business value."
+      intro="Shaping UX strategy through qualitative depth, quantitative insight, and scalable ResearchOps."
       headerImage={headerImg}
     >
       {/* ===== Hero-Content direkt unter Intro ===== */}

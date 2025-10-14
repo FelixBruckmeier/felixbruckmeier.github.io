@@ -1,65 +1,52 @@
 import Section from "@/components/ui/Section";
 import Tile from "@/components/ui/Tile";
-import { typography } from "@/lib/tokens";
+import { Subtitle, Body } from "@/components/ui/Tokens";
 import { User, Mail, Info } from "lucide-react";
 
 export default function ImprintSection() {
   return (
-    // Kein title mehr → PageLayout zeigt "Imprint"
-    <Section id="imprint" spacing="md" fullWidth={false}>
+    <Section id="imprint" spacing="md" fullWidth={false} title="Imprint">
       <div className="grid gap-6 md:grid-cols-2">
         {/* Responsible */}
         <Tile variant="static">
           <div className="flex items-center gap-2 mb-3">
             <User className="w-5 h-5 text-muted-foreground" />
-            <h3
-              className={`${typography.subtitle.size} ${typography.subtitle.weight}`}
-            >
-              Responsible for this Website
-            </h3>
+            <Subtitle>Responsible for this Website</Subtitle>
           </div>
-          <p className={`${typography.body.size} ${typography.body.leading}`}>
+          <Body>
             Felix Bruckmeier
             <br />
             Munich, Germany
-          </p>
+          </Body>
         </Tile>
 
         {/* Contact */}
         <Tile variant="static">
           <div className="flex items-center gap-2 mb-3">
             <Mail className="w-5 h-5 text-muted-foreground" />
-            <h3
-              className={`${typography.subtitle.size} ${typography.subtitle.weight}`}
-            >
-              Contact
-            </h3>
+            <Subtitle>Contact</Subtitle>
           </div>
-          <p className={`${typography.body.size} ${typography.body.leading}`}>
+          <Body>
             <a
               href="mailto:felixbruckmeier@googlemail.com"
               className="text-accent hover:underline"
             >
               felixbruckmeier@googlemail.com
             </a>
-          </p>
+          </Body>
         </Tile>
 
         {/* Legal Note */}
         <Tile variant="static" className="md:col-span-2">
           <div className="flex items-center gap-2 mb-3">
             <Info className="w-5 h-5 text-muted-foreground" />
-            <h3
-              className={`${typography.subtitle.size} ${typography.subtitle.weight}`}
-            >
-              Legal Notice
-            </h3>
+            <Subtitle>Legal Notice</Subtitle>
           </div>
-          <p className={`${typography.body.size} ${typography.body.leading}`}>
+          <Body>
             This website is a private, non-commercial portfolio project. It is
             not intended for business purposes, but serves solely to present
             selected work and expertise.
-          </p>
+          </Body>
         </Tile>
       </div>
     </Section>

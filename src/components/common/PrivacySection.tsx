@@ -1,4 +1,3 @@
-// src/components/sections/shared/PrivacySection.tsx
 import Section from "@/components/ui/Section";
 import Tile from "@/components/ui/Tile";
 import { Subtitle, Body } from "@/components/ui/Tokens";
@@ -6,8 +5,7 @@ import { Mail, Shield, Server, Eye } from "lucide-react";
 
 export default function PrivacySection() {
   return (
-    // Titel kommt vom PageLayout → hier ohne title
-    <Section id="privacy" spacing="md" fullWidth={false}>
+    <Section id="privacy" title="Privacy" spacing="md" fullWidth={false}>
       <div className="grid gap-6 md:grid-cols-2">
         {/* General Info */}
         <Tile variant="static">

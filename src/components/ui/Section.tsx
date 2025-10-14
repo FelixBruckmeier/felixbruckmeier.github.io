@@ -17,19 +17,19 @@ interface SectionProps {
   center?: boolean;
   borderTop?: boolean;
   borderBottom?: boolean;
-  border?: boolean;     // ✅ neu (für Footer usw.)
-  compact?: boolean;    // ✅ neu (für ImpactMeasurement)
+  border?: boolean;     // optional für z. B. Footer-Trennlinie
+  compact?: boolean;    // kompakter Modus (z. B. für Impact-Tiles)
   spacing?: keyof typeof sectionSpacing;
   className?: string;
-  fullWidth?: boolean;
+  fullWidth?: boolean;  // ⬅ volle Breite standardmäßig aktiviert
 }
 
 /**
- * 🔧 Unified Section Component (Design System)
+ * 💠 Unified Section Component (Design System)
  * --------------------------------------------
- * - Standard: volle Breite (fullWidth = true)
+ * - Standardmäßig volle Breite
  * - Optionaler Container-Modus via fullWidth={false}
- * - Titel und Inhalte automatisch bündig
+ * - Einheitliche Typo, Abstände und Border-Behandlung
  */
 export default function Section({
   id,
@@ -39,33 +39,32 @@ export default function Section({
   center = false,
   borderTop = false,
   borderBottom = false,
-  border = true,
+  border = false,        // ⚙️ kein Border mehr per Default
   compact = false,
   spacing = "md",
   className,
-  fullWidth = true, // ✅ Standard jetzt volle Breite
+  fullWidth = true,      // ✅ volle Breite ist Standard
 }: SectionProps) {
   return (
     <section
       id={id}
       className={cn(
         layout.scrollOffset,
-        borderTop && "border-t",
-        borderBottom && "border-b",
-        border && colors.border,
+        borderTop && "border-t border-border/20",
+        borderBottom && "border-b border-border/20",
+        border && "border-y border-border/20",
         sectionSpacing[spacing],
-        compact && "py-4", // ✅ kompakter Modus
+        compact && "py-4",
         "w-full",
         className
       )}
     >
       <div
         className={cn(
-          fullWidth ? "w-full" : layout.container, // ⬅ Container nur bei false
+          fullWidth ? "w-full px-0" : layout.container,
           center ? "text-center mx-auto" : "text-left"
         )}
       >
-        {/* --- Titel (bündig mit Inhalt) --- */}
         {title && (
           <h2
             className={cn(
@@ -81,7 +80,6 @@ export default function Section({
           </h2>
         )}
 
-        {/* --- Untertitel optional --- */}
         {subtitle && (
           <p
             className={cn(
@@ -98,7 +96,6 @@ export default function Section({
           </p>
         )}
 
-        {/* --- Inhalt (z. B. SectionIntro, Tiles etc.) --- */}
         <div className="w-full">{children}</div>
       </div>
     </section>

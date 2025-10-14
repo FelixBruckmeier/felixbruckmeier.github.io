@@ -2,7 +2,7 @@ import { Section } from "@/components/ui";
 import SectionIntro from "@/components/ui/SectionIntro";
 import Tile from "@/components/ui/Tile";
 import { Subtitle, Body } from "@/components/ui/Tokens";
-import { layout, spacing, colors } from "@/lib/tokens";
+import { layout, spacing, colors, shadows } from "@/lib/tokens";
 import { cn } from "@/lib/utils";
 import VennDiagram from "@/assets/visuals/uxstrategy/VennDiagram";
 
@@ -15,14 +15,20 @@ export default function VisionAlignment() {
     {
       title: "Business Viability",
       text: "Ensuring research outcomes connect directly to measurable business impact — translating user understanding into growth and strategic clarity.",
+      bg: colors.notion.yellow.bg,
+      textColor: colors.notion.yellow.text,
     },
     {
       title: "Technology Feasibility",
       text: "Partnering with engineering early to align desirability with feasibility — ensuring that user insights inform technical direction, not react to it.",
+      bg: colors.notion.blue.bg,
+      textColor: colors.notion.blue.text,
     },
     {
       title: "Human Desirability",
       text: "Grounding all product decisions in empathy, behavior, and cultural context — to deliver solutions that feel intuitive, inclusive, and meaningful.",
+      bg: colors.notion.pink.bg,
+      textColor: colors.notion.pink.text,
     },
   ];
 
@@ -48,12 +54,24 @@ export default function VisionAlignment() {
         </div>
       </div>
 
-      {/* --- Supporting Tiles --- */}
+      {/* --- Supporting Tiles (statisch, DS-konform, mit Farbcode) --- */}
       <div className={cn(layout.gridCols3, spacing.gap6, spacing.mt12)}>
         {tiles.map((item) => (
-          <Tile key={item.title} variant="static" className={cn("h-full", spacing.p6)}>
+          <Tile
+            key={item.title}
+            variant="static"
+            className={cn(
+              item.bg,
+              item.textColor,
+              "h-full text-left border border-border/10 rounded-xl",
+              spacing.p6,
+              shadows.sm
+            )}
+          >
             <Subtitle className={cn("mb-3 text-foreground")}>{item.title}</Subtitle>
-            <Body className={cn(colors.muted.text, "leading-relaxed")}>{item.text}</Body>
+            <Body className={cn(colors.muted.text, "leading-relaxed")}>
+              {item.text}
+            </Body>
           </Tile>
         ))}
       </div>

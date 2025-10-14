@@ -22,25 +22,25 @@
     "valueProp": "I help companies build sustainable products by transforming deep user insights into actionable strategies. My mission is to scale the user's voice and empower organizations to make user-centered decisions.",
     "pillars": [
       {
-        "title": "Research Strategy",
-        "caption": "Discovery programs aligned to business goals"
-      },
-      {
-        "title": "Needs → Product Strategy",
-        "caption": "Translate insights into roadmaps"
-      },
-      {
-        "title": "Process & Tooling",
-        "caption": "Efficient, scalable practice"
-      },
-      {
-        "title": "Team Leadership",
-        "caption": "Mentorship, standards, excellence"
-      },
-      {
-        "title": "Proving ROI",
-        "caption": "Measure and communicate impact"
-      }
+      "title": "UX Strategy",
+      "caption": "I align UX Research insights with business direction."
+    },
+    {
+      "title": "Strategic UX Research",
+      "caption": "I translate real user needs into actionable product roadmaps."
+    },
+    {
+      "title": "ResearchOps",
+      "caption": "I build efficient, scalable, and insight-driven research operations."
+    },
+    {
+      "title": "Leadership & Mentoring",
+      "caption": "I empower teams through mentorship, alignment, and excellence in craft."
+    },
+    {
+      "title": "Impact Measurement",
+      "caption": "I measure and communicate UX impact across the organization."
+    }
     ],
     "uxStrategy": "UX Strategy",
     "strategicUxResearch": "Strategic UX Research",
@@ -95,7 +95,7 @@
   },
   "contact": {
     "title": "Book a Call",
-    "cta": "📞 Contact me — I'm eager to learn about your challenges...",
+    "cta": "Let’s talk about your UX research challenges.",
     "cta2": "Book Your Call Now — Schedule a Discovery Call",
     "cta3": "Click to easily book a 60-minute call directly in my calendar."
   }
