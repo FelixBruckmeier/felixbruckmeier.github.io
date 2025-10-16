@@ -7,16 +7,10 @@ export default function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className={cn("border-t", colors.border)}>
-      <Section
-        id="footer"
-        border={false}
-        spacing="sm"
-        className="py-6"
-        fullWidth={false} // 👈 sorgt für gleichen Einzug wie Navbar
-      >
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-          {/* Copyright */}
+    <footer className={cn("border-t border-border")}>
+      {/* ✅ Section übernimmt bereits die einheitliche Breite */}
+      <Section id="footer" spacing="sm" className="py-6" fullWidth>
+        <div className="mx-auto w-full max-w-[1900px] px-[3vw] flex flex-col sm:flex-row items-center justify-between gap-4">
           <p
             className={cn(
               typography.small.font,
@@ -29,7 +23,6 @@ export default function Footer() {
             © {year} Felix Bruckmeier — All rights reserved.
           </p>
 
-          {/* Footer Links */}
           <nav
             className={cn(
               "flex items-center gap-4",
@@ -39,20 +32,14 @@ export default function Footer() {
             )}
           >
             <Link
-              className={cn(
-                colors.muted.text,
-                "hover:underline hover:opacity-80"
-              )}
               to="/imprint"
+              className={cn(colors.muted.text, "hover:underline hover:opacity-80")}
             >
               Imprint
             </Link>
             <Link
-              className={cn(
-                colors.muted.text,
-                "hover:underline hover:opacity-80"
-              )}
               to="/privacy"
+              className={cn(colors.muted.text, "hover:underline hover:opacity-80")}
             >
               Privacy
             </Link>

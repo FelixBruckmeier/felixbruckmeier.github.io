@@ -6,8 +6,15 @@ import {
   sectionInnerSpacing,
   typography,
   colors,
-  layout,
 } from "@/lib/tokens";
+
+/**
+ * 💠 Section Component
+ * -----------------------------------------------------
+ * Einheitliche Breite & Ränder für alle Inhaltsbereiche
+ * Dynamisch (ca. 94 vw, max. 1900 px)
+ * Headerbilder in PageLayout bleiben unberührt
+ */
 
 interface SectionProps {
   id?: string;
@@ -17,20 +24,13 @@ interface SectionProps {
   center?: boolean;
   borderTop?: boolean;
   borderBottom?: boolean;
-  border?: boolean;     // optional für z. B. Footer-Trennlinie
-  compact?: boolean;    // kompakter Modus (z. B. für Impact-Tiles)
+  border?: boolean;
+  compact?: boolean;
   spacing?: keyof typeof sectionSpacing;
   className?: string;
-  fullWidth?: boolean;  // ⬅ volle Breite standardmäßig aktiviert
+  fullWidth?: boolean;
 }
 
-/**
- * 💠 Unified Section Component (Design System)
- * --------------------------------------------
- * - Standardmäßig volle Breite
- * - Optionaler Container-Modus via fullWidth={false}
- * - Einheitliche Typo, Abstände und Border-Behandlung
- */
 export default function Section({
   id,
   title,
@@ -39,17 +39,21 @@ export default function Section({
   center = false,
   borderTop = false,
   borderBottom = false,
-  border = false,        // ⚙️ kein Border mehr per Default
+  border = false,
   compact = false,
   spacing = "md",
   className,
-  fullWidth = true,      // ✅ volle Breite ist Standard
+  fullWidth = false,
 }: SectionProps) {
+  // ✅ Dynamische Container-Breite, identisch zu Navbar/Footer
+  const containerClass = fullWidth
+    ? "w-full"
+    : "mx-auto w-full max-w-[1900px] px-[3vw]";
+
   return (
     <section
       id={id}
       className={cn(
-        layout.scrollOffset,
         borderTop && "border-t border-border/20",
         borderBottom && "border-b border-border/20",
         border && "border-y border-border/20",
@@ -59,12 +63,7 @@ export default function Section({
         className
       )}
     >
-      <div
-        className={cn(
-          fullWidth ? "w-full px-0" : layout.container,
-          center ? "text-center mx-auto" : "text-left"
-        )}
-      >
+      <div className={cn(containerClass, center && "text-center")}>
         {title && (
           <h2
             className={cn(
@@ -101,4 +100,3 @@ export default function Section({
     </section>
   );
 }
-

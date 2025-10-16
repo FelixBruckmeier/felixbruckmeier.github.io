@@ -1,31 +1,39 @@
-// src/components/common/NavBar.tsx
 import { Link, useLocation } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import ThemeToggle from "@/components/common/ThemeToggle";
-import { typography, colors, spacing } from "@/lib/tokens";
+import { typography } from "@/lib/tokens";
 import { cn } from "@/lib/utils";
-import logo from "@/assets/logo-uxr.png";
 
-const NAV = ["about", "expertise", "projects", "cv", "contact"] as const;
-
-const SUBNAV: Record<string, { id: string; titleKey: string; path: string }[]> = {
-  projects: [
-    { id: "car-insurance", titleKey: "projects.carInsurance.title", path: "/projects/car-insurance" },
-    { id: "zooplus-reops", titleKey: "projects.reopsAgileUX.title", path: "/projects/zooplus-reops" },
-    { id: "swiss-life", titleKey: "projects.b2b2c.title", path: "/projects/swiss-life-b2b2c" },
-    { id: "zooplus-pricing", titleKey: "projects.pricing.title", path: "/projects/zooplus-pricing" },
-    { id: "delete-case", titleKey: "projects.deleteCase.title", path: "/projects/delete-case" },
-    { id: "atoss-reops", titleKey: "projects.atossReops.title", path: "/projects/atoss-reops" },
-  ],
-  expertise: [
-    { id: "ux-strategy", titleKey: "expertise.uxStrategy", path: "/expertise/ux-strategy" },
-    { id: "strategic-ux-research", titleKey: "expertise.strategicUxResearch", path: "/expertise/strategic-ux-research" },
-    { id: "researchops", titleKey: "expertise.researchOps", path: "/expertise/researchops" },
-    { id: "team-leadership", titleKey: "expertise.teamLeadership", path: "/expertise/team-leadership" },
-    { id: "impact-measurement", titleKey: "expertise.impactMeasurement", path: "/expertise/impact-measurement" },
-  ],
+type NavItem = {
+  id: string;
+  link?: string;
+  children?: { id: string; label: string }[];
 };
+
+const NAV: NavItem[] = [
+  {
+    id: "expertise",
+    children: [
+      { id: "expertise/ux-strategy", label: "UX Strategy" },
+      { id: "expertise/strategic-ux-research", label: "Strategic UX Research" },
+      { id: "expertise/researchops", label: "ResearchOps" },
+      { id: "expertise/team-leadership", label: "Team Leadership" },
+      { id: "expertise/impact-measurement", label: "Impact Measurement" },
+    ],
+  },
+  {
+    id: "projects",
+    children: [
+      { id: "projects/adac-car-insurance", label: "ADAC Car Insurance" },
+      { id: "projects/zooplus-researchops", label: "zooplus ResearchOps" },
+      { id: "projects/zooplus-pricing", label: "zooplus Pricing" },
+      { id: "projects/swisslife-b2b2c", label: "Swiss Life B2B2C" },
+    ],
+  },
+  { id: "cv", link: "/cv" },
+  { id: "contact" },
+];
 
 export default function NavBar() {
   const { t } = useTranslation();
@@ -45,7 +53,11 @@ export default function NavBar() {
   const observerRef = useRef<IntersectionObserver | null>(null);
   useEffect(() => {
     if (!onHome) return;
-    const sections = NAV.map((id) => document.getElementById(id)).filter(Boolean) as HTMLElement[];
+    const sections = NAV.flatMap((nav) =>
+      [nav.id, ...(nav.children?.map((c) => c.id) ?? [])]
+        .map((id) => document.getElementById(id))
+        .filter(Boolean)
+    ) as HTMLElement[];
     if (observerRef.current) observerRef.current.disconnect();
     observerRef.current = new IntersectionObserver(
       (entries) => {
@@ -59,101 +71,79 @@ export default function NavBar() {
       },
       { threshold: 0.5, rootMargin: "-20% 0px -50% 0px" }
     );
-    sections.forEach((sec) => observerRef.current?.observe(sec));
+    sections.forEach((s) => observerRef.current?.observe(s));
     return () => observerRef.current?.disconnect();
   }, [onHome]);
 
-  const hrefFor = (id: string) => `/#${id}`;
+  const hrefFor = (nav: NavItem) =>
+    nav.link ?? (nav.id.includes("/") ? `/${nav.id}` : `/#${nav.id}`);
+
   useEffect(() => setActive(hash.replace("#", "")), [hash]);
   useEffect(() => setOpen(false), [hash, pathname]);
 
-  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
-    if (!onHome) {
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, nav: NavItem) => {
+    if (!onHome && !nav.link && !nav.id.includes("/")) {
       e.preventDefault();
-      window.location.assign(`/#${id}`);
+      window.location.assign(`/#${nav.id}`);
     }
   };
 
   return (
     <>
-      {/* === Fixed Sticky Header === */}
-      <header
-        className={cn(
-          "fixed top-0 left-0 right-0 z-[100] border-b border-border backdrop-blur-md bg-background/95 supports-[backdrop-filter]:bg-background/80"
-        )}
-      >
-        <nav className="container-responsive h-16 flex items-center justify-between">
-          {/* === Logo + Name === */}
+      <header className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-md supports-[backdrop-filter]:bg-background/80">
+        <nav className="mx-auto w-full max-w-[1900px] px-[3vw] flex h-20 items-center justify-between">
+          {/* === Logo === */}
           <Link
-            to="/#header"
+            to="/"
             onClick={(e) => {
               if (window.location.pathname === "/") {
                 e.preventDefault();
                 window.scrollTo({ top: 0, behavior: "smooth" });
               }
             }}
-            className={cn(
-              "flex items-center gap-3 font-semibold text-foreground",
-              typography.subtitle.font,
-              typography.subtitle.size
-            )}
+            className="flex flex-col items-start text-foreground"
           >
-            <img src={logo} alt="Felix Bruckmeier Logo" className="h-8 w-8 object-contain rounded-md" />
-            <span>Felix Bruckmeier</span>
+            <span className="text-2xl font-bold leading-tight">Felix</span>
+            <span className="text-2xl font-bold leading-tight">Bruckmeier</span>
+            <div className="mt-1 w-full border-b border-border" />
           </Link>
 
           {/* === Desktop Navigation === */}
-          <ul className="hidden md:flex items-center gap-6">
-            {NAV.map((id) => (
-              <li key={id} className="relative group">
-                {id === "cv" ? (
-                  <Link
-                    to="/cv"
-                    className={cn(
-                      "px-1 py-2 font-semibold underline underline-offset-4 decoration-transparent transition",
-                      pathname === "/cv"
-                        ? "text-foreground decoration-current"
-                        : "text-muted-foreground hover:text-foreground hover:decoration-current"
-                    )}
-                  >
-                    {t(`nav.${id}`)}
-                  </Link>
-                ) : (
-                  <a
-                    href={hrefFor(id)}
-                    onClick={(e) => handleNavClick(e, id)}
-                    aria-current={active === id ? "page" : undefined}
-                    className={cn(
-                      "px-1 py-2 font-semibold underline underline-offset-4 decoration-transparent transition",
-                      active === id
-                        ? "text-foreground decoration-current"
-                        : "text-muted-foreground hover:text-foreground hover:decoration-current"
-                    )}
-                  >
-                    {t(`nav.${id}`)}
-                  </a>
-                )}
+          <ul className="hidden md:flex items-center gap-8">
+            {NAV.map((nav) => (
+              <li key={nav.id} className="relative group">
+                <a
+                  href={hrefFor(nav)}
+                  onClick={(e) => handleNavClick(e, nav)}
+                  aria-current={active === nav.id ? "page" : undefined}
+                  className={cn(
+                    typography.subtitle.font,
+                    typography.subtitle.size,
+                    typography.subtitle.weight,
+                    "underline underline-offset-4 decoration-transparent transition",
+                    active === nav.id
+                      ? "text-primary decoration-current"
+                      : "text-muted-foreground hover:text-foreground hover:decoration-current"
+                  )}
+                >
+                  {t(`nav.${nav.id}`, nav.id.charAt(0).toUpperCase() + nav.id.slice(1))}
+                </a>
 
-                {/* === Dropdowns === */}
-                {SUBNAV[id] && (
+                {/* === Dropdown (bleibt offen bei Hover) === */}
+                {nav.children && (
                   <ul
-                    className={cn(
-                      "absolute left-0 top-full hidden group-hover:block shadow-lg rounded-md mt-1 py-2 w-64 border bg-background",
-                      colors.border
-                    )}
+                    className="absolute left-0 top-full hidden group-hover:flex flex-col bg-background border border-border rounded-lg shadow-lg min-w-[220px] py-2 opacity-0 group-hover:opacity-100 transition-opacity duration-150"
                   >
-                    {SUBNAV[id].map((sub) => (
-                      <li key={sub.id}>
+                    {nav.children.map((child) => (
+                      <li key={child.id}>
                         <Link
-                          to={sub.path}
+                          to={`/${child.id}`}
                           className={cn(
-                            "block px-4 py-2 hover:bg-muted transition",
-                            typography.body.font,
-                            typography.body.size,
-                            "font-medium text-muted-foreground hover:text-foreground"
+                            typography.subtitle.font,
+                            "block px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 transition"
                           )}
                         >
-                          {t(sub.titleKey)}
+                          {child.label}
                         </Link>
                       </li>
                     ))}
@@ -161,12 +151,12 @@ export default function NavBar() {
                 )}
               </li>
             ))}
-            <li className={spacing.pl4}>
+            <li>
               <ThemeToggle />
             </li>
           </ul>
 
-          {/* === Mobile Right Controls === */}
+          {/* === Mobile === */}
           <div className="flex items-center gap-3 md:hidden">
             <ThemeToggle />
             <button
@@ -183,38 +173,40 @@ export default function NavBar() {
           </div>
         </nav>
 
-        {/* === Mobile Menu === */}
+        {/* === Mobile Menü === */}
         <div
           className={cn(
             "md:hidden overflow-hidden transition-[max-height,opacity] duration-300 ease-in-out border-t border-border bg-background/95 backdrop-blur-sm",
             open ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
           )}
         >
-          <div className="container-responsive py-3 space-y-2">
-            {NAV.map((id) => (
-              <div key={id}>
-                {id === "cv" ? (
-                  <Link to="/cv" className="block py-2 font-medium text-foreground">
-                    {t(`nav.${id}`)}
-                  </Link>
-                ) : (
-                  <a
-                    href={hrefFor(id)}
-                    onClick={(e) => handleNavClick(e, id)}
-                    className="block py-2 font-medium text-foreground"
-                  >
-                    {t(`nav.${id}`)}
-                  </a>
-                )}
-                {SUBNAV[id] && (
-                  <div className="pl-4 space-y-1">
-                    {SUBNAV[id].map((sub) => (
+          <div className="mx-auto w-full max-w-[1900px] px-[3vw] py-3 space-y-2">
+            {NAV.map((nav) => (
+              <div key={nav.id}>
+                <a
+                  href={hrefFor(nav)}
+                  onClick={(e) => handleNavClick(e, nav)}
+                  className={cn(
+                    typography.subtitle.font,
+                    typography.subtitle.size,
+                    typography.subtitle.weight,
+                    "block py-2 text-foreground"
+                  )}
+                >
+                  {t(`nav.${nav.id}`, nav.id.charAt(0).toUpperCase() + nav.id.slice(1))}
+                </a>
+                {nav.children && (
+                  <div className="ml-4 space-y-1">
+                    {nav.children.map((child) => (
                       <Link
-                        key={sub.id}
-                        to={sub.path}
-                        className="block py-1 text-sm text-muted-foreground hover:text-foreground"
+                        key={child.id}
+                        to={`/${child.id}`}
+                        className={cn(
+                          typography.subtitle.font,
+                          "block py-1 text-sm text-muted-foreground hover:text-foreground transition"
+                        )}
                       >
-                        {t(sub.titleKey)}
+                        {child.label}
                       </Link>
                     ))}
                   </div>
@@ -224,9 +216,7 @@ export default function NavBar() {
           </div>
         </div>
       </header>
-
-      {/* Spacer to offset fixed header */}
-      <div className="h-16" />
+      <div className="h-20" />
     </>
   );
 }

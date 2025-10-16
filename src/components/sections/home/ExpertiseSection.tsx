@@ -1,12 +1,19 @@
 import { Section } from "@/components/ui";
 import SectionIntro from "@/components/ui/SectionIntro";
 import FadeIn from "@/components/ui/FadeIn";
+import TextReveal from "@/components/ui/TextReveal";
 import { useTranslation } from "react-i18next";
-import { Subtitle, Body } from "@/components/ui/Tokens";
-import Tile from "@/components/ui/Tile";
-import { spacing, colors } from "@/lib/tokens";
 import { cn } from "@/lib/utils";
+import { spacing, layout } from "@/lib/tokens";
 import { Link } from "react-router-dom";
+import TileImage from "@/components/ui/TileImage";
+
+// 🖼️ Expertise-Bilder – korrekte Pfade und Dateinamen
+import uxStrategyImg from "@/assets/images/expertise/uxstrategy/schach1.jpg";
+import strategicUxImg from "@/assets/images/expertise/strategicuxresearch/strategicuxr.jpg";
+import researchOpsImg from "@/assets/images/expertise/researchops/plant.jpg";
+import leadershipImg from "@/assets/images/expertise/teamleadership/team.jpg";
+import impactImg from "@/assets/images/expertise/impactmeasurement/impact.jpg";
 
 export default function ExpertiseSection() {
   const { t } = useTranslation();
@@ -25,45 +32,51 @@ export default function ExpertiseSection() {
     "expertise/impact-measurement",
   ];
 
+  const images = [
+    uxStrategyImg,
+    strategicUxImg,
+    researchOpsImg,
+    leadershipImg,
+    impactImg,
+  ];
+
   return (
     <Section id="expertise" title={t("expertise.title")} spacing="lg">
-      {/* --- Intro Text mit sanftem Fade-In --- */}
-      <FadeIn>
-        <SectionIntro>
+      {/* --- Intro Text --- */}
+      <SectionIntro>
+        <TextReveal
+          stagger={0.06}
+          duration={0.35}
+          delay={0.1}
+          ease="easeOut"
+          className="inherit"
+        >
           I help companies build sustainable products by transforming deep user
           insights into actionable strategies. My mission is to scale the user's
           voice and empower organizations to make user-centered decisions.
-        </SectionIntro>
-      </FadeIn>
+        </TextReveal>
+      </SectionIntro>
 
-      {/* --- Expertise Pillars (blue theme) --- */}
+      {/* --- Expertise Tiles (3 pro Zeile Desktop) --- */}
       <div
         className={cn(
-          "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 items-stretch",
-          spacing.gap6,
-          "max-w-6xl mx-auto"
+          "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3",
+          spacing.gap8,
+          layout.fullWidth
         )}
       >
         {pillars.slice(0, 5).map((p, i) => {
           const to = routesByIndex[i] ?? "expertise";
+          const image = images[i];
           return (
             <FadeIn key={i} delay={0.2 + i * 0.1}>
               <Link to={to}>
-                <Tile
-                  variant="interactive"
-                  className={cn(
-                    colors.notion.blue.bg,
-                    colors.notion.blue.text,
-                    spacing.p6
-                  )}
-                >
-                  <Subtitle className="text-foreground">{p.title}</Subtitle>
-                  {p.caption && (
-                    <Body className={cn("text-muted-foreground")}>
-                      {p.caption}
-                    </Body>
-                  )}
-                </Tile>
+                <TileImage
+                  image={image}
+                  title={p.title}
+                  caption={p.caption}
+                  className="group rounded-xl overflow-hidden"
+                />
               </Link>
             </FadeIn>
           );

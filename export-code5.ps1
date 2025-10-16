@@ -4,9 +4,15 @@
 $folders = @(
   "C:\Users\felix\Documents\GitHub\felixbruckmeier.github.io\src\pages",
   "C:\Users\felix\Documents\GitHub\felixbruckmeier.github.io\src\lib",
-  "C:\Users\felix\Documents\GitHub\felixbruckmeier.github.io\src\components\sections",
+  "C:\Users\felix\Documents\GitHub\felixbruckmeier.github.io\src\components\sections\home",
+  "C:\Users\felix\Documents\GitHub\felixbruckmeier.github.io\src\components\sections\expertise\uxstrategy",
   "C:\Users\felix\Documents\GitHub\felixbruckmeier.github.io\src\components\artefacts",
   "C:\Users\felix\Documents\GitHub\felixbruckmeier.github.io\src\components\ui"
+  "C:\Users\felix\Documents\GitHub\felixbruckmeier.github.io\src\locales"  
+"C:\Users\felix\Documents\GitHub\felixbruckmeier.github.io\src\components\layout"
+"C:\Users\felix\Documents\GitHub\felixbruckmeier.github.io\src\components\common"
+
+
 )
 
 # Ziel-Datei

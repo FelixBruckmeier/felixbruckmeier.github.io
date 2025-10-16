@@ -1,10 +1,8 @@
-// src/components/sections/ContactSection.tsx
 import Section from "@/components/ui/Section";
 import Button from "@/components/ui/Button";
 import { useTranslation } from "react-i18next";
 import { Calendar } from "lucide-react";
-import InfoTile from "@/components/ui/InfoTile";
-import { layout, spacing, colors, icon, hoverEffects } from "@/lib/tokens";
+import { spacing, colors, icon, hoverEffects, layout } from "@/lib/tokens";
 import { cn } from "@/lib/utils";
 
 export default function ContactSection() {
@@ -17,27 +15,46 @@ export default function ContactSection() {
 
   return (
     <Section id="contact" title="Contact">
-      <div className={cn(layout.flexColCenter, spacing.gap6)}>
-        {/* Ganze Kachel klickbar */}
+      {/* 🔹 Schmalere Inhaltsbreite */}
+      <div
+        className={cn(
+          layout.containerNarrow,
+          layout.flexColCenter,
+          spacing.gap8,
+          layout.maxWidthText
+        )}
+      >
+        {/* === Klickbare Karte === */}
         <div
           onClick={handleClick}
           className={cn(
-            "cursor-pointer w-full max-w-2xl",
-            hoverEffects.smoothLift
+            "cursor-pointer w-full flex flex-col items-center text-center py-10 rounded-xl",
+            hoverEffects.smoothLift,
+            colors.tile.bg,
+            colors.tile.text
           )}
         >
-          <InfoTile
-            title={t("contact.title", "Schedule a Discovery Call")}
-            description={t(
-              "contact.cta",
-              "Book a time directly in my Google Calendar – quick and easy."
+          {/* --- Rundes Icon --- */}
+          <div
+            className={cn(
+              "flex items-center justify-center aspect-square w-20 rounded-full mb-6",
+              colors.notion.blue.bg,
+              colors.notion.blue.text
             )}
-            icon={<Calendar className={cn(icon.lg, colors.accent.text)} />}
-            className="items-center text-center"
-          />
+          >
+            <Calendar className={cn(icon.lg)} />
+          </div>
+
+          {/* --- Titel & Beschreibung --- */}
+          <h3 className="text-xl font-semibold text-foreground">
+            {t("contact.title", "Book a Call")}
+          </h3>
+          <p className="text-muted-foreground mt-2 max-w-sm">
+            {t("contact.cta", "Let’s talk about your UX Research challenge.")}
+          </p>
         </div>
 
-        {/* Button unten bleibt zusätzlich */}
+        {/* === Separater Button === */}
         <Button variant="secondary" size="lg" onClick={handleClick}>
           {t("contact.button", "Open Calendar")}
         </Button>

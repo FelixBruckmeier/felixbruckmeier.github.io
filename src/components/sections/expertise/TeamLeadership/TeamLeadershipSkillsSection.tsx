@@ -25,7 +25,7 @@ export default function TeamLeadershipSkillsSection() {
         ].map((item) => (
           <Tile
             key={item.title}
-            variant="inactive"
+            variant="static"
             className={cn("flex flex-col justify-start h-full", spacing.p8)}
           >
             <Subtitle className={spacing.mb3}>{item.title}</Subtitle>

@@ -1,20 +1,15 @@
 // src/components/layout/AppLayout.tsx
 import { Outlet } from "react-router-dom";
-import Navbar from "@/components/common/Navbar"; // ✅ korrigierter Importname
+import Navbar from "@/components/common/Navbar";
 import Footer from "@/components/common/Footer";
 
 export default function AppLayout() {
   return (
-    <div className="min-h-screen bg-background text-foreground flex flex-col">
-      {/* === Navigation (mit Burger-Menü) === */}
+    <div className="min-h-screen flex flex-col bg-background text-foreground overflow-x-clip">
       <Navbar />
-
-      {/* === Seiteninhalt === */}
       <main className="flex-1">
         <Outlet />
       </main>
-
-      {/* === Footer === */}
       <Footer />
     </div>
   );

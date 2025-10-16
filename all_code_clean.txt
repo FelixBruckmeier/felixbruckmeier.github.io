@@ -4351,66 +4351,53 @@ export default function Footer() {
 ==== \src\components\common\ImprintSection.tsx ====
 import Section from "@/components/ui/Section";
 import Tile from "@/components/ui/Tile";
-import { typography } from "@/lib/tokens";
+import { Subtitle, Body } from "@/components/ui/Tokens";
 import { User, Mail, Info } from "lucide-react";
 
 export default function ImprintSection() {
   return (
-    // Kein title mehr → PageLayout zeigt "Imprint"
-    <Section id="imprint" spacing="md" fullWidth={false}>
+    <Section id="imprint" spacing="md" fullWidth={false} title="Imprint">
       <div className="grid gap-6 md:grid-cols-2">
         {/* Responsible */}
         <Tile variant="static">
           <div className="flex items-center gap-2 mb-3">
             <User className="w-5 h-5 text-muted-foreground" />
-            <h3
-              className={`${typography.subtitle.size} ${typography.subtitle.weight}`}
-            >
-              Responsible for this Website
-            </h3>
+            <Subtitle>Responsible for this Website</Subtitle>
           </div>
-          <p className={`${typography.body.size} ${typography.body.leading}`}>
+          <Body>
             Felix Bruckmeier
             <br />
             Munich, Germany
-          </p>
+          </Body>
         </Tile>
 
         {/* Contact */}
         <Tile variant="static">
           <div className="flex items-center gap-2 mb-3">
             <Mail className="w-5 h-5 text-muted-foreground" />
-            <h3
-              className={`${typography.subtitle.size} ${typography.subtitle.weight}`}
-            >
-              Contact
-            </h3>
+            <Subtitle>Contact</Subtitle>
           </div>
-          <p className={`${typography.body.size} ${typography.body.leading}`}>
+          <Body>
             <a
               href="mailto:felixbruckmeier@googlemail.com"
               className="text-accent hover:underline"
             >
               felixbruckmeier@googlemail.com
             </a>
-          </p>
+          </Body>
         </Tile>
 
         {/* Legal Note */}
         <Tile variant="static" className="md:col-span-2">
           <div className="flex items-center gap-2 mb-3">
             <Info className="w-5 h-5 text-muted-foreground" />
-            <h3
-              className={`${typography.subtitle.size} ${typography.subtitle.weight}`}
-            >
-              Legal Notice
-            </h3>
+            <Subtitle>Legal Notice</Subtitle>
           </div>
-          <p className={`${typography.body.size} ${typography.body.leading}`}>
+          <Body>
             This website is a private, non-commercial portfolio project. It is
             not intended for business purposes, but serves solely to present
             selected work and expertise.
-          </p>
+          </Body>
         </Tile>
       </div>
     </Section>
@@ -4441,32 +4428,31 @@ export default function LanguageToggle() {
 
 
 ==== \src\components\common\Navbar.tsx ====
-// src/components/common/NavBar.tsx
 import { Link, useLocation } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import ThemeToggle from "@/components/common/ThemeToggle";
-import { typography, colors, spacing } from "@/lib/tokens";
+import { typography, spacing, colors } from "@/lib/tokens";
 import { cn } from "@/lib/utils";
-import logo from "@/assets/logo-uxr.png";
 
-const NAV = ["about", "expertise", "projects", "cv", "contact"] as const;
+// === Hauptnavigation ohne "About" ===
+const NAV = ["expertise", "projects", "cv", "contact"] as const;
 
+// === Unterpunkte für Expertise + Projekte ===
 const SUBNAV: Record<string, { id: string; titleKey: string; path: string }[]> = {
-  projects: [
-    { id: "car-insurance", titleKey: "projects.carInsurance.title", path: "/projects/car-insurance" },
-    { id: "zooplus-reops", titleKey: "projects.reopsAgileUX.title", path: "/projects/zooplus-reops" },
-    { id: "swiss-life", titleKey: "projects.b2b2c.title", path: "/projects/swiss-life-b2b2c" },
-    { id: "zooplus-pricing", titleKey: "projects.pricing.title", path: "/projects/zooplus-pricing" },
-    { id: "delete-case", titleKey: "projects.deleteCase.title", path: "/projects/delete-case" },
-    { id: "atoss-reops", titleKey: "projects.atossReops.title", path: "/projects/atoss-reops" },
-  ],
   expertise: [
     { id: "ux-strategy", titleKey: "expertise.uxStrategy", path: "/expertise/ux-strategy" },
     { id: "strategic-ux-research", titleKey: "expertise.strategicUxResearch", path: "/expertise/strategic-ux-research" },
     { id: "researchops", titleKey: "expertise.researchOps", path: "/expertise/researchops" },
     { id: "team-leadership", titleKey: "expertise.teamLeadership", path: "/expertise/team-leadership" },
     { id: "impact-measurement", titleKey: "expertise.impactMeasurement", path: "/expertise/impact-measurement" },
+  ],
+  projects: [
+    { id: "car-insurance", titleKey: "projects.carInsurance.title", path: "/projects/car-insurance" },
+    { id: "zooplus-reops", titleKey: "projects.reopsAgileUX.title", path: "/projects/zooplus-reops" },
+    { id: "swiss-life", titleKey: "projects.b2b2c.title", path: "/projects/swiss-life-b2b2c" },
+    { id: "zooplus-pricing", titleKey: "projects.pricing.title", path: "/projects/zooplus-pricing" },
+    { id: "atoss-reops", titleKey: "projects.atossReops.title", path: "/projects/atoss-reops" },
   ],
 };
 
@@ -4477,6 +4463,7 @@ export default function NavBar() {
   const [active, setActive] = useState<string>("");
   const [open, setOpen] = useState(false);
 
+  // Smooth scroll
   useEffect(() => {
     const prev = document.documentElement.style.scrollBehavior;
     document.documentElement.style.scrollBehavior = "smooth";
@@ -4485,6 +4472,7 @@ export default function NavBar() {
     };
   }, []);
 
+  // Scroll spy
   const observerRef = useRef<IntersectionObserver | null>(null);
   useEffect(() => {
     if (!onHome) return;
@@ -4502,7 +4490,7 @@ export default function NavBar() {
       },
       { threshold: 0.5, rootMargin: "-20% 0px -50% 0px" }
     );
-    sections.forEach((sec) => observerRef.current?.observe(sec));
+    sections.forEach((s) => observerRef.current?.observe(s));
     return () => observerRef.current?.disconnect();
   }, [onHome]);
 
@@ -4519,43 +4507,36 @@ export default function NavBar() {
 
   return (
     <>
-      {/* === Fixed Sticky Header === */}
-      <header
-        className={cn(
-          "fixed top-0 left-0 right-0 z-[100] border-b border-border backdrop-blur-md bg-background/95 supports-[backdrop-filter]:bg-background/80"
-        )}
-      >
-        <nav className="container-responsive h-16 flex items-center justify-between">
-          {/* === Logo + Name === */}
+      {/* === Header ohne untere Linie === */}
+      <header className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-md supports-[backdrop-filter]:bg-background/80">
+        <nav className="mx-auto flex h-20 max-w-6xl items-center justify-between px-6">
+          {/* === Branding === */}
           <Link
-            to="/#header"
+            to="/"
             onClick={(e) => {
               if (window.location.pathname === "/") {
                 e.preventDefault();
                 window.scrollTo({ top: 0, behavior: "smooth" });
               }
             }}
-            className={cn(
-              "flex items-center gap-3 font-semibold text-foreground",
-              typography.subtitle.font,
-              typography.subtitle.size
-            )}
+            className={cn("flex flex-col items-start text-foreground", typography.subtitle.font)}
           >
-            <img src={logo} alt="Felix Bruckmeier Logo" className="h-8 w-8 object-contain rounded-md" />
-            <span>Felix Bruckmeier</span>
+            <span className="text-2xl font-bold leading-tight">Felix</span>
+            <span className="text-2xl font-bold leading-tight">Bruckmeier</span>
+            <div className="mt-1 w-full border-b border-border" />
           </Link>
 
           {/* === Desktop Navigation === */}
-          <ul className="hidden md:flex items-center gap-6">
+          <ul className="hidden md:flex items-center gap-8 text-sm font-semibold">
             {NAV.map((id) => (
               <li key={id} className="relative group">
                 {id === "cv" ? (
                   <Link
                     to="/cv"
                     className={cn(
-                      "px-1 py-2 font-semibold underline underline-offset-4 decoration-transparent transition",
+                      "px-1 py-2 underline underline-offset-4 decoration-transparent transition",
                       pathname === "/cv"
-                        ? "text-foreground decoration-current"
+                        ? "text-primary decoration-current"
                         : "text-muted-foreground hover:text-foreground hover:decoration-current"
                     )}
                   >
@@ -4567,9 +4548,9 @@ export default function NavBar() {
                     onClick={(e) => handleNavClick(e, id)}
                     aria-current={active === id ? "page" : undefined}
                     className={cn(
-                      "px-1 py-2 font-semibold underline underline-offset-4 decoration-transparent transition",
+                      "px-1 py-2 underline underline-offset-4 decoration-transparent transition",
                       active === id
-                        ? "text-foreground decoration-current"
+                        ? "text-primary decoration-current"
                         : "text-muted-foreground hover:text-foreground hover:decoration-current"
                     )}
                   >
@@ -4577,7 +4558,7 @@ export default function NavBar() {
                   </a>
                 )}
 
-                {/* === Dropdowns === */}
+                {/* === Dropdowns für Expertise & Projects === */}
                 {SUBNAV[id] && (
                   <ul
                     className={cn(
@@ -4609,7 +4590,7 @@ export default function NavBar() {
             </li>
           </ul>
 
-          {/* === Mobile Right Controls === */}
+          {/* === Mobile Controls === */}
           <div className="flex items-center gap-3 md:hidden">
             <ThemeToggle />
             <button
@@ -4633,7 +4614,7 @@ export default function NavBar() {
             open ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
           )}
         >
-          <div className="container-responsive py-3 space-y-2">
+          <div className="mx-auto max-w-6xl px-6 py-3 space-y-2">
             {NAV.map((id) => (
               <div key={id}>
                 {id === "cv" ? (
@@ -4668,15 +4649,13 @@ export default function NavBar() {
         </div>
       </header>
 
-      {/* Spacer to offset fixed header */}
-      <div className="h-16" />
+      <div className="h-20" />
     </>
   );
 }
 
 
 ==== \src\components\common\PrivacySection.tsx ====
-// src/components/sections/shared/PrivacySection.tsx
 import Section from "@/components/ui/Section";
 import Tile from "@/components/ui/Tile";
 import { Subtitle, Body } from "@/components/ui/Tokens";
@@ -4684,8 +4663,7 @@ import { Mail, Shield, Server, Eye } from "lucide-react";
 
 export default function PrivacySection() {
   return (
-    // Titel kommt vom PageLayout → hier ohne title
-    <Section id="privacy" spacing="md" fullWidth={false}>
+    <Section id="privacy" title="Privacy" spacing="md" fullWidth={false}>
       <div className="grid gap-6 md:grid-cols-2">
         {/* General Info */}
         <Tile variant="static">
@@ -4837,8 +4815,9 @@ import { layout, sectionSpacing, typography } from "@/lib/tokens";
 interface PageLayoutProps {
   title?: string;
   intro?: string;
-  headerImage?: string; // Hintergrundbild
+  headerImage?: string;
   children: ReactNode;
+  width?: "narrow" | "default" | "wide"; // 🔹 Breitenoption
 }
 
 export default function PageLayout({
@@ -4846,28 +4825,28 @@ export default function PageLayout({
   intro,
   headerImage,
   children,
+  width = "default",
 }: PageLayoutProps) {
+  // Dynamische Breitensteuerung über Tokens
+  const containerClass =
+    width === "narrow"
+      ? layout.containerNarrow
+      : width === "wide"
+      ? layout.containerWide
+      : layout.containerDefault;
+
   return (
     <main className="flex flex-col items-stretch text-left">
-      {/* ===== HERO-BEREICH MIT HINTERGRUNDBILD ===== */}
+      {/* ===== HERO ===== */}
       {headerImage && (
-        <section
-          className={cn(
-            "relative w-full min-h-[50vh] flex flex-col justify-center items-center text-center text-white overflow-hidden"
-          )}
-        >
-          {/* Hintergrundbild */}
+        <section className="relative w-full flex flex-col justify-center items-center text-center text-white overflow-hidden min-h-[50vh]">
           <img
             src={headerImage}
             alt=""
-            data-hero
             className="absolute inset-0 w-full h-full object-cover object-center"
           />
-
-          {/* Halbtransparenter Overlay */}
           <div className="absolute inset-0 bg-black/50" />
 
-          {/* Text-Content */}
           <div className="relative z-10 max-w-3xl px-6">
             {title && (
               <h1
@@ -4898,8 +4877,8 @@ export default function PageLayout({
         </section>
       )}
 
-      {/* ===== SEITENINHALT ===== */}
-      <div className={cn(layout.container, sectionSpacing.lg, "space-y-32")}>
+      {/* ===== CONTENT ===== */}
+      <div className={cn(containerClass, sectionSpacing.lg, "space-y-32")}>
         {children}
       </div>
     </main>
@@ -9421,7 +9400,7 @@ import { Section } from "@/components/ui";
 import SectionIntro from "@/components/ui/SectionIntro";
 import Tile from "@/components/ui/Tile";
 import { Subtitle, Body } from "@/components/ui/Tokens";
-import { layout, spacing, colors } from "@/lib/tokens";
+import { layout, spacing, colors, shadows } from "@/lib/tokens";
 import { cn } from "@/lib/utils";
 import VennDiagram from "@/assets/visuals/uxstrategy/VennDiagram";
 
@@ -9434,14 +9413,20 @@ export default function VisionAlignment() {
     {
       title: "Business Viability",
       text: "Ensuring research outcomes connect directly to measurable business impact — translating user understanding into growth and strategic clarity.",
+      bg: colors.notion.yellow.bg,
+      textColor: colors.notion.yellow.text,
     },
     {
       title: "Technology Feasibility",
       text: "Partnering with engineering early to align desirability with feasibility — ensuring that user insights inform technical direction, not react to it.",
+      bg: colors.notion.blue.bg,
+      textColor: colors.notion.blue.text,
     },
     {
       title: "Human Desirability",
       text: "Grounding all product decisions in empathy, behavior, and cultural context — to deliver solutions that feel intuitive, inclusive, and meaningful.",
+      bg: colors.notion.pink.bg,
+      textColor: colors.notion.pink.text,
     },
   ];
 
@@ -9467,12 +9452,24 @@ export default function VisionAlignment() {
         </div>
       </div>
 
-      {/* --- Supporting Tiles --- */}
+      {/* --- Supporting Tiles (statisch, DS-konform, mit Farbcode) --- */}
       <div className={cn(layout.gridCols3, spacing.gap6, spacing.mt12)}>
         {tiles.map((item) => (
-          <Tile key={item.title} variant="static" className={cn("h-full", spacing.p6)}>
+          <Tile
+            key={item.title}
+            variant="static"
+            className={cn(
+              item.bg,
+              item.textColor,
+              "h-full text-left border border-border/10 rounded-xl",
+              spacing.p6,
+              shadows.sm
+            )}
+          >
             <Subtitle className={cn("mb-3 text-foreground")}>{item.title}</Subtitle>
-            <Body className={cn(colors.muted.text, "leading-relaxed")}>{item.text}</Body>
+            <Body className={cn(colors.muted.text, "leading-relaxed")}>
+              {item.text}
+            </Body>
           </Tile>
         ))}
       </div>
@@ -9485,81 +9482,116 @@ export default function VisionAlignment() {
 // src/components/sections/home/AboutSection.tsx
 import Section from "@/components/ui/Section";
 import Tile from "@/components/ui/Tile";
-import { Subtitle, Body, IntroText } from "@/components/ui/Tokens";
-import { layout, spacing, radii, shadows, colors } from "@/lib/tokens";
+import FadeIn from "@/components/ui/FadeIn";
+import TextReveal from "@/components/ui/TextReveal";
+import { Subtitle, Body } from "@/components/ui/Tokens";
+import { spacing, shadows, colors } from "@/lib/tokens";
 import { cn } from "@/lib/utils";
 import profileImg from "@/assets/profile-felix.png";
 
 export default function AboutSection() {
+  const metrics = [
+    {
+      number: "10+",
+      title: "Years Experience",
+      desc: "UX strategy and research leadership across teams",
+    },
+    {
+      number: "25+",
+      title: "Research Methods",
+      desc: "Full spectrum of qualitative and quantitative approaches",
+    },
+    {
+      number: "5",
+      title: "Industries",
+      desc: "Cross-domain expertise from e-commerce to finance",
+    },
+    {
+      number: "200+",
+      title: "Studies Conducted",
+      desc: "End-to-end research across product development phases",
+    },
+  ];
+
   return (
     <Section id="about" title="About Me" center>
-      {/* === Portrait & Intro === */}
-      <div
-        className={cn(
-          "flex flex-col items-center text-center mx-auto",
-          spacing.mt8,
-          spacing.mb12
-        )}
-      >
-        <img
-          src={profileImg}
-          alt="Portrait of Felix Bruckmeier"
-          className={cn(
-            "w-48 h-48 md:w-56 md:h-56 object-cover rounded-full border-4 border-background shadow-lg",
-            colors.border,
-            shadows.md
-          )}
-        />
+      {/* === Portrait === */}
+      <div className={cn("flex flex-col items-center w-full", spacing.mt8, spacing.mb20)}>
+        <FadeIn>
+          <div className="flex justify-center w-full">
+            <img
+              src={profileImg}
+              alt="Portrait of Felix Bruckmeier"
+              className={cn(
+                "w-[40%] max-w-[200px] md:max-w-[260px] aspect-[4/5] object-cover rounded-2xl shadow-lg mx-auto",
+                colors.border,
+                shadows.md
+              )}
+            />
+          </div>
+        </FadeIn>
 
-        <IntroText
+        {/* === Animated Intro Text (word-by-word) === */}
+        <TextReveal
+          variant="word"
+          delay={0.2}
           className={cn(
-            "max-w-2xl mt-8 text-foreground/90 leading-relaxed",
+            "text-center text-foreground/90 leading-relaxed mt-10 max-w-3xl text-lg tracking-wide",
             spacing.pxCard
           )}
         >
-          I am a UX Research Leader with a background in econometrics and
-          product development. My work bridges qualitative depth and
-          quantitative rigor, with a focus on ResearchOps, strategy alignment,
-          and measurable impact.
-        </IntroText>
+          I’m a UX Research Lead with 10+ years of experience bridging strategy,
+          operations, and insight generation. My work combines qualitative depth,
+          quantitative validation, and ResearchOps leadership to accelerate confident
+          product decisions.
+        </TextReveal>
       </div>
 
-      {/* === 3 Tiles === */}
+      {/* === Key Metrics (static Tiles mit Fade-In) === */}
       <div
         className={cn(
-          layout.gridCols3,
-          layout.gridGap,
-          "text-left justify-items-stretch"
+          "grid grid-cols-2 md:grid-cols-4 w-full",
+          spacing.gap6,
+          spacing.mt20
         )}
       >
-        <Tile variant="static" className="h-full">
-          <Subtitle>Career Interests</Subtitle>
-          <Body className={spacing.mt2}>
-            Scaling ResearchOps, advancing UX maturity, and integrating
-            user-centered decision making.
-          </Body>
-        </Tile>
-
-        <Tile variant="static" className="h-full">
-          <Subtitle>Background</Subtitle>
-          <Body className={spacing.mt2}>
-            Master’s degree in Economics from Augsburg, with 10+ years of
-            experience in UX Research across industries.
-          </Body>
-        </Tile>
-
-        <Tile variant="static" className="h-full">
-          <Subtitle>Personal Note</Subtitle>
-          <Body className={spacing.mt2}>
-            I see research as both craft and strategy — repeatable, improvable,
-            and essential for confident decisions.
-          </Body>
-        </Tile>
+        {metrics.map((m, i) => (
+          <FadeIn key={i} delay={0.3 + i * 0.1}>
+            <Tile
+              variant="static"
+              className={cn(
+                colors.tile.bg,
+                colors.tile.text,
+                "text-center border border-border/10",
+                spacing.p6,
+                shadows.sm,
+                "rounded-xl"
+              )}
+            >
+              <Subtitle className="font-bold">{m.number}</Subtitle>
+              <Body className="font-semibold text-foreground mt-1">{m.title}</Body>
+              <Body className="text-muted-foreground mt-1">{m.desc}</Body>
+            </Tile>
+          </FadeIn>
+        ))}
       </div>
+
+      {/* === Quote / Philosophy Statement === */}
+      <FadeIn delay={0.8}>
+        <blockquote
+          className={cn(
+            "italic text-center text-muted-foreground",
+            spacing.mt16,
+            spacing.mb8,
+            spacing.pxCard
+          )}
+        >
+          “Good UX Research isn’t meant to scale — it’s meant to reveal what scaling hides.”
+        </blockquote>
+      </FadeIn>
     </Section>
   );
 }
-
 
 
 ==== \src\components\sections\home\ContactSection.tsx ====
@@ -9568,8 +9600,7 @@ import Section from "@/components/ui/Section";
 import Button from "@/components/ui/Button";
 import { useTranslation } from "react-i18next";
 import { Calendar } from "lucide-react";
-import InfoTile from "@/components/ui/InfoTile";
-import { layout, spacing, colors, icon, hoverEffects } from "@/lib/tokens";
+import { spacing, colors, icon, hoverEffects, layout } from "@/lib/tokens";
 import { cn } from "@/lib/utils";
 
 export default function ContactSection() {
@@ -9582,27 +9613,38 @@ export default function ContactSection() {
 
   return (
     <Section id="contact" title="Contact">
-      <div className={cn(layout.flexColCenter, spacing.gap6)}>
-        {/* Ganze Kachel klickbar */}
+      <div className={cn(layout.flexColCenter, spacing.gap8, "max-w-2xl mx-auto")}>
+        {/* === Klickbare Karte === */}
         <div
           onClick={handleClick}
           className={cn(
-            "cursor-pointer w-full max-w-2xl",
-            hoverEffects.smoothLift
+            "cursor-pointer w-full max-w-md flex flex-col items-center text-center py-10 rounded-xl",
+            hoverEffects.smoothLift,
+            colors.tile.bg,
+            colors.tile.text
           )}
         >
-          <InfoTile
-            title={t("contact.title", "Schedule a Discovery Call")}
-            description={t(
-              "contact.cta",
-              "Book a time directly in my Google Calendar – quick and easy."
+          {/* --- Rundes Icon --- */}
+          <div
+            className={cn(
+              "flex items-center justify-center aspect-square w-20 rounded-full mb-6",
+              colors.notion.blue.bg,
+              colors.notion.blue.text
             )}
-            icon={<Calendar className={cn(icon.lg, colors.accent.text)} />}
-            className="items-center text-center"
-          />
+          >
+            <Calendar className={cn(icon.lg)} />
+          </div>
+
+          {/* --- Titel & Beschreibung --- */}
+          <h3 className="text-xl font-semibold text-foreground">
+            {t("contact.title", "Book a Call")}
+          </h3>
+          <p className="text-muted-foreground mt-2 max-w-sm">
+            {t("contact.cta", "Let’s talk about your UX Research challenge.")}
+          </p>
         </div>
 
-        {/* Button unten bleibt zusätzlich */}
+        {/* === Separater Button === */}
         <Button variant="secondary" size="lg" onClick={handleClick}>
           {t("contact.button", "Open Calendar")}
         </Button>
@@ -9612,158 +9654,105 @@ export default function ContactSection() {
 }
 
 
-==== \src\components\sections\home\CraftSection.tsx ====
-// src/components/sections/CraftSection.tsx
-import Section from "@/components/ui/Section";
-import SectionIntro from "@/components/ui/SectionIntro";
-
-export default function CraftSection() {
-  return (
-    <Section id="craft" title="Craft">
-      <SectionIntro>
-        Research as craft: repeatable, improvable practice with strong quality standards.
-      </SectionIntro>
-    </Section>
-  );
-}
-
-
-==== \src\components\sections\home\CVSection.tsx ====
-// src/components/sections/CVSection.tsx
-import { Section } from "@/components/ui";
-import CVPreview from "@/components/artefacts/CVPreview";
-import { IntroText } from "@/components/ui/Tokens";
-
-export default function CVSection() {
-  return (
-    <Section id="cv" title="CV snapshot" spacing="lg">
-      <IntroText>A quick preview of my career journey.</IntroText>
-
-      <CVPreview hideCTA /> {/* verhindert doppelte Links */}
-    </Section>
-  );
-}
-
-
 ==== \src\components\sections\home\ExpertiseSection.tsx ====
+// src/components/sections/home/ExpertiseSection.tsx
 import { Section } from "@/components/ui";
-import HouseDiagram from "@/components/artefacts/HouseDiagram";
+import SectionIntro from "@/components/ui/SectionIntro";
+import FadeIn from "@/components/ui/FadeIn";
+import TextReveal from "@/components/ui/TextReveal";
 import { useTranslation } from "react-i18next";
-import { IntroText } from "@/components/ui/Tokens";
+import { cn } from "@/lib/utils";
+import { spacing } from "@/lib/tokens";
+import { Link } from "react-router-dom";
+import TileImage from "@/components/ui/TileImage";
+
+// 🖼️ Expertise-Bilder – korrekte Pfade und Dateinamen
+import uxStrategyImg from "@/assets/images/expertise/uxstrategy/schach1.jpg";
+import strategicUxImg from "@/assets/images/expertise/strategicuxresearch/strategicuxr.jpg";
+import researchOpsImg from "@/assets/images/expertise/researchops/plant.jpg";
+import leadershipImg from "@/assets/images/expertise/teamleadership/team.jpg";
+import impactImg from "@/assets/images/expertise/impactmeasurement/impact.jpg";
 
 export default function ExpertiseSection() {
   const { t } = useTranslation();
 
+  const pillars =
+    (t("expertise.pillars", { returnObjects: true }) as Array<{
+      title: string;
+      caption?: string;
+    }>) ?? [];
+
+  const routesByIndex = [
+    "expertise/ux-strategy",
+    "expertise/strategic-ux-research",
+    "expertise/researchops",
+    "expertise/team-leadership",
+    "expertise/impact-measurement",
+  ];
+
+  const images = [
+    uxStrategyImg,
+    strategicUxImg,
+    researchOpsImg,
+    leadershipImg,
+    impactImg,
+  ];
+
   return (
     <Section id="expertise" title={t("expertise.title")} spacing="lg">
-      <IntroText>
-        I help companies build sustainable products by transforming deep user
-        insights into actionable strategies. My mission is to scale the user's
-        voice and empower organizations to make user-centered decisions.
-      </IntroText>
+      {/* --- Intro Text --- */}
+      <SectionIntro>
+        <TextReveal
+          stagger={0.06}
+          duration={0.35}
+          delay={0.1}
+          ease="easeOut"
+          className="inherit"
+        >
+          I help companies build sustainable products by transforming deep user
+          insights into actionable strategies. My mission is to scale the user's
+          voice and empower organizations to make user-centered decisions.
+        </TextReveal>
+      </SectionIntro>
 
-      <HouseDiagram />
-    </Section>
-  );
-}
-
-
-
-==== \src\components\sections\home\HeroSection.tsx ====
-// src/components/sections/HeroSection.tsx
-import { useTranslation } from "react-i18next";
-import profileImg from "@/assets/profile-felix.png";
-import headerHome from "@/assets/images/headers/home/headerhome.jpg";
-import Button from "@/components/ui/Button";
-import { H1, Body, MutedText } from "@/components/ui/Tokens";
-import { colors, layout, spacing, radii, shadows, sectionSpacing } from "@/lib/tokens";
-import { cn } from "@/lib/utils";
-
-export default function HeroSection() {
-  const { t } = useTranslation();
-
-  return (
-    <section
-      id="header"
-      className={cn(
-        "relative w-full overflow-hidden",
-        layout.scrollOffset,
-        sectionSpacing.lg
-      )}
-    >
-      {/* --- Hintergrundbild über volle Breite --- */}
-      <div
-        className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat"
-        style={{
-          backgroundImage: `url(${headerHome})`,
-        }}
-      />
-      {/* --- Halbtransparentes Overlay --- */}
-      <div className="absolute inset-0 bg-black/40" />
-
-      {/* --- Inhalt --- */}
+      {/* --- Expertise Tiles (2 große pro Zeile) --- */}
       <div
         className={cn(
-          "relative z-10 grid items-center w-full min-h-[70vh]",
-          layout.container,
-          layout.gridHero,
-          spacing.gap10
+          "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2", // 👉 jetzt 2 pro Zeile
+          spacing.gap8,
+          "max-w-6xl mx-auto"
         )}
       >
-        {/* --- Textseite --- */}
-        <div className="text-white">
-          <H1 className="drop-shadow-lg">Felix Bruckmeier</H1>
-
-          <Body className={cn("text-neutral-200 mt-3 max-w-2xl")}>
-            {t("hero.claim")}
-          </Body>
-
-          <Body className={cn("mt-6 max-w-2xl text-neutral-300")}>
-            <MutedText>{t("hero.intro")}</MutedText>
-          </Body>
-
-          {/* --- Call-to-Actions --- */}
-          <div className={cn("flex flex-wrap", spacing.gap4, spacing.pt6)}>
-            <Button asChild to="/cv" variant="secondary" size="lg">
-              View CV
-            </Button>
-            <Button asChild to="#projects" variant="secondary" size="lg">
-              See Projects
-            </Button>
-            <Button asChild to="#expertise" variant="secondary" size="lg">
-              Explore Expertise
-            </Button>
-          </div>
-        </div>
-
-        {/* --- Profilbild rechts --- */}
-        <div className="flex justify-center md:justify-end relative">
-          <img
-            src={profileImg}
-            alt="Portrait of Felix Bruckmeier"
-            className={cn(
-              "w-full max-w-sm object-cover relative z-10",
-              radii.xxl,
-              shadows.lg,
-              "border border-white/20"
-            )}
-          />
-        </div>
+        {pillars.slice(0, 5).map((p, i) => {
+          const to = routesByIndex[i] ?? "expertise";
+          const image = images[i];
+          return (
+            <FadeIn key={i} delay={0.2 + i * 0.1}>
+              <Link to={to}>
+                <TileImage
+                  image={image}
+                  title={p.title}
+                  caption={p.caption}
+                  className="group aspect-[4/3] rounded-xl overflow-hidden" // 📐 größeres Verhältnis & schöne Form
+                />
+              </Link>
+            </FadeIn>
+          );
+        })}
       </div>
-    </section>
+    </Section>
   );
 }
 
 
 ==== \src\components\sections\home\index.ts ====
 // src/components/sections/home/index.ts
-export { default as HeroSection } from "./HeroSection";
+
 export { default as AboutSection } from "./AboutSection";
 export { default as ExpertiseSection } from "./ExpertiseSection";
 export { default as ProjectsSection } from "./ProjectsSection";
-export { default as CraftSection } from "./CraftSection";
 export { default as ContactSection } from "./ContactSection";
-export { default as CVSection } from "./CVSection";
+
 
 
 ==== \src\components\sections\home\ProjectsSection.tsx ====
@@ -9771,8 +9760,20 @@ export { default as CVSection } from "./CVSection";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Section } from "@/components/ui";
-import InfoTile from "@/components/ui/InfoTile";
-import { layout } from "@/lib/tokens";
+import SectionIntro from "@/components/ui/SectionIntro";
+import TextReveal from "@/components/ui/TextReveal";
+import FadeIn from "@/components/ui/FadeIn";
+import TileImage from "@/components/ui/TileImage";
+import { spacing } from "@/lib/tokens";
+import { cn } from "@/lib/utils";
+
+// 📸 Projektbilder
+import carInsuranceImg from "@/assets/images/projects/carinsurance/CarInsurance.png";
+import reopsAgileImg from "@/assets/images/projects/reopsagile/ResearchOpsAgileUX.jpg";
+import b2b2cImg from "@/assets/images/projects/b2b2c/B2B2COptimization.jpg";
+import pricingImg from "@/assets/images/projects/pricingtesting/PricingUsabilityTesting.jpg";
+import microinteractionImg from "@/assets/images/projects/amicrointeraction/optimize.jpg";
+import reopsImplImg from "@/assets/images/projects/reopsimplement/ReOpsimplementation.jpg";
 
 export default function ProjectsSection() {
   const { t } = useTranslation();
@@ -9782,41 +9783,73 @@ export default function ProjectsSection() {
       to: "/projects/car-insurance",
       title: "Car Insurance",
       desc: "Reduced friction and improved conversion.",
+      image: carInsuranceImg,
     },
     {
       to: "/projects/zooplus-reops",
       title: "ResearchOps & Agile UX",
       desc: "Governance, templates & enablement at scale.",
+      image: reopsAgileImg,
     },
     {
       to: "/projects/swiss-life-b2b2c",
       title: "B2B2C Optimization",
       desc: "Qual & quant insights aligned to business goals.",
+      image: b2b2cImg,
     },
     {
       to: "/projects/zooplus-pricing",
       title: "Pricing Usability Testing",
       desc: "Clarity in pricing components and PDP details.",
+      image: pricingImg,
     },
     {
       to: "/projects/delete-case",
-      title: "A micro interaction that saves lots of user time",
+      title: "Micro Interaction",
       desc: "Simplifying repetitive workflows efficiently.",
+      image: microinteractionImg,
     },
     {
       to: "/projects/atoss-reops",
       title: "ReOps Implementation",
       desc: "Empowering UX teams through ResearchOps foundations.",
+      image: reopsImplImg,
     },
   ];
 
   return (
     <Section id="projects" title={t("projects.title")} spacing="lg">
-      <div className={`mt-6 ${layout.gridCols3} ${layout.gridGap} items-stretch`}>
+      <SectionIntro>
+        <TextReveal
+          stagger={0.06}
+          duration={0.35}
+          delay={0.1}
+          ease="easeOut"
+          className="inherit"
+        >
+          A selection of research and operations projects — from foundational
+          insights to usability testing and scalable ResearchOps systems.
+        </TextReveal>
+      </SectionIntro>
+
+      <div
+        className={cn(
+          "grid grid-cols-1 md:grid-cols-2",
+          spacing.gap8,
+          "max-w-6xl mx-auto"
+        )}
+      >
         {projects.map((p, i) => (
-          <Link key={i} to={p.to} className="block">
-            <InfoTile title={p.title} description={p.desc} className="cursor-pointer" />
-          </Link>
+          <FadeIn key={i} delay={0.2 + i * 0.1}>
+            <Link to={p.to}>
+              <TileImage
+                image={p.image}
+                title={p.title}
+                caption={p.desc}
+                className="group"
+              />
+            </Link>
+          </FadeIn>
         ))}
       </div>
     </Section>
@@ -10084,6 +10117,36 @@ export default function Button({
 }
 
 
+==== \src\components\ui\FadeIn.tsx ====
+// src/components/ui/FadeIn.tsx
+import { motion, useAnimation } from "framer-motion";
+import { useInView } from "react-intersection-observer";
+import { useEffect } from "react";
+
+export default function FadeIn({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
+  const controls = useAnimation();
+  const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
+
+  useEffect(() => {
+    if (inView) controls.start("visible");
+  }, [controls, inView]);
+
+  return (
+    <motion.div
+      ref={ref}
+      initial="hidden"
+      animate={controls}
+      variants={{
+        hidden: { opacity: 0, y: 20 },
+        visible: { opacity: 1, y: 0, transition: { duration: 0.6, delay } },
+      }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+
 ==== \src\components\ui\index.ts ====
 export { default as Section } from "./Section";
 export { default as Tile } from "./Tile";
@@ -10221,19 +10284,19 @@ interface SectionProps {
   center?: boolean;
   borderTop?: boolean;
   borderBottom?: boolean;
-  border?: boolean;     // ✅ neu (für Footer usw.)
-  compact?: boolean;    // ✅ neu (für ImpactMeasurement)
+  border?: boolean;     // optional für z. B. Footer-Trennlinie
+  compact?: boolean;    // kompakter Modus (z. B. für Impact-Tiles)
   spacing?: keyof typeof sectionSpacing;
   className?: string;
-  fullWidth?: boolean;
+  fullWidth?: boolean;  // ⬅ volle Breite standardmäßig aktiviert
 }
 
 /**
- * 🔧 Unified Section Component (Design System)
+ * 💠 Unified Section Component (Design System)
  * --------------------------------------------
- * - Standard: volle Breite (fullWidth = true)
+ * - Standardmäßig volle Breite
  * - Optionaler Container-Modus via fullWidth={false}
- * - Titel und Inhalte automatisch bündig
+ * - Einheitliche Typo, Abstände und Border-Behandlung
  */
 export default function Section({
   id,
@@ -10243,33 +10306,32 @@ export default function Section({
   center = false,
   borderTop = false,
   borderBottom = false,
-  border = true,
+  border = false,        // ⚙️ kein Border mehr per Default
   compact = false,
   spacing = "md",
   className,
-  fullWidth = true, // ✅ Standard jetzt volle Breite
+  fullWidth = true,      // ✅ volle Breite ist Standard
 }: SectionProps) {
   return (
     <section
       id={id}
       className={cn(
         layout.scrollOffset,
-        borderTop && "border-t",
-        borderBottom && "border-b",
-        border && colors.border,
+        borderTop && "border-t border-border/20",
+        borderBottom && "border-b border-border/20",
+        border && "border-y border-border/20",
         sectionSpacing[spacing],
-        compact && "py-4", // ✅ kompakter Modus
+        compact && "py-4",
         "w-full",
         className
       )}
     >
       <div
         className={cn(
-          fullWidth ? "w-full" : layout.container, // ⬅ Container nur bei false
+          fullWidth ? "w-full px-0" : layout.container,
           center ? "text-center mx-auto" : "text-left"
         )}
       >
-        {/* --- Titel (bündig mit Inhalt) --- */}
         {title && (
           <h2
             className={cn(
@@ -10285,7 +10347,6 @@ export default function Section({
           </h2>
         )}
 
-        {/* --- Untertitel optional --- */}
         {subtitle && (
           <p
             className={cn(
@@ -10302,7 +10363,6 @@ export default function Section({
           </p>
         )}
 
-        {/* --- Inhalt (z. B. SectionIntro, Tiles etc.) --- */}
         <div className="w-full">{children}</div>
       </div>
     </section>
@@ -10411,49 +10471,203 @@ export default function Tag({
 }
 
 
+==== \src\components\ui\TextReveal.tsx ====
+// src/components/ui/TextReveal.tsx
+import { motion, useAnimation } from "framer-motion";
+import { useInView } from "react-intersection-observer";
+import { useEffect } from "react";
+import { cn } from "@/lib/utils";
+
+type TextRevealProps = {
+  children: string;
+  delay?: number;
+  variant?: "word"; // fest auf Wortweise
+  stagger?: number; // ⏱ Abstand zwischen Wörtern
+  duration?: number; // ⏱ Dauer pro Wort
+  ease?: "linear" | "easeOut" | "easeInOut"; // 🎨 Art der Bewegung
+  className?: string;
+};
+
+export default function TextReveal({
+  children,
+  delay = 0,
+  variant = "word",
+  stagger = 0.04,
+  duration = 0.3,
+  ease = "easeOut",
+  className,
+}: TextRevealProps) {
+  const controls = useAnimation();
+  const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
+
+  useEffect(() => {
+    if (inView) controls.start("visible");
+  }, [controls, inView]);
+
+  // Text in Wörter (inkl. Leerzeichen) aufteilen
+  const textParts = children.split(/(\s+)/);
+
+  // Container-Animation
+  const container = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        delay,
+        staggerChildren: stagger,
+      },
+    },
+  };
+
+  // Einzelne Wörter
+  const child = {
+    hidden: { opacity: 0, x: 8 },
+    visible: {
+      opacity: 1,
+      x: 0,
+      transition: { duration, ease },
+    },
+  };
+
+  return (
+    <motion.div
+      ref={ref}
+      variants={container}
+      initial="hidden"
+      animate={controls}
+      className={cn("inline-block leading-relaxed", className)}
+    >
+      {textParts.map((part, i) => (
+        <motion.span
+          key={i}
+          variants={child}
+          style={{
+            display: "inline-block",
+            whiteSpace: "pre",
+          }}
+        >
+          {part}
+        </motion.span>
+      ))}
+    </motion.div>
+  );
+}
+
+
+
 ==== \src\components\ui\Tile.tsx ====
-// src/components/ui/Tile.tsx
 import { cn } from "@/lib/utils";
 import { colors, radii, transitions, spacing, hoverEffects } from "@/lib/tokens";
+import { ArrowRight } from "lucide-react";
 
 type TileProps = React.HTMLAttributes<HTMLDivElement> & {
-  /** interactive = Hover + Scale, static = keine Interaktion, inactive = ruhig + leicht ausgegraut */
-  variant?: "interactive" | "static" | "inactive"; // ✅ erweitert
+  variant?: "interactive" | "interactiveArrow" | "static" | "inactive";
 };
 
 export default function Tile({
   variant = "interactive",
   className,
+  children,
   ...props
 }: TileProps) {
+  // gemeinsame Basisstile
+  const baseStyles = cn(
+    colors.tile.bg,
+    colors.tile.text,
+    radii.lg,
+    spacing.p6,
+    transitions.default,
+    "relative flex flex-col justify-between h-full text-left space-y-2",
+    className
+  );
+
+  // Variantenlogik
+  const variantStyles =
+    variant === "interactive"
+      ? cn("will-change-transform cursor-pointer group", hoverEffects.smoothLift)
+      : variant === "interactiveArrow"
+      ? cn("will-change-transform cursor-pointer group", hoverEffects.smoothLift)
+      : variant === "inactive"
+      ? cn("opacity-70 cursor-not-allowed transition-none transform-none")
+      : cn("cursor-default transition-none transform-none");
+
+  return (
+    <div className={cn(baseStyles, variantStyles)} {...props}>
+      {/* --- Tile-Inhalt --- */}
+      <div className="flex-1">{children}</div>
+
+      {/* --- Nur bei Variante "interactiveArrow" Pfeil anzeigen --- */}
+      {variant === "interactiveArrow" && (
+        <div className="mt-4 flex justify-end">
+          <div
+            className="flex h-9 w-9 items-center justify-center rounded-full 
+                       bg-primary/10 text-primary dark:text-primary-foreground
+                       transition-transform duration-200 
+                       group-hover:translate-x-1 group-active:translate-x-1"
+          >
+            <ArrowRight className="h-5 w-5" strokeWidth={2} />
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+
+==== \src\components\ui\TileImage.tsx ====
+// src/components/ui/TileImage.tsx
+import { cn } from "@/lib/utils";
+import { transitions, hoverEffects } from "@/lib/tokens";
+
+type TileImageProps = React.HTMLAttributes<HTMLDivElement> & {
+  image: string; // Pfad zum Hintergrundbild
+  title?: string;
+  caption?: string;
+  variant?: "default" | "hoverLift";
+};
+
+export default function TileImage({
+  image,
+  title,
+  caption,
+  variant = "hoverLift",
+  className,
+  ...props
+}: TileImageProps) {
   return (
     <div
       className={cn(
-        colors.tile.bg,
-        colors.tile.text,
-        radii.lg,
-        spacing.p6,
+        "relative aspect-square overflow-hidden rounded-2xl text-white",
         transitions.default,
-        variant === "interactive"
-          ? cn("will-change-transform", hoverEffects.smoothLift, "cursor-pointer")
-          : variant === "inactive"
-          ? cn(
-              // ✅ leicht ausgegrauter, deaktivierter Zustand
-              "opacity-70",
-              "cursor-not-allowed",
-              "transition-none",
-              "transform-none"
-            )
-          : cn(
-              // statisch, aber aktiv sichtbar
-              "cursor-default",
-              "transition-none",
-              "transform-none"
-            ),
+        variant === "hoverLift" && hoverEffects.smoothLift,
         className
       )}
       {...props}
-    />
+    >
+      {/* === Hintergrundbild === */}
+      <img
+        src={image}
+        alt={title || ""}
+        className="absolute inset-0 w-full h-full object-cover object-center"
+      />
+
+      {/* === Overlay === */}
+      <div className="absolute inset-0 bg-black/40 transition-opacity duration-300 group-hover:bg-black/50" />
+
+      {/* === Text-Inhalt === */}
+      <div className="relative z-10 flex flex-col justify-start h-full p-4">
+        {title && (
+          <h3 className="text-xl font-semibold mb-2 drop-shadow-md">
+            {title}
+          </h3>
+        )}
+        {caption && (
+          <p className="text-base text-gray-200 drop-shadow-md leading-snug">
+            {caption}
+          </p>
+        )}
+      </div>
+    </div>
   );
 }
 
@@ -11120,9 +11334,13 @@ export const spacing = {
   blockGapLg: "space-y-16",
 } as const;
 
-// ✅ layout separat exportiert
+// ✅ layout separat exportiert – ergänzt um Breitenvarianten
 export const layout = {
+  containerNarrow: "mx-auto max-w-[1100px] px-4 sm:px-6 lg:px-8",
+  containerDefault: "mx-auto max-w-[1280px] px-6 lg:px-8",
+  containerWide: "mx-auto max-w-[1440px] px-8 lg:px-10",
   container: "mx-auto max-w-6xl px-4 sm:px-6 lg:px-8",
+
   gridGap: spacing.gap6,
   gridCols2: "grid md:grid-cols-2",
   gridCols3: "grid sm:grid-cols-2 lg:grid-cols-3",
@@ -11196,7 +11414,8 @@ export const hoverEffects = {
   scale: "transition-transform duration-200 hover:scale-105",
   rotate: "transition-transform duration-200 hover:rotate-6",
   slide: "transition-all duration-300 ease-in-out",
-  smoothLift: "transition-all duration-300 ease-in-out hover:scale-[1.01] hover:bg-neutral-200 dark:hover:bg-neutral-800",
+  smoothLift:
+    "transition-all duration-300 ease-in-out hover:scale-[1.01] hover:bg-neutral-200 dark:hover:bg-neutral-800",
 } as const;
 
 // ================================
@@ -11409,25 +11628,25 @@ export function cn(...inputs: ClassValue[]) {
     "valueProp": "I help companies build sustainable products by transforming deep user insights into actionable strategies. My mission is to scale the user's voice and empower organizations to make user-centered decisions.",
     "pillars": [
       {
-        "title": "Research Strategy",
-        "caption": "Discovery programs aligned to business goals"
-      },
-      {
-        "title": "Needs → Product Strategy",
-        "caption": "Translate insights into roadmaps"
-      },
-      {
-        "title": "Process & Tooling",
-        "caption": "Efficient, scalable practice"
-      },
-      {
-        "title": "Team Leadership",
-        "caption": "Mentorship, standards, excellence"
-      },
-      {
-        "title": "Proving ROI",
-        "caption": "Measure and communicate impact"
-      }
+      "title": "UX Strategy",
+      "caption": "I align UX Research insights with business direction."
+    },
+    {
+      "title": "Strategic UX Research",
+      "caption": "I translate real user needs into actionable product roadmaps."
+    },
+    {
+      "title": "ResearchOps",
+      "caption": "I build efficient, scalable, and insight-driven research operations."
+    },
+    {
+      "title": "Leadership & Mentoring",
+      "caption": "I empower teams through mentorship, alignment, and excellence in craft."
+    },
+    {
+      "title": "Impact Measurement",
+      "caption": "I measure and communicate UX impact across the organization."
+    }
     ],
     "uxStrategy": "UX Strategy",
     "strategicUxResearch": "Strategic UX Research",
@@ -11482,7 +11701,7 @@ export function cn(...inputs: ClassValue[]) {
   },
   "contact": {
     "title": "Book a Call",
-    "cta": "📞 Contact me — I'm eager to learn about your challenges...",
+    "cta": "Let’s talk about your UX research challenges.",
     "cta2": "Book Your Call Now — Schedule a Discovery Call",
     "cta3": "Click to easily book a 60-minute call directly in my calendar."
   }
@@ -12752,67 +12971,112 @@ export default function PrivacyPage() {
 
 ==== \src\pages\Home.tsx ====
 import PageLayout from "@/components/layout/PageLayout";
-import headerImg from "@/assets/images/headers/home/headerhome.jpg";
+import Section from "@/components/ui/Section";
+import Tile from "@/components/ui/Tile";
 import Button from "@/components/ui/Button";
-import { Body, MutedText } from "@/components/ui/Tokens";
-import { spacing } from "@/lib/tokens";
+import FadeIn from "@/components/ui/FadeIn";
+import { Subtitle, Body } from "@/components/ui/Tokens";
+import { spacing, colors, shadows } from "@/lib/tokens";
 import { cn } from "@/lib/utils";
-
+import profileImg from "@/assets/profile-felix.png";
 import {
-  AboutSection,
   ExpertiseSection,
   ProjectsSection,
   ContactSection,
 } from "@/components/sections/home";
 
 export default function Home() {
-  return (
-    <PageLayout
-      title="Felix Bruckmeier"
-      intro="Bridging insight, design, and strategy to create user-centered digital products that deliver measurable business value."
-      headerImage={headerImg}
-    >
-      {/* ===== Hero-Content direkt unter Intro ===== */}
-      <div
-        className={cn(
-          "relative z-10 flex flex-col items-center text-center text-white",
-          spacing.mt4
-        )}
-      >
-        <Body className="max-w-2xl text-gray-200 leading-relaxed drop-shadow-md">
-          <MutedText>
-            User Experience Research • Strategy • ResearchOps
-          </MutedText>
-        </Body>
+  const metrics = [
+    { number: "10+", title: "Years Experience", desc: "UX strategy & research leadership" },
+    { number: "25+", title: "Research Methods", desc: "Qualitative & quantitative expertise" },
+    { number: "5", title: "Industries", desc: "E-commerce, finance, insurance & more" },
+    { number: "200+", title: "Studies", desc: "End-to-end user research projects" },
+  ];
 
-        {/* === Call-to-Actions === */}
+  return (
+    <PageLayout>
+      {/* ===== Intro-Text mit Portrait ===== */}
+      <Section id="intro" borderBottom>
+        <div className={cn("grid md:grid-cols-[1.1fr_0.9fr] gap-10 items-center")}>
+          <div>
+            <Subtitle className="text-foreground mb-4">
+              I’m a UX Research Lead passionate about connecting strategy, insight, and execution.
+            </Subtitle>
+            <Body className="text-muted-foreground max-w-prose">
+              My work bridges business goals and user needs through mixed-method research and scalable ResearchOps.
+              By combining qualitative depth and quantitative validation, I enable teams to make confident,
+              user-centered decisions.
+            </Body>
+
+            <div className={cn("flex flex-wrap gap-4 mt-8")}>
+              <Button asChild to="/cv" variant="secondary" size="lg">
+                View CV
+              </Button>
+              <Button asChild to="/#projects" variant="secondary" size="lg">
+                See Projects
+              </Button>
+              <Button asChild to="/#expertise" variant="secondary" size="lg">
+                Explore Expertise
+              </Button>
+            </div>
+          </div>
+
+          <img
+            src={profileImg}
+            alt="Portrait of Felix Bruckmeier"
+            className={cn(
+              "rounded-2xl shadow-lg mx-auto w-[70%] md:w-[80%] object-cover aspect-[4/5]",
+              colors.border
+            )}
+          />
+        </div>
+      </Section>
+
+      {/* ===== KPI-Tiles ===== */}
+      <Section id="facts" borderBottom>
         <div
           className={cn(
-            "flex flex-wrap justify-center",
-            spacing.gap4,
-            spacing.mt4 // enger Abstand unter Text
+            "grid grid-cols-2 md:grid-cols-4 w-full text-center",
+            spacing.gap6,
+            spacing.mt10
           )}
         >
-          <Button asChild to="/cv" variant="secondary" size="lg">
-            View CV
-          </Button>
-          <Button asChild to="#projects" variant="secondary" size="lg">
-            See Projects
-          </Button>
-          <Button asChild to="#expertise" variant="secondary" size="lg">
-            Explore Expertise
-          </Button>
+          {metrics.map((m, i) => (
+            <FadeIn key={i} delay={0.2 + i * 0.1}>
+              <Tile
+                variant="static"
+                className={cn(
+                  colors.tile.bg,
+                  colors.tile.text,
+                  "text-center border border-border/10",
+                  spacing.p6,
+                  shadows.sm,
+                  "rounded-xl"
+                )}
+              >
+                <Subtitle className="font-bold">{m.number}</Subtitle>
+                <Body className="font-semibold text-foreground mt-1">{m.title}</Body>
+                <Body className="text-muted-foreground mt-1">{m.desc}</Body>
+              </Tile>
+            </FadeIn>
+          ))}
         </div>
-      </div>
+      </Section>
 
-      {/* ===== SECTIONS DARUNTER ===== */}
-      <AboutSection />
+      {/* ===== Expertise Section ===== */}
       <ExpertiseSection />
+
+      {/* ===== Projects Section ===== */}
       <ProjectsSection />
-      <ContactSection />
+
+      {/* ===== Kontakt ===== */}
+      <Section id="contact" borderTop>
+        <ContactSection />
+      </Section>
     </PageLayout>
   );
 }
+
 
 
 ==== \src\pages\NotFound.tsx ====
@@ -13229,30 +13493,40 @@ declare module "*.mp4" {
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+
     <!-- Theme bootstrapping: setzt .dark auf <html>, bevor CSS rendert -->
     <script>
       (() => {
         try {
-          const stored = localStorage.getItem('theme');
+          const stored = localStorage.getItem("theme");
           const prefers =
             window.matchMedia &&
-            window.matchMedia('(prefers-color-scheme: dark)').matches;
-          const theme = stored ?? (prefers ? 'dark' : 'light');
+            window.matchMedia("(prefers-color-scheme: dark)").matches;
+          const theme = stored ?? (prefers ? "dark" : "light");
           const root = document.documentElement;
-          if (theme === 'dark') {
-            root.classList.add('dark');
-            root.style.colorScheme = 'dark';
+          if (theme === "dark") {
+            root.classList.add("dark");
+            root.style.colorScheme = "dark";
           } else {
-            root.classList.remove('dark');
-            root.style.colorScheme = 'light';
+            root.classList.remove("dark");
+            root.style.colorScheme = "light";
           }
         } catch {}
       })();
     </script>
+
+    <!-- ✅ GoatCounter Analytics -->
+    <script
+      data-goatcounter="https://felix.goatcounter.com/count"
+      async
+      src="//gc.zgo.at/count.js"
+    ></script>
+
     <link rel="icon" type="image/png" href="/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Felix Bruckmeier – UX Research</title>
   </head>
+
   <!-- WICHTIG: Tokens statt feste Farben -->
   <body class="min-h-screen bg-background text-foreground">
     <div id="root"></div>
@@ -13293,6 +13567,7 @@ declare module "*.mp4" {
     "react-chartjs-2": "^5.3.0",
     "react-dom": "^18.2.0",
     "react-i18next": "^13.5.0",
+    "react-intersection-observer": "^9.16.0",
     "react-router-dom": "^6.26.0",
     "recharts": "^3.2.1",
     "tailwind-merge": "^3.3.1",

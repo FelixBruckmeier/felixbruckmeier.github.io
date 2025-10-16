@@ -5,8 +5,9 @@ import { layout, sectionSpacing, typography } from "@/lib/tokens";
 interface PageLayoutProps {
   title?: string;
   intro?: string;
-  headerImage?: string; // Hintergrundbild
+  headerImage?: string;
   children: ReactNode;
+  width?: "narrow" | "default" | "wide"; // 🔹 Breitenoption
 }
 
 export default function PageLayout({
@@ -14,28 +15,28 @@ export default function PageLayout({
   intro,
   headerImage,
   children,
+  width = "default",
 }: PageLayoutProps) {
+  // Dynamische Breitensteuerung über Tokens
+  const containerClass =
+    width === "narrow"
+      ? layout.containerNarrow
+      : width === "wide"
+      ? layout.containerWide
+      : layout.containerDefault;
+
   return (
     <main className="flex flex-col items-stretch text-left">
-      {/* ===== HERO-BEREICH MIT HINTERGRUNDBILD ===== */}
+      {/* ===== HERO ===== */}
       {headerImage && (
-        <section
-          className={cn(
-            "relative w-full min-h-[50vh] flex flex-col justify-center items-center text-center text-white overflow-hidden"
-          )}
-        >
-          {/* Hintergrundbild */}
+        <section className="relative w-full flex flex-col justify-center items-center text-center text-white overflow-hidden min-h-[50vh]">
           <img
             src={headerImage}
             alt=""
-            data-hero
             className="absolute inset-0 w-full h-full object-cover object-center"
           />
-
-          {/* Halbtransparenter Overlay */}
           <div className="absolute inset-0 bg-black/50" />
 
-          {/* Text-Content */}
           <div className="relative z-10 max-w-3xl px-6">
             {title && (
               <h1
@@ -66,8 +67,8 @@ export default function PageLayout({
         </section>
       )}
 
-      {/* ===== SEITENINHALT ===== */}
-      <div className={cn(layout.container, sectionSpacing.lg, "space-y-32")}>
+      {/* ===== CONTENT ===== */}
+      <div className={cn(containerClass, sectionSpacing.lg, "space-y-32")}>
         {children}
       </div>
     </main>

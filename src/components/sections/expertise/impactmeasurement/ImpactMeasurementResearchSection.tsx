@@ -49,7 +49,7 @@ export default function ImpactMeasurementResearchSection() {
           "items-stretch"
         )}
       >
-        <Tile variant="inactive" className="h-full flex flex-col justify-between p-8">
+        <Tile variant="static" className="h-full flex flex-col justify-between p-8">
           <div>
             <Subtitle>The RPS principle</Subtitle>
             <Body className={cn(colors.muted.text, spacing.mt4)}>
@@ -65,7 +65,7 @@ export default function ImpactMeasurementResearchSection() {
           </Small>
         </Tile>
 
-        <Tile variant="inactive" className="h-full flex flex-col justify-between p-8">
+        <Tile variant="static" className="h-full flex flex-col justify-between p-8">
           <div>
             <Subtitle>What it measures</Subtitle>
             <Body className={cn(colors.muted.text, spacing.mt4)}>
@@ -83,7 +83,7 @@ export default function ImpactMeasurementResearchSection() {
           </Small>
         </Tile>
 
-        <Tile variant="inactive" className="h-full flex flex-col justify-between p-8">
+        <Tile variant="static" className="h-full flex flex-col justify-between p-8">
           <div>
             <Subtitle>How it's applied</Subtitle>
             <Body className={cn(colors.muted.text, spacing.mt4)}>

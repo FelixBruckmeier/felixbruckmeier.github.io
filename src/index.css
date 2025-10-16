@@ -35,7 +35,9 @@
   --color-accent-foreground: #ffffff;
 }
 
-/* Dark Theme Overrides */
+/* ================================
+   DARK THEME OVERRIDES
+   ================================ */
 .dark {
   --color-background: #0b0b0b;
   --color-foreground: #f8f8f8;
@@ -73,9 +75,13 @@
    ================================ */
 html,
 body {
-  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+  overflow-y: scroll; /* reserviert Scrollbalkenplatz */
+  overflow-x: clip;   /* verhindert horizontales Verschieben */
   width: 100%;
-  max-width: 100%;
+  background: var(--color-background);
+  color: var(--color-foreground);
 }
 
 /* ✅ Normale Bilder & SVGs skalieren richtig,
@@ -122,7 +128,7 @@ svg:not([data-hero]) {
     @apply text-foreground hover:bg-muted/40;
   }
 
-  /* Tiles (Kacheln für HouseDiagram, About, etc.) */
+  /* Tiles */
   .tile {
     @apply rounded-xl border border-border bg-muted 
            p-4 text-center text-sm text-muted-foreground 
@@ -142,9 +148,11 @@ svg:not([data-hero]) {
   h1 {
     @apply font-display font-extrabold tracking-tight;
   }
+
   h2 {
     @apply font-display font-bold;
   }
+
   h3 {
     @apply font-display font-semibold;
   }
@@ -152,6 +160,7 @@ svg:not([data-hero]) {
   p {
     @apply leading-relaxed text-muted-foreground;
   }
+
   small {
     @apply text-sm text-muted-foreground;
   }

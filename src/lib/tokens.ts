@@ -49,12 +49,20 @@ export const typography = {
     tracking: "tracking-tight",
     leading: "leading-tight",
   },
-  sectionTitle: {
+    sectionTitle: {
     font: "[font-family:var(--font-display)]",
     size: "text-3xl md:text-5xl",
     weight: "font-bold",
     tracking: "tracking-tight",
     leading: "leading-snug",
+  },
+  sectionHeading: {
+    font: "[font-family:var(--font-display)]",
+    size: "text-2xl md:text-3xl",
+    weight: "font-semibold",
+    tracking: "tracking-tight",
+    leading: "leading-snug",
+    color: "text-foreground",
   },
   subtitle: {
     font: "[font-family:var(--font-sans)]",
@@ -189,9 +197,14 @@ export const spacing = {
   blockGapLg: "space-y-16",
 } as const;
 
-// ✅ layout separat exportiert
+// ✅ layout mit dynamischer Breite (für 4K, WQHD usw.)
 export const layout = {
+ containerDynamic: "mx-auto w-full max-w-[1900px] px-[3vw]", // 🔹 NEU: responsive Container
+  containerNarrow: "mx-auto max-w-[1100px] px-4 sm:px-6 lg:px-8",
+  containerDefault: "mx-auto max-w-[1280px] px-6 lg:px-8",
+  containerWide: "mx-auto max-w-[1440px] px-8 lg:px-10",
   container: "mx-auto max-w-6xl px-4 sm:px-6 lg:px-8",
+
   gridGap: spacing.gap6,
   gridCols2: "grid md:grid-cols-2",
   gridCols3: "grid sm:grid-cols-2 lg:grid-cols-3",
@@ -199,7 +212,7 @@ export const layout = {
   gridHero: "md:grid-cols-[1.1fr_0.9fr]",
   flexCenter: "flex items-center justify-center",
   flexBetween: "flex items-center justify-between",
-  flexColCenter: "flex flex-col items-center",
+  flexColCenter: "flex flex-col items-center justify-center",
   flexCol: "flex flex-col",
   itemsStart: "items-start",
   textLeft: "text-left",
@@ -265,7 +278,8 @@ export const hoverEffects = {
   scale: "transition-transform duration-200 hover:scale-105",
   rotate: "transition-transform duration-200 hover:rotate-6",
   slide: "transition-all duration-300 ease-in-out",
-  smoothLift: "transition-all duration-300 ease-in-out hover:scale-[1.01] hover:bg-neutral-200 dark:hover:bg-neutral-800",
+  smoothLift:
+    "transition-all duration-300 ease-in-out hover:scale-[1.01] hover:bg-neutral-200 dark:hover:bg-neutral-800",
 } as const;
 
 // ================================
