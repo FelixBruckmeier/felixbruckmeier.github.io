@@ -1,134 +1,129 @@
 // src/components/sections/home/AboutSection.tsx
 import Section from "@/components/ui/Section";
-import Tile from "@/components/ui/Tile";
 import FadeIn from "@/components/ui/FadeIn";
 import TextReveal from "@/components/ui/TextReveal";
-import { Subtitle, Body } from "@/components/ui/Tokens";
-import { spacing, shadows, colors, layout } from "@/lib/tokens";
+import Button from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { colors } from "@/lib/tokens";
 import profileImg from "@/assets/profile-felix.png";
-import { useEffect } from "react";
 
 export default function AboutSection() {
-  const location = useLocation();
-  const navigate = useNavigate();
-
-  // ✅ Scrollfunktion (funktioniert auch nach Navigation)
-  const scrollToId = (id: string) => {
-    const el = document.getElementById(id);
-    if (el) {
-      const yOffset = -80;
-      const y = el.getBoundingClientRect().top + window.scrollY + yOffset;
-      window.scrollTo({ top: y, behavior: "smooth" });
-    }
-  };
-
-  // Wenn URL z. B. /#projects → beim Laden scrollen
-  useEffect(() => {
-    if (location.hash) {
-      const id = location.hash.replace("#", "");
-      setTimeout(() => scrollToId(id), 100);
-    }
-  }, [location]);
-
-  const metrics = [
-    { number: "10+", title: "Years Experience", desc: "UX strategy and research leadership across teams" },
-    { number: "25+", title: "Research Methods", desc: "Full spectrum of qualitative and quantitative approaches" },
-    { number: "5", title: "Industries", desc: "Cross-domain expertise from e-commerce to finance" },
-    { number: "200+", title: "Studies Conducted", desc: "End-to-end research across product development phases" },
-  ];
-
   return (
-    <Section id="about" title="About Me" center>
-      <div className={cn("flex flex-col items-center w-full", spacing.mt8, spacing.mb20)}>
-        <FadeIn>
-          <div className="flex justify-center w-full">
+    <Section id="about" borderBottom>
+      <div
+        className={cn(
+          // Mobile: Text → Bild → CTA
+          // Desktop: Text + CTA links, Bild rechts
+          "flex flex-col md:grid md:grid-cols-[1.1fr_0.9fr] gap-10 items-center"
+        )}
+      >
+        {/* === Text-Bereich (inkl. Desktop-CTA) === */}
+        <div className="text-block order-1 md:order-1 md:col-start-1 flex flex-col">
+          <FadeIn delay={0.1}>
+            <TextReveal
+              variant="word"
+              stagger={0.08}
+              duration={0.9}
+              delay={0.1}
+              ease="easeInOut"
+              className="text-left text-foreground font-bold text-5xl mb-8"
+            >
+              Hello!
+            </TextReveal>
+          </FadeIn>
+
+          <FadeIn delay={1.2}>
+            <TextReveal
+              variant="word"
+              stagger={0.08}
+              duration={0.8}
+              delay={0.15}
+              ease="easeInOut"
+              className="text-left text-foreground font-semibold text-lg mb-4"
+            >
+              I’m a UX Research Lead passionate about connecting strategy, insight, and execution.
+            </TextReveal>
+          </FadeIn>
+
+          <FadeIn delay={2.4}>
+            <TextReveal
+              variant="word"
+              stagger={0.08}
+              duration={0.8}
+              delay={0.2}
+              ease="easeInOut"
+              className="text-left text-muted-foreground leading-relaxed max-w-prose"
+            >
+              My work bridges business goals and user needs through mixed-method research and scalable ResearchOps.
+              By combining qualitative depth and quantitative validation, I enable teams to make confident,
+              user-centered decisions.
+            </TextReveal>
+          </FadeIn>
+
+          {/* === CTA nur auf Desktop sichtbar === */}
+          <div className="hidden md:flex flex-wrap gap-4 w-full mt-8">
+            <FadeIn delay={3.6}>
+              <Button asChild variant="secondary" size="lg">
+                <a href="#projects">See Projects ↓</a>
+              </Button>
+            </FadeIn>
+
+            <FadeIn delay={3.8}>
+              <Button asChild variant="secondary" size="lg">
+                <a href="#expertise">Explore Expertise ↓</a>
+              </Button>
+            </FadeIn>
+
+            <FadeIn delay={4.0}>
+              <Button asChild variant="secondary" size="lg">
+                <a href="/cv">View CV →</a>
+              </Button>
+            </FadeIn>
+          </div>
+        </div>
+
+        {/* === Bild-Bereich === */}
+        <div className="image-block order-2 md:order-2 md:col-start-2">
+          <FadeIn delay={0.8}>
             <img
               src={profileImg}
               alt="Portrait of Felix Bruckmeier"
               className={cn(
-                "w-[40%] max-w-[200px] md:max-w-[260px] aspect-[4/5] object-cover rounded-2xl shadow-lg mx-auto",
-                colors.border,
-                shadows.md
+                "rounded-2xl shadow-lg mx-auto w-[70%] md:w-[80%] object-cover aspect-[4/5]",
+                colors.border
               )}
             />
-          </div>
-        </FadeIn>
+          </FadeIn>
+        </div>
 
-        <TextReveal
-          variant="word"
-          delay={0.2}
-          className={cn(
-            "text-center text-foreground/90 leading-relaxed mt-10 text-lg tracking-wide",
-            layout.maxWidthText
-          )}
-        >
-          I’m a UX Research Lead with 10+ years of experience bridging strategy,
-          operations, and insight generation. My work combines qualitative depth,
-          quantitative validation, and ResearchOps leadership to accelerate confident
-          product decisions.
-        </TextReveal>
+        {/* === CTA nur auf Mobile sichtbar – jetzt unterhalb des Bildes === */}
+        <div className="order-3 md:hidden flex flex-wrap gap-4 mt-8 w-full">
+          <FadeIn delay={3.6}>
+            <Button asChild variant="secondary" size="lg" className="w-full">
+              <a href="#projects">See Projects ↓</a>
+            </Button>
+          </FadeIn>
 
-        {/* === CTA Buttons === */}
-        <div className="flex flex-wrap justify-center gap-4 mt-10">
-          <button
-            onClick={() => scrollToId("expertise")}
-            className="btn btn-primary"
-          >
-            Explore Expertise ↓
-          </button>
-          <button
-            onClick={() => scrollToId("projects")}
-            className="btn btn-secondary"
-          >
-            See Projects ↓
-          </button>
-          <Link to="/cv" className="btn btn-ghost">
-            View CV →
-          </Link>
+          <FadeIn delay={3.8}>
+            <Button asChild variant="secondary" size="lg" className="w-full">
+              <a href="#expertise">Explore Expertise ↓</a>
+            </Button>
+          </FadeIn>
+
+          <FadeIn delay={4.0}>
+            <Button asChild variant="secondary" size="lg" className="w-full">
+              <a href="/cv">View CV →</a>
+            </Button>
+          </FadeIn>
         </div>
       </div>
 
-      <div
-        className={cn(
-          "grid grid-cols-2 md:grid-cols-4 w-full",
-          spacing.gap6,
-          spacing.mt20
-        )}
-      >
-        {metrics.map((m, i) => (
-          <FadeIn key={i} delay={0.3 + i * 0.1}>
-            <Tile
-              variant="static"
-              className={cn(
-                colors.tile.bg,
-                colors.tile.text,
-                "text-center border border-border/10",
-                spacing.p6,
-                shadows.sm,
-                "rounded-xl"
-              )}
-            >
-              <Subtitle className="font-bold">{m.number}</Subtitle>
-              <Body className="font-semibold text-foreground mt-1">{m.title}</Body>
-              <Body className="text-muted-foreground mt-1">{m.desc}</Body>
-            </Tile>
-          </FadeIn>
-        ))}
-      </div>
-
-      <FadeIn delay={0.8}>
-        <blockquote
-          className={cn(
-            "italic text-center text-muted-foreground",
-            spacing.mt16,
-            spacing.mb8,
-            layout.maxWidthText
-          )}
-        >
-          “Good UX Research isn’t meant to scale — it’s meant to reveal what scaling hides.”
-        </blockquote>
+      {/* === Quote unterhalb der Section === */}
+      <FadeIn delay={4.4}>
+        <p className="mt-12 text-center text-muted-foreground italic text-sm md:text-base">
+          “UX Research is not for perfectionists. We strive for something better than perfection — something real.”
+         
+        </p>
       </FadeIn>
     </Section>
   );

@@ -84,6 +84,12 @@ body {
   color: var(--color-foreground);
 }
 
+
+/* ✅ Weiches Scrollen aktivieren */
+html {
+  scroll-behavior: smooth;
+}
+
 /* ✅ Normale Bilder & SVGs skalieren richtig,
    Hero-/Headerbilder mit data-hero bleiben unberührt */
 img:not([data-hero]),

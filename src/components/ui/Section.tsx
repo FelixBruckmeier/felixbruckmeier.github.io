@@ -5,7 +5,6 @@ import {
   sectionSpacing,
   sectionInnerSpacing,
   typography,
-  colors,
 } from "@/lib/tokens";
 
 /**
@@ -60,6 +59,8 @@ export default function Section({
         sectionSpacing[spacing],
         compact && "py-4",
         "w-full",
+        // 🧩 Fix: sorgt dafür, dass beim Ankern die Section nicht unter der Navbar verschwindet
+        "scroll-mt-[80px]",
         className
       )}
     >
@@ -100,3 +101,4 @@ export default function Section({
     </section>
   );
 }
+
