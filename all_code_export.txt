@@ -7,30 +7,27 @@ C:\Users\felix\Documents\GitHub\felixbruckmeier.github.io\src\pages\Home.tsx
 
 import PageLayout from "@/components/layout/PageLayout";
 import Section from "@/components/ui/Section";
-import Tile from "@/components/ui/Tile";
 import Button from "@/components/ui/Button";
 import FadeIn from "@/components/ui/FadeIn";
 import { Subtitle, Body } from "@/components/ui/Tokens";
-import { spacing, colors, shadows } from "@/lib/tokens";
 import { cn } from "@/lib/utils";
+import { colors } from "@/lib/tokens";
 import profileImg from "@/assets/profile-felix.png";
+
+// ðŸ”¹ Startseiten-Sections
 import {
   ExpertiseSection,
   ProjectsSection,
   ContactSection,
 } from "@/components/sections/home";
 
-export default function Home() {
-  const metrics = [
-    { number: "10+", title: "Years Experience", desc: "UX strategy & research leadership" },
-    { number: "25+", title: "Research Methods", desc: "Qualitative & quantitative expertise" },
-    { number: "5", title: "Industries", desc: "E-commerce, finance, insurance & more" },
-    { number: "200+", title: "Studies", desc: "End-to-end user research projects" },
-  ];
+// ðŸ”¹ Neue KPI-Section mit grauem Hintergrund
+import MetricsSection from "@/components/sections/home/MetricsSection";
 
+export default function Home() {
   return (
     <PageLayout>
-      {/* ===== Intro-Text mit Portrait ===== */}
+      {/* ===== Intro mit Portrait ===== */}
       <Section id="intro" borderBottom>
         <div className={cn("grid md:grid-cols-[1.1fr_0.9fr] gap-10 items-center")}>
           <div>
@@ -43,7 +40,7 @@ export default function Home() {
               user-centered decisions.
             </Body>
 
-            <div className={cn("flex flex-wrap gap-4 mt-8")}>
+            <div className="flex flex-wrap gap-4 mt-8">
               <Button asChild to="/cv" variant="secondary" size="lg">
                 View CV
               </Button>
@@ -67,36 +64,8 @@ export default function Home() {
         </div>
       </Section>
 
-      {/* ===== KPI-Tiles ===== */}
-      <Section id="facts" borderBottom>
-        <div
-          className={cn(
-            "grid grid-cols-2 md:grid-cols-4 w-full text-center",
-            spacing.gap6,
-            spacing.mt10
-          )}
-        >
-          {metrics.map((m, i) => (
-            <FadeIn key={i} delay={0.2 + i * 0.1}>
-              <Tile
-                variant="static"
-                className={cn(
-                  colors.tile.bg,
-                  colors.tile.text,
-                  "text-center border border-border/10",
-                  spacing.p6,
-                  shadows.sm,
-                  "rounded-xl"
-                )}
-              >
-                <Subtitle className="font-bold">{m.number}</Subtitle>
-                <Body className="font-semibold text-foreground mt-1">{m.title}</Body>
-                <Body className="text-muted-foreground mt-1">{m.desc}</Body>
-              </Tile>
-            </FadeIn>
-          ))}
-        </div>
-      </Section>
+      {/* ===== KPI-Section (hellgrauer Hintergrund, volle Breite) ===== */}
+      <MetricsSection />
 
       {/* ===== Expertise Section ===== */}
       <ExpertiseSection />
@@ -104,14 +73,11 @@ export default function Home() {
       {/* ===== Projects Section ===== */}
       <ProjectsSection />
 
-      {/* ===== Kontakt ===== */}
-      <Section id="contact" borderTop>
+      {/* ===== Kontakt Section ===== */}
         <ContactSection />
-      </Section>
     </PageLayout>
   );
 }
-
 
 
 
@@ -306,12 +272,20 @@ export const typography = {
     tracking: "tracking-tight",
     leading: "leading-tight",
   },
-  sectionTitle: {
+    sectionTitle: {
     font: "[font-family:var(--font-display)]",
     size: "text-3xl md:text-5xl",
     weight: "font-bold",
     tracking: "tracking-tight",
     leading: "leading-snug",
+  },
+  sectionHeading: {
+    font: "[font-family:var(--font-display)]",
+    size: "text-2xl md:text-3xl",
+    weight: "font-semibold",
+    tracking: "tracking-tight",
+    leading: "leading-snug",
+    color: "text-foreground",
   },
   subtitle: {
     font: "[font-family:var(--font-sans)]",
@@ -620,6 +594,7 @@ export function cn(...inputs: ClassValue[]) {
 C:\Users\felix\Documents\GitHub\felixbruckmeier.github.io\src\components\sections\home\AboutSection.tsx
 ==============================
 
+// src/components/sections/home/AboutSection.tsx
 import Section from "@/components/ui/Section";
 import Tile from "@/components/ui/Tile";
 import FadeIn from "@/components/ui/FadeIn";
@@ -627,35 +602,41 @@ import TextReveal from "@/components/ui/TextReveal";
 import { Subtitle, Body } from "@/components/ui/Tokens";
 import { spacing, shadows, colors, layout } from "@/lib/tokens";
 import { cn } from "@/lib/utils";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import profileImg from "@/assets/profile-felix.png";
+import { useEffect } from "react";
 
 export default function AboutSection() {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  // âœ… Scrollfunktion (funktioniert auch nach Navigation)
+  const scrollToId = (id: string) => {
+    const el = document.getElementById(id);
+    if (el) {
+      const yOffset = -80;
+      const y = el.getBoundingClientRect().top + window.scrollY + yOffset;
+      window.scrollTo({ top: y, behavior: "smooth" });
+    }
+  };
+
+  // Wenn URL z. B. /#projects â†’ beim Laden scrollen
+  useEffect(() => {
+    if (location.hash) {
+      const id = location.hash.replace("#", "");
+      setTimeout(() => scrollToId(id), 100);
+    }
+  }, [location]);
+
   const metrics = [
-    {
-      number: "10+",
-      title: "Years Experience",
-      desc: "UX strategy and research leadership across teams",
-    },
-    {
-      number: "25+",
-      title: "Research Methods",
-      desc: "Full spectrum of qualitative and quantitative approaches",
-    },
-    {
-      number: "5",
-      title: "Industries",
-      desc: "Cross-domain expertise from e-commerce to finance",
-    },
-    {
-      number: "200+",
-      title: "Studies Conducted",
-      desc: "End-to-end research across product development phases",
-    },
+    { number: "10+", title: "Years Experience", desc: "UX strategy and research leadership across teams" },
+    { number: "25+", title: "Research Methods", desc: "Full spectrum of qualitative and quantitative approaches" },
+    { number: "5", title: "Industries", desc: "Cross-domain expertise from e-commerce to finance" },
+    { number: "200+", title: "Studies Conducted", desc: "End-to-end research across product development phases" },
   ];
 
   return (
     <Section id="about" title="About Me" center>
-      {/* === Portrait === */}
       <div className={cn("flex flex-col items-center w-full", spacing.mt8, spacing.mb20)}>
         <FadeIn>
           <div className="flex justify-center w-full">
@@ -671,13 +652,12 @@ export default function AboutSection() {
           </div>
         </FadeIn>
 
-        {/* === Animated Intro Text === */}
         <TextReveal
           variant="word"
           delay={0.2}
           className={cn(
             "text-center text-foreground/90 leading-relaxed mt-10 text-lg tracking-wide",
-            layout.maxWidthText // âœ… ersetzt max-w-3xl
+            layout.maxWidthText
           )}
         >
           Iâ€™m a UX Research Lead with 10+ years of experience bridging strategy,
@@ -685,9 +665,27 @@ export default function AboutSection() {
           quantitative validation, and ResearchOps leadership to accelerate confident
           product decisions.
         </TextReveal>
+
+        {/* === CTA Buttons === */}
+        <div className="flex flex-wrap justify-center gap-4 mt-10">
+          <button
+            onClick={() => scrollToId("expertise")}
+            className="btn btn-primary"
+          >
+            Explore Expertise â†“
+          </button>
+          <button
+            onClick={() => scrollToId("projects")}
+            className="btn btn-secondary"
+          >
+            See Projects â†“
+          </button>
+          <Link to="/cv" className="btn btn-ghost">
+            View CV â†’
+          </Link>
+        </div>
       </div>
 
-      {/* === Key Metrics === */}
       <div
         className={cn(
           "grid grid-cols-2 md:grid-cols-4 w-full",
@@ -716,7 +714,6 @@ export default function AboutSection() {
         ))}
       </div>
 
-      {/* === Quote === */}
       <FadeIn delay={0.8}>
         <blockquote
           className={cn(
@@ -756,7 +753,15 @@ export default function ContactSection() {
 
   return (
     <Section id="contact" title="Contact">
-      <div className={cn(layout.flexColCenter, spacing.gap8, layout.maxWidthText)}>
+      {/* ðŸ”¹ Schmalere Inhaltsbreite */}
+      <div
+        className={cn(
+          layout.containerNarrow,
+          layout.flexColCenter,
+          spacing.gap8,
+          layout.maxWidthText
+        )}
+      >
         {/* === Klickbare Karte === */}
         <div
           onClick={handleClick}
@@ -812,12 +817,12 @@ import { spacing, layout } from "@/lib/tokens";
 import { Link } from "react-router-dom";
 import TileImage from "@/components/ui/TileImage";
 
-// ðŸ–¼ï¸ Expertise-Bilder â€“ korrekte Pfade und Dateinamen
-import uxStrategyImg from "@/assets/images/expertise/uxstrategy/schach1.jpg";
-import strategicUxImg from "@/assets/images/expertise/strategicuxresearch/strategicuxr.jpg";
-import researchOpsImg from "@/assets/images/expertise/researchops/plant.jpg";
-import leadershipImg from "@/assets/images/expertise/teamleadership/team.jpg";
-import impactImg from "@/assets/images/expertise/impactmeasurement/impact.jpg";
+// ðŸ–¼ï¸ Expertise-Bilder (optimiert)
+import uxStrategyImg from "@/assets/images/expertise/uxstrategy/schach1.jpg?w=400;800&format=webp;png&as=picture";
+import strategicUxImg from "@/assets/images/expertise/strategicuxresearch/strategicuxr.jpg?w=400;800&format=webp;png&as=picture";
+import researchOpsImg from "@/assets/images/expertise/researchops/plant.jpg?w=400;800&format=webp;png&as=picture";
+import leadershipImg from "@/assets/images/expertise/teamleadership/team.jpg?w=400;800&format=webp;png&as=picture";
+import impactImg from "@/assets/images/expertise/impactmeasurement/impact.jpg?w=400;800&format=webp;png&as=picture";
 
 export default function ExpertiseSection() {
   const { t } = useTranslation();
@@ -861,12 +866,12 @@ export default function ExpertiseSection() {
         </TextReveal>
       </SectionIntro>
 
-      {/* --- Expertise Tiles (2 groÃŸe pro Zeile) --- */}
+      {/* --- Expertise Tiles (3 pro Zeile Desktop) --- */}
       <div
         className={cn(
-          "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2",
+          "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3",
           spacing.gap8,
-          layout.fullWidth // âœ… ersetzt max-w-6xl mx-auto
+          layout.fullWidth
         )}
       >
         {pillars.slice(0, 5).map((p, i) => {
@@ -879,7 +884,7 @@ export default function ExpertiseSection() {
                   image={image}
                   title={p.title}
                   caption={p.caption}
-                  className="group aspect-[4/3] rounded-xl overflow-hidden"
+                  className="group rounded-xl overflow-hidden"
                 />
               </Link>
             </FadeIn>
@@ -907,10 +912,73 @@ export { default as ContactSection } from "./ContactSection";
 
 
 ==============================
+C:\Users\felix\Documents\GitHub\felixbruckmeier.github.io\src\components\sections\home\MetricsSection.tsx
+==============================
+
+import Section from "@/components/ui/Section";
+import Tile from "@/components/ui/Tile";
+import FadeIn from "@/components/ui/FadeIn";
+import { Body } from "@/components/ui/Tokens";
+import { typography, spacing } from "@/lib/tokens";
+import { cn } from "@/lib/utils";
+
+export default function MetricsSection() {
+  const metrics = [
+    { number: "10+", title: "Years Experience", desc: "UX strategy and research leadership across teams" },
+    { number: "25+", title: "Research Methods", desc: "Full spectrum of qualitative and quantitative approaches" },
+    { number: "5", title: "Industries", desc: "Cross-domain expertise from e-commerce to finance" },
+    { number: "200+", title: "Studies Conducted", desc: "End-to-end research across product development phases" },
+  ];
+
+  return (
+    // ðŸ”¹ Vollbreiter Hintergrund â€“ krÃ¤ftigeres Grau + Darkmode-Variante
+    <div className="w-screen relative left-1/2 right-1/2 -mx-[50vw] bg-gray-100 dark:bg-neutral-900 border-y border-border/10">
+      <Section id="metrics" spacing="sm" center className="py-16 md:py-20">
+        <div
+          className={cn(
+            "grid grid-cols-2 md:grid-cols-4 text-center",
+            spacing.gap6,
+            spacing.mt4,
+            "mx-auto max-w-screen-xl px-6"
+          )}
+        >
+          {metrics.map((m, i) => (
+            <FadeIn key={i} delay={0.2 + i * 0.1}>
+              <Tile
+                variant="transparent"
+                className="rounded-xl p-6"
+              >
+                {/* Ãœberschrift im Stil von sectionHeading */}
+                <div
+                  className={cn(
+                    typography.sectionHeading.font,
+                    typography.sectionHeading.size,
+                    typography.sectionHeading.weight,
+                    typography.sectionHeading.tracking,
+                    typography.sectionHeading.leading,
+                    "text-foreground mb-2"
+                  )}
+                >
+                  {m.number}
+                </div>
+
+                <Body className="font-semibold text-foreground mt-1">{m.title}</Body>
+                <Body className="text-muted-foreground mt-1">{m.desc}</Body>
+              </Tile>
+            </FadeIn>
+          ))}
+        </div>
+      </Section>
+    </div>
+  );
+}
+
+
+
+==============================
 C:\Users\felix\Documents\GitHub\felixbruckmeier.github.io\src\components\sections\home\ProjectsSection.tsx
 ==============================
 
-// src/components/sections/home/ProjectsSection.tsx
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Section } from "@/components/ui";
@@ -918,16 +986,16 @@ import SectionIntro from "@/components/ui/SectionIntro";
 import TextReveal from "@/components/ui/TextReveal";
 import FadeIn from "@/components/ui/FadeIn";
 import TileImage from "@/components/ui/TileImage";
-import { spacing } from "@/lib/tokens";
+import { spacing, layout } from "@/lib/tokens";
 import { cn } from "@/lib/utils";
 
-// ðŸ“¸ Projektbilder
-import carInsuranceImg from "@/assets/images/projects/carinsurance/CarInsurance.png";
-import reopsAgileImg from "@/assets/images/projects/reopsagile/ResearchOpsAgileUX.jpg";
-import b2b2cImg from "@/assets/images/projects/b2b2c/B2B2COptimization.jpg";
-import pricingImg from "@/assets/images/projects/pricingtesting/PricingUsabilityTesting.jpg";
-import microinteractionImg from "@/assets/images/projects/amicrointeraction/optimize.jpg";
-import reopsImplImg from "@/assets/images/projects/reopsimplement/ReOpsimplementation.jpg";
+// ðŸ“¸ Projektbilder (optimiert via vite-imagetools)
+import carInsuranceImg from "@/assets/images/projects/carinsurance/CarInsurance.png?w=400;800&format=webp;png&as=picture";
+import reopsAgileImg from "@/assets/images/projects/reopsagile/ResearchOpsAgileUX.jpg?w=400;800&format=webp;png&as=picture";
+import b2b2cImg from "@/assets/images/projects/b2b2c/B2B2COptimization.jpg?w=400;800&format=webp;png&as=picture";
+import pricingImg from "@/assets/images/projects/pricingtesting/PricingUsabilityTesting.jpg?w=400;800&format=webp;png&as=picture";
+import microinteractionImg from "@/assets/images/projects/amicrointeraction/optimize.jpg?w=400;800&format=webp;png&as=picture";
+import reopsImplImg from "@/assets/images/projects/reopsimplement/ReOpsimplementation.jpg?w=400;800&format=webp;png&as=picture";
 
 export default function ProjectsSection() {
   const { t } = useTranslation();
@@ -986,11 +1054,12 @@ export default function ProjectsSection() {
         </TextReveal>
       </SectionIntro>
 
+      {/* --- Projects Tiles (3 pro Zeile Desktop) --- */}
       <div
         className={cn(
-          "grid grid-cols-1 md:grid-cols-2",
+          "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3",
           spacing.gap8,
-          "max-w-6xl mx-auto"
+          layout.fullWidth
         )}
       >
         {projects.map((p, i) => (
@@ -1000,7 +1069,7 @@ export default function ProjectsSection() {
                 image={p.image}
                 title={p.title}
                 caption={p.desc}
-                className="group"
+                className="group rounded-xl overflow-hidden"
               />
             </Link>
           </FadeIn>
@@ -2615,7 +2684,7 @@ import { colors, radii, transitions, spacing, hoverEffects } from "@/lib/tokens"
 import { ArrowRight } from "lucide-react";
 
 type TileProps = React.HTMLAttributes<HTMLDivElement> & {
-  variant?: "interactive" | "interactiveArrow" | "static" | "inactive";
+  variant?: "interactive" | "interactiveArrow" | "static" | "transparent";
 };
 
 export default function Tile({
@@ -2624,33 +2693,32 @@ export default function Tile({
   children,
   ...props
 }: TileProps) {
-  // gemeinsame Basisstile
+  // Basisstile â€“ kein text-left hier!
   const baseStyles = cn(
-    colors.tile.bg,
-    colors.tile.text,
     radii.lg,
     spacing.p6,
     transitions.default,
-    "relative flex flex-col justify-between h-full text-left space-y-2",
+    "relative flex flex-col justify-between h-full space-y-2",
     className
   );
 
   // Variantenlogik
   const variantStyles =
     variant === "interactive"
-      ? cn("will-change-transform cursor-pointer group", hoverEffects.smoothLift)
+      ? cn(colors.tile.bg, colors.tile.text, "will-change-transform cursor-pointer group", hoverEffects.smoothLift, "text-left")
       : variant === "interactiveArrow"
-      ? cn("will-change-transform cursor-pointer group", hoverEffects.smoothLift)
-      : variant === "inactive"
-      ? cn("opacity-70 cursor-not-allowed transition-none transform-none")
-      : cn("cursor-default transition-none transform-none");
+      ? cn(colors.tile.bg, colors.tile.text, "will-change-transform cursor-pointer group", hoverEffects.smoothLift, "text-left")
+      : variant === "transparent"
+      ? cn(
+          "bg-transparent shadow-none border-none cursor-default transition-none transform-none",
+          "text-center items-center space-y-3" // âœ… zentriert horizontal
+        )
+      : cn(colors.tile.bg, colors.tile.text, "cursor-default transition-none transform-none text-left");
 
   return (
     <div className={cn(baseStyles, variantStyles)} {...props}>
-      {/* --- Tile-Inhalt --- */}
       <div className="flex-1">{children}</div>
 
-      {/* --- Nur bei Variante "interactiveArrow" Pfeil anzeigen --- */}
       {variant === "interactiveArrow" && (
         <div className="mt-4 flex justify-end">
           <div
@@ -2673,12 +2741,23 @@ export default function Tile({
 C:\Users\felix\Documents\GitHub\felixbruckmeier.github.io\src\components\ui\TileImage.tsx
 ==============================
 
-// src/components/ui/TileImage.tsx
 import { cn } from "@/lib/utils";
-import { transitions, hoverEffects } from "@/lib/tokens";
+import { transitions, hoverEffects, radii } from "@/lib/tokens";
+import { ArrowRight } from "lucide-react";
+
+type PictureSource = {
+  srcset: string;
+  type: string;
+  sizes?: string;
+};
+
+type PictureObject = {
+  img: { src: string; width: number; height: number };
+  sources?: PictureSource[];
+};
 
 type TileImageProps = React.HTMLAttributes<HTMLDivElement> & {
-  image: string; // Pfad zum Hintergrundbild
+  image: string | PictureObject;
   title?: string;
   caption?: string;
   variant?: "default" | "hoverLift";
@@ -2695,35 +2774,95 @@ export default function TileImage({
   return (
     <div
       className={cn(
-        "relative aspect-square overflow-hidden rounded-2xl text-white",
+        "group relative overflow-hidden aspect-[4/3]",
+        radii.xl,
         transitions.default,
         variant === "hoverLift" && hoverEffects.smoothLift,
         className
       )}
       {...props}
     >
-      {/* === Hintergrundbild === */}
-      <img
-        src={image}
-        alt={title || ""}
-        className="absolute inset-0 w-full h-full object-cover object-center"
-      />
+      {/* === Hintergrundbild (unterstÃ¼tzt imagetools picture oder string) === */}
+      <div className="absolute inset-0 bg-black">
+        {typeof image === "string" ? (
+          <img
+            src={image}
+            alt={title || ""}
+            loading="lazy"
+            className={cn(
+              "absolute inset-0 w-full h-full object-cover object-center scale-[1.15]",
+              "transition-transform duration-500 ease-out will-change-transform"
+            )}
+          />
+        ) : (
+          <picture className="absolute inset-0">
+            {image.sources?.map((source) => (
+              <source key={source.srcset} {...source} />
+            ))}
+            <img
+              src={image.img.src}
+              alt={title || ""}
+              width={image.img.width}
+              height={image.img.height}
+              loading="lazy"
+              className={cn(
+                "absolute inset-0 w-full h-full object-cover object-center scale-[1.15]",
+                "transition-transform duration-500 ease-out will-change-transform"
+              )}
+            />
+          </picture>
+        )}
+      </div>
 
       {/* === Overlay === */}
-      <div className="absolute inset-0 bg-black/40 transition-opacity duration-300 group-hover:bg-black/50" />
+      <div
+        className={cn(
+          "absolute inset-0",
+          "bg-gradient-to-b from-black/55 via-black/45 to-black/60",
+          "dark:from-black/60 dark:via-black/50 dark:to-black/70",
+          "transition-opacity duration-300 group-hover:from-black/60 group-hover:to-black/70"
+        )}
+      />
 
-      {/* === Text-Inhalt === */}
-      <div className="relative z-10 flex flex-col justify-start h-full p-4">
+      {/* === Text === */}
+      <div
+        className={cn(
+          "relative z-10 flex flex-col h-full p-4",
+          "justify-start md:justify-end"
+        )}
+      >
         {title && (
-          <h3 className="text-xl font-semibold mb-2 drop-shadow-md">
+          <h3
+            className={cn(
+              "text-xl font-semibold mb-1 text-gray-50",
+              "drop-shadow-[0_2px_8px_rgba(0,0,0,0.75)]"
+            )}
+          >
             {title}
           </h3>
         )}
         {caption && (
-          <p className="text-base text-gray-200 drop-shadow-md leading-snug">
+          <p
+            className={cn(
+              "text-base text-gray-100 leading-snug",
+              "drop-shadow-[0_2px_6px_rgba(0,0,0,0.7)]"
+            )}
+          >
             {caption}
           </p>
         )}
+      </div>
+
+      {/* === Mobile CTA === */}
+      <div
+        className={cn(
+          "absolute bottom-3 right-3 md:hidden z-20 flex items-center justify-center",
+          "w-9 h-9 rounded-full backdrop-blur-sm pointer-events-none",
+          "bg-white/80 text-gray-900 dark:bg-black/70 dark:text-gray-100",
+          "shadow-md transition-transform duration-300 group-hover:scale-105"
+        )}
+      >
+        <ArrowRight className="w-5 h-5" />
       </div>
     </div>
   );
@@ -3544,7 +3683,6 @@ export default function LanguageToggle() {
 C:\Users\felix\Documents\GitHub\felixbruckmeier.github.io\src\components\common\Navbar.tsx
 ==============================
 
-// src/components/layout/NavBar.tsx
 import { Link, useLocation } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -3552,7 +3690,35 @@ import ThemeToggle from "@/components/common/ThemeToggle";
 import { typography } from "@/lib/tokens";
 import { cn } from "@/lib/utils";
 
-const NAV = ["expertise", "projects", "cv", "contact"] as const;
+type NavItem = {
+  id: string;
+  link?: string;
+  children?: { id: string; label: string }[];
+};
+
+const NAV: NavItem[] = [
+  {
+    id: "expertise",
+    children: [
+      { id: "expertise/ux-strategy", label: "UX Strategy" },
+      { id: "expertise/strategic-ux-research", label: "Strategic UX Research" },
+      { id: "expertise/researchops", label: "ResearchOps" },
+      { id: "expertise/team-leadership", label: "Team Leadership" },
+      { id: "expertise/impact-measurement", label: "Impact Measurement" },
+    ],
+  },
+  {
+    id: "projects",
+    children: [
+      { id: "projects/adac-car-insurance", label: "ADAC Car Insurance" },
+      { id: "projects/zooplus-researchops", label: "zooplus ResearchOps" },
+      { id: "projects/zooplus-pricing", label: "zooplus Pricing" },
+      { id: "projects/swisslife-b2b2c", label: "Swiss Life B2B2C" },
+    ],
+  },
+  { id: "cv", link: "/cv" },
+  { id: "contact" },
+];
 
 export default function NavBar() {
   const { t } = useTranslation();
@@ -3561,7 +3727,6 @@ export default function NavBar() {
   const [active, setActive] = useState<string>("");
   const [open, setOpen] = useState(false);
 
-  // smooth scroll
   useEffect(() => {
     const prev = document.documentElement.style.scrollBehavior;
     document.documentElement.style.scrollBehavior = "smooth";
@@ -3570,11 +3735,14 @@ export default function NavBar() {
     };
   }, []);
 
-  // intersection observer
   const observerRef = useRef<IntersectionObserver | null>(null);
   useEffect(() => {
     if (!onHome) return;
-    const sections = NAV.map((id) => document.getElementById(id)).filter(Boolean) as HTMLElement[];
+    const sections = NAV.flatMap((nav) =>
+      [nav.id, ...(nav.children?.map((c) => c.id) ?? [])]
+        .map((id) => document.getElementById(id))
+        .filter(Boolean)
+    ) as HTMLElement[];
     if (observerRef.current) observerRef.current.disconnect();
     observerRef.current = new IntersectionObserver(
       (entries) => {
@@ -3592,22 +3760,24 @@ export default function NavBar() {
     return () => observerRef.current?.disconnect();
   }, [onHome]);
 
-  const hrefFor = (id: string) => `/#${id}`;
+  const hrefFor = (nav: NavItem) =>
+    nav.link ?? (nav.id.includes("/") ? `/${nav.id}` : `/#${nav.id}`);
+
   useEffect(() => setActive(hash.replace("#", "")), [hash]);
   useEffect(() => setOpen(false), [hash, pathname]);
 
-  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
-    if (!onHome) {
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, nav: NavItem) => {
+    if (!onHome && !nav.link && !nav.id.includes("/")) {
       e.preventDefault();
-      window.location.assign(`/#${id}`);
+      window.location.assign(`/#${nav.id}`);
     }
   };
 
   return (
     <>
       <header className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-md supports-[backdrop-filter]:bg-background/80">
-        {/* âœ… Einheitliche Containerbreite */}
         <nav className="mx-auto w-full max-w-[1900px] px-[3vw] flex h-20 items-center justify-between">
+          {/* === Logo === */}
           <Link
             to="/"
             onClick={(e) => {
@@ -3616,29 +3786,54 @@ export default function NavBar() {
                 window.scrollTo({ top: 0, behavior: "smooth" });
               }
             }}
-            className={cn("flex flex-col items-start text-foreground", typography.subtitle.font)}
+            className="flex flex-col items-start text-foreground"
           >
             <span className="text-2xl font-bold leading-tight">Felix</span>
             <span className="text-2xl font-bold leading-tight">Bruckmeier</span>
             <div className="mt-1 w-full border-b border-border" />
           </Link>
 
-          <ul className="hidden md:flex items-center gap-8 text-sm font-semibold">
-            {NAV.map((id) => (
-              <li key={id}>
+          {/* === Desktop Navigation === */}
+          <ul className="hidden md:flex items-center gap-8">
+            {NAV.map((nav) => (
+              <li key={nav.id} className="relative group">
                 <a
-                  href={hrefFor(id)}
-                  onClick={(e) => handleNavClick(e, id)}
-                  aria-current={active === id ? "page" : undefined}
+                  href={hrefFor(nav)}
+                  onClick={(e) => handleNavClick(e, nav)}
+                  aria-current={active === nav.id ? "page" : undefined}
                   className={cn(
-                    "px-1 py-2 underline underline-offset-4 decoration-transparent transition",
-                    active === id
+                    typography.subtitle.font,
+                    typography.subtitle.size,
+                    typography.subtitle.weight,
+                    "underline underline-offset-4 decoration-transparent transition",
+                    active === nav.id
                       ? "text-primary decoration-current"
                       : "text-muted-foreground hover:text-foreground hover:decoration-current"
                   )}
                 >
-                  {t(`nav.${id}`)}
+                  {t(`nav.${nav.id}`, nav.id.charAt(0).toUpperCase() + nav.id.slice(1))}
                 </a>
+
+                {/* === Dropdown (bleibt offen bei Hover) === */}
+                {nav.children && (
+                  <ul
+                    className="absolute left-0 top-full hidden group-hover:flex flex-col bg-background border border-border rounded-lg shadow-lg min-w-[220px] py-2 opacity-0 group-hover:opacity-100 transition-opacity duration-150"
+                  >
+                    {nav.children.map((child) => (
+                      <li key={child.id}>
+                        <Link
+                          to={`/${child.id}`}
+                          className={cn(
+                            typography.subtitle.font,
+                            "block px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 transition"
+                          )}
+                        >
+                          {child.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </li>
             ))}
             <li>
@@ -3646,7 +3841,7 @@ export default function NavBar() {
             </li>
           </ul>
 
-          {/* Mobile */}
+          {/* === Mobile === */}
           <div className="flex items-center gap-3 md:hidden">
             <ThemeToggle />
             <button
@@ -3663,7 +3858,7 @@ export default function NavBar() {
           </div>
         </nav>
 
-        {/* Mobile MenÃ¼ */}
+        {/* === Mobile MenÃ¼ === */}
         <div
           className={cn(
             "md:hidden overflow-hidden transition-[max-height,opacity] duration-300 ease-in-out border-t border-border bg-background/95 backdrop-blur-sm",
@@ -3671,15 +3866,36 @@ export default function NavBar() {
           )}
         >
           <div className="mx-auto w-full max-w-[1900px] px-[3vw] py-3 space-y-2">
-            {NAV.map((id) => (
-              <div key={id}>
+            {NAV.map((nav) => (
+              <div key={nav.id}>
                 <a
-                  href={hrefFor(id)}
-                  onClick={(e) => handleNavClick(e, id)}
-                  className="block py-2 font-medium text-foreground"
+                  href={hrefFor(nav)}
+                  onClick={(e) => handleNavClick(e, nav)}
+                  className={cn(
+                    typography.subtitle.font,
+                    typography.subtitle.size,
+                    typography.subtitle.weight,
+                    "block py-2 text-foreground"
+                  )}
                 >
-                  {t(`nav.${id}`)}
+                  {t(`nav.${nav.id}`, nav.id.charAt(0).toUpperCase() + nav.id.slice(1))}
                 </a>
+                {nav.children && (
+                  <div className="ml-4 space-y-1">
+                    {nav.children.map((child) => (
+                      <Link
+                        key={child.id}
+                        to={`/${child.id}`}
+                        className={cn(
+                          typography.subtitle.font,
+                          "block py-1 text-sm text-muted-foreground hover:text-foreground transition"
+                        )}
+                      >
+                        {child.label}
+                      </Link>
+                    ))}
+                  </div>
+                )}
               </div>
             ))}
           </div>

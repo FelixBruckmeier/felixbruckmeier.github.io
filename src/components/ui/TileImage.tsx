@@ -1,9 +1,21 @@
+// src/components/ui/TileImage.tsx
 import { cn } from "@/lib/utils";
 import { transitions, hoverEffects, radii } from "@/lib/tokens";
 import { ArrowRight } from "lucide-react";
 
+type PictureSource = {
+  srcset: string;
+  type: string;
+  sizes?: string;
+};
+
+type PictureObject = {
+  img: { src: string; width: number; height: number };
+  sources?: PictureSource[];
+};
+
 type TileImageProps = React.HTMLAttributes<HTMLDivElement> & {
-  image: string;
+  image: string | PictureObject;
   title?: string;
   caption?: string;
   variant?: "default" | "hoverLift";
@@ -28,20 +40,40 @@ export default function TileImage({
       )}
       {...props}
     >
-      {/* === Hintergrundbild === */}
+      {/* === Hintergrundbild (unterstützt imagetools picture oder normalen String) === */}
       <div className="absolute inset-0 bg-black">
-        <img
-          src={image}
-          alt={title || ""}
-          loading="lazy"
-          className={cn(
-            "absolute inset-0 w-full h-full object-cover object-center scale-[1.15]",
-            "transition-transform duration-500 ease-out will-change-transform"
-          )}
-        />
+        {typeof image === "string" ? (
+          <img
+            src={image}
+            alt={title || ""}
+            loading="lazy"
+            className={cn(
+              "absolute inset-0 w-full h-full object-cover object-center scale-[1.15]",
+              "transition-transform duration-500 ease-out will-change-transform"
+            )}
+          />
+        ) : (
+          <picture className="absolute inset-0">
+            {Array.isArray(image.sources) &&
+              image.sources.map((source) => (
+                <source key={source.srcset} {...source} />
+              ))}
+            <img
+              src={image.img?.src || ""}
+              alt={title || ""}
+              width={image.img?.width}
+              height={image.img?.height}
+              loading="lazy"
+              className={cn(
+                "absolute inset-0 w-full h-full object-cover object-center scale-[1.15]",
+                "transition-transform duration-500 ease-out will-change-transform"
+              )}
+            />
+          </picture>
+        )}
       </div>
 
-      {/* === Overlay – balanced contrast === */}
+      {/* === Overlay === */}
       <div
         className={cn(
           "absolute inset-0",
@@ -51,11 +83,10 @@ export default function TileImage({
         )}
       />
 
-      {/* === Text-Inhalt === */}
+      {/* === Text === */}
       <div
         className={cn(
           "relative z-10 flex flex-col h-full p-4",
-          // Text auf Mobile oben, auf Desktop unten
           "justify-start md:justify-end"
         )}
       >
@@ -81,7 +112,7 @@ export default function TileImage({
         )}
       </div>
 
-      {/* === Mobile CTA – visueller Pfeilindikator === */}
+      {/* === Mobile CTA === */}
       <div
         className={cn(
           "absolute bottom-3 right-3 md:hidden z-20 flex items-center justify-center",

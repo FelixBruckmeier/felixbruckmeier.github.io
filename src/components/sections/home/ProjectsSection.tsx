@@ -8,13 +8,13 @@ import TileImage from "@/components/ui/TileImage";
 import { spacing, layout } from "@/lib/tokens";
 import { cn } from "@/lib/utils";
 
-// 📸 Projektbilder
-import carInsuranceImg from "@/assets/images/projects/carinsurance/CarInsurance.png";
-import reopsAgileImg from "@/assets/images/projects/reopsagile/ResearchOpsAgileUX.jpg";
-import b2b2cImg from "@/assets/images/projects/b2b2c/B2B2COptimization.jpg";
-import pricingImg from "@/assets/images/projects/pricingtesting/PricingUsabilityTesting.jpg";
-import microinteractionImg from "@/assets/images/projects/amicrointeraction/optimize.jpg";
-import reopsImplImg from "@/assets/images/projects/reopsimplement/ReOpsimplementation.jpg";
+// 📸 Projektbilder (optimiert via vite-imagetools)
+import carInsuranceImg from "@/assets/images/projects/carinsurance/CarInsurance.png?w=400;800&format=webp;png&as=picture";
+import reopsAgileImg from "@/assets/images/projects/reopsagile/ResearchOpsAgileUX.jpg?w=400;800&format=webp;png&as=picture";
+import b2b2cImg from "@/assets/images/projects/b2b2c/B2B2COptimization.jpg?w=400;800&format=webp;png&as=picture";
+import pricingImg from "@/assets/images/projects/pricingtesting/PricingUsabilityTesting.jpg?w=400;800&format=webp;png&as=picture";
+import microinteractionImg from "@/assets/images/projects/amicrointeraction/optimize.jpg?w=400;800&format=webp;png&as=picture";
+import reopsImplImg from "@/assets/images/projects/reopsimplement/ReOpsimplementation.jpg?w=400;800&format=webp;png&as=picture";
 
 export default function ProjectsSection() {
   const { t } = useTranslation();

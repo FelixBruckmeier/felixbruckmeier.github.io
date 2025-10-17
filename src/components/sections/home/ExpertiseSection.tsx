@@ -8,12 +8,12 @@ import { spacing, layout } from "@/lib/tokens";
 import { Link } from "react-router-dom";
 import TileImage from "@/components/ui/TileImage";
 
-// 🖼️ Expertise-Bilder – korrekte Pfade und Dateinamen
-import uxStrategyImg from "@/assets/images/expertise/uxstrategy/schach1.jpg";
-import strategicUxImg from "@/assets/images/expertise/strategicuxresearch/strategicuxr.jpg";
-import researchOpsImg from "@/assets/images/expertise/researchops/plant.jpg";
-import leadershipImg from "@/assets/images/expertise/teamleadership/team.jpg";
-import impactImg from "@/assets/images/expertise/impactmeasurement/impact.jpg";
+// 🖼️ Expertise-Bilder (optimiert)
+import uxStrategyImg from "@/assets/images/expertise/uxstrategy/schach1.jpg?w=400;800&format=webp;png&as=picture";
+import strategicUxImg from "@/assets/images/expertise/strategicuxresearch/strategicuxr.jpg?w=400;800&format=webp;png&as=picture";
+import researchOpsImg from "@/assets/images/expertise/researchops/plant.jpg?w=400;800&format=webp;png&as=picture";
+import leadershipImg from "@/assets/images/expertise/teamleadership/team.jpg?w=400;800&format=webp;png&as=picture";
+import impactImg from "@/assets/images/expertise/impactmeasurement/impact.jpg?w=400;800&format=webp;png&as=picture";
 
 export default function ExpertiseSection() {
   const { t } = useTranslation();
