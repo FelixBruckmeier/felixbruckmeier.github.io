@@ -7,10 +7,10 @@ import { cn } from "@/lib/utils";
 type TextRevealProps = {
   children: string;
   delay?: number;
-  variant?: "word"; // fest auf Wortweise
-  stagger?: number; // ⏱ Abstand zwischen Wörtern
-  duration?: number; // ⏱ Dauer pro Wort
-  ease?: "linear" | "easeOut" | "easeInOut"; // 🎨 Art der Bewegung
+  variant?: "word";
+  stagger?: number;
+  duration?: number;
+  ease?: "linear" | "easeOut" | "easeInOut";
   className?: string;
 };
 
@@ -30,22 +30,17 @@ export default function TextReveal({
     if (inView) controls.start("visible");
   }, [controls, inView]);
 
-  // Text in Wörter (inkl. Leerzeichen) aufteilen
-  const textParts = children.split(/(\s+)/);
+  // Text in Wörter + Leerzeichen aufteilen
+  const textParts = variant === "word" ? children.split(/(\s+)/) : [children];
 
-  // Container-Animation
   const container = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: {
-        delay,
-        staggerChildren: stagger,
-      },
+      transition: { delay, staggerChildren: stagger },
     },
   };
 
-  // Einzelne Wörter
   const child = {
     hidden: { opacity: 0, x: 8 },
     visible: {
@@ -68,8 +63,8 @@ export default function TextReveal({
           key={i}
           variants={child}
           style={{
-            display: "inline-block",
-            whiteSpace: "pre",
+            display: part.trim() ? "inline-block" : "inline",
+            whiteSpace: "pre-wrap",
           }}
         >
           {part}

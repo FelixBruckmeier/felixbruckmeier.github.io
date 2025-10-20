@@ -41,7 +41,7 @@ export default function AboutSection() {
               ease="easeInOut"
               className="text-left text-foreground font-semibold text-lg mb-4"
             >
-              I’m a UX Research Lead passionate about connecting strategy, insight, and execution.
+              I’m a UX Research Lead focused on grounding decisions in evidence.
             </TextReveal>
           </FadeIn>
 
@@ -53,10 +53,8 @@ export default function AboutSection() {
               delay={0.2}
               ease="easeInOut"
               className="text-left text-muted-foreground leading-relaxed max-w-prose"
-            >
-              My work bridges business goals and user needs through mixed-method research and scalable ResearchOps.
-              By combining qualitative depth and quantitative validation, I enable teams to make confident,
-              user-centered decisions.
+            >I support teams in shaping meaningful strategies.
+Most of my work happens in the space between what people need and what businesses can deliver — a space that’s often messy and full of trade-offs. I navigate ambiguity, conflicting priorities, and incomplete data, translating them into clarity, direction, and meaningful change.
             </TextReveal>
           </FadeIn>
 

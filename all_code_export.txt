@@ -5,66 +5,27 @@
 C:\Users\felix\Documents\GitHub\felixbruckmeier.github.io\src\pages\Home.tsx
 ==============================
 
+// src/pages/Home.tsx
 import PageLayout from "@/components/layout/PageLayout";
-import Section from "@/components/ui/Section";
-import Button from "@/components/ui/Button";
-import FadeIn from "@/components/ui/FadeIn";
-import { Subtitle, Body } from "@/components/ui/Tokens";
-import { cn } from "@/lib/utils";
-import { colors } from "@/lib/tokens";
-import profileImg from "@/assets/profile-felix.png";
 
 // ðŸ”¹ Startseiten-Sections
 import {
+  AboutSection,
   ExpertiseSection,
   ProjectsSection,
   ContactSection,
 } from "@/components/sections/home";
 
-// ðŸ”¹ Neue KPI-Section mit grauem Hintergrund
+// ðŸ”¹ KPI-Section
 import MetricsSection from "@/components/sections/home/MetricsSection";
 
 export default function Home() {
   return (
     <PageLayout>
-      {/* ===== Intro mit Portrait ===== */}
-      <Section id="intro" borderBottom>
-        <div className={cn("grid md:grid-cols-[1.1fr_0.9fr] gap-10 items-center")}>
-          <div>
-            <Subtitle className="text-foreground mb-4">
-              Iâ€™m a UX Research Lead passionate about connecting strategy, insight, and execution.
-            </Subtitle>
-            <Body className="text-muted-foreground max-w-prose">
-              My work bridges business goals and user needs through mixed-method research and scalable ResearchOps.
-              By combining qualitative depth and quantitative validation, I enable teams to make confident,
-              user-centered decisions.
-            </Body>
+      {/* ===== About Section (Intro mit Portrait + Buttons) ===== */}
+      <AboutSection />
 
-            <div className="flex flex-wrap gap-4 mt-8">
-              <Button asChild to="/cv" variant="secondary" size="lg">
-                View CV
-              </Button>
-              <Button asChild to="/#projects" variant="secondary" size="lg">
-                See Projects
-              </Button>
-              <Button asChild to="/#expertise" variant="secondary" size="lg">
-                Explore Expertise
-              </Button>
-            </div>
-          </div>
-
-          <img
-            src={profileImg}
-            alt="Portrait of Felix Bruckmeier"
-            className={cn(
-              "rounded-2xl shadow-lg mx-auto w-[70%] md:w-[80%] object-cover aspect-[4/5]",
-              colors.border
-            )}
-          />
-        </div>
-      </Section>
-
-      {/* ===== KPI-Section (hellgrauer Hintergrund, volle Breite) ===== */}
+      {/* ===== KPI-Section ===== */}
       <MetricsSection />
 
       {/* ===== Expertise Section ===== */}
@@ -74,7 +35,7 @@ export default function Home() {
       <ProjectsSection />
 
       {/* ===== Kontakt Section ===== */}
-        <ContactSection />
+      <ContactSection />
     </PageLayout>
   );
 }
@@ -477,7 +438,7 @@ export const shadows = {
 export const buttonVariants = {
   base: "inline-flex items-center justify-center rounded-3xl px-5 py-2.5 transition-colors duration-200",
   primary: "bg-primary text-primary-foreground hover:bg-neutral-900 dark:hover:bg-neutral-200",
-  secondary: "bg-muted text-foreground hover:bg-neutral-300 dark:hover:bg-neutral-700",
+ secondary: "bg-gray-100 dark:bg-neutral-900 border border-border text-foreground hover:bg-gray-200 dark:hover:bg-neutral-800",
   ghost: "text-foreground hover:bg-neutral-200 dark:hover:bg-neutral-700",
   danger: "bg-red-600 text-white hover:bg-red-700",
   success: "bg-green-600 text-white hover:bg-green-700",
@@ -596,135 +557,128 @@ C:\Users\felix\Documents\GitHub\felixbruckmeier.github.io\src\components\section
 
 // src/components/sections/home/AboutSection.tsx
 import Section from "@/components/ui/Section";
-import Tile from "@/components/ui/Tile";
 import FadeIn from "@/components/ui/FadeIn";
 import TextReveal from "@/components/ui/TextReveal";
-import { Subtitle, Body } from "@/components/ui/Tokens";
-import { spacing, shadows, colors, layout } from "@/lib/tokens";
+import Button from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { colors } from "@/lib/tokens";
 import profileImg from "@/assets/profile-felix.png";
-import { useEffect } from "react";
 
 export default function AboutSection() {
-  const location = useLocation();
-  const navigate = useNavigate();
-
-  // âœ… Scrollfunktion (funktioniert auch nach Navigation)
-  const scrollToId = (id: string) => {
-    const el = document.getElementById(id);
-    if (el) {
-      const yOffset = -80;
-      const y = el.getBoundingClientRect().top + window.scrollY + yOffset;
-      window.scrollTo({ top: y, behavior: "smooth" });
-    }
-  };
-
-  // Wenn URL z. B. /#projects â†’ beim Laden scrollen
-  useEffect(() => {
-    if (location.hash) {
-      const id = location.hash.replace("#", "");
-      setTimeout(() => scrollToId(id), 100);
-    }
-  }, [location]);
-
-  const metrics = [
-    { number: "10+", title: "Years Experience", desc: "UX strategy and research leadership across teams" },
-    { number: "25+", title: "Research Methods", desc: "Full spectrum of qualitative and quantitative approaches" },
-    { number: "5", title: "Industries", desc: "Cross-domain expertise from e-commerce to finance" },
-    { number: "200+", title: "Studies Conducted", desc: "End-to-end research across product development phases" },
-  ];
-
   return (
-    <Section id="about" title="About Me" center>
-      <div className={cn("flex flex-col items-center w-full", spacing.mt8, spacing.mb20)}>
-        <FadeIn>
-          <div className="flex justify-center w-full">
+    <Section id="about" borderBottom>
+      <div
+        className={cn(
+          // Mobile: Text â†’ Bild â†’ CTA
+          // Desktop: Text + CTA links, Bild rechts
+          "flex flex-col md:grid md:grid-cols-[1.1fr_0.9fr] gap-10 items-center"
+        )}
+      >
+        {/* === Text-Bereich (inkl. Desktop-CTA) === */}
+        <div className="text-block order-1 md:order-1 md:col-start-1 flex flex-col">
+          <FadeIn delay={0.1}>
+            <TextReveal
+              variant="word"
+              stagger={0.08}
+              duration={0.9}
+              delay={0.1}
+              ease="easeInOut"
+              className="text-left text-foreground font-bold text-5xl mb-8"
+            >
+              Hello!
+            </TextReveal>
+          </FadeIn>
+
+          <FadeIn delay={1.2}>
+            <TextReveal
+              variant="word"
+              stagger={0.08}
+              duration={0.8}
+              delay={0.15}
+              ease="easeInOut"
+              className="text-left text-foreground font-semibold text-lg mb-4"
+            >
+              Iâ€™m a UX Research Lead focused on grounding decisions in evidence.
+            </TextReveal>
+          </FadeIn>
+
+          <FadeIn delay={2.4}>
+            <TextReveal
+              variant="word"
+              stagger={0.08}
+              duration={0.8}
+              delay={0.2}
+              ease="easeInOut"
+              className="text-left text-muted-foreground leading-relaxed max-w-prose"
+            >I support teams in shaping meaningful strategies.
+Most of my work happens in the space between what people need and what businesses can deliver â€” a space thatâ€™s often messy and full of trade-offs. I navigate ambiguity, conflicting priorities, and incomplete data, translating them into clarity, direction, and meaningful change.
+            </TextReveal>
+          </FadeIn>
+
+          {/* === CTA nur auf Desktop sichtbar === */}
+          <div className="hidden md:flex flex-wrap gap-4 w-full mt-8">
+            <FadeIn delay={3.6}>
+              <Button asChild variant="secondary" size="lg">
+                <a href="#projects">See Projects â†“</a>
+              </Button>
+            </FadeIn>
+
+            <FadeIn delay={3.8}>
+              <Button asChild variant="secondary" size="lg">
+                <a href="#expertise">Explore Expertise â†“</a>
+              </Button>
+            </FadeIn>
+
+            <FadeIn delay={4.0}>
+              <Button asChild variant="secondary" size="lg">
+                <a href="/cv">View CV â†’</a>
+              </Button>
+            </FadeIn>
+          </div>
+        </div>
+
+        {/* === Bild-Bereich === */}
+        <div className="image-block order-2 md:order-2 md:col-start-2">
+          <FadeIn delay={0.8}>
             <img
               src={profileImg}
               alt="Portrait of Felix Bruckmeier"
               className={cn(
-                "w-[40%] max-w-[200px] md:max-w-[260px] aspect-[4/5] object-cover rounded-2xl shadow-lg mx-auto",
-                colors.border,
-                shadows.md
+                "rounded-2xl shadow-lg mx-auto w-[70%] md:w-[80%] object-cover aspect-[4/5]",
+                colors.border
               )}
             />
-          </div>
-        </FadeIn>
+          </FadeIn>
+        </div>
 
-        <TextReveal
-          variant="word"
-          delay={0.2}
-          className={cn(
-            "text-center text-foreground/90 leading-relaxed mt-10 text-lg tracking-wide",
-            layout.maxWidthText
-          )}
-        >
-          Iâ€™m a UX Research Lead with 10+ years of experience bridging strategy,
-          operations, and insight generation. My work combines qualitative depth,
-          quantitative validation, and ResearchOps leadership to accelerate confident
-          product decisions.
-        </TextReveal>
+        {/* === CTA nur auf Mobile sichtbar â€“ jetzt unterhalb des Bildes === */}
+        <div className="order-3 md:hidden flex flex-wrap gap-4 mt-8 w-full">
+          <FadeIn delay={3.6}>
+            <Button asChild variant="secondary" size="lg" className="w-full">
+              <a href="#projects">See Projects â†“</a>
+            </Button>
+          </FadeIn>
 
-        {/* === CTA Buttons === */}
-        <div className="flex flex-wrap justify-center gap-4 mt-10">
-          <button
-            onClick={() => scrollToId("expertise")}
-            className="btn btn-primary"
-          >
-            Explore Expertise â†“
-          </button>
-          <button
-            onClick={() => scrollToId("projects")}
-            className="btn btn-secondary"
-          >
-            See Projects â†“
-          </button>
-          <Link to="/cv" className="btn btn-ghost">
-            View CV â†’
-          </Link>
+          <FadeIn delay={3.8}>
+            <Button asChild variant="secondary" size="lg" className="w-full">
+              <a href="#expertise">Explore Expertise â†“</a>
+            </Button>
+          </FadeIn>
+
+          <FadeIn delay={4.0}>
+            <Button asChild variant="secondary" size="lg" className="w-full">
+              <a href="/cv">View CV â†’</a>
+            </Button>
+          </FadeIn>
         </div>
       </div>
 
-      <div
-        className={cn(
-          "grid grid-cols-2 md:grid-cols-4 w-full",
-          spacing.gap6,
-          spacing.mt20
-        )}
-      >
-        {metrics.map((m, i) => (
-          <FadeIn key={i} delay={0.3 + i * 0.1}>
-            <Tile
-              variant="static"
-              className={cn(
-                colors.tile.bg,
-                colors.tile.text,
-                "text-center border border-border/10",
-                spacing.p6,
-                shadows.sm,
-                "rounded-xl"
-              )}
-            >
-              <Subtitle className="font-bold">{m.number}</Subtitle>
-              <Body className="font-semibold text-foreground mt-1">{m.title}</Body>
-              <Body className="text-muted-foreground mt-1">{m.desc}</Body>
-            </Tile>
-          </FadeIn>
-        ))}
-      </div>
-
-      <FadeIn delay={0.8}>
-        <blockquote
-          className={cn(
-            "italic text-center text-muted-foreground",
-            spacing.mt16,
-            spacing.mb8,
-            layout.maxWidthText
-          )}
-        >
-          â€œGood UX Research isnâ€™t meant to scale â€” itâ€™s meant to reveal what scaling hides.â€
-        </blockquote>
+      {/* === Quote unterhalb der Section === */}
+      <FadeIn delay={4.4}>
+        <p className="mt-12 text-center text-muted-foreground italic text-sm md:text-base">
+          â€œUX Research is not for perfectionists. We strive for something better than perfection â€” something real.â€
+         
+        </p>
       </FadeIn>
     </Section>
   );
@@ -1313,80 +1267,20 @@ C:\Users\felix\Documents\GitHub\felixbruckmeier.github.io\src\components\section
 
 import { Section } from "@/components/ui";
 import SectionIntro from "@/components/ui/SectionIntro";
-import Tile from "@/components/ui/Tile";
-import { Subtitle, Body } from "@/components/ui/Tokens";
-import { layout, spacing, colors, shadows } from "@/lib/tokens";
+import { spacing } from "@/lib/tokens";
 import { cn } from "@/lib/utils";
 import VennDiagram from "@/assets/visuals/uxstrategy/VennDiagram";
 
-/**
- * Section: Vision & Alignment
- * DS-conform â€” matches typography, spacing, and tile style across UX pages
- */
 export default function VisionAlignment() {
-  const tiles = [
-    {
-      title: "Business Viability",
-      text: "Ensuring research outcomes connect directly to measurable business impact â€” translating user understanding into growth and strategic clarity.",
-      bg: colors.notion.yellow.bg,
-      textColor: colors.notion.yellow.text,
-    },
-    {
-      title: "Technology Feasibility",
-      text: "Partnering with engineering early to align desirability with feasibility â€” ensuring that user insights inform technical direction, not react to it.",
-      bg: colors.notion.blue.bg,
-      textColor: colors.notion.blue.text,
-    },
-    {
-      title: "Human Desirability",
-      text: "Grounding all product decisions in empathy, behavior, and cultural context â€” to deliver solutions that feel intuitive, inclusive, and meaningful.",
-      bg: colors.notion.pink.bg,
-      textColor: colors.notion.pink.text,
-    },
-  ];
-
   return (
     <Section id="vision-alignment" title="Vision & Alignment" spacing="lg">
-      {/* --- Intro Text --- */}
       <SectionIntro>
-        UX sits at the intersection of <strong>business</strong>,{" "}
-        <strong>technology</strong>, and <strong>human experience</strong> â€” 
-        aligning user needs with strategic goals and technical feasibility.
+        If you will, user experience is what weâ€™re able to offer when user needs, technical feasibility, and business goals are carefully aligned.
+As a UX Research Lead, I support this process on a strategic level â€” helping teams find common ground for better decisions.
       </SectionIntro>
 
-      {/* --- Centered Venn Diagram --- */}
-      <div
-        className={cn(
-          "flex justify-center items-center mx-auto w-full",
-          spacing.mt12,
-          spacing.mb12
-        )}
-      >
-        <div className="w-full max-w-3xl flex justify-center">
-          <VennDiagram />
-        </div>
-      </div>
-
-      {/* --- Supporting Tiles (statisch, DS-konform, mit Farbcode) --- */}
-      <div className={cn(layout.gridCols3, spacing.gap6, spacing.mt12)}>
-        {tiles.map((item) => (
-          <Tile
-            key={item.title}
-            variant="static"
-            className={cn(
-              item.bg,
-              item.textColor,
-              "h-full text-left border border-border/10 rounded-xl",
-              spacing.p6,
-              shadows.sm
-            )}
-          >
-            <Subtitle className={cn("mb-3 text-foreground")}>{item.title}</Subtitle>
-            <Body className={cn(colors.muted.text, "leading-relaxed")}>
-              {item.text}
-            </Body>
-          </Tile>
-        ))}
+      <div className={cn("flex justify-center", spacing.mt12)}>
+        <VennDiagram />
       </div>
     </Section>
   );
@@ -2381,7 +2275,6 @@ import {
   sectionSpacing,
   sectionInnerSpacing,
   typography,
-  colors,
 } from "@/lib/tokens";
 
 /**
@@ -2436,6 +2329,8 @@ export default function Section({
         sectionSpacing[spacing],
         compact && "py-4",
         "w-full",
+        // ðŸ§© Fix: sorgt dafÃ¼r, dass beim Ankern die Section nicht unter der Navbar verschwindet
+        "scroll-mt-[80px]",
         className
       )}
     >
@@ -2476,6 +2371,7 @@ export default function Section({
     </section>
   );
 }
+
 
 
 
@@ -2600,10 +2496,10 @@ import { cn } from "@/lib/utils";
 type TextRevealProps = {
   children: string;
   delay?: number;
-  variant?: "word"; // fest auf Wortweise
-  stagger?: number; // â± Abstand zwischen WÃ¶rtern
-  duration?: number; // â± Dauer pro Wort
-  ease?: "linear" | "easeOut" | "easeInOut"; // ðŸŽ¨ Art der Bewegung
+  variant?: "word";
+  stagger?: number;
+  duration?: number;
+  ease?: "linear" | "easeOut" | "easeInOut";
   className?: string;
 };
 
@@ -2623,22 +2519,17 @@ export default function TextReveal({
     if (inView) controls.start("visible");
   }, [controls, inView]);
 
-  // Text in WÃ¶rter (inkl. Leerzeichen) aufteilen
-  const textParts = children.split(/(\s+)/);
+  // Text in WÃ¶rter + Leerzeichen aufteilen
+  const textParts = variant === "word" ? children.split(/(\s+)/) : [children];
 
-  // Container-Animation
   const container = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: {
-        delay,
-        staggerChildren: stagger,
-      },
+      transition: { delay, staggerChildren: stagger },
     },
   };
 
-  // Einzelne WÃ¶rter
   const child = {
     hidden: { opacity: 0, x: 8 },
     visible: {
@@ -2661,8 +2552,8 @@ export default function TextReveal({
           key={i}
           variants={child}
           style={{
-            display: "inline-block",
-            whiteSpace: "pre",
+            display: part.trim() ? "inline-block" : "inline",
+            whiteSpace: "pre-wrap",
           }}
         >
           {part}
@@ -2741,6 +2632,7 @@ export default function Tile({
 C:\Users\felix\Documents\GitHub\felixbruckmeier.github.io\src\components\ui\TileImage.tsx
 ==============================
 
+// src/components/ui/TileImage.tsx
 import { cn } from "@/lib/utils";
 import { transitions, hoverEffects, radii } from "@/lib/tokens";
 import { ArrowRight } from "lucide-react";
@@ -2782,7 +2674,7 @@ export default function TileImage({
       )}
       {...props}
     >
-      {/* === Hintergrundbild (unterstÃ¼tzt imagetools picture oder string) === */}
+      {/* === Hintergrundbild (unterstÃ¼tzt imagetools picture oder normalen String) === */}
       <div className="absolute inset-0 bg-black">
         {typeof image === "string" ? (
           <img
@@ -2796,14 +2688,15 @@ export default function TileImage({
           />
         ) : (
           <picture className="absolute inset-0">
-            {image.sources?.map((source) => (
-              <source key={source.srcset} {...source} />
-            ))}
+            {Array.isArray(image.sources) &&
+              image.sources.map((source) => (
+                <source key={source.srcset} {...source} />
+              ))}
             <img
-              src={image.img.src}
+              src={image.img?.src || ""}
               alt={title || ""}
-              width={image.img.width}
-              height={image.img.height}
+              width={image.img?.width}
+              height={image.img?.height}
               loading="lazy"
               className={cn(
                 "absolute inset-0 w-full h-full object-cover object-center scale-[1.15]",

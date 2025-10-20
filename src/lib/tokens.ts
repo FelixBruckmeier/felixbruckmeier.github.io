@@ -254,7 +254,7 @@ export const shadows = {
 export const buttonVariants = {
   base: "inline-flex items-center justify-center rounded-3xl px-5 py-2.5 transition-colors duration-200",
   primary: "bg-primary text-primary-foreground hover:bg-neutral-900 dark:hover:bg-neutral-200",
-  secondary: "bg-muted text-foreground hover:bg-neutral-300 dark:hover:bg-neutral-700",
+ secondary: "bg-gray-100 dark:bg-neutral-900 border border-border text-foreground hover:bg-gray-200 dark:hover:bg-neutral-800",
   ghost: "text-foreground hover:bg-neutral-200 dark:hover:bg-neutral-700",
   danger: "bg-red-600 text-white hover:bg-red-700",
   success: "bg-green-600 text-white hover:bg-green-700",
