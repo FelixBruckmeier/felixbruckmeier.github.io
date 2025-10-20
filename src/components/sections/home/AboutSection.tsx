@@ -1,4 +1,3 @@
-// src/components/sections/home/AboutSection.tsx
 import Section from "@/components/ui/Section";
 import FadeIn from "@/components/ui/FadeIn";
 import TextReveal from "@/components/ui/TextReveal";
@@ -12,19 +11,17 @@ export default function AboutSection() {
     <Section id="about" borderBottom>
       <div
         className={cn(
-          // Mobile: Text → Bild → CTA
-          // Desktop: Text + CTA links, Bild rechts
           "flex flex-col md:grid md:grid-cols-[1.1fr_0.9fr] gap-10 items-center"
         )}
       >
-        {/* === Text-Bereich (inkl. Desktop-CTA) === */}
+        {/* === Text-Bereich === */}
         <div className="text-block order-1 md:order-1 md:col-start-1 flex flex-col">
-          <FadeIn delay={0.1}>
+          <FadeIn delay={0.05}>
             <TextReveal
               variant="word"
-              stagger={0.08}
-              duration={0.9}
-              delay={0.1}
+              stagger={0.05}
+              duration={0.6}
+              delay={0.05}
               ease="easeInOut"
               className="text-left text-foreground font-bold text-5xl mb-8"
             >
@@ -32,12 +29,12 @@ export default function AboutSection() {
             </TextReveal>
           </FadeIn>
 
-          <FadeIn delay={1.2}>
+          <FadeIn delay={0.25}>
             <TextReveal
               variant="word"
-              stagger={0.08}
-              duration={0.8}
-              delay={0.15}
+              stagger={0.05}
+              duration={0.5}
+              delay={0.05}
               ease="easeInOut"
               className="text-left text-foreground font-semibold text-lg mb-4"
             >
@@ -45,34 +42,35 @@ export default function AboutSection() {
             </TextReveal>
           </FadeIn>
 
-          <FadeIn delay={2.4}>
+          <FadeIn delay={0.45}>
             <TextReveal
               variant="word"
-              stagger={0.08}
-              duration={0.8}
-              delay={0.2}
+              stagger={0.05}
+              duration={0.5}
+              delay={0.1}
               ease="easeInOut"
               className="text-left text-muted-foreground leading-relaxed max-w-prose"
-            >I support teams in shaping meaningful strategies.
-Most of my work happens in the space between what people need and what businesses can deliver — a space that’s often messy and full of trade-offs. I navigate ambiguity, conflicting priorities, and incomplete data, translating them into clarity, direction, and meaningful change.
+            >
+              I support teams in shaping meaningful strategies.
+              Most of my work happens in the space between what people need and what businesses can deliver — a space that’s often messy and full of trade-offs. I navigate ambiguity, conflicting priorities, and incomplete data, translating them into clarity, direction, and meaningful change.
             </TextReveal>
           </FadeIn>
 
-          {/* === CTA nur auf Desktop sichtbar === */}
+          {/* === CTA (Desktop) === */}
           <div className="hidden md:flex flex-wrap gap-4 w-full mt-8">
-            <FadeIn delay={3.6}>
+            <FadeIn delay={0.65}>
               <Button asChild variant="secondary" size="lg">
                 <a href="#projects">See Projects ↓</a>
               </Button>
             </FadeIn>
 
-            <FadeIn delay={3.8}>
+            <FadeIn delay={0.75}>
               <Button asChild variant="secondary" size="lg">
                 <a href="#expertise">Explore Expertise ↓</a>
               </Button>
             </FadeIn>
 
-            <FadeIn delay={4.0}>
+            <FadeIn delay={0.85}>
               <Button asChild variant="secondary" size="lg">
                 <a href="/cv">View CV →</a>
               </Button>
@@ -82,7 +80,7 @@ Most of my work happens in the space between what people need and what businesse
 
         {/* === Bild-Bereich === */}
         <div className="image-block order-2 md:order-2 md:col-start-2">
-          <FadeIn delay={0.8}>
+          <FadeIn delay={0.2}>
             <img
               src={profileImg}
               alt="Portrait of Felix Bruckmeier"
@@ -94,21 +92,21 @@ Most of my work happens in the space between what people need and what businesse
           </FadeIn>
         </div>
 
-        {/* === CTA nur auf Mobile sichtbar – jetzt unterhalb des Bildes === */}
+        {/* === CTA Mobile === */}
         <div className="order-3 md:hidden flex flex-wrap gap-4 mt-8 w-full">
-          <FadeIn delay={3.6}>
+          <FadeIn delay={0.65}>
             <Button asChild variant="secondary" size="lg" className="w-full">
               <a href="#projects">See Projects ↓</a>
             </Button>
           </FadeIn>
 
-          <FadeIn delay={3.8}>
+          <FadeIn delay={0.75}>
             <Button asChild variant="secondary" size="lg" className="w-full">
               <a href="#expertise">Explore Expertise ↓</a>
             </Button>
           </FadeIn>
 
-          <FadeIn delay={4.0}>
+          <FadeIn delay={0.85}>
             <Button asChild variant="secondary" size="lg" className="w-full">
               <a href="/cv">View CV →</a>
             </Button>
@@ -116,11 +114,10 @@ Most of my work happens in the space between what people need and what businesse
         </div>
       </div>
 
-      {/* === Quote unterhalb der Section === */}
-      <FadeIn delay={4.4}>
+      {/* === Quote === */}
+      <FadeIn delay={1.0}>
         <p className="mt-12 text-center text-muted-foreground italic text-sm md:text-base">
           “UX Research is not for perfectionists. We strive for something better than perfection — something real.”
-         
         </p>
       </FadeIn>
     </Section>

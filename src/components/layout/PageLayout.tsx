@@ -7,7 +7,7 @@ interface PageLayoutProps {
   intro?: string;
   headerImage?: string;
   children: ReactNode;
-  width?: "narrow" | "default" | "wide"; // 🔹 Breitenoption
+  width?: "narrow" | "default" | "wide";
 }
 
 export default function PageLayout({
@@ -17,7 +17,6 @@ export default function PageLayout({
   children,
   width = "default",
 }: PageLayoutProps) {
-  // Dynamische Breitensteuerung über Tokens
   const containerClass =
     width === "narrow"
       ? layout.containerNarrow
@@ -29,12 +28,16 @@ export default function PageLayout({
     <main className="flex flex-col items-stretch text-left">
       {/* ===== HERO ===== */}
       {headerImage && (
-        <section className="relative w-full flex flex-col justify-center items-center text-center text-white overflow-hidden min-h-[50vh]">
-          <img
-            src={headerImage}
-            alt=""
-            className="absolute inset-0 w-full h-full object-cover object-center"
-          />
+        <section
+          className="relative w-full flex flex-col justify-center items-center text-center text-white overflow-hidden min-h-[50vh] bg-black/30"
+          style={{
+            backgroundImage: `url(${headerImage})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center center",
+            backgroundRepeat: "no-repeat",
+            transition: "background-size 0.6s ease-in-out",
+          }}
+        >
           <div className="absolute inset-0 bg-black/50" />
 
           <div className="relative z-10 max-w-3xl px-6">
