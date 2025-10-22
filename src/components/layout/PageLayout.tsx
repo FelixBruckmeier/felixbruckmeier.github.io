@@ -22,7 +22,7 @@ export default function PageLayout({
       {/* ===== HERO ===== */}
       {headerImage && (
         <section
-          className="relative w-full flex flex-col justify-center items-center text-center text-white overflow-hidden min-h-[50vh] bg-black/30"
+          className="relative w-full flex flex-col justify-center items-center text-center text-white overflow-hidden h-[60vh] bg-black/30"
           style={{
             backgroundImage: `url(${headerImage})`,
             backgroundSize: "cover",
@@ -31,8 +31,10 @@ export default function PageLayout({
             transition: "background-size 0.6s ease-in-out",
           }}
         >
+          {/* Overlay für bessere Lesbarkeit */}
           <div className="absolute inset-0 bg-black/50" />
 
+          {/* Titel & Intro zentral positioniert */}
           <div className="relative z-10 max-w-3xl px-6">
             {title && (
               <h1
@@ -69,3 +71,4 @@ export default function PageLayout({
     </main>
   );
 }
+

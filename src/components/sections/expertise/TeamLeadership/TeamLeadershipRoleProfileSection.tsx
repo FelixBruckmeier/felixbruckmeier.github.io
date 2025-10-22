@@ -1,3 +1,4 @@
+// src/components/sections/expertise/teamleadership/TeamLeadershipRoleProfileSection.tsx
 import { Section } from "@/components/ui";
 import SectionIntro from "@/components/ui/SectionIntro";
 import { layout, spacing } from "@/lib/tokens";
@@ -9,15 +10,14 @@ export default function TeamLeadershipRoleProfileSection() {
     <Section
       id="leadership-role-profile"
       title="My Role Profile"
-      spacing="xl"       // Einheitlich mit RolesSection
+      spacing="xl" // Einheitlich mit RolesSection
       borderTop
-      fullWidth
     >
       {/* Intro */}
       <SectionIntro>
         As a UX generalist, I combine a broad spectrum of experience across
         research, design, and strategy. While I’m not the deepest expert in
-        every single domain, I understand each role’s language and challenges — 
+        every single domain, I understand each role’s language and challenges —
         enabling me to coach, connect, and empower specialists to perform at
         their best.
       </SectionIntro>

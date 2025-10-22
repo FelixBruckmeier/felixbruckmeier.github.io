@@ -1,3 +1,4 @@
+// src/components/sections/expertise/TeamLeadership/TeamLeadershipPhilosophySection.tsx
 import { Section } from "@/components/ui";
 import SectionIntro from "@/components/ui/SectionIntro";
 import { Tile } from "@/components/ui";
@@ -26,20 +27,22 @@ export default function TeamLeadershipPhilosophySection() {
   ];
 
   return (
-    <Section id="leadership-philosophy" title="My Leadership Philosophy" spacing="xl">
+    <Section id="leadership-philosophy" title="My Leadership Philosophy" spacing="lg">
       <SectionIntro>
         For me, leadership is not control — it’s enablement. It’s about building
         environments where others can bring their best work, take ownership, and
         grow beyond what they thought possible.
       </SectionIntro>
 
-      <div className={cn(layout.gridCols3, spacing.gap8, spacing.mt16)}>
+      <div className={cn(layout.gridCols3, spacing.gap8)}>
         {pillars.map((p) => (
           <Tile key={p.title} variant="static" className="text-center">
             <div className="flex flex-col items-center">
               {p.icon}
               <Subtitle className={spacing.mt4}>{p.title}</Subtitle>
-              <Body className={cn(colors.muted.text, spacing.mt2, "max-w-md mx-auto")}>
+              <Body
+                className={cn(colors.muted.text, spacing.mt2, "max-w-md mx-auto")}
+              >
                 {p.text}
               </Body>
             </div>
