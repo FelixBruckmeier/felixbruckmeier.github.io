@@ -1,34 +1,30 @@
+// src/pages/expertise/ImpactMeasurement/index.tsx
 import PageLayout from "@/components/layout/PageLayout";
 import headerImg from "@/assets/images/expertise/impactmeasurement/impact.jpg";
 import {
   ImpactMeasurementIntroSection,
-  ImpactMeasurementUXSection,        // ✅ ersetzt BusinessSection
-  ImpactMeasurementHeartSection,
-  ImpactMeasurementResearchSection,
-  ImpactMeasurementSummarySection,
+  ImpactMeasurementFrameworkSection,
+  ImpactMeasurementMetricsSection,
+  ImpactMeasurementROISection,
 } from "@/components/sections/expertise/impactmeasurement";
 
+/**
+ * Impact Measurement Page
+ * ----------------------------------------------------
+ * Einheitliches Breitenverhalten wie Home
+ */
 export default function ImpactMeasurementPage() {
   return (
     <PageLayout
       title="Impact Measurement"
-      intro="Connecting UX outcomes with business, user, and research value."
+      intro="Measuring, proving, and communicating UX impact through metrics that connect user experience to business outcomes."
       headerImage={headerImg}
+      width="wide" // ✅ identisch zu Home
     >
-      {/* 1️⃣ Intro */}
       <ImpactMeasurementIntroSection />
-
-      {/* 2️⃣ Measuring UX Impact – with 1–4 + Pragmatic Approach */}
-      <ImpactMeasurementUXSection />
-
-      {/* 3️⃣ Measuring UX Outcomes – The HEART Framework */}
-      <ImpactMeasurementHeartSection />
-
-      {/* 4️⃣ Research Impact */}
-      <ImpactMeasurementResearchSection />
-
-      {/* 5️⃣ Summary */}
-      <ImpactMeasurementSummarySection />
+      <ImpactMeasurementFrameworkSection />
+      <ImpactMeasurementMetricsSection />
+      <ImpactMeasurementROISection />
     </PageLayout>
   );
 }

@@ -6,7 +6,7 @@ export default function ImpactMeasurementUXSection() {
   return (
     <Section
       id="impact-ux"
-      title="Measuring UX Impact"
+      title="How I Measure and Communicate UX Impact"
       spacing="md"
       compact={false}
     >

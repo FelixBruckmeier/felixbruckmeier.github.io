@@ -1,4 +1,3 @@
-// src/components/sections/expertise/researchops/ResearchOpsValueSection.tsx
 import { Section } from "@/components/ui";
 import SectionIntro from "@/components/ui/SectionIntro";
 import { Tile } from "@/components/ui";
@@ -27,13 +26,12 @@ export default function ResearchOpsValueSection() {
   ];
 
   return (
-    <Section id="reops-value" title="The Value of ResearchOps" spacing="lg" fullWidth>
+    <Section id="reops-value" title="The Value of ResearchOps" spacing="lg">
       <SectionIntro>
         ResearchOps is not just about process — it’s about{" "}
         <strong>amplifying the value of research</strong>. Here’s what happens when it works:
       </SectionIntro>
 
-      {/* --- DS-conform Tile Grid --- */}
       <div className={cn(layout.gridCols3, spacing.gap6, spacing.mt12)}>
         {tiles.map((item) => (
           <Tile

@@ -34,18 +34,21 @@ export default function StrategicUXOKRSection() {
   return (
     <Section
       id="okr"
-      title="UX Research OKRs: Bridging Users & Business"
+      title="UX Research OKRs — Linking Research to Business Strategy"
       spacing="lg"
     >
       {/* --- Intro --- */}
       <SectionIntro>
-        UX Research OKRs connect user insights directly to organizational priorities —
-        creating focus, measurable impact, and shared alignment across teams.
-        <br />
-        <br />
-        While many organizations define ambitious goals, user needs are often underrepresented.
-        UX Research bridges that gap — ensuring that objectives are grounded in real evidence,
-        not assumptions.
+        Strategic UX Research doesn’t end with insight — it connects learning to direction.
+UX Research OKRs link research efforts directly to company strategy, ensuring that what teams discover also shapes what the organization pursues.
+
+Instead of existing as a side activity, research becomes part of how strategic priorities are defined, measured, and evolved.
+<div className="my-6"></div>
+By aligning learning goals with business objectives, I turn UX Research into a steering mechanism — one that helps organizations see user evidence not as validation, but as orientation.
+At this level, research informs not just how we build, but why.<div className="my-6"></div>
+One might ask — isn’t that too good to be true?<div className="my-6"></div>
+And yes, UX as a leading force within business strategy doesn’t happen overnight.
+It’s a gradual, sometimes rocky journey — one that’s best understood in levels:
       </SectionIntro>
 
       {/* --- Tile Grid --- */}

@@ -49,11 +49,6 @@ $excludedFilePatterns = @(
 # ($|\\) sorgt dafür, dass NUR diese Ordner + Unterordner betroffen sind – NICHT z. B. "components/ui"
 $excludedFolderPatterns = @(
     "\\src\\assets\\visuals($|\\)",
-    "\\src\\components\\sections\\expertise\\impactmeasurement($|\\)",
-    "\\src\\components\\sections\\expertise\\strategicuxresearch($|\\)",
-    "\\src\\components\\sections\\expertise\\reserachops($|\\)",
-    "\\src\\components\\sections\\expertise\\TeamLeadership($|\\)",
-    "\\src\\components\\sections\\expertise\\CV($|\\)",
     "\\src\\components\\artefacts($|\\)",
     "\\src\\components\\projects\\AtossReOps($|\\)",
     "\\src\\components\\projects\\CarInsurance($|\\)",

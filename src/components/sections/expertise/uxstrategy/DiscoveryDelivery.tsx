@@ -14,12 +14,11 @@ import ResearchInPD from "@/assets/visuals/uxstrategy/ResearchinPD";
 
 export default function DiscoveryDelivery() {
   return (
-    <Section id="discovery-delivery" title="From Discovery to Delivery" spacing="lg">
+    <Section id="discovery-delivery" title="2. From Discovery to Delivery — Making Research Continuous" spacing="lg">
       <SectionIntro>
-        UX Research is not a one-time effort but a continuous learning process
-        throughout the product lifecycle. As a UX Research Lead, I create systems
-        that connect discovery, validation, and optimization — enabling teams to
-        learn faster and make confident, user-centered decisions.
+        UX is not static — it’s a continuous learning process.
+I design research systems that connect discovery, prototyping, and optimization.
+Whether exploring unmet needs, testing prototypes, or measuring live experiences, I ensure that every phase of the product lifecycle builds on evidence, not assumption.
       </SectionIntro>
 
       {/* === 3-column Tile Grid === */}

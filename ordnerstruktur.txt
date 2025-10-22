@@ -18,7 +18,6 @@ package.json
 postcss.config.js
 powershell Ordner struktur.txt
 tailwind.config.js
-Textdokument (neu).txt
 tsconfig.app.json
 tsconfig.json
 tsconfig.node.json
@@ -29,7 +28,6 @@ vite.config.js
 vite.config.ts
 docs\assets
 docs\404.html
-docs\CNAME
 docs\CV_Felix Bruckmeier.pdf
 docs\favicon.png
 docs\favicon.svg
@@ -59,9 +57,9 @@ docs\assets\impact-DN5cVibL.png
 docs\assets\impact-DOY7HJN9.png
 docs\assets\impact-t25q2vj2.webp
 docs\assets\impact-T7ntUD59.webp
-docs\assets\index-bjKPiOOh.js
-docs\assets\index-D6owTfjq.css
-docs\assets\index.es-DuXx6INW.js
+docs\assets\index-D4VbdD9H.js
+docs\assets\index-DWSfLkZK.css
+docs\assets\index.es-DMg15p8b.js
 docs\assets\optimize-BUxT-rdt.webp
 docs\assets\optimize-Bxq1w5MP.webp
 docs\assets\optimize-C4jCfXrX.png
@@ -198,11 +196,11 @@ src\assets\visuals\teamleadership\skillassessment\SkillmapChart.tsx
 src\assets\visuals\teamleadership\skillassessment\SkillmapColors.ts
 src\assets\visuals\teamleadership\skillassessment\SkillmapForm.tsx
 src\assets\visuals\teamleadership\skillassessment\SkillmapLegend.tsx
-src\assets\visuals\uxstrategy\priomatrix.txt
+src\assets\visuals\uxstrategy\Neuer Ordner
 src\assets\visuals\uxstrategy\ResearchinPD.tsx
 src\assets\visuals\uxstrategy\ResearchPrioritizationMatrix.tsx
 src\assets\visuals\uxstrategy\VennDiagram.tsx
-src\assets\visuals\uxstrategy\VennDiagrampasst.tsx
+src\assets\visuals\uxstrategy\Neuer Ordner\nsdfgtsdgsdfgResearchinPD.tsx
 src\components\artefacts
 src\components\common
 src\components\layout
@@ -288,7 +286,6 @@ src\components\sections\expertise\strategicuxresearch\StrategicUXFrameworkSectio
 src\components\sections\expertise\strategicuxresearch\StrategicUXIntroSection.tsx
 src\components\sections\expertise\strategicuxresearch\StrategicUXOKRSection.tsx
 src\components\sections\expertise\strategicuxresearch\StrategicUXRITESection.tsx
-src\components\sections\expertise\strategicuxresearch\StrategicUXValueSection.tsx
 src\components\sections\expertise\TeamLeadership\skillassessment
 src\components\sections\expertise\TeamLeadership\index.ts
 src\components\sections\expertise\TeamLeadership\TeamLeadershipImpactSection.tsx

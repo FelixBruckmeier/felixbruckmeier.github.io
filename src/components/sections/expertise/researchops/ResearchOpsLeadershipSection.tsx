@@ -1,4 +1,3 @@
-// src/components/sections/expertise/researchops/ResearchOpsLeadershipSection.tsx
 import { Section } from "@/components/ui";
 import SectionIntro from "@/components/ui/SectionIntro";
 import { Tile } from "@/components/ui";
@@ -7,11 +6,9 @@ import { layout, spacing } from "@/lib/tokens";
 import { cn } from "@/lib/utils";
 
 /**
- * ResearchOps Leadership Section — DS-conform + full-width
+ * ResearchOps Leadership Section — DS-conform
  * ------------------------------------------------------------
- * ✅ unified with ValueSection visual style
- * ✅ uses global tile + typography tokens
- * ✅ consistent vertical rhythm and color handling
+ * Unified with ValueSection visual style, no fullWidth
  */
 export default function ResearchOpsLeadershipSection() {
   const tiles = [
@@ -34,10 +31,8 @@ export default function ResearchOpsLeadershipSection() {
       id="reops-leadership"
       title="What's my job here?"
       spacing="lg"
-      fullWidth
       borderTop={false}
     >
-      {/* --- Intro Text --- */}
       <SectionIntro>
         Scaling research isn’t just about adding processes — it’s about{" "}
         <strong>creating clarity and connection between vision and execution.</strong> As a UX
@@ -46,7 +41,6 @@ export default function ResearchOpsLeadershipSection() {
         make better decisions with evidence.
       </SectionIntro>
 
-      {/* --- DS-Conform Tile Grid --- */}
       <div className={cn(layout.gridCols3, spacing.gap6, spacing.mt10, spacing.mb20)}>
         {tiles.map((item) => (
           <Tile key={item.title} variant="static" className={cn("h-full", spacing.p6)}>
@@ -56,7 +50,6 @@ export default function ResearchOpsLeadershipSection() {
         ))}
       </div>
 
-      {/* --- Closing Statement --- */}
       <div className={cn("text-center", spacing.mt8)}>
         <Body className={cn("text-lg leading-relaxed text-muted-foreground max-w-3xl mx-auto")}>
           The result: a research organization that operates with purpose, earns leadership trust,

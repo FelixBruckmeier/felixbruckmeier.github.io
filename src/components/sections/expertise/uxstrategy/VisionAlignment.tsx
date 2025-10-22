@@ -6,10 +6,11 @@ import VennDiagram from "@/assets/visuals/uxstrategy/VennDiagram";
 
 export default function VisionAlignment() {
   return (
-    <Section id="vision-alignment" title="Vision & Alignment" spacing="lg">
+    <Section id="vision-alignment" title="1. Vision & Alignment — Creating the Big Picture" spacing="lg">
       <SectionIntro>
-        If you will, user experience is what we’re able to offer when user needs, technical feasibility, and business goals are carefully aligned.
-As a UX Research Lead, I support this process on a strategic level — helping teams find common ground for better decisions.
+       Every strategy begins with alignment.
+I help teams to connect user needs, technical feasibility, and business goals — building a shared understanding of what value means for both users and the organization.
+I turn fragmented perspectives into a common narrative that guides product vision and strategic decisions.
       </SectionIntro>
 
       <div className={cn("flex justify-center", spacing.mt12)}>

@@ -39,7 +39,7 @@ export default function ResearchOpsFrameworkSection() {
   ];
 
   return (
-    <Section id="reops-framework" title="My Approach to ResearchOps" spacing="lg" fullWidth>
+    <Section id="reops-framework" title="My Approach to ResearchOps" spacing="lg">
       <SectionIntro>
         I help organizations design ResearchOps systems that free researchers from operational
         friction and connect insights directly to business impact.

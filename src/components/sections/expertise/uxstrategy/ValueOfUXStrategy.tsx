@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils";
  */
 export default function ValueOfUXStrategy() {
   return (
-    <Section id="value" title="The Value of UX Strategy" spacing="lg" fullWidth>
+    <Section id="value" title="The Value of UX Strategy" spacing="lg">
       {/* --- Storytelling Intro --- */}
       <SectionIntro>
         In today’s product culture, speed often replaces clarity.
@@ -47,7 +47,6 @@ export default function ValueOfUXStrategy() {
               "flex flex-col justify-start text-left rounded-2xl shadow-sm"
             )}
           >
-            {/* Subtitles und Body greifen automatisch auf Tokens zu */}
             <Subtitle className={spacing.mb2}>{item.title}</Subtitle>
             <Body className="leading-relaxed">{item.text}</Body>
           </Tile>

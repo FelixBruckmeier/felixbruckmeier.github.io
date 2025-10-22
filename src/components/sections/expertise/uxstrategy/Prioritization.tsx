@@ -13,21 +13,25 @@ import ResearchPrioritizationMatrix from "@/assets/visuals/uxstrategy/ResearchPr
 
 export default function Prioritization() {
   return (
-    <Section id="research-prioritization" title="UX Research Prioritization" spacing="lg">
+    <Section id="research-prioritization" title="3. UX Research Prioritization" spacing="lg">
       {/* --- Intro text --- */}
       <SectionIntro>
-        Modern product teams face the constant challenge of balancing speed with insight.{" "}
-        This framework helps decide <strong>where to invest research effort</strong> — and when it’s acceptable to move fast and learn later.{" "}
-        It maps two dimensions that drive research prioritization:
+        No team has infinite time. UX Strategy means also knowing when to go deep and when to move fast.
+I guide teams in prioritizing research based on two key dimensions:
+
+Problem clarity — how well we understand user needs
+
+Risk of getting it wrong — how costly a wrong decision would be
+
+This ensures that every research effort matches context, balancing impact, time, and confidence.
+         <br />It maps two dimensions that drive research prioritization: <br />
         <br />
         • <strong>Problem clarity</strong> — how well we understand what users need
         <br />
         • <strong>Risk of getting it wrong</strong> — how costly a mistake would be
         <br />
         <br />
-        As a UX Researcher, my role is to <strong>help teams allocate research resources wisely</strong>, matching method depth to context.{" "}
-        This ensures that every research activity delivers the right balance between learning value, time, and risk mitigation.
-      </SectionIntro>
+             </SectionIntro>
 
       {/* --- Centered matrix visual --- */}
       <div className={cn("flex justify-center mt-12 mb-8")}>

@@ -47,7 +47,7 @@ export default function Section({
   // ✅ Dynamische Container-Breite, identisch zu Navbar/Footer
   const containerClass = fullWidth
     ? "w-full"
-    : "mx-auto w-full max-w-[1900px] px-[3vw]";
+    : "mx-auto w-full max-w-[1400px] px-[3vw]";
 
   return (
     <section

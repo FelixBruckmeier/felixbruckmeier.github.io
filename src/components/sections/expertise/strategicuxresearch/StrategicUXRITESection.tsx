@@ -42,11 +42,12 @@ export default function StrategicUXRITESection() {
     <Section id="rite" title="Rapid Iterative Testing & Evaluation (RITE)" spacing="lg">
       {/* --- Intro --- */}
       <SectionIntro>
-        <strong>RITE</strong> is a pragmatic approach to usability testing that blends speed with
-        learning — making it particularly well-suited for <strong>Agile UX</strong> environments.
-        Instead of waiting until a study ends, teams iterate as soon as issues appear — often after
-        just a few participants. Each round feeds directly into the next, turning research into a
-        fast cycle of discovery, design, and validation.
+        <strong>RITE</strong> is a pragmatic approach to usability testing that blends speed with learning — making it particularly well-suited for Agile UX environments.
+Instead of waiting until a study ends, teams iterate as soon as issues appear — often after just a few participants.
+Each round feeds directly into the next, turning research into a fast cycle of discovery, design, and validation.
+<p>&nbsp;</p>
+In the context of Strategic UX Research, RITE operationalizes UX Strategy: it transforms research from isolated checkpoints into a living feedback loop.
+This approach brings the strategic principle of continuous learning to life — bridging the gap between discovery and delivery through shared understanding and real-time improvement.
       </SectionIntro>
 
       {/* --- Animated RITE Cycle --- */}

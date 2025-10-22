@@ -555,7 +555,6 @@ export function cn(...inputs: ClassValue[]) {
 C:\Users\felix\Documents\GitHub\felixbruckmeier.github.io\src\components\sections\home\AboutSection.tsx
 ==============================
 
-// src/components/sections/home/AboutSection.tsx
 import Section from "@/components/ui/Section";
 import FadeIn from "@/components/ui/FadeIn";
 import TextReveal from "@/components/ui/TextReveal";
@@ -569,19 +568,17 @@ export default function AboutSection() {
     <Section id="about" borderBottom>
       <div
         className={cn(
-          // Mobile: Text â†’ Bild â†’ CTA
-          // Desktop: Text + CTA links, Bild rechts
           "flex flex-col md:grid md:grid-cols-[1.1fr_0.9fr] gap-10 items-center"
         )}
       >
-        {/* === Text-Bereich (inkl. Desktop-CTA) === */}
+        {/* === Text-Bereich === */}
         <div className="text-block order-1 md:order-1 md:col-start-1 flex flex-col">
-          <FadeIn delay={0.1}>
+          <FadeIn delay={0.05}>
             <TextReveal
               variant="word"
-              stagger={0.08}
-              duration={0.9}
-              delay={0.1}
+              stagger={0.05}
+              duration={0.6}
+              delay={0.05}
               ease="easeInOut"
               className="text-left text-foreground font-bold text-5xl mb-8"
             >
@@ -589,12 +586,12 @@ export default function AboutSection() {
             </TextReveal>
           </FadeIn>
 
-          <FadeIn delay={1.2}>
+          <FadeIn delay={0.25}>
             <TextReveal
               variant="word"
-              stagger={0.08}
-              duration={0.8}
-              delay={0.15}
+              stagger={0.05}
+              duration={0.5}
+              delay={0.05}
               ease="easeInOut"
               className="text-left text-foreground font-semibold text-lg mb-4"
             >
@@ -602,34 +599,35 @@ export default function AboutSection() {
             </TextReveal>
           </FadeIn>
 
-          <FadeIn delay={2.4}>
+          <FadeIn delay={0.45}>
             <TextReveal
               variant="word"
-              stagger={0.08}
-              duration={0.8}
-              delay={0.2}
+              stagger={0.05}
+              duration={0.5}
+              delay={0.1}
               ease="easeInOut"
               className="text-left text-muted-foreground leading-relaxed max-w-prose"
-            >I support teams in shaping meaningful strategies.
-Most of my work happens in the space between what people need and what businesses can deliver â€” a space thatâ€™s often messy and full of trade-offs. I navigate ambiguity, conflicting priorities, and incomplete data, translating them into clarity, direction, and meaningful change.
+            >
+              I support teams in shaping meaningful strategies.
+              Most of my work happens in the space between what people need and what businesses can deliver â€” a space thatâ€™s often messy and full of trade-offs. I navigate ambiguity, conflicting priorities, and incomplete data, translating them into clarity, direction, and meaningful change.
             </TextReveal>
           </FadeIn>
 
-          {/* === CTA nur auf Desktop sichtbar === */}
+          {/* === CTA (Desktop) === */}
           <div className="hidden md:flex flex-wrap gap-4 w-full mt-8">
-            <FadeIn delay={3.6}>
+            <FadeIn delay={0.65}>
               <Button asChild variant="secondary" size="lg">
                 <a href="#projects">See Projects â†“</a>
               </Button>
             </FadeIn>
 
-            <FadeIn delay={3.8}>
+            <FadeIn delay={0.75}>
               <Button asChild variant="secondary" size="lg">
                 <a href="#expertise">Explore Expertise â†“</a>
               </Button>
             </FadeIn>
 
-            <FadeIn delay={4.0}>
+            <FadeIn delay={0.85}>
               <Button asChild variant="secondary" size="lg">
                 <a href="/cv">View CV â†’</a>
               </Button>
@@ -639,7 +637,7 @@ Most of my work happens in the space between what people need and what businesse
 
         {/* === Bild-Bereich === */}
         <div className="image-block order-2 md:order-2 md:col-start-2">
-          <FadeIn delay={0.8}>
+          <FadeIn delay={0.2}>
             <img
               src={profileImg}
               alt="Portrait of Felix Bruckmeier"
@@ -651,21 +649,21 @@ Most of my work happens in the space between what people need and what businesse
           </FadeIn>
         </div>
 
-        {/* === CTA nur auf Mobile sichtbar â€“ jetzt unterhalb des Bildes === */}
+        {/* === CTA Mobile === */}
         <div className="order-3 md:hidden flex flex-wrap gap-4 mt-8 w-full">
-          <FadeIn delay={3.6}>
+          <FadeIn delay={0.65}>
             <Button asChild variant="secondary" size="lg" className="w-full">
               <a href="#projects">See Projects â†“</a>
             </Button>
           </FadeIn>
 
-          <FadeIn delay={3.8}>
+          <FadeIn delay={0.75}>
             <Button asChild variant="secondary" size="lg" className="w-full">
               <a href="#expertise">Explore Expertise â†“</a>
             </Button>
           </FadeIn>
 
-          <FadeIn delay={4.0}>
+          <FadeIn delay={0.85}>
             <Button asChild variant="secondary" size="lg" className="w-full">
               <a href="/cv">View CV â†’</a>
             </Button>
@@ -673,11 +671,10 @@ Most of my work happens in the space between what people need and what businesse
         </div>
       </div>
 
-      {/* === Quote unterhalb der Section === */}
-      <FadeIn delay={4.4}>
+      {/* === Quote === */}
+      <FadeIn delay={1.0}>
         <p className="mt-12 text-center text-muted-foreground italic text-sm md:text-base">
           â€œUX Research is not for perfectionists. We strive for something better than perfection â€” something real.â€
-         
         </p>
       </FadeIn>
     </Section>
@@ -1055,12 +1052,11 @@ import ResearchInPD from "@/assets/visuals/uxstrategy/ResearchinPD";
 
 export default function DiscoveryDelivery() {
   return (
-    <Section id="discovery-delivery" title="From Discovery to Delivery" spacing="lg">
+    <Section id="discovery-delivery" title="2. From Discovery to Delivery â€” Making Research Continuous" spacing="lg">
       <SectionIntro>
-        UX Research is not a one-time effort but a continuous learning process
-        throughout the product lifecycle. As a UX Research Lead, I create systems
-        that connect discovery, validation, and optimization â€” enabling teams to
-        learn faster and make confident, user-centered decisions.
+        UX is not static â€” itâ€™s a continuous learning process.
+I design research systems that connect discovery, prototyping, and optimization.
+Whether exploring unmet needs, testing prototypes, or measuring live experiences, I ensure that every phase of the product lifecycle builds on evidence, not assumption.
       </SectionIntro>
 
       {/* === 3-column Tile Grid === */}
@@ -1116,7 +1112,6 @@ C:\Users\felix\Documents\GitHub\felixbruckmeier.github.io\src\components\section
 export { default as VisionAlignment } from "./VisionAlignment";
 export { default as DiscoveryDelivery } from "./DiscoveryDelivery";
 export { default as Prioritization } from "./Prioritization";
-export { default as ValueOfUXStrategy } from "./ValueOfUXStrategy";
 
 
 
@@ -1125,10 +1120,8 @@ export { default as ValueOfUXStrategy } from "./ValueOfUXStrategy";
 C:\Users\felix\Documents\GitHub\felixbruckmeier.github.io\src\components\sections\expertise\uxstrategy\Prioritization.tsx
 ==============================
 
-// src/components/sections/expertise/uxstrategy/Prioritization.tsx
 import { Section } from "@/components/ui";
 import SectionIntro from "@/components/ui/SectionIntro";
-import { Body } from "@/components/ui/Tokens";
 import { layout, spacing } from "@/lib/tokens";
 import { cn } from "@/lib/utils";
 
@@ -1137,51 +1130,36 @@ import ResearchPrioritizationMatrix from "@/assets/visuals/uxstrategy/ResearchPr
 
 /**
  * Section: UX Research Prioritization
- * Uses the existing 3Ã—3 (or 2Ã—2) matrix visual and aligns explanatory text below it.
+ * Shows matrix and explanatory framework intro.
  */
 
 export default function Prioritization() {
   return (
-    <Section id="research-prioritization" title="UX Research Prioritization" spacing="lg">
+    <Section id="research-prioritization" title="3. UX Research Prioritization" spacing="lg">
       {/* --- Intro text --- */}
       <SectionIntro>
-        Not every research question deserves the same depth.  
-        Prioritization balances <strong>knowledge about the customer</strong> and  
-        <strong>risk of getting it wrong</strong>.
-      </SectionIntro>
+        No team has infinite time. UX Strategy means also knowing when to go deep and when to move fast.
+I guide teams in prioritizing research based on two key dimensions:
+
+Problem clarity â€” how well we understand user needs
+
+Risk of getting it wrong â€” how costly a wrong decision would be
+
+This ensures that every research effort matches context, balancing impact, time, and confidence.
+         <br />It maps two dimensions that drive research prioritization: <br />
+        <br />
+        â€¢ <strong>Problem clarity</strong> â€” how well we understand what users need
+        <br />
+        â€¢ <strong>Risk of getting it wrong</strong> â€” how costly a mistake would be
+        <br />
+        <br />
+             </SectionIntro>
 
       {/* --- Centered matrix visual --- */}
       <div className={cn("flex justify-center mt-12 mb-8")}>
-        <div className="w-full max-w-4xl flex justify-center">
+        <div className="w-full max-w-none flex justify-center">
           <ResearchPrioritizationMatrix />
         </div>
-      </div>
-
-      {/* --- Explanatory text (below, left-aligned) --- */}
-      <div
-        className={cn(
-          layout.container,
-          "max-w-3xl mx-auto text-left",
-          spacing.mt8
-        )}
-      >
-        <Body>
-          I apply a <strong>prioritization framework</strong> that maps initiatives 
-          along two axes: <em>risk of getting it wrong</em> and 
-          <em>knowledge about the user</em>.  
-          <br />
-          <br />
-          <strong>High risk & low knowledge</strong> areas require 
-          foundational research to uncover user context and reduce uncertainty.  
-          <br />
-          <strong>High knowledge & low risk</strong> areas benefit from 
-          lightweight validation and optimization.  
-          <br />
-          <br />
-          This approach ensures research investment scales with 
-          strategic impact â€” aligning depth of inquiry with 
-          decision confidence and business value.
-        </Body>
       </div>
     </Section>
   );
@@ -1273,10 +1251,11 @@ import VennDiagram from "@/assets/visuals/uxstrategy/VennDiagram";
 
 export default function VisionAlignment() {
   return (
-    <Section id="vision-alignment" title="Vision & Alignment" spacing="lg">
+    <Section id="vision-alignment" title="1. Vision & Alignment â€” Creating the Big Picture" spacing="lg">
       <SectionIntro>
-        If you will, user experience is what weâ€™re able to offer when user needs, technical feasibility, and business goals are carefully aligned.
-As a UX Research Lead, I support this process on a strategic level â€” helping teams find common ground for better decisions.
+       Every strategy begins with alignment.
+I help teams to connect user needs, technical feasibility, and business goals â€” building a shared understanding of what value means for both users and the organization.
+I turn fragmented perspectives into a common narrative that guides product vision and strategic decisions.
       </SectionIntro>
 
       <div className={cn("flex justify-center", spacing.mt12)}>
@@ -3257,7 +3236,7 @@ interface PageLayoutProps {
   intro?: string;
   headerImage?: string;
   children: ReactNode;
-  width?: "narrow" | "default" | "wide"; // ðŸ”¹ Breitenoption
+  width?: "narrow" | "default" | "wide";
 }
 
 export default function PageLayout({
@@ -3267,7 +3246,6 @@ export default function PageLayout({
   children,
   width = "default",
 }: PageLayoutProps) {
-  // Dynamische Breitensteuerung Ã¼ber Tokens
   const containerClass =
     width === "narrow"
       ? layout.containerNarrow
@@ -3279,12 +3257,16 @@ export default function PageLayout({
     <main className="flex flex-col items-stretch text-left">
       {/* ===== HERO ===== */}
       {headerImage && (
-        <section className="relative w-full flex flex-col justify-center items-center text-center text-white overflow-hidden min-h-[50vh]">
-          <img
-            src={headerImage}
-            alt=""
-            className="absolute inset-0 w-full h-full object-cover object-center"
-          />
+        <section
+          className="relative w-full flex flex-col justify-center items-center text-center text-white overflow-hidden min-h-[50vh] bg-black/30"
+          style={{
+            backgroundImage: `url(${headerImage})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center center",
+            backgroundRepeat: "no-repeat",
+            transition: "background-size 0.6s ease-in-out",
+          }}
+        >
           <div className="absolute inset-0 bg-black/50" />
 
           <div className="relative z-10 max-w-3xl px-6">

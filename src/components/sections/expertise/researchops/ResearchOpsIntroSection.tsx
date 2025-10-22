@@ -1,4 +1,3 @@
-// src/components/sections/expertise/researchops/ResearchOpsIntroSection.tsx
 import { Section } from "@/components/ui";
 import SectionIntro from "@/components/ui/SectionIntro";
 

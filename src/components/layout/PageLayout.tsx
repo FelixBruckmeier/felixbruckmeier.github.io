@@ -1,13 +1,14 @@
+// src/components/layout/PageLayout.tsx
 import { ReactNode } from "react";
 import { cn } from "@/lib/utils";
-import { layout, sectionSpacing, typography } from "@/lib/tokens";
+import { sectionSpacing, typography } from "@/lib/tokens";
 
 interface PageLayoutProps {
   title?: string;
   intro?: string;
   headerImage?: string;
   children: ReactNode;
-  width?: "narrow" | "default" | "wide";
+  width?: "narrow" | "default" | "wide"; // bleibt für Kompatibilität, wird aber nicht mehr genutzt
 }
 
 export default function PageLayout({
@@ -15,15 +16,7 @@ export default function PageLayout({
   intro,
   headerImage,
   children,
-  width = "default",
 }: PageLayoutProps) {
-  const containerClass =
-    width === "narrow"
-      ? layout.containerNarrow
-      : width === "wide"
-      ? layout.containerWide
-      : layout.containerDefault;
-
   return (
     <main className="flex flex-col items-stretch text-left">
       {/* ===== HERO ===== */}
@@ -71,9 +64,8 @@ export default function PageLayout({
       )}
 
       {/* ===== CONTENT ===== */}
-      <div className={cn(containerClass, sectionSpacing.lg, "space-y-32")}>
-        {children}
-      </div>
+      {/* ❗ Kein Container-Limit mehr – Sections steuern Breite selbst */}
+      <div className={cn(sectionSpacing.lg, "space-y-32")}>{children}</div>
     </main>
   );
 }

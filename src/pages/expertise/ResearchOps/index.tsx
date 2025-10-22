@@ -12,30 +12,21 @@ import {
 /**
  * ResearchOps Page
  * --------------------------------------------
- * - Nutzt das einheitliche PageLayout (zentriert, konsistenter Rhythmus)
- * - Jede Section ist DS-konform (Section + SectionIntro etc.)
- * - Kein eigenes Styling oder Padding hier notwendig
+ * - Jetzt identisches Breitenverhalten wie Home
+ * - Keine weiteren Änderungen am Layout
  */
 export default function ResearchOpsPage() {
   return (
     <PageLayout
       title="ResearchOps"
       intro="Building the systems, culture, and clarity that make research scalable — and strategic."
-      headerImage={headerImg} // ✅ Headerbild hinzugefügt
+      headerImage={headerImg}
+      width="wide" // ✅ sorgt für denselben Container wie auf Home
     >
-      {/* === 1️⃣ Problem & Kontext === */}
       <ResearchOpsIntroSection />
-
-      {/* === 2️⃣ Framework / Struktur === */}
       <ResearchOpsFrameworkSection />
-
-      {/* === 3️⃣ Maturity & Growth === */}
       <ResearchOpsMaturitySection />
-
-      {/* === 4️⃣ Business Value === */}
       <ResearchOpsValueSection />
-
-      {/* === 5️⃣ Leadership & Enablement === */}
       <ResearchOpsLeadershipSection />
     </PageLayout>
   );

@@ -1,3 +1,4 @@
+// src/components/ui/Tile.tsx
 import { cn } from "@/lib/utils";
 import { colors, radii, transitions, spacing, hoverEffects } from "@/lib/tokens";
 import { ArrowRight } from "lucide-react";
@@ -12,7 +13,7 @@ export default function Tile({
   children,
   ...props
 }: TileProps) {
-  // Basisstile – kein text-left hier!
+  // 🧱 Basisstil für alle Tiles
   const baseStyles = cn(
     radii.lg,
     spacing.p6,
@@ -21,18 +22,38 @@ export default function Tile({
     className
   );
 
-  // Variantenlogik
+  // 🎨 Varianten-Styles
   const variantStyles =
     variant === "interactive"
-      ? cn(colors.tile.bg, colors.tile.text, "will-change-transform cursor-pointer group", hoverEffects.smoothLift, "text-left")
+      ? cn(
+          colors.tile.bg,
+          colors.tile.text,
+          "will-change-transform cursor-pointer group",
+          hoverEffects.smoothLift,
+          "text-left"
+        )
       : variant === "interactiveArrow"
-      ? cn(colors.tile.bg, colors.tile.text, "will-change-transform cursor-pointer group", hoverEffects.smoothLift, "text-left")
+      ? cn(
+          colors.tile.bg,
+          colors.tile.text,
+          "will-change-transform cursor-pointer group",
+          hoverEffects.smoothLift,
+          "text-left"
+        )
       : variant === "transparent"
       ? cn(
-          "bg-transparent shadow-none border-none cursor-default transition-none transform-none",
-          "text-center items-center space-y-3" // ✅ zentriert horizontal
+          // ✅ leicht graue DS-Kachel mit subtiler Transparenz und Rahmen
+          "bg-[#F3F4F6]/80 dark:bg-[#1C1C1C]/80 text-foreground/90",
+          "border border-border/50 shadow-none cursor-default transform-none transition-none",
+          "text-center items-center space-y-3"
         )
-      : cn(colors.tile.bg, colors.tile.text, "cursor-default transition-none transform-none text-left");
+      : variant === "static"
+      ? cn(
+          // ✅ Standard: fester grauer Hintergrund + sichtbarer Rahmen
+          "bg-[#F3F4F6] dark:bg-[#1C1C1C] text-foreground/90",
+          "border border-border/50 cursor-default transition-none transform-none text-left"
+        )
+      : "";
 
   return (
     <div className={cn(baseStyles, variantStyles)} {...props}>

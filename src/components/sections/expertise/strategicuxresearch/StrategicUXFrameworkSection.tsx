@@ -68,11 +68,12 @@ export default function StrategicUXFrameworkSection() {
   const prev = () => setIndex((i) => (i > 0 ? i - 1 : story.length - 1));
 
   return (
-    <Section id="framework" title="My Research Planning Framework" spacing="lg" fullWidth>
+    <Section id="framework" title="My Research Planning Framework — Creating Clarity" spacing="lg">
       <SectionIntro>
-        Based on Erika Hall’s principles, this six-phase framework comes to life through
-        the story of a researcher navigating uncertainty, curiosity, and clarity — showing
-        how design research connects insight to real impact.
+        Solid UX Research starts with the right questions.
+        My research planning framework, inspired by Erika Hall, helps teams move from assumptions
+        to focus — defining what decisions need evidence and how to generate it. This ensures every
+        study directly contributes to strategic intent.
       </SectionIntro>
 
       <div className={cn("flex flex-col items-center w-full", spacing.mtLg)}>
@@ -82,7 +83,7 @@ export default function StrategicUXFrameworkSection() {
             layout.container,
             radii.xxl,
             shadows.lg,
-            "pb-12 md:pb-0" // mehr Platz unten auf Mobile
+            "pb-12 md:pb-0"
           )}
         >
           {/* IMAGE */}

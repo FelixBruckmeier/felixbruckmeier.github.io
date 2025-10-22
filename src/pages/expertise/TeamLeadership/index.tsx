@@ -20,6 +20,7 @@ export default function TeamLeadershipPage() {
       title="Team Leadership & Mentoring"
       intro="Building high-performing UX teams through clarity, coaching, and a culture of trust."
       headerImage={headerImg} // ✅ Hintergrundbild eingebunden
+      width="wide" // ✅ sorgt für denselben Container wie auf Home
     >
       <TeamLeadershipPhilosophySection />
       <TeamLeadershipRolesSection />

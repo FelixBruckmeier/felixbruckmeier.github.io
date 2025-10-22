@@ -1,80 +1,53 @@
 // src/components/sections/expertise/impactmeasurement/PragmaticApproachSection.tsx
 
+import { Section } from "@/components/ui";
+import SectionIntro from "@/components/ui/SectionIntro";
+import { Body, Subtitle } from "@/components/ui/Tokens";
 import { cn } from "@/lib/utils";
-import { layout, spacing, typography } from "@/lib/tokens";
+import { spacing, typography } from "@/lib/tokens";
 import { motion } from "framer-motion";
 
 export default function PragmaticApproachSection() {
   return (
-    <motion.section
-      className={cn(layout.maxWidthText, spacing.mt24, spacing.mb24)}
-      initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.3 }}
-      transition={{ duration: 0.8, ease: [0.33, 1.02, 0.68, 1] }}
-    >
-      <h2
-        className={cn(
-          typography.sectionTitle.font,
-          typography.sectionTitle.size,
-          typography.sectionTitle.weight,
-          spacing.mb10
-        )}
+    <Section id="pragmatic-approach" title="My Pragmatic Approach to This Problem" spacing="lg">
+      <SectionIntro>
+        When a full measurement system is not yet in place — or leadership needs a clear,
+        fundable argument — I make UX impact visible using simple financial logic.
+        This pragmatic route complements later, more complete frameworks.
+      </SectionIntro>
+
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.3 }}
+        transition={{ duration: 0.8, ease: [0.33, 1.02, 0.68, 1] }}
+        className={cn("space-y-16", spacing.mt12)}
       >
-        My pragmatic approach to this problem
-      </h2>
+        {/* Example 1 */}
+        <div>
+          <Subtitle className="mb-3">Example 1 – CLTV Impact through UX Optimization</Subtitle>
+          <Body className="text-muted-foreground">
+            Assuming — as McKinsey shows — that around <strong>32 % of customers</strong> do not
+            return after a bad experience, poor UX has a measurable price. With a user base of
+            <strong> 3.2 million</strong> and an average
+            <strong> Customer Lifetime Value of €30</strong>, the potential annual revenue at risk is
+            significant. Retaining just <strong>10 % of these customers</strong> through better UX
+            already adds about <strong>€10 million per year</strong>.
+          </Body>
+        </div>
 
-      {/* Example 1 */}
-      <div className={cn(spacing.mb16)}>
-        <h3
-          className={cn(
-            typography.subtitle.font,
-            typography.subtitle.size,
-            typography.subtitle.weight,
-            "text-foreground mb-3"
-          )}
-        >
-          Example 1: CLTV Impact through UX Optimization
-        </h3>
-        <p className={cn(typography.body.font, typography.body.size, typography.body.leading, "text-muted-foreground")}>
-          Wenn man annimmt – wie eine McKinsey-Studie zeigt –, dass rund{" "}
-          <strong>32 % der Kunden</strong> nach einer schlechten Erfahrung nicht
-          zurückkehren, dann hat schlechte UX einen messbaren Preis. Bei einer
-          Kundenbasis von etwa <strong>3,2 Millionen Personen</strong> und einem
-          durchschnittlichen <strong>Customer Lifetime Value von 30 €</strong>{" "}
-          ergibt sich daraus ein erhebliches Risiko an verlorenem Umsatz.
-          Gelingt es jedoch, nur{" "}
-          <strong>10 % dieser potenziellen Abwanderer</strong> durch bessere
-          Nutzungserlebnisse zu halten, entsteht bereits ein{" "}
-          <strong>zusätzlicher Jahresgewinn von rund 10 Millionen €</strong>.
-        </p>
-      </div>
-
-      {/* Example 2 */}
-      <div>
-        <h3
-          className={cn(
-            typography.subtitle.font,
-            typography.subtitle.size,
-            typography.subtitle.weight,
-            "text-foreground mb-3"
-          )}
-        >
-          Example 2: Usability Improvement and Efficiency Gains
-        </h3>
-        <p className={cn(typography.body.font, typography.body.size, typography.body.leading, "text-muted-foreground")}>
-          Ein ähnlicher Effekt zeigt sich auch in internen Prozessen. Wenn ein{" "}
-          <strong>Usability-Problem in einer internen Software</strong>{" "}
-          identifiziert und durch ein verbessertes Design behoben wird, kann
-          sich die Bearbeitungszeit einzelner Aufgaben durch Fachpersonal{" "}
-          <strong>deutlich reduzieren</strong> – zum Beispiel von{" "}
-          <strong>5 Minuten 30 Sekunden auf 2 Minuten 15 Sekunden</strong>. Bei
-          tausenden Vorgängen pro Monat ergibt sich daraus eine{" "}
-          <strong>substantielle Zeit- und Kosteneinsparung</strong>, die sich
-          direkt in geringeren <strong>Personalkosten</strong> und{" "}
-          <strong>höherer Produktivität</strong> widerspiegelt.
-        </p>
-      </div>
-    </motion.section>
+        {/* Example 2 */}
+        <div>
+          <Subtitle className="mb-3">Example 2 – Usability Improvement and Efficiency Gains</Subtitle>
+          <Body className="text-muted-foreground">
+            Similar effects occur in internal processes. Fixing a
+            <strong> usability issue in an internal tool</strong> can cut task time from
+            <strong> 5 min 30 sec to 2 min 15 sec</strong>. Across thousands of tasks monthly, that
+            translates into major <strong>time and cost savings</strong>, directly reflected in
+            <strong> lower personnel costs and higher productivity</strong>.
+          </Body>
+        </div>
+      </motion.div>
+    </Section>
   );
 }
