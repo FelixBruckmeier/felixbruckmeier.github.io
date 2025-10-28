@@ -7,8 +7,6 @@ import { cn } from "@/lib/utils";
 
 /**
  * ResearchOps Leadership Section — DS-conform
- * ------------------------------------------------------------
- * Unified with ValueSection visual style, no fullWidth
  */
 export default function ResearchOpsLeadershipSection() {
   const tiles = [
@@ -44,14 +42,14 @@ export default function ResearchOpsLeadershipSection() {
       <div className={cn(layout.gridCols3, spacing.gap6, spacing.mt10, spacing.mb20)}>
         {tiles.map((item) => (
           <Tile key={item.title} variant="static" className={cn("h-full", spacing.p6)}>
-            <Subtitle className={cn("mb-3 text-foreground")}>{item.title}</Subtitle>
+            <Subtitle>{item.title}</Subtitle>
             <Body className="text-muted-foreground">{item.text}</Body>
           </Tile>
         ))}
       </div>
 
       <div className={cn("text-center", spacing.mt8)}>
-        <Body className={cn("text-lg leading-relaxed text-muted-foreground max-w-3xl mx-auto")}>
+        <Body className="text-muted-foreground max-w-3xl mx-auto">
           The result: a research organization that operates with purpose, earns leadership trust,
           and drives meaningful impact at every level of the business.
         </Body>

@@ -888,82 +888,55 @@ export default function HeartFramework() {
 ==== \src\assets\visuals\impactmeasurement\ImpactMeasurementStoryVisual.tsx ====
 // src/components/sections/expertise/impactmeasurement/PragmaticApproachSection.tsx
 
+import { Section } from "@/components/ui";
+import SectionIntro from "@/components/ui/SectionIntro";
+import { Body, Subtitle } from "@/components/ui/Tokens";
 import { cn } from "@/lib/utils";
-import { layout, spacing, typography } from "@/lib/tokens";
+import { spacing, typography } from "@/lib/tokens";
 import { motion } from "framer-motion";
 
 export default function PragmaticApproachSection() {
   return (
-    <motion.section
-      className={cn(layout.maxWidthText, spacing.mt24, spacing.mb24)}
-      initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.3 }}
-      transition={{ duration: 0.8, ease: [0.33, 1.02, 0.68, 1] }}
-    >
-      <h2
-        className={cn(
-          typography.sectionTitle.font,
-          typography.sectionTitle.size,
-          typography.sectionTitle.weight,
-          spacing.mb10
-        )}
+    <Section id="pragmatic-approach" title="My Pragmatic Approach to This Problem" spacing="lg">
+      <SectionIntro>
+        When a full measurement system is not yet in place — or leadership needs a clear,
+        fundable argument — I make UX impact visible using simple financial logic.
+        This pragmatic route complements later, more complete frameworks.
+      </SectionIntro>
+
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.3 }}
+        transition={{ duration: 0.8, ease: [0.33, 1.02, 0.68, 1] }}
+        className={cn("space-y-16", spacing.mt12)}
       >
-        My pragmatic approach to this problem
-      </h2>
+        {/* Example 1 */}
+        <div>
+          <Subtitle className="mb-3">Example 1 – CLTV Impact through UX Optimization</Subtitle>
+          <Body className="text-muted-foreground">
+            Assuming — as McKinsey shows — that around <strong>32 % of customers</strong> do not
+            return after a bad experience, poor UX has a measurable price. With a user base of
+            <strong> 3.2 million</strong> and an average
+            <strong> Customer Lifetime Value of €30</strong>, the potential annual revenue at risk is
+            significant. Retaining just <strong>10 % of these customers</strong> through better UX
+            already adds about <strong>€10 million per year</strong>.
+          </Body>
+        </div>
 
-      {/* Example 1 */}
-      <div className={cn(spacing.mb16)}>
-        <h3
-          className={cn(
-            typography.subtitle.font,
-            typography.subtitle.size,
-            typography.subtitle.weight,
-            "text-foreground mb-3"
-          )}
-        >
-          Example 1: CLTV Impact through UX Optimization
-        </h3>
-        <p className={cn(typography.body.font, typography.body.size, typography.body.leading, "text-muted-foreground")}>
-          Wenn man annimmt – wie eine McKinsey-Studie zeigt –, dass rund{" "}
-          <strong>32 % der Kunden</strong> nach einer schlechten Erfahrung nicht
-          zurückkehren, dann hat schlechte UX einen messbaren Preis. Bei einer
-          Kundenbasis von etwa <strong>3,2 Millionen Personen</strong> und einem
-          durchschnittlichen <strong>Customer Lifetime Value von 30 €</strong>{" "}
-          ergibt sich daraus ein erhebliches Risiko an verlorenem Umsatz.
-          Gelingt es jedoch, nur{" "}
-          <strong>10 % dieser potenziellen Abwanderer</strong> durch bessere
-          Nutzungserlebnisse zu halten, entsteht bereits ein{" "}
-          <strong>zusätzlicher Jahresgewinn von rund 10 Millionen €</strong>.
-        </p>
-      </div>
-
-      {/* Example 2 */}
-      <div>
-        <h3
-          className={cn(
-            typography.subtitle.font,
-            typography.subtitle.size,
-            typography.subtitle.weight,
-            "text-foreground mb-3"
-          )}
-        >
-          Example 2: Usability Improvement and Efficiency Gains
-        </h3>
-        <p className={cn(typography.body.font, typography.body.size, typography.body.leading, "text-muted-foreground")}>
-          Ein ähnlicher Effekt zeigt sich auch in internen Prozessen. Wenn ein{" "}
-          <strong>Usability-Problem in einer internen Software</strong>{" "}
-          identifiziert und durch ein verbessertes Design behoben wird, kann
-          sich die Bearbeitungszeit einzelner Aufgaben durch Fachpersonal{" "}
-          <strong>deutlich reduzieren</strong> – zum Beispiel von{" "}
-          <strong>5 Minuten 30 Sekunden auf 2 Minuten 15 Sekunden</strong>. Bei
-          tausenden Vorgängen pro Monat ergibt sich daraus eine{" "}
-          <strong>substantielle Zeit- und Kosteneinsparung</strong>, die sich
-          direkt in geringeren <strong>Personalkosten</strong> und{" "}
-          <strong>höherer Produktivität</strong> widerspiegelt.
-        </p>
-      </div>
-    </motion.section>
+        {/* Example 2 */}
+        <div>
+          <Subtitle className="mb-3">Example 2 – Usability Improvement and Efficiency Gains</Subtitle>
+          <Body className="text-muted-foreground">
+            Similar effects occur in internal processes. Fixing a
+            <strong> usability issue in an internal tool</strong> can cut task time from
+            <strong> 5 min 30 sec to 2 min 15 sec</strong>. Across thousands of tasks monthly, that
+            translates into major <strong>time and cost savings</strong>, directly reflected in
+            <strong> lower personnel costs and higher productivity</strong>.
+          </Body>
+        </div>
+      </motion.div>
+    </Section>
   );
 }
 
@@ -1453,80 +1426,6 @@ function ConstructionIcon() {
 }
 
 
-==== \src\assets\visuals\impactmeasurement\UXMeasurementChallengeVisual.tsx ====
-// src/assets/visuals/impactmeasurement/UXMeasurementChallengeVisual.tsx
-import React from "react";
-
-export default function UXMeasurementChallengeVisual() {
-  return (
-    <div className="w-full max-w-4xl mx-auto bg-[#F9F9F9] dark:bg-[#1C1C1C] rounded-2xl p-8 shadow-sm border border-border">
-      {/* KPI Row */}
-      <div className="grid grid-cols-3 gap-6 mb-6">
-        {/* Happiness */}
-        <div className="flex flex-col items-center justify-center rounded-xl p-6 bg-[#F3F4F6] dark:bg-[#2A2A2A]">
-          <span className="text-muted-foreground mb-2">Happiness</span>
-          <div className="w-16 h-16 rounded-full border-4 border-dashed border-[#9CA3AF] flex items-center justify-center text-sm text-gray-400">
-            N/A
-          </div>
-          <span className="text-xs mt-2 text-gray-500 dark:text-gray-400">
-            Data missing
-          </span>
-        </div>
-
-        {/* Engagement */}
-        <div className="flex flex-col items-center justify-center rounded-xl p-6 bg-[#F3F4F6] dark:bg-[#2A2A2A]">
-          <span className="text-muted-foreground mb-2">Engagement</span>
-          <div className="relative w-16 h-16">
-            <div className="absolute inset-0 rounded-full border-4 border-[#E5E7EB] dark:border-[#3A3A3A]" />
-            <div
-              className="absolute inset-0 rounded-full border-4 border-blue-500"
-              style={{ clipPath: "inset(50% 0 0 0)" }}
-            />
-          </div>
-          <span className="text-xs mt-2 text-blue-600 dark:text-blue-400">
-            Partial data
-          </span>
-        </div>
-
-        {/* Task Success */}
-        <div className="flex flex-col items-center justify-center rounded-xl p-6 bg-[#F3F4F6] dark:bg-[#2A2A2A]">
-          <span className="text-muted-foreground mb-2">Task Success</span>
-          <div className="w-16 h-16 rounded-full border-4 border-green-500 flex items-center justify-center text-green-600 font-semibold">
-            92%
-          </div>
-          <span className="text-xs mt-2 text-green-600 dark:text-green-400">
-            Measured
-          </span>
-        </div>
-      </div>
-
-      {/* Warning Message */}
-      <div className="flex flex-col items-center justify-center text-center text-sm text-yellow-600 dark:text-yellow-500 mt-4">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth="1.8"
-          stroke="currentColor"
-          className="w-6 h-6 mb-1"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"
-          />
-          <line x1="12" y1="9" x2="12" y2="13" />
-          <line x1="12" y1="17" x2="12" y2="17" />
-        </svg>
-        <span className="font-medium">
-          Incomplete data — UX metrics disconnected from business KPIs
-        </span>
-      </div>
-    </div>
-  );
-}
-
-
 ==== \src\assets\visuals\researchops\reopsData.ts ====
 /* eslint-disable react/no-unknown-property */
 import { reopsColors } from "@/lib/tokens";
@@ -1852,9 +1751,8 @@ import { stages } from "./reopsData";
 /**
  * ResearchOps Maturity Timeline — DS-conform
  * ------------------------------------------------------------
- * ✅ No shadows, hover, or custom background colors
- * ✅ Uses only DS tokens for spacing, text, and tile colors
- * ✅ Fully consistent with other sections
+ * ✅ No manual typography or margin classes
+ * ✅ Uses only DS tokens for spacing and text
  */
 export default function ResearchOpsMaturityTimeline() {
   return (
@@ -1863,12 +1761,10 @@ export default function ResearchOpsMaturityTimeline() {
         <div key={stage.level} className={cn("flex flex-col", "space-y-10 md:space-y-12")}>
           {/* === Stage Header === */}
           <div className="text-center max-w-4xl mx-auto">
-            <h3 className="text-foreground text-2xl sm:text-3xl font-semibold mb-3">
-              {stage.label}: {stage.level}
-            </h3>
-            <p className="text-muted-foreground text-base sm:text-lg leading-relaxed">
+            <Subtitle>{stage.label}: {stage.level}</Subtitle>
+            <Body className={colors.muted.text}>
               {stage.description}
-            </p>
+            </Body>
           </div>
 
           {/* === Stage Areas Grid === */}
@@ -1877,29 +1773,20 @@ export default function ResearchOpsMaturityTimeline() {
               <Tile
                 key={area.name}
                 variant="static"
-                className={cn(
-                  colors.tile.bg,
-                  colors.tile.text,
-                  spacing.p6,
-                  "flex flex-col justify-start text-left rounded-2xl"
-                )}
+                className={cn(spacing.p6, "flex flex-col justify-start text-left rounded-2xl")}
               >
                 {/* === Area Title === */}
-                <Subtitle className={cn("mb-2 text-foreground text-base sm:text-lg font-semibold")}>
-                  {area.name}
-                </Subtitle>
+                <Subtitle>{area.name}</Subtitle>
 
                 {/* === Area Description === */}
-                <Body className={cn(colors.muted.text, "text-sm sm:text-base leading-relaxed")}>
+                <Body className={colors.muted.text}>
                   {area.description}
                 </Body>
 
                 {/* === Recommendation === */}
-                <div className={cn(spacing.mt4, "border-t border-border pt-4")}>
-                  <Subtitle className="text-foreground text-base sm:text-lg font-semibold">
-                    Recommendation
-                  </Subtitle>
-                  <Body className={cn(colors.muted.text, "text-sm sm:text-base leading-relaxed mt-1")}>
+                <div className={cn("border-t border-border", spacing.pt4, spacing.mt6)}>
+                  <Subtitle>Recommendation</Subtitle>
+                  <Body className={colors.muted.text}>
                     {area.recommendation}
                   </Body>
                 </div>
@@ -1908,66 +1795,6 @@ export default function ResearchOpsMaturityTimeline() {
           </div>
         </div>
       ))}
-    </div>
-  );
-}
-
-
-
-==== \src\assets\visuals\researchops\ResearchOpsVisualIntro.tsx ====
-import { cn } from "@/lib/utils";
-import { typography, colors } from "@/lib/tokens";
-
-/**
- * ResearchOpsVisualIntro
- * A short storytelling visual block introducing the purpose of ResearchOps.
- */
-
-export default function ResearchOpsVisualIntro() {
-  return (
-    <div
-      className={cn(
-        "relative flex flex-col items-center justify-center text-center w-full max-w-3xl mx-auto py-12"
-      )}
-    >
-      <div className="rounded-full bg-accent/10 w-48 h-48 flex items-center justify-center mb-8 shadow-inner">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="w-16 h-16 text-accent-foreground"
-        >
-          <circle cx="12" cy="12" r="10" />
-          <path d="M12 6v6l4 2" />
-        </svg>
-      </div>
-
-      <h3
-        className={cn(
-          typography.sectionTitle.font,
-          typography.sectionTitle.size,
-          typography.sectionTitle.weight,
-          "mb-4"
-        )}
-      >
-        From Chaos to Clarity
-      </h3>
-
-      <p
-        className={cn(
-          typography.body.font,
-          colors.muted.text,
-          "max-w-2xl text-center"
-        )}
-      >
-        ResearchOps turns scattered efforts into a structured, strategic engine for insight.
-        By aligning people, processes, and tools, organizations move from reactive research
-        to a state of clarity — where insights flow freely and decisions are confident.
-      </p>
     </div>
   );
 }
@@ -3005,6 +2832,141 @@ export default function LeadershipPillars() {
         </div>
       ))}
     </div>
+  );
+}
+
+
+==== \src\assets\visuals\teamleadership\PersonaCard.tsx ====
+// src/components/ui/PersonaCard.tsx
+import React from "react";
+import Tile from "@/components/ui/Tile";
+import Tag from "@/components/ui/Tag";
+import { Body, Small, Subtitle } from "@/components/ui/Tokens";
+import { colors, spacing, layout } from "@/lib/tokens";
+
+interface PersonaCardProps {
+  name: string;
+  role?: string;
+  level?: string;
+  quote?: string;
+  imgSrc?: string;
+  description?: string;
+  skills?: string[];
+  needs?: string;
+  painPoints?: string;
+  challenges?: string;
+  responsibilities?: string[];
+}
+
+export default function PersonaCard({
+  name,
+  role,
+  level,
+  quote,
+  imgSrc,
+  description,
+  skills = [],
+  needs,
+  painPoints,
+  challenges,
+  responsibilities = [],
+}: PersonaCardProps) {
+  return (
+    <Tile variant="static" className="w-full p-8 md:p-10 flex flex-col gap-8 text-left">
+      {/* === ÄUSSERES GRID === */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full items-start text-left">
+        {/* === LEFT COLUMN – Profile === */}
+        <div className="flex flex-col h-full text-left">
+          <Tile variant="transparent" className="flex flex-col justify-between h-full text-left">
+            {/* Profilbild */}
+            <div className="w-60 h-60 rounded-full overflow-hidden border border-border bg-muted mb-10">
+              {imgSrc ? (
+                <img src={imgSrc} alt={name} className="w-full h-full object-cover rounded-full" />
+              ) : (
+                <div className="flex items-center justify-center h-full text-3xl font-semibold text-muted-foreground">
+                  {name.charAt(0)}
+                </div>
+              )}
+            </div>
+
+            {/* Name + Rolle */}
+            <div className="space-y-2 mb-8 text-left">
+              <Subtitle className="text-left">{name}</Subtitle>
+              <Small className={`${colors.muted.text} text-left`}>
+                {role} {level ? `· ${level}` : ""}
+              </Small>
+            </div>
+
+            {/* Quote */}
+            {quote && (
+              <Body className="italic text-foreground/80 max-w-md leading-relaxed text-left">
+                “{quote}”
+              </Body>
+            )}
+          </Tile>
+        </div>
+
+        {/* === MIDDLE COLUMN === */}
+        <div className="flex flex-col gap-4 h-full text-left">
+          {description && (
+            <Tile variant="transparent" className="flex-1 flex flex-col justify-between text-left">
+              <Subtitle className="text-left">Role Overview</Subtitle>
+              <Body className={`${colors.muted.text} text-left`}>{description}</Body>
+            </Tile>
+          )}
+
+          {skills.length > 0 && (
+            <Tile variant="transparent" className="flex-1 flex flex-col justify-between text-left">
+              <Subtitle className="text-left">Key Skills</Subtitle>
+              <div className="flex flex-wrap gap-2 mt-2 text-left">
+                {skills.map((skill, i) => (
+                  <Tag key={i} color="gray">
+                    {skill}
+                  </Tag>
+                ))}
+              </div>
+            </Tile>
+          )}
+
+          {responsibilities.length > 0 && (
+            <Tile variant="transparent" className="flex-1 flex flex-col justify-between text-left">
+              <Subtitle className="text-left">Responsibilities</Subtitle>
+              <Body className={`${colors.muted.text} text-left`}>
+                <ul className="list-disc pl-5 space-y-1">
+                  {responsibilities.map((r, i) => (
+                    <li key={i}>{r}</li>
+                  ))}
+                </ul>
+              </Body>
+            </Tile>
+          )}
+        </div>
+
+        {/* === RIGHT COLUMN === */}
+        <div className="flex flex-col gap-4 h-full text-left">
+          {needs && (
+            <Tile variant="transparent" className="flex-1 flex flex-col justify-between text-left">
+              <Subtitle className="text-left">Needs</Subtitle>
+              <Body className={`${colors.muted.text} text-left`}>{needs}</Body>
+            </Tile>
+          )}
+
+          {painPoints && (
+            <Tile variant="transparent" className="flex-1 flex flex-col justify-between text-left">
+              <Subtitle className="text-left">Pain Points</Subtitle>
+              <Body className={`${colors.muted.text} text-left`}>{painPoints}</Body>
+            </Tile>
+          )}
+
+          {challenges && (
+            <Tile variant="transparent" className="flex-1 flex flex-col justify-between text-left">
+              <Subtitle className="text-left">Challenges</Subtitle>
+              <Body className={`${colors.muted.text} text-left`}>{challenges}</Body>
+            </Tile>
+          )}
+        </div>
+      </div>
+    </Tile>
   );
 }
 
@@ -4946,16 +4908,17 @@ export default function ThemeToggle() {
 
 
 ==== \src\components\layout\PageLayout.tsx ====
+// src/components/layout/PageLayout.tsx
 import { ReactNode } from "react";
 import { cn } from "@/lib/utils";
-import { layout, sectionSpacing, typography } from "@/lib/tokens";
+import { sectionSpacing, typography } from "@/lib/tokens";
 
 interface PageLayoutProps {
   title?: string;
   intro?: string;
   headerImage?: string;
   children: ReactNode;
-  width?: "narrow" | "default" | "wide";
+  width?: "narrow" | "default" | "wide"; // bleibt für Kompatibilität, wird aber nicht mehr genutzt
 }
 
 export default function PageLayout({
@@ -4963,21 +4926,13 @@ export default function PageLayout({
   intro,
   headerImage,
   children,
-  width = "default",
 }: PageLayoutProps) {
-  const containerClass =
-    width === "narrow"
-      ? layout.containerNarrow
-      : width === "wide"
-      ? layout.containerWide
-      : layout.containerDefault;
-
   return (
     <main className="flex flex-col items-stretch text-left">
       {/* ===== HERO ===== */}
       {headerImage && (
         <section
-          className="relative w-full flex flex-col justify-center items-center text-center text-white overflow-hidden min-h-[50vh] bg-black/30"
+          className="relative w-full flex flex-col justify-center items-center text-center text-white overflow-hidden h-[60vh] bg-black/30"
           style={{
             backgroundImage: `url(${headerImage})`,
             backgroundSize: "cover",
@@ -4986,8 +4941,10 @@ export default function PageLayout({
             transition: "background-size 0.6s ease-in-out",
           }}
         >
+          {/* Overlay für bessere Lesbarkeit */}
           <div className="absolute inset-0 bg-black/50" />
 
+          {/* Titel & Intro zentral positioniert */}
           <div className="relative z-10 max-w-3xl px-6">
             {title && (
               <h1
@@ -5019,12 +4976,12 @@ export default function PageLayout({
       )}
 
       {/* ===== CONTENT ===== */}
-      <div className={cn(containerClass, sectionSpacing.lg, "space-y-32")}>
-        {children}
-      </div>
+      {/* ❗ Kein Container-Limit mehr – Sections steuern Breite selbst */}
+      <div className={cn(sectionSpacing.lg, "space-y-32")}>{children}</div>
     </main>
   );
 }
+
 
 
 ==== \src\components\projects\AtossReOps\AffinityMap.tsx ====
@@ -7510,6 +7467,7 @@ export default function ImpactMeasurementHeartSection() {
 
 
 ==== \src\components\sections\expertise\impactmeasurement\ImpactMeasurementIntroSection.tsx ====
+// src/components/sections/expertise/impactmeasurement/ImpactMeasurementIntroSection.tsx
 import { Section } from "@/components/ui";
 import SectionIntro from "@/components/ui/SectionIntro";
 import { Body } from "@/components/ui/Tokens";
@@ -7524,7 +7482,7 @@ import { colors, spacing } from "@/lib/tokens";
  */
 export default function ImpactMeasurementIntroSection() {
   return (
-    <Section id="impact-intro" title="Impact Measurement" spacing="md">
+    <Section id="impact-intro" title="Impact Measurement" spacing="lg">
       {/* Intro-Text */}
       <SectionIntro className="max-w-3xl leading-relaxed text-lg">
         Measuring and proving the business value of UX — because user experience is not a cost
@@ -7665,6 +7623,7 @@ export default function ImpactMeasurementResearchSection() {
 // src/components/sections/expertise/impactmeasurement/ImpactMeasurementStoryVisual.tsx
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { Section } from "@/components/ui";
 import { spacing, layout, typography } from "@/lib/tokens";
 import { Body, Subtitle } from "@/components/ui/Tokens";
 
@@ -7675,136 +7634,164 @@ import MeasurementGapVisual from "@/assets/visuals/impactmeasurement/Measurement
 
 export default function ImpactMeasurementStoryVisual() {
   return (
-    <div className={cn(layout.flexCol, spacing.blockGapLg, "space-y-32 md:space-y-40")}>
-      {/* 1️⃣ Problem */}
-      <StoryItem
-        visual={<UXKPIConstructionVisual />}
-        title="1️⃣ Problem – Why the value of UX often remains invisible"
-        text={
-          <>
-            Many organizations prioritize short-term KPIs such as <strong>conversion</strong>,{" "}
-            <strong>efficiency</strong>, or <strong>revenue</strong>. Long-term value drivers like{" "}
-            <strong>trust</strong>, <strong>satisfaction</strong>, and <strong>loyalty</strong> are
-            rarely tracked systematically.
-            <br />
-            <br />
-            As a result, UX is often perceived as a soft discipline — disconnected from business
-            impact. Leadership may acknowledge its importance, yet UX KPIs rarely influence
-            decision-making. The outcome: investments flow toward quick wins instead of
-            sustainable customer relationships.
-          </>
-        }
-      />
+    <Section id="impact-story" spacing="lg">
+      <div
+        className={cn(
+          layout.flexCol,
+          spacing.blockGapLg,
+          "space-y-32 md:space-y-40"
+        )}
+      >
+        {/* 1️⃣ Problem */}
+        <StoryItem
+          visual={<UXKPIConstructionVisual />}
+          title="1️⃣ Problem – Why the value of UX often remains invisible"
+          text={
+            <>
+              Many organizations prioritize short-term KPIs such as{" "}
+              <strong>conversion</strong>, <strong>efficiency</strong>, or{" "}
+              <strong>revenue</strong>. Long-term value drivers like{" "}
+              <strong>trust</strong>, <strong>satisfaction</strong>, and{" "}
+              <strong>loyalty</strong> are rarely tracked systematically.
+              <br />
+              <br />
+              As a result, UX is often perceived as a soft discipline —
+              disconnected from business impact. Leadership may acknowledge its
+              importance, yet UX KPIs rarely influence decision-making. The
+              outcome: investments flow toward quick wins instead of sustainable
+              customer relationships.
+            </>
+          }
+        />
 
-      {/* 2️⃣ Evidence */}
-      <StoryItem
-        visual={<McKinseyDesignIndexVisual />}
-        title="2️⃣ Evidence – What McKinsey proves"
-        text={
-          <>
-            McKinsey’s{" "}
-            <a
-              href="https://www.mckinsey.com/~/media/mckinsey/business%20functions/mckinsey%20design/our%20insights/the%20business%20value%20of%20design/the-business-value-of-design-full-report.ashx"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline hover:opacity-80"
-            >
-              <em>Business Value of Design</em>
-            </a>{" "}
-            study empirically shows that companies with <strong>high design maturity</strong>
-            outperform competitors by up to <strong>32% in revenue growth</strong> and{" "}
-            <strong>56% in shareholder returns</strong>.
-            <br />
-            <br />
-            Key success factors include <strong>analytic leadership</strong>,{" "}
-            <strong>cross-functional collaboration</strong>, <strong>continuous learning</strong>,
-            and a strong <strong>focus on user value</strong>. Still, translating design maturity
-            into monetary metrics is challenging in many organizations.
-          </>
-        }
-      />
+        {/* 2️⃣ Evidence */}
+        <StoryItem
+          visual={<McKinseyDesignIndexVisual />}
+          title="2️⃣ Evidence – What McKinsey proves"
+          text={
+            <>
+              McKinsey’s{" "}
+              <a
+                href="https://www.mckinsey.com/~/media/mckinsey/business%20functions/mckinsey%20design/our%20insights/the%20business%20value%20of%20design/the-business-value-of-design-full-report.ashx"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline hover:opacity-80"
+              >
+                <em>Business Value of Design</em>
+              </a>{" "}
+              study empirically shows that companies with{" "}
+              <strong>high design maturity</strong> outperform competitors by up
+              to <strong>32% in revenue growth</strong> and{" "}
+              <strong>56% in shareholder returns</strong>.
+              <br />
+              <br />
+              Key success factors include <strong>analytic leadership</strong>,{" "}
+              <strong>cross-functional collaboration</strong>,{" "}
+              <strong>continuous learning</strong>, and a strong{" "}
+              <strong>focus on user value</strong>. Still, translating design
+              maturity into monetary metrics is challenging in many
+              organizations.
+            </>
+          }
+        />
 
-      {/* 3️⃣ Challenge */}
-      <StoryItem
-        visual={<MeasurementGapVisual />}
-        title="3️⃣ Challenge – Why measuring UX remains difficult"
-        text={
-          <>
-            Measuring UX is inherently complex. Unlike sales or conversion rates, UX outcomes are{" "}
-            <strong>indirect</strong> — a combination of <strong>quantitative</strong> and{" "}
-            <strong>qualitative</strong> signals such as satisfaction, trust, and ease-of-use.
-            <br />
-            <br />
-            Even when teams collect data, those signals live in different units: NPS, completion
-            time, perceived confidence, etc. To act on them, organizations must{" "}
-            <strong>normalize and translate</strong> those signals into a unified performance
-            metric — a process that requires analytics, governance, and time.
-            <br />
-            <br />
-            Frameworks like Google’s <strong>HEART model</strong> are suitable tools for this
-            translation, but adopting them requires organizational maturity and leadership buy-in.
-          </>
-        }
-      />
+        {/* 3️⃣ Challenge */}
+        <StoryItem
+          visual={<MeasurementGapVisual />}
+          title="3️⃣ Challenge – Why measuring UX remains difficult"
+          text={
+            <>
+              Measuring UX is inherently complex. Unlike sales or conversion
+              rates, UX outcomes are <strong>indirect</strong> — a combination
+              of <strong>quantitative</strong> and{" "}
+              <strong>qualitative</strong> signals such as satisfaction, trust,
+              and ease-of-use.
+              <br />
+              <br />
+              Even when teams collect data, those signals live in different
+              units: NPS, completion time, perceived confidence, etc. To act on
+              them, organizations must{" "}
+              <strong>normalize and translate</strong> those signals into a
+              unified performance metric — a process that requires analytics,
+              governance, and time.
+              <br />
+              <br />
+              Frameworks like Google’s <strong>HEART model</strong> are suitable
+              tools for this translation, but adopting them requires
+              organizational maturity and leadership buy-in.
+            </>
+          }
+        />
 
-      {/* 4️⃣ Solution (integrated, full worked examples in English) */}
-      <StoryItem
-        title="4️⃣ Solution – My pragmatic approach"
-        text={
-          <>
-            When a full measurement system is not yet in place — or leadership needs a clear,
-            fundable argument — I make UX impact visible using simple financial logic. This
-            pragmatic route complements later, more complete frameworks.
-            <br />
-            <br />
-            <strong>Example 1 — CLTV impact through UX optimization</strong>
-            <br />
-            Assume — as McKinsey suggests — that roughly <strong>32% of customers</strong> do not
-            return after a bad experience. With a user base of <strong>3.2 million</strong> and an
-            average <strong>CLTV of €30</strong>, the potential annual revenue at risk is:
-            <br />
-            <br />
-            <em>3,200,000 × 0.32 × €30 = €30,720,000</em>
-            <br />
-            <br />
-            If targeted UX work can retain just <strong>10% of these at-risk customers</strong>, the
-            recovered revenue would be:
-            <br />
-            <br />
-            <em>€30,720,000 × 0.10 = €3,072,000</em>
-            <br />
-            <br />
-            In short: a modest UX effect (10% retention of the at-risk cohort) yields over{" "}
-            <strong>€3M per year</strong> — and that is before considering any marketing or sales
-            costs.
-            <br />
-            <br />
-            <strong>Example 2 — Usability improvement → efficiency gains</strong>
-            <br />
-            Consider an internal task that currently takes <strong>5m30s</strong> and is executed by{" "}
-            <strong>400 employees</strong> on average <strong>3 times per day</strong>. After a UX
-            redesign the task takes <strong>2m15s</strong>, saving <strong>3m15s</strong> per run.
-            Annual saved time:
-            <br />
-            <br />
-            <em>3.25 minutes × 3 × 400 employees × 220 workdays = 856,800 minutes</em>
-            <br />
-            ≈ <strong>14,280 hours / year</strong>
-            <br />
-            <br />
-            At an average internal rate of <strong>€40 / hour</strong> this equals:
-            <br />
-            <br />
-            <em>14,280 × €40 = €571,200</em>
-            <br />
-            <br />
-            These two short, transparent calculations create fundable business cases that make UX
-            a visible lever while the organization builds a comprehensive measurement system like
-            HEART.
-          </>
-        }
-      />
-    </div>
+        {/* 4️⃣ Solution */}
+        <StoryItem
+          title="4️⃣ Solution – My pragmatic approach"
+          text={
+            <>
+              When a full measurement system is not yet in place — or leadership
+              needs a clear, fundable argument — I make UX impact visible using
+              simple financial logic. This pragmatic route complements later,
+              more complete frameworks.
+              <br />
+              <br />
+              <strong>Example 1 — CLTV impact through UX optimization</strong>
+              <br />
+              Assume — as McKinsey suggests — that roughly{" "}
+              <strong>32% of customers</strong> do not return after a bad
+              experience. With a user base of <strong>3.2 million</strong> and
+              an average <strong>CLTV of €30</strong>, the potential annual
+              revenue at risk is:
+              <br />
+              <br />
+              <em>3,200,000 × 0.32 × €30 = €30,720,000</em>
+              <br />
+              <br />
+              If targeted UX work can retain just{" "}
+              <strong>10% of these at-risk customers</strong>, the recovered
+              revenue would be:
+              <br />
+              <br />
+              <em>€30,720,000 × 0.10 = €3,072,000</em>
+              <br />
+              <br />
+              In short: a modest UX effect (10% retention of the at-risk cohort)
+              yields over <strong>€3M per year</strong> — and that is before
+              considering any marketing or sales costs.
+              <br />
+              <br />
+              <strong>Example 2 — Usability improvement → efficiency gains</strong>
+              <br />
+              Consider an internal task that currently takes{" "}
+              <strong>5m30s</strong> and is executed by{" "}
+              <strong>400 employees</strong> on average{" "}
+              <strong>3 times per day</strong>. After a UX redesign the task
+              takes <strong>2m15s</strong>, saving <strong>3m15s</strong> per
+              run. Annual saved time:
+              <br />
+              <br />
+              <em>
+                3.25 minutes × 3 × 400 employees × 220 workdays = 856,800
+                minutes
+              </em>
+              <br />
+              ≈ <strong>14,280 hours / year</strong>
+              <br />
+              <br />
+              At an average internal rate of <strong>€40 / hour</strong> this
+              equals:
+              <br />
+              <br />
+              <em>14,280 × €40 = €571,200</em>
+              <br />
+              <br />
+              These two short, transparent calculations create fundable business
+              cases that make UX a visible lever while the organization builds a
+              comprehensive measurement system like HEART.
+            </>
+          }
+        />
+      </div>
+    </Section>
   );
 }
 
@@ -7821,7 +7808,9 @@ const StoryItem = ({
   text: React.ReactNode;
 }) => (
   <motion.div
-    className={cn("grid md:grid-cols-[1.2fr_1fr] gap-16 md:gap-24 items-center")}
+    className={cn(
+      "grid sm:grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center"
+    )}
     initial="hidden"
     whileInView="visible"
     viewport={{ once: true, amount: 0.3 }}
@@ -7834,7 +7823,6 @@ const StoryItem = ({
       },
     }}
   >
-    {/* Left: Visual (optional) */}
     {visual && (
       <motion.div
         variants={{
@@ -7846,7 +7834,6 @@ const StoryItem = ({
       </motion.div>
     )}
 
-    {/* Right: Text */}
     <motion.div
       variants={{
         hidden: { opacity: 0, y: 20 },
@@ -7856,10 +7843,16 @@ const StoryItem = ({
           transition: { duration: 0.6, delay: 0.2 },
         },
       }}
-      className={cn(!visual && "md:col-span-2")}
+      className={cn(!visual && "lg:col-span-2")}
     >
       <Subtitle className="mb-5">{title}</Subtitle>
-      <Body className={cn(typography.body.size, typography.body.leading, spacing.stackLg)}>
+      <Body
+        className={cn(
+          typography.body.size,
+          typography.body.leading,
+          spacing.stackLg
+        )}
+      >
         {text}
       </Body>
     </motion.div>
@@ -7893,7 +7886,7 @@ export default function ImpactMeasurementUXSection() {
   return (
     <Section
       id="impact-ux"
-      title="Measuring UX Impact"
+      title="How I Measure and Communicate UX Impact"
       spacing="md"
       compact={false}
     >
@@ -7911,11 +7904,14 @@ export default function ImpactMeasurementUXSection() {
 
 
 ==== \src\components\sections\expertise\impactmeasurement\index.ts ====
+// src/components/sections/expertise/impactmeasurement/index.ts
 export { default as ImpactMeasurementIntroSection } from "./ImpactMeasurementIntroSection";
-export { default as ImpactMeasurementUXSection } from "./ImpactMeasurementUXSection"; // ✅ neu hinzugefügt
-export { default as ImpactMeasurementHeartSection } from "./ImpactMeasurementHeartSection";
+export { default as ImpactMeasurementFrameworkSection } from "./ImpactMeasurementUXSection";
+export { default as ImpactMeasurementMetricsSection } from "./ImpactMeasurementHeartSection";
+export { default as ImpactMeasurementROISection } from "./ImpactMeasurementSummarySection";
+
+// 🔹 Optional fünfte Section (Research Impact)
 export { default as ImpactMeasurementResearchSection } from "./ImpactMeasurementResearchSection";
-export { default as ImpactMeasurementSummarySection } from "./ImpactMeasurementSummarySection";
 
 
 ==== \src\components\sections\expertise\researchops\index.ts ====
@@ -7931,13 +7927,13 @@ import { Section } from "@/components/ui";
 import SectionIntro from "@/components/ui/SectionIntro";
 import { Tile } from "@/components/ui";
 import { Subtitle, Body } from "@/components/ui/Tokens";
-import { layout, spacing, colors } from "@/lib/tokens";
+import { layout, spacing } from "@/lib/tokens";
 import { cn } from "@/lib/utils";
 import ReOpsWheel from "@/assets/visuals/researchops/ReOpsWheel";
 
 /**
  * ResearchOps Framework Section
- * Pure DS-conform — static tiles, no shadows or hover effects
+ * 100% DS-conform — relies fully on DS tokens
  */
 export default function ResearchOpsFrameworkSection() {
   const tiles = [
@@ -7968,7 +7964,7 @@ export default function ResearchOpsFrameworkSection() {
   ];
 
   return (
-    <Section id="reops-framework" title="My Approach to ResearchOps" spacing="lg" fullWidth>
+    <Section id="reops-framework" title="My Approach to ResearchOps" spacing="lg">
       <SectionIntro>
         I help organizations design ResearchOps systems that free researchers from operational
         friction and connect insights directly to business impact.
@@ -7981,16 +7977,12 @@ export default function ResearchOpsFrameworkSection() {
         </div>
       </div>
 
-      {/* Clean DS Tiles */}
+      {/* DS Tiles */}
       <div className={cn(layout.gridCols3, spacing.gap8, spacing.mt12)}>
         {tiles.map((item) => (
-          <Tile
-            key={item.title}
-            variant="static"
-            className={cn(colors.tile.bg, colors.tile.text, spacing.p6, "rounded-2xl")}
-          >
-            <Subtitle className={cn("mb-3 text-foreground")}>{item.title}</Subtitle>
-            <Body className={cn(colors.muted.text)}>{item.text}</Body>
+          <Tile key={item.title} variant="static" className="rounded-2xl">
+            <Subtitle>{item.title}</Subtitle>
+            <Body>{item.text}</Body>
           </Tile>
         ))}
       </div>
@@ -8000,7 +7992,6 @@ export default function ResearchOpsFrameworkSection() {
 
 
 ==== \src\components\sections\expertise\researchops\ResearchOpsIntroSection.tsx ====
-// src/components/sections/expertise/researchops/ResearchOpsIntroSection.tsx
 import { Section } from "@/components/ui";
 import SectionIntro from "@/components/ui/SectionIntro";
 
@@ -8018,19 +8009,13 @@ export default function ResearchOpsIntroSection() {
       borderTop={false}
     >
       <SectionIntro>
-        Every team wants to make evidence-based decisions — from Product and UX to Marketing,
-        Analytics, and Customer Service. Yet without shared systems, insights stay scattered,
-        studies get repeated, and intuition fills the gaps.
+       Every team wants to make evidence-based decisions — from Product and UX to Marketing, Analytics, and Customer Service. Yet without shared systems, insights remain scattered, studies are repeated, and intuition fills the gaps.
+<br />
         <br />
+I’ve seen this in many forms: knowledge locked in silos, with no one seeing the full picture. Research happens everywhere — but without coordination, its impact fades across teams, channels, and strategies. Teams invest in expensive, sometimes redundant tools, yet results — and even usage — often go unshared.
+<br />
         <br />
-        I’ve seen this slow down even the best organizations: knowledge lives in silos, and no one
-        sees the full picture. Research happens everywhere — but without coordination, its impact
-        fades across teams, channels, and strategy.
-        <br />
-        <br />
-        <strong>ResearchOps</strong> changes that — creating the structure and culture that connect
-        people, data, and decisions. It turns fragmented research into a cohesive, insight-driven
-        ecosystem that powers clarity, alignment, and smarter outcomes across the business.
+ <strong>ResearchOps </strong> changes that. It builds the structure and culture that connect people, data, and decisions. It transforms fragmented efforts into a cohesive, insight-driven ecosystem that drives clarity, alignment, and smarter outcomes across the organization.
       </SectionIntro>
     </Section>
   );
@@ -8038,7 +8023,6 @@ export default function ResearchOpsIntroSection() {
 
 
 ==== \src\components\sections\expertise\researchops\ResearchOpsLeadershipSection.tsx ====
-// src/components/sections/expertise/researchops/ResearchOpsLeadershipSection.tsx
 import { Section } from "@/components/ui";
 import SectionIntro from "@/components/ui/SectionIntro";
 import { Tile } from "@/components/ui";
@@ -8047,11 +8031,7 @@ import { layout, spacing } from "@/lib/tokens";
 import { cn } from "@/lib/utils";
 
 /**
- * ResearchOps Leadership Section — DS-conform + full-width
- * ------------------------------------------------------------
- * ✅ unified with ValueSection visual style
- * ✅ uses global tile + typography tokens
- * ✅ consistent vertical rhythm and color handling
+ * ResearchOps Leadership Section — DS-conform
  */
 export default function ResearchOpsLeadershipSection() {
   const tiles = [
@@ -8074,10 +8054,8 @@ export default function ResearchOpsLeadershipSection() {
       id="reops-leadership"
       title="What's my job here?"
       spacing="lg"
-      fullWidth
       borderTop={false}
     >
-      {/* --- Intro Text --- */}
       <SectionIntro>
         Scaling research isn’t just about adding processes — it’s about{" "}
         <strong>creating clarity and connection between vision and execution.</strong> As a UX
@@ -8086,19 +8064,17 @@ export default function ResearchOpsLeadershipSection() {
         make better decisions with evidence.
       </SectionIntro>
 
-      {/* --- DS-Conform Tile Grid --- */}
       <div className={cn(layout.gridCols3, spacing.gap6, spacing.mt10, spacing.mb20)}>
         {tiles.map((item) => (
           <Tile key={item.title} variant="static" className={cn("h-full", spacing.p6)}>
-            <Subtitle className={cn("mb-3 text-foreground")}>{item.title}</Subtitle>
+            <Subtitle>{item.title}</Subtitle>
             <Body className="text-muted-foreground">{item.text}</Body>
           </Tile>
         ))}
       </div>
 
-      {/* --- Closing Statement --- */}
       <div className={cn("text-center", spacing.mt8)}>
-        <Body className={cn("text-lg leading-relaxed text-muted-foreground max-w-3xl mx-auto")}>
+        <Body className="text-muted-foreground max-w-3xl mx-auto">
           The result: a research organization that operates with purpose, earns leadership trust,
           and drives meaningful impact at every level of the business.
         </Body>
@@ -8118,20 +8094,16 @@ import ResearchOpsMaturityTimeline from "@/assets/visuals/researchops/ResearchOp
 /**
  * ResearchOps Maturity Section
  * ------------------------------------------------------------
- * ✅ Full-width layout, DS compliant
- * ✅ Removed closing body text (per request)
- * ✅ Consistent vertical rhythm between timeline & next section
+ * DS-compliant, consistent vertical rhythm between timeline & next section
  */
 export default function ResearchOpsMaturitySection() {
   return (
-    <Section id="reops-maturity" title="Maturity & Growth" spacing="lg" fullWidth>
-      {/* --- Intro text --- */}
+    <Section id="reops-maturity" title="Maturity & Growth" spacing="lg">
       <SectionIntro>
         ResearchOps maturity grows as organizations evolve from uncoordinated efforts
         to a well-orchestrated ecosystem where insights drive confident decisions.
       </SectionIntro>
 
-      {/* --- Full-width timeline visualization --- */}
       <div className={cn("w-full", spacing.mt12, spacing.mb20)}>
         <ResearchOpsMaturityTimeline />
       </div>
@@ -8141,7 +8113,6 @@ export default function ResearchOpsMaturitySection() {
 
 
 ==== \src\components\sections\expertise\researchops\ResearchOpsValueSection.tsx ====
-// src/components/sections/expertise/researchops/ResearchOpsValueSection.tsx
 import { Section } from "@/components/ui";
 import SectionIntro from "@/components/ui/SectionIntro";
 import { Tile } from "@/components/ui";
@@ -8170,23 +8141,16 @@ export default function ResearchOpsValueSection() {
   ];
 
   return (
-    <Section id="reops-value" title="The Value of ResearchOps" spacing="lg" fullWidth>
+    <Section id="reops-value" title="The Value of ResearchOps" spacing="lg">
       <SectionIntro>
         ResearchOps is not just about process — it’s about{" "}
         <strong>amplifying the value of research</strong>. Here’s what happens when it works:
       </SectionIntro>
 
-      {/* --- DS-conform Tile Grid --- */}
       <div className={cn(layout.gridCols3, spacing.gap6, spacing.mt12)}>
         {tiles.map((item) => (
-          <Tile
-            key={item.title}
-            variant="static"
-            className={cn("h-full", spacing.p6)}
-          >
-            <Subtitle className={cn("mb-3 text-foreground")}>
-              {item.title}
-            </Subtitle>
+          <Tile key={item.title} variant="static" className={cn("h-full", spacing.p6)}>
+            <Subtitle>{item.title}</Subtitle>
             <Body className="text-muted-foreground">{item.text}</Body>
           </Tile>
         ))}
@@ -8275,11 +8239,12 @@ export default function StrategicUXFrameworkSection() {
   const prev = () => setIndex((i) => (i > 0 ? i - 1 : story.length - 1));
 
   return (
-    <Section id="framework" title="My Research Planning Framework — Creating Clarity" spacing="lg" fullWidth>
+    <Section id="framework" title="My Research Planning Framework — Creating Clarity" spacing="lg">
       <SectionIntro>
-       Solid UX Research starts with the right questions.
-My research planning framework, inspired by Erika Hall, helps teams move from assumptions to focus — defining what decisions need evidence and how to generate it.
-This ensures every study directly contributes to strategic intent.
+        Solid UX Research starts with the right questions.
+        My research planning framework, inspired by Erika Hall, helps teams move from assumptions
+        to focus — defining what decisions need evidence and how to generate it. This ensures every
+        study directly contributes to strategic intent.
       </SectionIntro>
 
       <div className={cn("flex flex-col items-center w-full", spacing.mtLg)}>
@@ -8289,7 +8254,7 @@ This ensures every study directly contributes to strategic intent.
             layout.container,
             radii.xxl,
             shadows.lg,
-            "pb-12 md:pb-0" // mehr Platz unten auf Mobile
+            "pb-12 md:pb-0"
           )}
         >
           {/* IMAGE */}
@@ -8349,9 +8314,10 @@ This ensures every study directly contributes to strategic intent.
 
 
 ==== \src\components\sections\expertise\strategicuxresearch\StrategicUXIntroSection.tsx ====
+// src/components/sections/expertise/strategicux/StrategicUXIntroSection.tsx
 import { Section } from "@/components/ui";
 import { Body } from "@/components/ui/Tokens";
-import { colors, spacing, layout } from "@/lib/tokens";
+import { colors, spacing } from "@/lib/tokens";
 import { cn } from "@/lib/utils";
 
 export default function StrategicUXIntroSection() {
@@ -8361,7 +8327,7 @@ export default function StrategicUXIntroSection() {
       title="Strategic UX Research — How I Turn UX Strategy into Action"
       spacing="lg"
     >
-      <div className={cn(layout.container, "flex flex-col gap-6")}>
+      <div className={cn("flex flex-col gap-6")}>
         <Body className="text-foreground text-lg font-semibold">
           Turning UX Research from isolated insights into a system that drives clarity,
           alignment, and confident decisions.
@@ -8385,12 +8351,12 @@ import { Section } from "@/components/ui";
 import SectionIntro from "@/components/ui/SectionIntro";
 import Tile from "@/components/ui/Tile";
 import { Subtitle, Body } from "@/components/ui/Tokens";
-import { layout, spacing, colors } from "@/lib/tokens";
+import { layout, spacing } from "@/lib/tokens";
 import { cn } from "@/lib/utils";
 
 /**
  * Section: UX Research OKRs
- * DS-konform, statische Tiles, linksbündig
+ * 100% DS-konform, statische Tiles, einheitliche Typografie
  */
 export default function StrategicUXOKRSection() {
   const tiles = [
@@ -8420,56 +8386,47 @@ export default function StrategicUXOKRSection() {
       title="UX Research OKRs — Linking Research to Business Strategy"
       spacing="lg"
     >
-      {/* --- Intro --- */}
       <SectionIntro>
         Strategic UX Research doesn’t end with insight — it connects learning to direction.
-UX Research OKRs link research efforts directly to company strategy, ensuring that what teams discover also shapes what the organization pursues.
-
-Instead of existing as a side activity, research becomes part of how strategic priorities are defined, measured, and evolved.
-<div className="my-6"></div>
-By aligning learning goals with business objectives, I turn UX Research into a steering mechanism — one that helps organizations see user evidence not as validation, but as orientation.
-At this level, research informs not just how we build, but why.<div className="my-6"></div>
-One might ask — isn’t that too good to be true?<div className="my-6"></div>
-And yes, UX as a leading force within business strategy doesn’t happen overnight.
-It’s a gradual, sometimes rocky journey — one that’s best understood in levels:
+        UX Research OKRs link research efforts directly to company strategy, ensuring that
+        what teams discover also shapes what the organization pursues.
+        <div className="my-6"></div>
+        Instead of existing as a side activity, research becomes part of how strategic priorities
+        are defined, measured, and evolved.
+        <div className="my-6"></div>
+        By aligning learning goals with business objectives, I turn UX Research into a steering
+        mechanism — one that helps organizations see user evidence not as validation, but as
+        orientation. At this level, research informs not just how we build, but why.
+        <div className="my-6"></div>
+        One might ask — isn’t that too good to be true?
+        <div className="my-6"></div>
+        And yes, UX as a leading force within business strategy doesn’t happen overnight.
+        It’s a gradual, sometimes rocky journey — one that’s best understood in levels:
       </SectionIntro>
 
-      {/* --- Tile Grid --- */}
+      {/* === Tile Grid === */}
       <div className={cn(layout.gridCols3, spacing.gap6, spacing.mt12)}>
         {tiles.map((item) => (
-          <Tile
-            key={item.title}
-            variant="static"
-            className={cn(
-              "h-full flex flex-col justify-start items-start",
-              spacing.p6
-            )}
-          >
-            <div className="flex items-center gap-2 mb-3">
-              <span className="text-2xl">{item.icon}</span>
-              <Subtitle className="text-foreground">{item.level}</Subtitle>
+          <Tile key={item.title} variant="static" className="flex flex-col items-start">
+            <div className="flex items-center gap-2">
+              <span>{item.icon}</span>
+              <Subtitle>{item.level}</Subtitle>
             </div>
 
-            <Body className="font-semibold text-foreground mb-2">
-              {item.title}
-            </Body>
-            <Body className={cn(colors.muted.text, "leading-relaxed")}>
-              {item.text}
-            </Body>
+            <Subtitle>{item.title}</Subtitle>
+            <Body>{item.text}</Body>
           </Tile>
         ))}
       </div>
 
-      {/* --- Outro Text (jetzt bündig links) --- */}
+      {/* === Outro Text === */}
       <div className={cn(spacing.mt16)}>
-        <Subtitle className="text-foreground mb-4">
-          From Alignment to Leadership
-        </Subtitle>
-        <Body className={cn(colors.muted.text, "leading-relaxed")}>
-          Having UX Research OKRs is good — but even better is when UX Research itself
-          contributes directly to defining company OKRs. That’s when research moves beyond
-          validation to become a strategic driver — ensuring that what the organization
-          measures truly reflects what users value.
+        <Subtitle>From Alignment to Leadership</Subtitle>
+        <Body>
+          Having UX Research OKRs is good — but even better is when UX Research itself contributes
+          directly to defining company OKRs. That’s when research moves beyond validation to become
+          a strategic driver — ensuring that what the organization measures truly reflects what
+          users value.
         </Body>
       </div>
     </Section>
@@ -8482,13 +8439,13 @@ import { Section } from "@/components/ui";
 import SectionIntro from "@/components/ui/SectionIntro";
 import Tile from "@/components/ui/Tile";
 import { Subtitle, Body } from "@/components/ui/Tokens";
-import { layout, spacing, colors } from "@/lib/tokens";
+import { layout, spacing } from "@/lib/tokens";
 import { cn } from "@/lib/utils";
 import RITECycleChart from "@/assets/visuals/strategicuxresearch/RITECycleChart";
 
 /**
  * Section: Rapid Iterative Testing & Evaluation (RITE)
- * DS-conform — with animated RITE cycle
+ * 100% DS-konform — keine lokalen Margins oder Abstände
  */
 export default function StrategicUXRITESection() {
   const tiles = [
@@ -8520,46 +8477,42 @@ export default function StrategicUXRITESection() {
 
   return (
     <Section id="rite" title="Rapid Iterative Testing & Evaluation (RITE)" spacing="lg">
-      {/* --- Intro --- */}
       <SectionIntro>
-        <strong>RITE</strong> is a pragmatic approach to usability testing that blends speed with learning — making it particularly well-suited for Agile UX environments.
-Instead of waiting until a study ends, teams iterate as soon as issues appear — often after just a few participants.
-Each round feeds directly into the next, turning research into a fast cycle of discovery, design, and validation.
-<p>&nbsp;</p>
-In the context of Strategic UX Research, RITE operationalizes UX Strategy: it transforms research from isolated checkpoints into a living feedback loop.
-This approach brings the strategic principle of continuous learning to life — bridging the gap between discovery and delivery through shared understanding and real-time improvement.
+        <strong>RITE</strong> is a pragmatic approach to usability testing that blends speed with
+        learning — making it particularly well-suited for Agile UX environments.
+        Instead of waiting until a study ends, teams iterate as soon as issues appear — often after
+        just a few participants. Each round feeds directly into the next, turning research into a
+        fast cycle of discovery, design, and validation.
+        <div className={spacing.mt6}></div>
+        In the context of Strategic UX Research, RITE operationalizes UX Strategy: it transforms
+        research from isolated checkpoints into a living feedback loop. This approach brings the
+        strategic principle of continuous learning to life — bridging the gap between discovery and
+        delivery through shared understanding and real-time improvement.
       </SectionIntro>
 
       {/* --- Animated RITE Cycle --- */}
-      <div
-        className={cn(
-          "flex flex-col justify-center items-center mx-auto w-full",
-          spacing.mt16,
-          spacing.mb16
-        )}
-      >
+      <div className={cn("flex justify-center w-full", spacing.mt16, spacing.mb16)}>
         <div className="w-full max-w-4xl flex justify-center">
           <RITECycleChart />
         </div>
       </div>
 
       {/* --- Key Benefits --- */}
-      <Subtitle className="text-foreground mb-6">Key Benefits</Subtitle>
+      <Subtitle>Key Benefits</Subtitle>
 
-      {/* --- Tile Grid --- */}
       <div className={cn(layout.gridCols3, spacing.gap6, spacing.mt8)}>
         {tiles.map((item) => (
-          <Tile key={item.title} variant="static" className={cn("h-full", spacing.p6)}>
-            <Subtitle className={cn("mb-3 text-foreground")}>{item.title}</Subtitle>
-            <Body className={cn(colors.muted.text, "leading-relaxed")}>{item.text}</Body>
+          <Tile key={item.title} variant="static">
+            <Subtitle>{item.title}</Subtitle>
+            <Body>{item.text}</Body>
           </Tile>
         ))}
       </div>
 
       {/* --- Critical Reflection --- */}
       <div className={cn(spacing.mt16)}>
-        <Subtitle className="text-foreground mb-4">Critical Reflection</Subtitle>
-        <Body className={cn(colors.muted.text, "leading-relaxed")}>
+        <Subtitle>Critical Reflection</Subtitle>
+        <Body>
           RITE isn’t meant to deliver perfect data; it’s meant to drive progress. In areas like
           healthcare, safety-critical systems, or regulated industries, strict methodological
           control is essential — and RITE wouldn’t be the right choice. But in many organizations,
@@ -8868,9 +8821,113 @@ export default function SkillAssessmentSummarySection() {
 ==== \src\components\sections\expertise\TeamLeadership\index.ts ====
 export { default as TeamLeadershipPhilosophySection } from "./TeamLeadershipPhilosophySection";
 export { default as TeamLeadershipRolesSection } from "./TeamLeadershipRolesSection";
-export { default as TeamLeadershipRoleProfileSection } from "./TeamLeadershipRoleProfileSection"; // ✅ hinzugefügt
+export { default as TeamLeadershipRoleProfileSection } from "./TeamLeadershipRoleProfileSection";
 export { default as TeamLeadershipSkillsSection } from "./TeamLeadershipSkillsSection";
 export { default as TeamLeadershipImpactSection } from "./TeamLeadershipImpactSection";
+export { default as TeamLeadershipRolesExplorer } from "./TeamLeadershipRolesExplorer"; // ✅ NEU hinzugefügt
+
+
+==== \src\components\sections\expertise\TeamLeadership\RolesVersatilitySection.tsx ====
+import { useState } from "react";
+import { personas, PersonaLevel } from "@/data/personaData";
+import { motion, AnimatePresence } from "framer-motion";
+
+export default function RolesVersatilitySection() {
+  const [selected, setSelected] = useState<PersonaLevel | null>(null);
+
+  const colorMap = {
+    Research: "bg-blue-50 dark:bg-blue-900/30",
+    Design: "bg-purple-50 dark:bg-purple-900/30",
+    Management: "bg-green-50 dark:bg-green-900/30",
+  } as const;
+
+  return (
+    <section id="roles-versatility" className="py-16">
+      <div className="max-w-5xl mx-auto px-6">
+        <h2 className="text-3xl font-semibold mb-4 text-foreground">
+          Roles & Versatility
+        </h2>
+        <p className="text-muted-foreground mb-10">
+          I navigate multiple UX roles depending on maturity, scope, and
+          organizational context — from tactical research to strategic UX
+          leadership. The following overview illustrates how UX roles evolve and
+          interact across levels and domains.
+        </p>
+
+        {/* Role Matrix */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          {personas.map((persona) => (
+            <button
+              key={persona.name}
+              onClick={() => setSelected(persona)}
+              className={`text-left rounded-2xl p-4 transition-all border border-border hover:shadow-md ${colorMap[persona.category]} ${
+                selected?.name === persona.name ? "ring-2 ring-primary" : ""
+              }`}
+            >
+              <h3 className="font-semibold text-lg">{persona.name}</h3>
+              <p className="text-sm text-muted-foreground">{persona.level}</p>
+              <p className="mt-2 text-sm line-clamp-3">{persona.summary}</p>
+              <span className="inline-block mt-3 text-xs px-2 py-1 rounded-full bg-muted text-foreground">
+                {persona.category}
+              </span>
+            </button>
+          ))}
+        </div>
+
+        {/* Viewer */}
+        <AnimatePresence>
+          {selected && (
+            <motion.div
+              key={selected.name}
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 30 }}
+              transition={{ duration: 0.3 }}
+              className={`mt-10 p-8 rounded-2xl border border-border shadow-sm ${colorMap[selected.category]}`}
+            >
+              <div className="flex justify-between items-start mb-4">
+                <div>
+                  <h3 className="text-2xl font-semibold text-foreground">
+                    {selected.name}
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    {selected.level} · {selected.category}
+                  </p>
+                </div>
+                <button
+                  onClick={() => setSelected(null)}
+                  className="text-sm text-muted-foreground hover:text-foreground transition"
+                >
+                  ✕ Close
+                </button>
+              </div>
+
+              <p className="mb-4 text-foreground">{selected.summary}</p>
+
+              <h4 className="font-semibold mb-2">Key Skills</h4>
+              <ul className="list-disc list-inside mb-4 text-sm text-muted-foreground">
+                {selected.skills.map((s) => (
+                  <li key={s}>{s}</li>
+                ))}
+              </ul>
+
+              <h4 className="font-semibold mb-2">Challenges</h4>
+              <ul className="list-disc list-inside mb-4 text-sm text-muted-foreground">
+                {selected.challenges.map((c) => (
+                  <li key={c}>{c}</li>
+                ))}
+              </ul>
+
+              <blockquote className="border-l-4 border-primary pl-4 italic text-muted-foreground">
+                {selected.quote}
+              </blockquote>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </section>
+  );
+}
 
 
 ==== \src\components\sections\expertise\TeamLeadership\TeamLeadershipImpactSection.tsx ====
@@ -8911,7 +8968,7 @@ export default function TeamLeadershipImpactSection() {
             className={cn("flex flex-col justify-start text-left", spacing.p8)}
           >
             <Subtitle>{impact.title}</Subtitle>
-            <Body className={cn(colors.muted.text, spacing.mt2)}>{impact.text}</Body>
+            <Body className={colors.muted.text}>{impact.text}</Body>
           </Tile>
         ))}
       </div>
@@ -8949,20 +9006,20 @@ export default function TeamLeadershipPhilosophySection() {
   ];
 
   return (
-    <Section id="leadership-philosophy" title="My Leadership Philosophy" spacing="xl">
+    <Section id="leadership-philosophy" title="My Leadership Philosophy" spacing="lg">
       <SectionIntro>
         For me, leadership is not control — it’s enablement. It’s about building
         environments where others can bring their best work, take ownership, and
         grow beyond what they thought possible.
       </SectionIntro>
 
-      <div className={cn(layout.gridCols3, spacing.gap8, spacing.mt16)}>
+      <div className={cn(layout.gridCols3, spacing.gap8)}>
         {pillars.map((p) => (
           <Tile key={p.title} variant="static" className="text-center">
             <div className="flex flex-col items-center">
               {p.icon}
-              <Subtitle className={spacing.mt4}>{p.title}</Subtitle>
-              <Body className={cn(colors.muted.text, spacing.mt2, "max-w-md mx-auto")}>
+              <Subtitle>{p.title}</Subtitle>
+              <Body className={cn(colors.muted.text, "max-w-md mx-auto")}>
                 {p.text}
               </Body>
             </div>
@@ -8975,6 +9032,7 @@ export default function TeamLeadershipPhilosophySection() {
 
 
 ==== \src\components\sections\expertise\TeamLeadership\TeamLeadershipRoleProfileSection.tsx ====
+// src/components/sections/expertise/teamleadership/TeamLeadershipRoleProfileSection.tsx
 import { Section } from "@/components/ui";
 import SectionIntro from "@/components/ui/SectionIntro";
 import { layout, spacing } from "@/lib/tokens";
@@ -8986,15 +9044,14 @@ export default function TeamLeadershipRoleProfileSection() {
     <Section
       id="leadership-role-profile"
       title="My Role Profile"
-      spacing="xl"       // Einheitlich mit RolesSection
+      spacing="xl" // Einheitlich mit RolesSection
       borderTop
-      fullWidth
     >
       {/* Intro */}
       <SectionIntro>
         As a UX generalist, I combine a broad spectrum of experience across
         research, design, and strategy. While I’m not the deepest expert in
-        every single domain, I understand each role’s language and challenges — 
+        every single domain, I understand each role’s language and challenges —
         enabling me to coach, connect, and empower specialists to perform at
         their best.
       </SectionIntro>
@@ -9017,148 +9074,125 @@ export default function TeamLeadershipRoleProfileSection() {
 }
 
 
+==== \src\components\sections\expertise\TeamLeadership\TeamLeadershipRolesExplorer.tsx ====
+// src/components/sections/expertise/TeamLeadership/TeamLeadershipRolesExplorer.tsx
+import React from "react";
+import Section from "@/components/ui/Section";
+import PersonaCard from "@/assets/visuals/teamleadership/PersonaCard";
+import avatarHannah from "@/assets/images/expertise/teamleadership/persona/Hannah.png"; // ✅ Neuer Pfad
+import UXRolesExplorer from "@/components/sections/expertise/TeamLeadership/UXRolesExplorer";
+
+
+export default function TeamLeadershipRolesExplorer() {
+  return (
+    <Section id="roles" title="Roles & Versatility" spacing="lg">
+      <div className="flex flex-col gap-8">
+        {/* Bestehende Beispiel-Persona */}
+        <PersonaCard
+          name="Hannah Müller"
+          role="UX Researcher"
+          level="Junior"
+          imgSrc={avatarHannah}
+          quote="I’m eager to turn user insights into design impact — and still learning how to ask the right questions."
+          description="A psychology graduate who loves exploring how people interact with products. Passionate about combining empathy and data to guide design decisions."
+          skills={[
+            "Usability Testing",
+            "Interview Moderation",
+            "Survey Design",
+            "Affinity Mapping",
+          ]}
+          responsibilities={[
+            "Support senior researchers in study setup and data collection",
+            "Document findings and tag insights in repository",
+            "Assist in participant recruiting and test coordination",
+          ]}
+          needs="Structured guidance for planning studies and presenting results clearly. Mentorship to grow confidence and build stronger impact."
+          painPoints="Struggles with tight timelines and unclear expectations. Sometimes unsure how to link findings to product priorities."
+          challenges="Learning to focus research on what truly drives business and user value while balancing speed and rigor."
+        />
+
+        {/* Neue interaktive UX-Rollenansicht */}
+        <UXRolesExplorer />
+      </div>
+    </Section>
+  );
+}
+
+
 ==== \src\components\sections\expertise\TeamLeadership\TeamLeadershipRolesSection.tsx ====
-import { Section } from "@/components/ui";
-import SectionIntro from "@/components/ui/SectionIntro";
-import { Body, Subtitle } from "@/components/ui/Tokens";
-import { colors, spacing, layout, typography } from "@/lib/tokens"; // ← ✅ typography hinzugefügt
+// src/components/sections/expertise/TeamLeadership/TeamLeadershipRolesSection.tsx
+import Section from "@/components/ui/Section";
 import { cn } from "@/lib/utils";
+import { spacing } from "@/lib/tokens";
+import TeamLeadershipRolesExplorer from "./TeamLeadershipRolesExplorer";
 
-// 🎨 Lokale Gruppenfarben (bewusst außerhalb des DS)
-const groupColors = {
-  Research: "text-blue-600",
-  Design: "text-emerald-600",
-  "Strategy & Management": "text-amber-600",
-  Specialized: "text-purple-600",
-};
-
-// 📄 Gruppenbeschreibungen
-const groupDescriptions = {
-  Research:
-    "Understanding users and contexts: discovering needs, validating hypotheses, and translating findings into evidence-based insights.",
-  Design:
-    "Designing and improving services, interfaces, and interactions that are consistent, usable, and human-centered.",
-  "Strategy & Management":
-    "Building structures, aligning UX with business goals, and scaling design maturity through leadership and clarity.",
-  Specialized:
-    "Specific expertise applied contextually — accessibility, content strategy, and technical implementation as key complements.",
-};
-
-// 🧱 Rollen-Daten
-const roles = {
-  Research: [
-    {
-      title: "UX Researcher",
-      text: "Explores user needs, tests prototypes, and translates data into actionable insights for evidence-based product decisions.",
-    },
-    {
-      title: "CX Analyst",
-      text: "Measures and analyzes customer experience across touchpoints and drives improvements based on data.",
-    },
-  ],
-  Design: [
-    {
-      title: "Service Designer",
-      text: "Creates and refines services, builds service blueprints and journeys, and tests concepts with users.",
-    },
-    {
-      title: "Interaction Designer",
-      text: "Designs interactions between people and systems — defining flows, animations, and interface logic.",
-    },
-    {
-      title: "UI / Visual Designer",
-      text: "Responsible for visual design, layout, iconography, and brand consistency across digital products.",
-    },
-  ],
-  "Strategy & Management": [
-    {
-      title: "UX Manager",
-      text: "Organizes UX processes, manages teams, anchors UX strategies, and measures business impact.",
-    },
-    {
-      title: "UX Strategist",
-      text: "Connects business goals with UX, develops strategies and roadmaps, and advises stakeholders on management level.",
-    },
-    {
-      title: "Journey Manager",
-      text: "Makes user journeys transparent, identifies pain points, and connects teams to ensure seamless experiences.",
-    },
-    {
-      title: "UX Architect",
-      text: "Shapes the overall experience, establishes human-centered design processes, and mentors teams methodically.",
-    },
-    {
-      title: "Requirements Engineer",
-      text: "Collects and translates user needs into actionable backlog items and verifies delivery quality.",
-    },
-  ],
-  Specialized: [
-    {
-      title: "Accessibility Specialist",
-      text: "Makes products inclusive, tests accessibility, and supports teams in implementing accessible solutions.",
-    },
-    {
-      title: "UX Writer",
-      text: "Writes clear, human-centered content and develops content strategies across the user journey.",
-    },
-    {
-      title: "UI Developer",
-      text: "Implements interfaces technically, ensures responsiveness, accessibility, and front-end quality.",
-    },
-  ],
-};
+/**
+ * TeamLeadershipRolesSection
+ * Provides overview of UX roles and connects to interactive Role-Level explorer.
+ */
 
 export default function TeamLeadershipRolesSection() {
   return (
-    <Section id="leadership-roles" title="Roles & Versatility" spacing="xl">
-      {/* Intro */}
-      <SectionIntro>
-        UX roles can often appear fuzzy — a “strategist” in one company may be
-        a “research lead” in another. My leadership approach brings clarity by
-        defining responsibilities, competencies, and collaboration patterns.
-      </SectionIntro>
+    <Section id="teamleadership-roles" title="Roles & Versatility" spacing="lg">
+      <p className="text-base text-muted-foreground max-w-3xl mb-8">
+        In UX teams, roles define <strong>responsibilities</strong>, not rigid
+        boundaries. They evolve with company maturity, size, and focus. This
+        section illustrates how core UX disciplines—Research, Design, Writing,
+        Service Design, and Management—grow across levels. Explore below how
+        each role transforms from <strong>Junior → Lead</strong>.
+      </p>
 
-      {/* Grouped Role Cards */}
-      <div className={cn(spacing.mt20, "space-y-20")}>
-        {Object.entries(roles).map(([group, items]) => (
-          <div key={group}>
-            <h3
-              className={cn(
-                typography.subtitle.font,
-                typography.subtitle.size,
-                typography.subtitle.weight,
-                typography.subtitle.leading,
-                groupColors[group as keyof typeof groupColors],
-                spacing.mb4
-              )}
-            >
-              {group}
-            </h3>
+      {/* Short role context cards */}
+      <div
+        className={cn(
+          "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6",
+          spacing.mt6
+        )}
+      >
+        <div className="border border-border rounded-xl p-5 bg-card shadow-sm">
+          <h3 className="text-base font-semibold">UX Researcher</h3>
+          <p className="text-sm text-muted-foreground mt-2">
+            Understands user needs and translates them into insights that guide
+            product and business decisions.
+          </p>
+        </div>
 
-            <Body className={cn(colors.muted.text, "max-w-5xl", spacing.mb8)}>
-              {groupDescriptions[group as keyof typeof groupDescriptions]}
-            </Body>
+        <div className="border border-border rounded-xl p-5 bg-card shadow-sm">
+          <h3 className="text-base font-semibold">UX Designer</h3>
+          <p className="text-sm text-muted-foreground mt-2">
+            Designs user flows, interactions, and systems to ensure cohesive and
+            accessible product experiences.
+          </p>
+        </div>
 
-            <div className={cn(layout.gridCols2, spacing.gap8)}>
-              {items.map((r) => (
-                <div
-                  key={r.title}
-                  className={cn(
-                    colors.tile.bg,
-                    colors.tile.text,
-                    spacing.p8,
-                    "rounded-2xl flex flex-col justify-start h-full"
-                  )}
-                >
-                  <Subtitle>{r.title}</Subtitle>
-                  <Body className={cn(colors.muted.text, spacing.mt2)}>
-                    {r.text}
-                  </Body>
-                </div>
-              ))}
-            </div>
-          </div>
-        ))}
+        <div className="border border-border rounded-xl p-5 bg-card shadow-sm">
+          <h3 className="text-base font-semibold">UX Writer</h3>
+          <p className="text-sm text-muted-foreground mt-2">
+            Crafts clear, inclusive language that helps users understand,
+            navigate, and succeed within digital products.
+          </p>
+        </div>
+
+        <div className="border border-border rounded-xl p-5 bg-card shadow-sm">
+          <h3 className="text-base font-semibold">Service Designer</h3>
+          <p className="text-sm text-muted-foreground mt-2">
+            Connects frontstage and backstage systems, ensuring end-to-end
+            coherence across channels and processes.
+          </p>
+        </div>
+
+        <div className="border border-border rounded-xl p-5 bg-card shadow-sm">
+          <h3 className="text-base font-semibold">UX Manager</h3>
+          <p className="text-sm text-muted-foreground mt-2">
+            Builds structures, teams, and processes that foster user-centered
+            thinking and long-term impact.
+          </p>
+        </div>
+      </div>
+
+      {/* Interactive Role → Level → Persona explorer */}
+      <div className={cn(spacing.mt8)}>
+        <TeamLeadershipRolesExplorer />
       </div>
     </Section>
   );
@@ -9196,7 +9230,7 @@ export default function TeamLeadershipSkillsSection() {
             variant="static"
             className={cn("flex flex-col justify-start h-full", spacing.p8)}
           >
-            <Subtitle className={spacing.mb3}>{item.title}</Subtitle>
+            <Subtitle>{item.title}</Subtitle>
             <Body className={colors.muted.text}>{item.text}</Body>
           </Tile>
         ))}
@@ -9217,66 +9251,237 @@ export default function TeamLeadershipSkillsSection() {
 }
 
 
+==== \src\components\sections\expertise\TeamLeadership\UXRolesExplorer.tsx ====
+// src/components/sections/expertise/TeamLeadership/UXRolesExplorer.tsx
+import React, { useState } from "react";
+import Section from "@/components/ui/Section";
+import PersonaCard from "@/assets/visuals/teamleadership/PersonaCard";
+import avatarResearcher from "@/assets/images/expertise/teamleadership/persona/Hannah.png";
+import avatarDesigner from "@/assets/images/expertise/teamleadership/persona/Designer.png";
+import avatarWriter from "@/assets/images/expertise/teamleadership/persona/Writer.png";
+import avatarStrategist from "@/assets/images/expertise/teamleadership/persona/Strategist.png";
+import avatarOps from "@/assets/images/expertise/teamleadership/persona/Ops.png";
+
+export default function UXRolesExplorer() {
+  const [selectedRole, setSelectedRole] = useState("Researcher");
+
+  const personas = {
+    Researcher: {
+      name: "Hannah Müller",
+      role: "UX Researcher",
+      imgSrc: avatarResearcher,
+      quote:
+        "I turn user behavior into clarity — transforming questions into confident product decisions.",
+      description:
+        "A curious mind who thrives on uncovering the ‘why’ behind user actions. Connects qualitative depth with quantitative validation to guide product direction.",
+      skills: [
+        "Usability Testing",
+        "Interview Moderation",
+        "Survey Design",
+        "Data Triangulation",
+      ],
+      responsibilities: [
+        "Plan and execute studies that reveal actionable insights",
+        "Turn findings into clear product recommendations",
+        "Collaborate closely with designers, PMs, and devs",
+      ],
+      needs:
+        "Stakeholder alignment early in the process and transparency about decision impact.",
+      painPoints:
+        "Late involvement in the design process or lack of time for iteration.",
+      challenges:
+        "Maintaining depth and rigor while adapting to agile product cycles.",
+    },
+    Designer: {
+      name: "Lina Novak",
+      role: "UX Designer",
+      imgSrc: avatarDesigner,
+      quote:
+        "Design isn’t decoration — it’s how ideas become usable realities.",
+      description:
+        "Combines creativity and logic to translate research insights into clear, engaging interfaces. Values simplicity, consistency, and accessibility.",
+      skills: [
+        "Information Architecture",
+        "Interaction Design",
+        "Wireframing & Prototyping",
+        "Accessibility",
+      ],
+      responsibilities: [
+        "Turn user needs into structured design concepts",
+        "Collaborate with researchers and devs on feasibility",
+        "Ensure usability across platforms and devices",
+      ],
+      needs:
+        "Early input from research and time for testing iterations.",
+      painPoints:
+        "Ambiguous requirements and sudden design scope changes.",
+      challenges:
+        "Balancing innovation with consistency in design systems.",
+    },
+    Writer: {
+      name: "Samira Chen",
+      role: "UX Writer",
+      imgSrc: avatarWriter,
+      quote:
+        "Words are design elements — every sentence shapes the user’s experience.",
+      description:
+        "Crafts clear, human language that guides users effortlessly. Believes that tone, clarity, and inclusivity are key parts of usability.",
+      skills: [
+        "Microcopy & UX Writing",
+        "Voice & Tone",
+        "Content Strategy",
+        "Localization",
+      ],
+      responsibilities: [
+        "Write consistent copy that supports design intent",
+        "Collaborate with designers and PMs on product language",
+        "Maintain a unified tone across the product ecosystem",
+      ],
+      needs:
+        "A strong design-content feedback loop and shared language guidelines.",
+      painPoints:
+        "Being involved too late or treated as ‘just copy editing’.",
+      challenges:
+        "Advocating for the role of content in UX decisions.",
+    },
+    Strategist: {
+      name: "Alex Becker",
+      role: "UX Strategist",
+      imgSrc: avatarStrategist,
+      quote:
+        "Good design starts with good decisions — I connect user value and business impact.",
+      description:
+        "Focuses on aligning UX initiatives with business goals. Defines success metrics, connects research insights with roadmap priorities, and drives design vision.",
+      skills: [
+        "UX Strategy & Roadmapping",
+        "Workshop Facilitation",
+        "KPI Definition",
+        "Stakeholder Management",
+      ],
+      responsibilities: [
+        "Translate insights into strategic opportunities",
+        "Facilitate vision and prioritization workshops",
+        "Measure UX impact via KPIs and ROI models",
+      ],
+      needs:
+        "Access to reliable research data and buy-in from leadership.",
+      painPoints:
+        "Difficulty proving ROI of UX in data-driven organizations.",
+      challenges:
+        "Balancing vision and execution in fast-paced environments.",
+    },
+    Ops: {
+      name: "Chris Wagner",
+      role: "UX Operations",
+      imgSrc: avatarOps,
+      quote:
+        "I scale impact — building the systems that let UX teams focus on users, not logistics.",
+      description:
+        "Specializes in processes, tooling, and governance. Builds frameworks that standardize research, design, and insight activation across teams.",
+      skills: [
+        "ResearchOps & DesignOps",
+        "Governance",
+        "Tooling & Automation",
+        "Knowledge Management",
+      ],
+      responsibilities: [
+        "Establish and optimize UX processes and repositories",
+        "Enable self-service and methodological consistency",
+        "Bridge cross-team collaboration and operational alignment",
+      ],
+      needs:
+        "Cross-departmental visibility and strategic support for Ops initiatives.",
+      painPoints:
+        "Low awareness of the value of Ops and limited resourcing.",
+      challenges:
+        "Scaling UX efficiently without losing adaptability.",
+    },
+  };
+
+  const persona = personas[selectedRole];
+
+  return (
+    <Section id="ux-roles" title="UX Roles Explorer" spacing="lg">
+      <div className="flex justify-center flex-wrap gap-4 mb-8">
+        {Object.keys(personas).map((role) => (
+          <button
+            key={role}
+            onClick={() => setSelectedRole(role)}
+            className={`px-5 py-2 rounded-2xl border transition ${
+              selectedRole === role
+                ? "bg-foreground text-background"
+                : "border-border text-foreground hover:bg-muted"
+            }`}
+          >
+            {role}
+          </button>
+        ))}
+      </div>
+
+      <div className="flex justify-center">
+        <PersonaCard {...persona} />
+      </div>
+    </Section>
+  );
+}
+
+
 ==== \src\components\sections\expertise\uxstrategy\DiscoveryDelivery.tsx ====
-// src/components/sections/expertise/uxstrategy/DiscoveryDelivery.tsx
 import { Section } from "@/components/ui";
 import SectionIntro from "@/components/ui/SectionIntro";
 import { Tile } from "@/components/ui";
 import { Subtitle, Body } from "@/components/ui/Tokens";
-import { layout, spacing, colors } from "@/lib/tokens";
+import { layout, spacing } from "@/lib/tokens";
 import { cn } from "@/lib/utils";
 import ResearchInPD from "@/assets/visuals/uxstrategy/ResearchinPD";
 
 /**
  * Section: From Discovery to Delivery
- * Demonstrates how UX Research is embedded across the product development cycle.
+ * DS-konform — einheitliche Typografie, spacing und tile padding
  */
-
 export default function DiscoveryDelivery() {
   return (
-    <Section id="discovery-delivery" title="2. From Discovery to Delivery — Making Research Continuous" spacing="lg">
+    <Section
+      id="discovery-delivery"
+      title="2. From Discovery to Delivery — Making Research Continuous"
+      spacing="lg"
+    >
       <SectionIntro>
         UX is not static — it’s a continuous learning process.
-I design research systems that connect discovery, prototyping, and optimization.
-Whether exploring unmet needs, testing prototypes, or measuring live experiences, I ensure that every phase of the product lifecycle builds on evidence, not assumption.
+        I design research systems that connect discovery, prototyping, and optimization.
+        Whether exploring unmet needs, testing prototypes, or measuring live experiences,
+        I ensure that every phase of the product lifecycle builds on evidence, not assumption.
       </SectionIntro>
 
-      {/* === 3-column Tile Grid === */}
       <div className={cn(layout.gridCols3, spacing.gap6, spacing.mt8)}>
-        <Tile variant="static" className={cn(spacing.p6, "h-full text-left")}>
+        <Tile variant="static">
           <Subtitle>Discovery</Subtitle>
-          <Body className={colors.muted.text}>
-            Exploring user needs, motivations, and market opportunities through
-            contextual inquiry and generative research. Insights inform early strategy
-            and opportunity framing.
+          <Body>
+            Exploring user needs, motivations, and market opportunities through contextual
+            inquiry and generative research. Insights inform early strategy and opportunity
+            framing.
           </Body>
         </Tile>
 
-        <Tile variant="static" className={cn(spacing.p6, "h-full text-left")}>
+        <Tile variant="static">
           <Subtitle>Prototyping</Subtitle>
-          <Body className={colors.muted.text}>
+          <Body>
             Translating findings into testable concepts. I enable teams to validate
             assumptions quickly and iterate towards solutions that balance impact,
             feasibility, and usability.
           </Body>
         </Tile>
 
-        <Tile variant="static" className={cn(spacing.p6, "h-full text-left")}>
+        <Tile variant="static">
           <Subtitle>Optimize</Subtitle>
-          <Body className={colors.muted.text}>
+          <Body>
             Embedding measurement and continuous evaluation into the product loop.
             Research evolves from validation to a self-sustaining learning system.
           </Body>
         </Tile>
       </div>
 
-      {/* === Full-width Diagram === */}
-      <div
-        className={cn(
-          "w-full flex justify-center mt-24", // Abstand nach dem Grid
-          "px-4 sm:px-6"                     // Responsive Padding
-        )}
-      >
+      <div className={cn("w-full flex justify-center", spacing.mt20)}>
         <div className="w-full max-w-6xl">
           <ResearchInPD />
         </div>
@@ -9354,7 +9559,7 @@ import { cn } from "@/lib/utils";
  */
 export default function ValueOfUXStrategy() {
   return (
-    <Section id="value" title="The Value of UX Strategy" spacing="lg" fullWidth>
+    <Section id="value" title="The Value of UX Strategy" spacing="lg">
       {/* --- Storytelling Intro --- */}
       <SectionIntro>
         In today’s product culture, speed often replaces clarity.
@@ -9390,7 +9595,6 @@ export default function ValueOfUXStrategy() {
               "flex flex-col justify-start text-left rounded-2xl shadow-sm"
             )}
           >
-            {/* Subtitles und Body greifen automatisch auf Tokens zu */}
             <Subtitle className={spacing.mb2}>{item.title}</Subtitle>
             <Body className="leading-relaxed">{item.text}</Body>
           </Tile>
@@ -10274,24 +10478,138 @@ export default function InfoTile({
 }
 
 
-==== \src\components\ui\ResearchGridBackground.tsx ====
-// src/components/ui/ResearchGridBackground.tsx
-import { cn } from "@/lib/utils";
+==== \src\components\ui\PersonaCard.tsx ====
+// src/components/ui/PersonaCard.tsx
+import React from "react";
+import Tile from "@/components/ui/Tile";
+import Tag from "@/components/ui/Tag";
+import { Body, Small, Subtitle, Quote } from "@/components/ui/Tokens";
 import { colors } from "@/lib/tokens";
 
-interface ResearchGridBackgroundProps {
-  className?: string;
+interface PersonaCardProps {
+  name: string;
+  role?: string;
+  level?: string;
+  quote?: string;
+  imgSrc?: string;
+  description?: string;
+  skills?: string[];
+  needs?: string;
+  painPoints?: string;
+  challenges?: string;
+  responsibilities?: string[];
 }
 
-export default function ResearchGridBackground({ className }: ResearchGridBackgroundProps) {
+export default function PersonaCard({
+  name,
+  role,
+  level,
+  quote,
+  imgSrc,
+  description,
+  skills = [],
+  needs,
+  painPoints,
+  challenges,
+  responsibilities = [],
+}: PersonaCardProps) {
   return (
-    <div
-      className={cn(
-        "absolute inset-0 -z-10",
-        colors.tile.bg,   // ✅ nutzt jetzt das einheitliche Tile-Background
-        className
-      )}
-    />
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
+      {/* LEFT COLUMN – Profile (Bild + Name + Quote) */}
+      <div className="flex flex-col">
+        <Tile
+          variant="static"
+          className="flex flex-col items-center md:items-start p-8 gap-8"
+        >
+          {/* Profilbild */}
+          <div className="w-60 h-60 rounded-full overflow-hidden border border-border bg-muted flex-shrink-0 shadow-md mb-12">
+            {imgSrc ? (
+              <img
+                src={imgSrc}
+                alt={name}
+                className="w-full h-full object-cover rounded-full"
+              />
+            ) : (
+              <div className="flex items-center justify-center h-full text-3xl font-semibold text-muted-foreground">
+                {name.charAt(0)}
+              </div>
+            )}
+          </div>
+
+          {/* Name + Rolle */}
+          <div className="text-center md:text-left space-y-2">
+            <Subtitle>{name}</Subtitle>
+            <Small className={colors.muted.text}>
+              {role} {level ? `· ${level}` : ""}
+            </Small>
+          </div>
+
+          {/* Quote */}
+          {quote && <Quote className="mt-8">“{quote}”</Quote>}
+        </Tile>
+      </div>
+
+      {/* MIDDLE COLUMN – Overview, Skills, Responsibilities */}
+      <div className="flex flex-col gap-6">
+        {description && (
+          <Tile variant="static">
+            <Subtitle className="mb-2">Role Overview</Subtitle>
+            <Body className={colors.muted.text}>{description}</Body>
+          </Tile>
+        )}
+
+        {skills.length > 0 && (
+          <Tile variant="static">
+            <Subtitle className="mb-2">Key Skills</Subtitle>
+            <div className="flex flex-wrap gap-2 mt-1">
+              {skills.map((skill, i) => (
+                <Tag key={i} color="gray">
+                  {skill}
+                </Tag>
+              ))}
+            </div>
+          </Tile>
+        )}
+
+        {responsibilities.length > 0 && (
+         <Tile variant="static">
+  <Subtitle className="mb-2">Responsibilities</Subtitle>
+  <Body className={colors.muted.text}>
+    <ul className="list-disc pl-5 space-y-1">
+      {responsibilities.map((r, i) => (
+        <li key={i}>{r}</li>
+      ))}
+    </ul>
+  </Body>
+</Tile>
+
+        )}
+      </div>
+
+      {/* RIGHT COLUMN – Needs, Pain Points, Challenges */}
+      <div className="flex flex-col gap-6">
+        {needs && (
+          <Tile variant="static">
+            <Subtitle className="mb-2">Needs</Subtitle>
+            <Body className={colors.muted.text}>{needs}</Body>
+          </Tile>
+        )}
+
+        {painPoints && (
+          <Tile variant="static">
+            <Subtitle className="mb-2">Pain Points</Subtitle>
+            <Body className={colors.muted.text}>{painPoints}</Body>
+          </Tile>
+        )}
+
+        {challenges && (
+          <Tile variant="static">
+            <Subtitle className="mb-2">Challenges</Subtitle>
+            <Body className={colors.muted.text}>{challenges}</Body>
+          </Tile>
+        )}
+      </div>
+    </div>
   );
 }
 
@@ -10346,7 +10664,7 @@ export default function Section({
   // ✅ Dynamische Container-Breite, identisch zu Navbar/Footer
   const containerClass = fullWidth
     ? "w-full"
-    : "mx-auto w-full max-w-[1900px] px-[3vw]";
+    : "mx-auto w-full max-w-[1400px] px-[3vw]";
 
   return (
     <section
@@ -10583,6 +10901,7 @@ export default function TextReveal({
 
 
 ==== \src\components\ui\Tile.tsx ====
+// src/components/ui/Tile.tsx
 import { cn } from "@/lib/utils";
 import { colors, radii, transitions, spacing, hoverEffects } from "@/lib/tokens";
 import { ArrowRight } from "lucide-react";
@@ -10597,7 +10916,7 @@ export default function Tile({
   children,
   ...props
 }: TileProps) {
-  // Basisstile – kein text-left hier!
+  // 🧱 Basisstil für alle Tiles
   const baseStyles = cn(
     radii.lg,
     spacing.p6,
@@ -10606,18 +10925,36 @@ export default function Tile({
     className
   );
 
-  // Variantenlogik
+  // 🎨 Varianten – komplett ohne Border & Shadow
   const variantStyles =
     variant === "interactive"
-      ? cn(colors.tile.bg, colors.tile.text, "will-change-transform cursor-pointer group", hoverEffects.smoothLift, "text-left")
+      ? cn(
+          colors.tile.bg,
+          colors.tile.text,
+          "will-change-transform cursor-pointer group",
+          hoverEffects.smoothLift,
+          "text-left"
+        )
       : variant === "interactiveArrow"
-      ? cn(colors.tile.bg, colors.tile.text, "will-change-transform cursor-pointer group", hoverEffects.smoothLift, "text-left")
+      ? cn(
+          colors.tile.bg,
+          colors.tile.text,
+          "will-change-transform cursor-pointer group",
+          hoverEffects.smoothLift,
+          "text-left"
+        )
       : variant === "transparent"
       ? cn(
-          "bg-transparent shadow-none border-none cursor-default transition-none transform-none",
-          "text-center items-center space-y-3" // ✅ zentriert horizontal
+          "bg-[#F3F4F6]/80 dark:bg-[#1C1C1C]/80 text-foreground/90",
+          "cursor-default transform-none transition-none",
+          "text-center items-center space-y-3"
         )
-      : cn(colors.tile.bg, colors.tile.text, "cursor-default transition-none transform-none text-left");
+      : variant === "static"
+      ? cn(
+          "bg-[#F3F4F6] dark:bg-[#1C1C1C] text-foreground/90",
+          "cursor-default transition-none transform-none text-left"
+        )
+      : "";
 
   return (
     <div className={cn(baseStyles, variantStyles)} {...props}>
@@ -10851,7 +11188,7 @@ export function H2({ children, className = "" }: { children: ReactNode; classNam
   );
 }
 
-// ✅ H3 jetzt automatisch mit subtitle.color (muted)
+// ✅ H3 nutzt subtitle-Typografie (muted)
 export function H3({ children, className = "" }: { children: ReactNode; className?: string }) {
   return (
     <h3
@@ -10919,6 +11256,24 @@ export function Subtitle({ children, className = "" }: { children: ReactNode; cl
   );
 }
 
+// 🆕 Quote-Komponente – DS-konform, ohne Balken
+export function Quote({ children, className = "" }: { children: ReactNode; className?: string }) {
+  return (
+    <blockquote
+      className={cn(
+        typography.quote.font,
+        typography.quote.size,
+        typography.quote.weight,
+        typography.quote.leading,
+        "italic text-foreground/90",
+        className
+      )}
+    >
+      {children}
+    </blockquote>
+  );
+}
+
 /**
  * INTRO TEXT
  */
@@ -10965,7 +11320,7 @@ export function BgAccent({ children, className = "" }: { children: ReactNode; cl
 }
 
 /**
- * ✅ MutedText jetzt mit title-Prop (Fix für SkillmapForm)
+ * ✅ MutedText (Fix für SkillmapForm)
  */
 export function MutedText({
   children,
@@ -11024,6 +11379,137 @@ export function ButtonGhost({ children, className = "" }: { children: ReactNode;
 export function Card({ children, className = "" }: { children: ReactNode; className?: string }) {
   return <div className={cn(radii.lg, className)}>{children}</div>;
 }
+
+
+==== \src\data\personaData.ts ====
+export interface PersonaLevel {
+  level: string;
+  name: string;
+  summary: string;
+  skills: string[];
+  challenges: string[];
+  quote: string;
+  category: "Research" | "Design" | "Management";
+}
+
+export const personas: PersonaLevel[] = [
+  {
+    level: "Principal",
+    name: "Dr. Olivia Weaver",
+    summary:
+      "A strategic Principal UX Researcher with over a decade of experience. Olivia transforms challenges into opportunities and drives organization-wide UX maturity.",
+    skills: [
+      "Mastery of the full research process",
+      "Advanced interview and facilitation techniques",
+      "Cross-functional leadership",
+      "ResearchOps & process design",
+      "Strategic influence on product direction",
+    ],
+    challenges: [
+      "Balancing innovation and feasibility",
+      "Managing strategic alignment across teams",
+      "Maintaining focus under complex stakeholder demands",
+    ],
+    quote:
+      "“Transforming challenges into opportunities, shaping the future of UX research with expertise and empathy.”",
+    category: "Research",
+  },
+  {
+    level: "Senior",
+    name: "Anna Fischer",
+    summary:
+      "A Senior UX Researcher skilled in roadmap development and strategic alignment. Anna bridges research and strategy with measurable business impact.",
+    skills: [
+      "Strategic research planning",
+      "Evangelizing research impact",
+      "Advanced qualitative & quantitative methods",
+      "Stakeholder facilitation",
+      "Mentorship & knowledge sharing",
+    ],
+    challenges: [
+      "Scaling research visibility",
+      "Balancing operational and strategic tasks",
+      "Maintaining clarity in communication",
+    ],
+    quote: "“I master the art of roadmap development to drive meaningful change.”",
+    category: "Research",
+  },
+  {
+    level: "Mid-Level",
+    name: "Mia Keller",
+    summary:
+      "A mid-level UX Researcher skilled in data synthesis and collaborative teamwork. Mia excels in turning insights into actionable design improvements.",
+    skills: [
+      "Usability testing",
+      "Data analysis and storytelling",
+      "Stakeholder engagement",
+      "Mixed-method approaches",
+    ],
+    challenges: [
+      "Balancing workload across projects",
+      "Refining synthesis and communication",
+      "Expanding method depth",
+    ],
+    quote: "“I turn insights into stories that guide better design decisions.”",
+    category: "Research",
+  },
+  {
+    level: "Junior",
+    name: "Liam Bauer",
+    summary:
+      "An emerging UX Researcher developing core skills in testing and interviewing. Liam is eager to learn and contribute to meaningful user experiences.",
+    skills: [
+      "Basic usability testing",
+      "Data collection and documentation",
+      "Collaboration with product teams",
+    ],
+    challenges: [
+      "Gaining confidence in facilitation",
+      "Developing stronger analytical skills",
+      "Balancing learning with project delivery",
+    ],
+    quote: "“Every interview is a chance to understand people better.”",
+    category: "Research",
+  },
+  {
+    level: "Senior",
+    name: "Sophie Lang",
+    summary:
+      "A Senior UX Designer ensuring aesthetic and functional harmony in product experiences. Sophie bridges creativity and usability with a human-centered mindset.",
+    skills: [
+      "UI/UX design systems",
+      "Prototyping & wireframing",
+      "Cross-platform design",
+      "DesignOps collaboration",
+    ],
+    challenges: [
+      "Balancing creativity with consistency",
+      "Maintaining clarity in stakeholder feedback",
+    ],
+    quote: "“Design should feel invisible — seamless and empowering.”",
+    category: "Design",
+  },
+  {
+    level: "Principal",
+    name: "Felix Hartmann",
+    summary:
+      "A UX Manager driving organizational UX maturity. Felix structures teams, aligns strategy, and leads by example with a strong ResearchOps foundation.",
+    skills: [
+      "UX strategy & leadership",
+      "Team development & mentoring",
+      "UX maturity scaling",
+      "Stakeholder management",
+      "Resource planning",
+    ],
+    challenges: [
+      "Managing competing priorities",
+      "Translating strategy into action",
+      "Driving adoption of UX frameworks",
+    ],
+    quote: "“Leading through clarity, empathy, and structure.”",
+    category: "Management",
+  },
+];
 
 
 ==== \src\data\skills.ts ====
@@ -11103,6 +11589,314 @@ export const themeColors: Record<string, string> = {
   "Amplify the Practice": "#D1C4E9",
   "Strategic Direction": "#B3E5FC",
 };
+
+
+==== \src\data\uxRolesPersonas.ts ====
+// src/components/RolePersonaExplorer.tsx
+import { useMemo, useState } from "react";
+import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
+import { spacing, radii, transitions } from "@/lib/tokens";
+import PersonaCard from "@/components/PersonaCard";
+
+// --- Config: Roles & Levels -------------------------------------------------
+
+const ROLES = [
+  { id: "uxr", label: "UX Researcher" },
+  { id: "uxd", label: "UX Designer" },
+] as const;
+
+const LEVELS = [
+  { id: "junior", label: "Junior" },
+  { id: "mid", label: "Mid" },
+  { id: "senior", label: "Senior" },
+  { id: "principal", label: "Principal / Lead" },
+] as const;
+
+// --- Data: succinct persona content per role & level ------------------------
+
+type PersonaData = {
+  name: string;
+  location?: string;
+  quote?: string;
+  responsibilities: string[];
+  keySkills: string[];
+  challenges: string[];
+  imgSrc?: string; // optional avatar path if you add one later
+};
+
+type RoleLevelMap = Record<(typeof ROLES)[number]["id"], Record<(typeof LEVELS)[number]["id"], PersonaData>>;
+
+const DATA: RoleLevelMap = {
+  uxr: {
+    junior: {
+      name: "Liam | Junior UX Researcher",
+      location: "Vienna, Austria",
+      quote:
+        "I’m mastering the basics and learning how to turn small stories into meaningful insights.",
+      responsibilities: [
+        "Prepare scripts, assist with recruiting & scheduling",
+        "Run simple usability tests with guidance",
+        "Capture data, organize notes & clips",
+        "Contribute to findings summaries",
+      ],
+      keySkills: [
+        "Interview & test fundamentals",
+        "Basic analysis & synthesis",
+        "Documentation hygiene",
+        "Tooling (surveys, clips, repo)",
+      ],
+      challenges: [
+        "Time management across tasks",
+        "Storytelling beyond observations",
+        "Choosing suitable methods",
+      ],
+    },
+    mid: {
+      name: "Mia | Mid-level UX Researcher",
+      location: "Munich, Germany",
+      quote:
+        "I’m the face of projects — collaborating closely and communicating clearly.",
+      responsibilities: [
+        "Own end-to-end evaluative studies",
+        "Facilitate sessions & debriefs",
+        "Translate data into insights & next steps",
+        "Partner with PM/Design/Dev on decisions",
+      ],
+      keySkills: [
+        "Moderation & probing",
+        "Triangulation of qual/quant signals",
+        "Stakeholder engagement",
+        "Backlog & roadmap contribution",
+      ],
+      challenges: [
+        "Balancing multiple projects",
+        "Negotiating realistic timelines",
+        "Influencing decisions consistently",
+      ],
+    },
+    senior: {
+      name: "Anna | Senior UX Researcher",
+      location: "Munich, Germany",
+      quote:
+        "I align research with strategy and ensure our insights move the roadmap.",
+      responsibilities: [
+        "Define research roadmaps & priorities",
+        "Run generative & evaluative programs",
+        "Evangelize value & mentor researchers",
+        "Operationalize templates & standards",
+      ],
+      keySkills: [
+        "Program design (discovery → validation)",
+        "Advanced analysis & storytelling",
+        "Stakeholder buy-in & influence",
+        "Metrics & decision support",
+      ],
+      challenges: [
+        "Keeping momentum across teams",
+        "Scaling impact without bottlenecks",
+        "Balancing depth vs. speed",
+      ],
+    },
+    principal: {
+      name: "Oliver | Principal UX Researcher",
+      location: "Augsburg, Germany",
+      quote:
+        "I turn strategy into measurable learning systems and shape portfolio bets.",
+      responsibilities: [
+        "Shape org-wide learning strategy",
+        "Link insights to KPIs & outcomes",
+        "Coach cross-functional leaders",
+        "Evolve ResearchOps & governance",
+      ],
+      keySkills: [
+        "Strategic framing & portfolio thinking",
+        "Org influence & executive comms",
+        "Method innovation & standards",
+        "Outcome & ROI measurement",
+      ],
+      challenges: [
+        "Driving change across org silos",
+        "Prioritizing high-leverage bets",
+        "Keeping craft excellence at scale",
+      ],
+    },
+  },
+
+  uxd: {
+    junior: {
+      name: "Liam | Junior UX Designer",
+      location: "Vienna, Austria",
+      quote:
+        "I’m building craft fundamentals and learning to validate designs early.",
+      responsibilities: [
+        "Produce wireframes & flows for features",
+        "Apply design system components",
+        "Prepare prototypes for testing",
+        "Document decisions with guidance",
+      ],
+      keySkills: [
+        "Figma basics & components",
+        "Heuristics & accessibility basics",
+        "Prototyping & iteration",
+        "Collaboration with devs",
+      ],
+      challenges: [
+        "Translating feedback into action",
+        "Managing scope & time",
+        "Consistent information architecture",
+      ],
+    },
+    mid: {
+      name: "Mia | Mid-level UX Designer",
+      location: "Munich, Germany",
+      quote:
+        "I connect user needs with feasible designs the team can ship.",
+      responsibilities: [
+        "Own end-to-end feature design",
+        "Define flows, IA & interaction patterns",
+        "Partner with UXR on tests & iterations",
+        "Contribute to design system improvements",
+      ],
+      keySkills: [
+        "Interaction design & IA",
+        "Usability testing & iteration",
+        "Design tokens & systems",
+        "Dev-ready specs & handover",
+      ],
+      challenges: [
+        "Balancing UX quality & delivery speed",
+        "Orchestrating feedback loops",
+        "Maintaining cross-surface consistency",
+      ],
+    },
+    senior: {
+      name: "Anna | Senior UX Designer",
+      location: "Munich, Germany",
+      quote:
+        "I elevate product quality and align design to strategy & metrics.",
+      responsibilities: [
+        "Lead complex journeys & initiatives",
+        "Shape design strategy & KPIs with PM",
+        "Mentor designers & refine processes",
+        "Advance accessibility & quality bars",
+      ],
+      keySkills: [
+        "Systems thinking & journeys",
+        "Design critique & coaching",
+        "Strategy & metric alignment",
+        "Cross-functional influence",
+      ],
+      challenges: [
+        "Scaling patterns without stifling innovation",
+        "Driving accessibility across teams",
+        "Keeping design debt under control",
+      ],
+    },
+    principal: {
+      name: "Oliver | Principal UX Designer",
+      location: "Augsburg, Germany",
+      quote:
+        "I set the bar for experience quality and drive coherent product ecosystems.",
+      responsibilities: [
+        "Define experience vision & North Star",
+        "Evolve design systems across products",
+        "Partner with leadership on portfolio bets",
+        "Coach teams on craft & outcomes",
+      ],
+      keySkills: [
+        "Experience strategy & vision",
+        "Multi-product system coherence",
+        "Org storytelling & influence",
+        "Outcome-focused design leadership",
+      ],
+      challenges: [
+        "Harmonizing platforms & brands",
+        "Measuring design’s business impact",
+        "Sustaining culture of excellence",
+      ],
+    },
+  },
+};
+
+// --- UI: Tabs + Persona Preview --------------------------------------------
+
+export default function RolePersonaExplorer() {
+  const [role, setRole] = useState<(typeof ROLES)[number]["id"]>("uxr");
+  const [level, setLevel] = useState<(typeof LEVELS)[number]["id"]>("mid");
+
+  const persona = useMemo(() => DATA[role][level], [role, level]);
+
+  return (
+    <div className="w-full">
+      {/* Role Tabs */}
+      <div className="flex items-center gap-2 border-b border-border">
+        {ROLES.map((r) => {
+          const active = role === r.id;
+          return (
+            <button
+              key={r.id}
+              onClick={() => setRole(r.id)}
+              className={cn(
+                "px-3 py-2 text-sm transition",
+                active
+                  ? "border-b-2 border-primary text-foreground"
+                  : "text-muted-foreground hover:text-foreground"
+              )}
+              aria-pressed={active}
+            >
+              {r.label}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Level Tabs */}
+      <div className={cn("flex flex-wrap items-center gap-2 mt-4", spacing.gap2)}>
+        {LEVELS.map((l) => {
+          const active = level === l.id;
+          return (
+            <button
+              key={l.id}
+              onClick={() => setLevel(l.id)}
+              className={cn(
+                "px-3 py-1.5 rounded-lg border text-sm transition",
+                active
+                  ? "border-primary text-foreground"
+                  : "border-border text-muted-foreground hover:bg-muted/50"
+              )}
+              aria-pressed={active}
+              title={l.label}
+            >
+              {l.label}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Persona Card */}
+      <motion.div
+        key={`${role}-${level}`}
+        initial={{ opacity: 0, y: 6 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.25, ease: "easeOut" }}
+        className={cn("mt-6")}
+      >
+        <PersonaCard
+          name={persona.name}
+          role={ROLES.find((r) => r.id === role)?.label}
+          level={LEVELS.find((l) => l.id === level)?.label}
+          quote={persona.quote}
+          location={persona.location}
+          responsibilities={persona.responsibilities}
+          keySkills={persona.keySkills}
+          challenges={persona.challenges}
+          // imgSrc={persona.imgSrc} // optional when you add avatars
+        />
+      </motion.div>
+    </div>
+  );
+}
 
 
 ==== \src\hooks\useActivePhase.ts ====
@@ -11838,37 +12632,33 @@ export default function CVPage() {
 
 
 ==== \src\pages\expertise\ImpactMeasurement\index.tsx ====
+// src/pages/expertise/ImpactMeasurement/index.tsx
 import PageLayout from "@/components/layout/PageLayout";
 import headerImg from "@/assets/images/expertise/impactmeasurement/impact.jpg";
 import {
   ImpactMeasurementIntroSection,
-  ImpactMeasurementUXSection,        // ✅ ersetzt BusinessSection
-  ImpactMeasurementHeartSection,
-  ImpactMeasurementResearchSection,
-  ImpactMeasurementSummarySection,
+  ImpactMeasurementFrameworkSection,
+  ImpactMeasurementMetricsSection,
+  ImpactMeasurementROISection,
 } from "@/components/sections/expertise/impactmeasurement";
 
+/**
+ * Impact Measurement Page
+ * ----------------------------------------------------
+ * Einheitliches Breitenverhalten wie Home
+ */
 export default function ImpactMeasurementPage() {
   return (
     <PageLayout
       title="Impact Measurement"
-      intro="Connecting UX outcomes with business, user, and research value."
+      intro="Measuring, proving, and communicating UX impact through metrics that connect user experience to business outcomes."
       headerImage={headerImg}
+      width="wide" // ✅ identisch zu Home
     >
-      {/* 1️⃣ Intro */}
       <ImpactMeasurementIntroSection />
-
-      {/* 2️⃣ Measuring UX Impact – with 1–4 + Pragmatic Approach */}
-      <ImpactMeasurementUXSection />
-
-      {/* 3️⃣ Measuring UX Outcomes – The HEART Framework */}
-      <ImpactMeasurementHeartSection />
-
-      {/* 4️⃣ Research Impact */}
-      <ImpactMeasurementResearchSection />
-
-      {/* 5️⃣ Summary */}
-      <ImpactMeasurementSummarySection />
+      <ImpactMeasurementFrameworkSection />
+      <ImpactMeasurementMetricsSection />
+      <ImpactMeasurementROISection />
     </PageLayout>
   );
 }
@@ -11889,30 +12679,21 @@ import {
 /**
  * ResearchOps Page
  * --------------------------------------------
- * - Nutzt das einheitliche PageLayout (zentriert, konsistenter Rhythmus)
- * - Jede Section ist DS-konform (Section + SectionIntro etc.)
- * - Kein eigenes Styling oder Padding hier notwendig
+ * - Jetzt identisches Breitenverhalten wie Home
+ * - Keine weiteren Änderungen am Layout
  */
 export default function ResearchOpsPage() {
   return (
     <PageLayout
       title="ResearchOps"
       intro="Building the systems, culture, and clarity that make research scalable — and strategic."
-      headerImage={headerImg} // ✅ Headerbild hinzugefügt
+      headerImage={headerImg}
+      width="wide" // ✅ sorgt für denselben Container wie auf Home
     >
-      {/* === 1️⃣ Problem & Kontext === */}
       <ResearchOpsIntroSection />
-
-      {/* === 2️⃣ Framework / Struktur === */}
       <ResearchOpsFrameworkSection />
-
-      {/* === 3️⃣ Maturity & Growth === */}
       <ResearchOpsMaturitySection />
-
-      {/* === 4️⃣ Business Value === */}
       <ResearchOpsValueSection />
-
-      {/* === 5️⃣ Leadership & Enablement === */}
       <ResearchOpsLeadershipSection />
     </PageLayout>
   );
@@ -11920,6 +12701,7 @@ export default function ResearchOpsPage() {
 
 
 ==== \src\pages\expertise\StrategicUXResearch\index.tsx ====
+// src/pages/expertise/StrategicUXResearch/index.tsx
 import PageLayout from "@/components/layout/PageLayout";
 import headerImg from "@/assets/images/expertise/strategicuxresearch/strategicuxr.jpg";
 
@@ -11942,7 +12724,7 @@ export default function StrategicUXResearchPage() {
       title="Strategic UX Research"
       intro="Turning UX Research from isolated insights into a strategic system that drives clarity, alignment, and confident decisions."
       headerImage={headerImg}
-      width="wide" // 👈 sorgt für denselben Container wie auf Home
+      width="wide" // ✅ sorgt für denselben Container wie auf Home
     >
       <StrategicUXIntroSection />
       <StrategicUXFrameworkSection />
@@ -11990,22 +12772,25 @@ import {
   TeamLeadershipSkillsSection,
   TeamLeadershipImpactSection,
 } from "@/components/sections/expertise/TeamLeadership";
+import RolesVersatilitySection from "@/components/sections/expertise/TeamLeadership/RolesVersatilitySection";
 
 /**
  * Team Leadership & Mentoring
  * Storytelling sequence:
- * 1️⃣ Philosophy → 2️⃣ Roles → 3️⃣ My Role Profile → 4️⃣ Skills → 5️⃣ Impact
+ * 1️⃣ Philosophy → 2️⃣ Roles → 3️⃣ Roles & Versatility → 4️⃣ My Role Profile → 5️⃣ Skills → 6️⃣ Impact
  */
 export default function TeamLeadershipPage() {
   return (
     <PageLayout
       title="Team Leadership & Mentoring"
       intro="Building high-performing UX teams through clarity, coaching, and a culture of trust."
-      headerImage={headerImg} // ✅ Hintergrundbild eingebunden
+      headerImage={headerImg}
+      width="wide"
     >
       <TeamLeadershipPhilosophySection />
       <TeamLeadershipRolesSection />
-      <TeamLeadershipRoleProfileSection /> {/* 🕸️ Spider Chart + Text separat */}
+      <RolesVersatilitySection /> {/* ✅ NEW: Role tabs + persona cards */}
+      <TeamLeadershipRoleProfileSection />
       <TeamLeadershipSkillsSection />
       <TeamLeadershipImpactSection />
     </PageLayout>
@@ -12014,6 +12799,7 @@ export default function TeamLeadershipPage() {
 
 
 ==== \src\pages\expertise\UXStrategy\index.tsx ====
+// src/pages/expertise/UXStrategy/index.tsx
 import PageLayout from "@/components/layout/PageLayout";
 import headerImg from "@/assets/images/expertise/uxstrategy/schach1.jpg";
 import {
@@ -12022,12 +12808,19 @@ import {
   Prioritization,
 } from "@/components/sections/expertise/uxstrategy";
 
+/**
+ * UX Strategy Page
+ * --------------------------------------------
+ * - Jetzt mit identischem Breitenverhalten wie Home
+ * - Keine weiteren Code- oder Layoutänderungen
+ */
 export default function UXStrategyPage() {
   return (
     <PageLayout
       title="UX Strategy"
       intro="How evidence-based UX Research connects discovery, design, and delivery — enabling organizations to make confident, user-centered decisions."
-      headerImage={headerImg} // ✅ Schach-Bild bleibt
+      headerImage={headerImg}
+      width="wide" // ✅ sorgt für denselben Container wie auf Home
     >
       <VisionAlignment />
       <DiscoveryDelivery />

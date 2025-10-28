@@ -22,7 +22,7 @@ export default function Tile({
     className
   );
 
-  // 🎨 Varianten-Styles
+  // 🎨 Varianten – komplett ohne Border & Shadow
   const variantStyles =
     variant === "interactive"
       ? cn(
@@ -42,16 +42,14 @@ export default function Tile({
         )
       : variant === "transparent"
       ? cn(
-          // ✅ leicht graue DS-Kachel mit subtiler Transparenz und Rahmen
           "bg-[#F3F4F6]/80 dark:bg-[#1C1C1C]/80 text-foreground/90",
-          "border border-border/50 shadow-none cursor-default transform-none transition-none",
+          "cursor-default transform-none transition-none",
           "text-center items-center space-y-3"
         )
       : variant === "static"
       ? cn(
-          // ✅ Standard: fester grauer Hintergrund + sichtbarer Rahmen
           "bg-[#F3F4F6] dark:bg-[#1C1C1C] text-foreground/90",
-          "border border-border/50 cursor-default transition-none transform-none text-left"
+          "cursor-default transition-none transform-none text-left"
         )
       : "";
 

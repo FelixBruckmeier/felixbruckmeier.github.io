@@ -34,14 +34,8 @@ export default function ResearchOpsValueSection() {
 
       <div className={cn(layout.gridCols3, spacing.gap6, spacing.mt12)}>
         {tiles.map((item) => (
-          <Tile
-            key={item.title}
-            variant="static"
-            className={cn("h-full", spacing.p6)}
-          >
-            <Subtitle className={cn("mb-3 text-foreground")}>
-              {item.title}
-            </Subtitle>
+          <Tile key={item.title} variant="static" className={cn("h-full", spacing.p6)}>
+            <Subtitle>{item.title}</Subtitle>
             <Body className="text-muted-foreground">{item.text}</Body>
           </Tile>
         ))}

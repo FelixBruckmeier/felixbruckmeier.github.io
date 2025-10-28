@@ -2,13 +2,13 @@ import { Section } from "@/components/ui";
 import SectionIntro from "@/components/ui/SectionIntro";
 import Tile from "@/components/ui/Tile";
 import { Subtitle, Body } from "@/components/ui/Tokens";
-import { layout, spacing, colors } from "@/lib/tokens";
+import { layout, spacing } from "@/lib/tokens";
 import { cn } from "@/lib/utils";
 import RITECycleChart from "@/assets/visuals/strategicuxresearch/RITECycleChart";
 
 /**
  * Section: Rapid Iterative Testing & Evaluation (RITE)
- * DS-conform — with animated RITE cycle
+ * 100% DS-konform — keine lokalen Margins oder Abstände
  */
 export default function StrategicUXRITESection() {
   const tiles = [
@@ -40,46 +40,42 @@ export default function StrategicUXRITESection() {
 
   return (
     <Section id="rite" title="Rapid Iterative Testing & Evaluation (RITE)" spacing="lg">
-      {/* --- Intro --- */}
       <SectionIntro>
-        <strong>RITE</strong> is a pragmatic approach to usability testing that blends speed with learning — making it particularly well-suited for Agile UX environments.
-Instead of waiting until a study ends, teams iterate as soon as issues appear — often after just a few participants.
-Each round feeds directly into the next, turning research into a fast cycle of discovery, design, and validation.
-<p>&nbsp;</p>
-In the context of Strategic UX Research, RITE operationalizes UX Strategy: it transforms research from isolated checkpoints into a living feedback loop.
-This approach brings the strategic principle of continuous learning to life — bridging the gap between discovery and delivery through shared understanding and real-time improvement.
+        <strong>RITE</strong> is a pragmatic approach to usability testing that blends speed with
+        learning — making it particularly well-suited for Agile UX environments.
+        Instead of waiting until a study ends, teams iterate as soon as issues appear — often after
+        just a few participants. Each round feeds directly into the next, turning research into a
+        fast cycle of discovery, design, and validation.
+        <div className={spacing.mt6}></div>
+        In the context of Strategic UX Research, RITE operationalizes UX Strategy: it transforms
+        research from isolated checkpoints into a living feedback loop. This approach brings the
+        strategic principle of continuous learning to life — bridging the gap between discovery and
+        delivery through shared understanding and real-time improvement.
       </SectionIntro>
 
       {/* --- Animated RITE Cycle --- */}
-      <div
-        className={cn(
-          "flex flex-col justify-center items-center mx-auto w-full",
-          spacing.mt16,
-          spacing.mb16
-        )}
-      >
+      <div className={cn("flex justify-center w-full", spacing.mt16, spacing.mb16)}>
         <div className="w-full max-w-4xl flex justify-center">
           <RITECycleChart />
         </div>
       </div>
 
       {/* --- Key Benefits --- */}
-      <Subtitle className="text-foreground mb-6">Key Benefits</Subtitle>
+      <Subtitle>Key Benefits</Subtitle>
 
-      {/* --- Tile Grid --- */}
       <div className={cn(layout.gridCols3, spacing.gap6, spacing.mt8)}>
         {tiles.map((item) => (
-          <Tile key={item.title} variant="static" className={cn("h-full", spacing.p6)}>
-            <Subtitle className={cn("mb-3 text-foreground")}>{item.title}</Subtitle>
-            <Body className={cn(colors.muted.text, "leading-relaxed")}>{item.text}</Body>
+          <Tile key={item.title} variant="static">
+            <Subtitle>{item.title}</Subtitle>
+            <Body>{item.text}</Body>
           </Tile>
         ))}
       </div>
 
       {/* --- Critical Reflection --- */}
       <div className={cn(spacing.mt16)}>
-        <Subtitle className="text-foreground mb-4">Critical Reflection</Subtitle>
-        <Body className={cn(colors.muted.text, "leading-relaxed")}>
+        <Subtitle>Critical Reflection</Subtitle>
+        <Body>
           RITE isn’t meant to deliver perfect data; it’s meant to drive progress. In areas like
           healthcare, safety-critical systems, or regulated industries, strict methodological
           control is essential — and RITE wouldn’t be the right choice. But in many organizations,

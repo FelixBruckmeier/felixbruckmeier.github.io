@@ -1,5 +1,5 @@
+// src/components/sections/expertise/TeamLeadership/index.ts
 export { default as TeamLeadershipPhilosophySection } from "./TeamLeadershipPhilosophySection";
-export { default as TeamLeadershipRolesSection } from "./TeamLeadershipRolesSection";
-export { default as TeamLeadershipRoleProfileSection } from "./TeamLeadershipRoleProfileSection"; // ✅ hinzugefügt
+export { default as TeamLeadershipRoleProfileSection } from "./TeamLeadershipRoleProfileSection";
 export { default as TeamLeadershipSkillsSection } from "./TeamLeadershipSkillsSection";
-export { default as TeamLeadershipImpactSection } from "./TeamLeadershipImpactSection";
+// TeamLeadershipRolesExplorer und RolesVersatilitySection wurden entfernt

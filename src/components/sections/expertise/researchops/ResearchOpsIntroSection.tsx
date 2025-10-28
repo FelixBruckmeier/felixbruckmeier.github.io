@@ -15,19 +15,13 @@ export default function ResearchOpsIntroSection() {
       borderTop={false}
     >
       <SectionIntro>
-        Every team wants to make evidence-based decisions — from Product and UX to Marketing,
-        Analytics, and Customer Service. Yet without shared systems, insights stay scattered,
-        studies get repeated, and intuition fills the gaps.
+       Every team wants to make evidence-based decisions — from Product and UX to Marketing, Analytics, and Customer Service. Yet without shared systems, insights remain scattered, studies are repeated, and intuition fills the gaps.
+<br />
         <br />
+I’ve seen this in many forms: knowledge locked in silos, with no one seeing the full picture. Research happens everywhere — but without coordination, its impact fades across teams, channels, and strategies. Teams invest in expensive, sometimes redundant tools, yet results — and even usage — often go unshared.
+<br />
         <br />
-        I’ve seen this slow down even the best organizations: knowledge lives in silos, and no one
-        sees the full picture. Research happens everywhere — but without coordination, its impact
-        fades across teams, channels, and strategy.
-        <br />
-        <br />
-        <strong>ResearchOps</strong> changes that — creating the structure and culture that connect
-        people, data, and decisions. It turns fragmented research into a cohesive, insight-driven
-        ecosystem that powers clarity, alignment, and smarter outcomes across the business.
+ <strong>ResearchOps </strong> changes that. It builds the structure and culture that connect people, data, and decisions. It transforms fragmented efforts into a cohesive, insight-driven ecosystem that drives clarity, alignment, and smarter outcomes across the organization.
       </SectionIntro>
     </Section>
   );

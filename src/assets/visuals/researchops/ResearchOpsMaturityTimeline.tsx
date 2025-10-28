@@ -7,9 +7,8 @@ import { stages } from "./reopsData";
 /**
  * ResearchOps Maturity Timeline — DS-conform
  * ------------------------------------------------------------
- * ✅ No shadows, hover, or custom background colors
- * ✅ Uses only DS tokens for spacing, text, and tile colors
- * ✅ Fully consistent with other sections
+ * ✅ No manual typography or margin classes
+ * ✅ Uses only DS tokens for spacing and text
  */
 export default function ResearchOpsMaturityTimeline() {
   return (
@@ -18,12 +17,10 @@ export default function ResearchOpsMaturityTimeline() {
         <div key={stage.level} className={cn("flex flex-col", "space-y-10 md:space-y-12")}>
           {/* === Stage Header === */}
           <div className="text-center max-w-4xl mx-auto">
-            <h3 className="text-foreground text-2xl sm:text-3xl font-semibold mb-3">
-              {stage.label}: {stage.level}
-            </h3>
-            <p className="text-muted-foreground text-base sm:text-lg leading-relaxed">
+            <Subtitle>{stage.label}: {stage.level}</Subtitle>
+            <Body className={colors.muted.text}>
               {stage.description}
-            </p>
+            </Body>
           </div>
 
           {/* === Stage Areas Grid === */}
@@ -32,29 +29,20 @@ export default function ResearchOpsMaturityTimeline() {
               <Tile
                 key={area.name}
                 variant="static"
-                className={cn(
-                  colors.tile.bg,
-                  colors.tile.text,
-                  spacing.p6,
-                  "flex flex-col justify-start text-left rounded-2xl"
-                )}
+                className={cn(spacing.p6, "flex flex-col justify-start text-left rounded-2xl")}
               >
                 {/* === Area Title === */}
-                <Subtitle className={cn("mb-2 text-foreground text-base sm:text-lg font-semibold")}>
-                  {area.name}
-                </Subtitle>
+                <Subtitle>{area.name}</Subtitle>
 
                 {/* === Area Description === */}
-                <Body className={cn(colors.muted.text, "text-sm sm:text-base leading-relaxed")}>
+                <Body className={colors.muted.text}>
                   {area.description}
                 </Body>
 
                 {/* === Recommendation === */}
-                <div className={cn(spacing.mt4, "border-t border-border pt-4")}>
-                  <Subtitle className="text-foreground text-base sm:text-lg font-semibold">
-                    Recommendation
-                  </Subtitle>
-                  <Body className={cn(colors.muted.text, "text-sm sm:text-base leading-relaxed mt-1")}>
+                <div className={cn("border-t border-border", spacing.pt4, spacing.mt6)}>
+                  <Subtitle>Recommendation</Subtitle>
+                  <Body className={colors.muted.text}>
                     {area.recommendation}
                   </Body>
                 </div>
@@ -66,4 +54,3 @@ export default function ResearchOpsMaturityTimeline() {
     </div>
   );
 }
-

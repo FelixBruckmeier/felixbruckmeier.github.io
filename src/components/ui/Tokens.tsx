@@ -48,7 +48,7 @@ export function H2({ children, className = "" }: { children: ReactNode; classNam
   );
 }
 
-// ✅ H3 jetzt automatisch mit subtitle.color (muted)
+// ✅ H3 nutzt subtitle-Typografie (muted)
 export function H3({ children, className = "" }: { children: ReactNode; className?: string }) {
   return (
     <h3
@@ -116,6 +116,24 @@ export function Subtitle({ children, className = "" }: { children: ReactNode; cl
   );
 }
 
+// 🆕 Quote-Komponente – DS-konform, ohne Balken
+export function Quote({ children, className = "" }: { children: ReactNode; className?: string }) {
+  return (
+    <blockquote
+      className={cn(
+        typography.quote.font,
+        typography.quote.size,
+        typography.quote.weight,
+        typography.quote.leading,
+        "italic text-foreground/90",
+        className
+      )}
+    >
+      {children}
+    </blockquote>
+  );
+}
+
 /**
  * INTRO TEXT
  */
@@ -162,7 +180,7 @@ export function BgAccent({ children, className = "" }: { children: ReactNode; cl
 }
 
 /**
- * ✅ MutedText jetzt mit title-Prop (Fix für SkillmapForm)
+ * ✅ MutedText (Fix für SkillmapForm)
  */
 export function MutedText({
   children,

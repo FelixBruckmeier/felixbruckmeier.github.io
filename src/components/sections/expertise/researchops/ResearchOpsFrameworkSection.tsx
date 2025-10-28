@@ -2,13 +2,13 @@ import { Section } from "@/components/ui";
 import SectionIntro from "@/components/ui/SectionIntro";
 import { Tile } from "@/components/ui";
 import { Subtitle, Body } from "@/components/ui/Tokens";
-import { layout, spacing, colors } from "@/lib/tokens";
+import { layout, spacing } from "@/lib/tokens";
 import { cn } from "@/lib/utils";
 import ReOpsWheel from "@/assets/visuals/researchops/ReOpsWheel";
 
 /**
  * ResearchOps Framework Section
- * Pure DS-conform — static tiles, no shadows or hover effects
+ * 100% DS-conform — relies fully on DS tokens
  */
 export default function ResearchOpsFrameworkSection() {
   const tiles = [
@@ -52,16 +52,12 @@ export default function ResearchOpsFrameworkSection() {
         </div>
       </div>
 
-      {/* Clean DS Tiles */}
+      {/* DS Tiles */}
       <div className={cn(layout.gridCols3, spacing.gap8, spacing.mt12)}>
         {tiles.map((item) => (
-          <Tile
-            key={item.title}
-            variant="static"
-            className={cn(colors.tile.bg, colors.tile.text, spacing.p6, "rounded-2xl")}
-          >
-            <Subtitle className={cn("mb-3 text-foreground")}>{item.title}</Subtitle>
-            <Body className={cn(colors.muted.text)}>{item.text}</Body>
+          <Tile key={item.title} variant="static" className="rounded-2xl">
+            <Subtitle>{item.title}</Subtitle>
+            <Body>{item.text}</Body>
           </Tile>
         ))}
       </div>
