@@ -20,16 +20,22 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node
+      - name: Setup Node (LTS)
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
 
-      - name: Clean install dependencies
+      - name: Clean install deps
         run: |
           rm -rf node_modules
           npm install
+
+      # 🩹 Workaround: Rollup Native Binary für Linux explizit installieren
+      # (um npm optional-deps Bug auf GitHub Actions zu umgehen)
+      - name: Ensure Rollup native binary is present
+        run: |
+          npm install -D @rollup/rollup-linux-x64-gnu@latest || true
 
       - name: Build
         run: npm run build
@@ -37,7 +43,7 @@ jobs:
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./docs   # ✅ bleibt docs, wenn dein build dorthin schreibt
+          path: ./docs
 
   deploy:
     environment:
