@@ -1,6 +1,6 @@
 import { Section } from "@/components/ui";
 import SectionIntro from "@/components/ui/SectionIntro";
-import CVPreview from "@/components/artefacts/CVPreview";
+import CVPreview from "@/assets/visuals/cv/CVPreview";
 import Button from "@/components/ui/Button";
 import { Download } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -20,7 +20,7 @@ export default function ProfessionalExperienceSection() {
 
       <CVPreview hideCTA />
 
-      {/* === Download CV Button (Design-System-kompatibel) === */}
+      {/* === Download CV Button === */}
       <div className={cn("flex justify-center", spacing.mt10)}>
         <Button
           variant="secondary"

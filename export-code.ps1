@@ -5,13 +5,10 @@
 $projectPath = "C:\Users\felix\Documents\GitHub\felixbruckmeier.github.io"
 $outputFile = "$projectPath\all_code_clean.txt"
 
-# Alte Datei löschen, falls vorhanden
 if (Test-Path $outputFile) { Remove-Item $outputFile }
 
-# Liste der erlaubten Textdateien
 $allowedExtensions = @("*.ts", "*.tsx", "*.css", "*.json", "*.html", "*.js", "*.md", "*.yml")
 
-# Wichtige Root-Dateien
 $importantFiles = @(
     "index.html",
     "package.json",
@@ -21,7 +18,6 @@ $importantFiles = @(
     "postcss.config.js"
 )
 
-# Root-Dateien exportieren (aber KEIN package-lock.json)
 foreach ($file in $importantFiles) {
     $path = Join-Path $projectPath $file
     if (Test-Path $path -and $file -ne "package-lock.json") {
@@ -30,10 +26,6 @@ foreach ($file in $importantFiles) {
         Add-Content $outputFile "`n"
     }
 }
-
-# ----------------------------------------------------
-# Ausschlüsse
-# ----------------------------------------------------
 
 # Einzelne Dateien ausschließen (exakte Muster)
 $excludedFilePatterns = @(
@@ -46,35 +38,44 @@ $excludedFilePatterns = @(
 )
 
 # Ganze Ordner (inkl. Unterordner & Dateien) ausschließen
-# ($|\\) sorgt dafür, dass NUR diese Ordner + Unterordner betroffen sind – NICHT z. B. "components/ui"
 $excludedFolderPatterns = @(
-    "\\src\\assets\\visuals($|\\)",
-    "\\src\\components\\artefacts($|\\)",
-    "\\src\\components\\projects\\AtossReOps($|\\)",
-    "\\src\\components\\projects\\CarInsurance($|\\)",
-    "\\src\\components\\projects\\DeleteCase($|\\)",
-    "\\src\\components\\projects\\SwissLife($|\\)",
-    "\\src\\components\\projects\\ZooplusPricing($|\\)",
-    "\\src\\components\\projects\\ZooplusReOps($|\\)"
+    "\\src\\assets\\visuals($|\\.*)",
+    "\\src\\components\\artefacts($|\\.*)",
+    "\\src\\components\\sections\\expertise\\researchops($|\\.*)",
+    "\\src\\components\\sections\\expertise\\impactmeasurement($|\\.*)",
+    "\\src\\components\\sections\\expertise\\strategicuxresearch($|\\.*)",
+    "\\src\\components\\sections\\expertise\\TeamLeadership($|\\.*)",
+    "\\src\\components\\projects($|\\.*)",
+    "\\src\\pages\\expertise($|\\.*)",
+    "\\src\\components\\common($|\\.*)",
+    "\\src\\hooks($|\\.*)",
+    "\\src\\types($|\\.*)",
+    "\\src\\components\\sections($|\\.*)",
+    "\\src\\pages\\projects\\AtossReOps($|\\.*)",
+    "\\src\\locales($|\\.*)",
+    "\\src\\data($|\\.*)",
+    "\\src\\assets($|\\.*)",
+    "\\.git($|\\.*)",
+    "\\.github\\workflows($|\\.*)",
+    "\\docs($|\\.*)"
 )
 
-# ----------------------------------------------------
-# Rekursive Suche & Export
-# ----------------------------------------------------
 Get-ChildItem -Path $projectPath -Recurse -Include $allowedExtensions |
     Where-Object {
-        $_.FullName -notmatch "\\node_modules\\" -and
-        $_.FullName -notmatch "\\.git\\" -and
-        $_.FullName -notmatch "\\docs\\" -and
-        $_.FullName -notmatch "\\dist\\" -and
-        $_.Name -ne "package-lock.json" -and
-        $_.Extension -notmatch "\.png|\.jpg|\.jpeg|\.gif|\.svg|\.ico|\.pdf" -and
-        -not ($excludedFilePatterns | Where-Object { $($_) -and ($_.FullName -match $_) }) -and
-        -not ($excludedFolderPatterns | Where-Object { $($_) -and ($_.FullName -match $_) })
+        $currentFile = $_
+        $currentFile.FullName -notmatch "\\node_modules\\" -and
+        $currentFile.FullName -notmatch "\\.git\\" -and
+        $currentFile.FullName -notmatch "\\docs\\" -and
+        $currentFile.FullName -notmatch "\\dist\\" -and
+        $currentFile.Name -ne "package-lock.json" -and
+        $currentFile.Extension -notmatch "\.png|\.jpg|\.jpeg|\.gif|\.svg|\.ico|\.pdf" -and
+        -not ($excludedFilePatterns | Where-Object { $currentFile.FullName -imatch $_ }) -and
+        -not ($excludedFolderPatterns | Where-Object { $currentFile.FullName -imatch $_ })
     } |
     ForEach-Object {
-        Add-Content $outputFile ("==== " + $_.FullName.Replace($projectPath, "") + " ====")
-        Get-Content $_.FullName | Add-Content $outputFile
+        $currentFile = $_
+        Add-Content $outputFile ("==== " + $currentFile.FullName.Replace($projectPath, "") + " ====")
+        Get-Content $currentFile.FullName | Add-Content $outputFile
         Add-Content $outputFile "`n"
     }
 

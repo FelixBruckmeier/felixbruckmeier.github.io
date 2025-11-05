@@ -44,6 +44,7 @@ docs\assets\3focus-DV998L-H.png
 docs\assets\4methods-Coa3dR1U.png
 docs\assets\5analysis-BnG1fRZh.png
 docs\assets\6present-Cm0shHSl.png
+docs\assets\accessibilityspecialist-BOJNujE8.png
 docs\assets\B2B2COptimization-B6jyQkPa.webp
 docs\assets\B2B2COptimization-B92L2NeT.png
 docs\assets\B2B2COptimization-DJGhMg0E.webp
@@ -52,15 +53,19 @@ docs\assets\CarInsurance-BG2-tJ1F.webp
 docs\assets\CarInsurance-BVr6iwnd.png
 docs\assets\CarInsurance-C3_KeWJT.webp
 docs\assets\CarInsurance-DiOQWBjL.png
+docs\assets\cxanalyst-xI1tVTFK.png
+docs\assets\designmanager-ZD0DqXId.png
 docs\assets\html2canvas.esm-CBrSDip1.js
 docs\assets\impact-Bil7Pb2j.jpg
 docs\assets\impact-DN5cVibL.png
 docs\assets\impact-DOY7HJN9.png
 docs\assets\impact-t25q2vj2.webp
 docs\assets\impact-T7ntUD59.webp
-docs\assets\index-C9mVMmvc.css
-docs\assets\index-CF1gCfGf.js
-docs\assets\index.es-g2AsVHyk.js
+docs\assets\index-D8-fMqjD.css
+docs\assets\index-DNyy_hgZ.js
+docs\assets\index.es-CwqRpLcs.js
+docs\assets\interactiondesigner-DKf1T4NC.png
+docs\assets\journeymanager-CE7b14hc.png
 docs\assets\optimize-BUxT-rdt.webp
 docs\assets\optimize-Bxq1w5MP.webp
 docs\assets\optimize-C4jCfXrX.png
@@ -80,6 +85,7 @@ docs\assets\ReOpsimplementation-BHl1DAKT.png
 docs\assets\ReOpsimplementation-BJRma_NP.webp
 docs\assets\ReOpsimplementation-C0F9aXzx.png
 docs\assets\ReOpsimplementation-DpeWGGDf.webp
+docs\assets\requirementsengineer-W1YE9jxA.png
 docs\assets\ResearchOpsAgileUX-BIJAp81I.png
 docs\assets\ResearchOpsAgileUX-BK-hEosg.png
 docs\assets\ResearchOpsAgileUX-C9EcSfsz.webp
@@ -89,6 +95,7 @@ docs\assets\schach1-ChCdgl6x.jpg
 docs\assets\schach1-CpbXyofm.png
 docs\assets\schach1-g7vjTWKS.webp
 docs\assets\schach1-yn1eRszu.png
+docs\assets\servicedesigner-m7VE0Sh4.png
 docs\assets\strategicuxr-BEl7aNQ1.png
 docs\assets\strategicuxr-BnC9Egip.webp
 docs\assets\strategicuxr-C0sMxfEi.webp
@@ -99,9 +106,14 @@ docs\assets\team-CCcSNTaY.webp
 docs\assets\team-CXeThQZr.webp
 docs\assets\team-DCB010vG.png
 docs\assets\team-DhWuHc25.jpg
-prompts\house-diagram-prompt-de.txt
-prompts\house-diagram-prompt-en.txt
-prompts\prompts.txt
+docs\assets\uideveloper-BAvwQg0P.png
+docs\assets\uivisualdesigner-BMTnWgVH.png
+docs\assets\uxarchitect-A--yQy64.png
+docs\assets\uxdesigner-Cec49fBd.png
+docs\assets\uxmanager-B14HFTR_.png
+docs\assets\uxresearcher-gorVPMqT.png
+docs\assets\uxstrategist-BFWkl04K.png
+docs\assets\uxwriter-CR0G8Rtn.png
 public\404.html
 public\CV_Felix Bruckmeier.pdf
 public\favicon.png
@@ -152,23 +164,23 @@ src\assets\images\expertise\strategicuxresearch\4methods.png
 src\assets\images\expertise\strategicuxresearch\5analysis.png
 src\assets\images\expertise\strategicuxresearch\6present.png
 src\assets\images\expertise\strategicuxresearch\strategicuxr.jpg
-src\assets\images\expertise\teamleadership\persona
+src\assets\images\expertise\teamleadership\personas
 src\assets\images\expertise\teamleadership\team.jpg
-src\assets\images\expertise\teamleadership\persona\Accessibility_Specialist_w.png
-src\assets\images\expertise\teamleadership\persona\CX_Analyst_m.png
-src\assets\images\expertise\teamleadership\persona\Design_Manager_w.png
-src\assets\images\expertise\teamleadership\persona\Interaction_Designer_m.png
-src\assets\images\expertise\teamleadership\persona\Journey_Manager_w.png
-src\assets\images\expertise\teamleadership\persona\Product_Designer_m.png
-src\assets\images\expertise\teamleadership\persona\Requirements_Engineer_m.png
-src\assets\images\expertise\teamleadership\persona\Service_Designer_w.png
-src\assets\images\expertise\teamleadership\persona\UX_Designer_m.png
-src\assets\images\expertise\teamleadership\persona\UX_Manager_m.png
-src\assets\images\expertise\teamleadership\persona\UX_Ops_w.png
-src\assets\images\expertise\teamleadership\persona\UX_Researcher_w.png
-src\assets\images\expertise\teamleadership\persona\UX_Strategist_w.png
-src\assets\images\expertise\teamleadership\persona\UX_UI_Designer_m.png
-src\assets\images\expertise\teamleadership\persona\UX_Writer_w.png
+src\assets\images\expertise\teamleadership\personas\accessibilityspecialist.png
+src\assets\images\expertise\teamleadership\personas\cxanalyst.png
+src\assets\images\expertise\teamleadership\personas\designmanager.png
+src\assets\images\expertise\teamleadership\personas\interactiondesigner.png
+src\assets\images\expertise\teamleadership\personas\journeymanager.png
+src\assets\images\expertise\teamleadership\personas\requirementsengineer.png
+src\assets\images\expertise\teamleadership\personas\servicedesigner.png
+src\assets\images\expertise\teamleadership\personas\uideveloper.png
+src\assets\images\expertise\teamleadership\personas\uivisualdesigner.png
+src\assets\images\expertise\teamleadership\personas\uxarchitect.png
+src\assets\images\expertise\teamleadership\personas\uxdesigner.png
+src\assets\images\expertise\teamleadership\personas\uxmanager.png
+src\assets\images\expertise\teamleadership\personas\uxresearcher.png
+src\assets\images\expertise\teamleadership\personas\uxstrategist.png
+src\assets\images\expertise\teamleadership\personas\uxwriter.png
 src\assets\images\expertise\uxstrategy\schach1.jpg
 src\assets\images\headers\home
 src\assets\images\headers\home\headerhome.jpg
@@ -202,6 +214,7 @@ src\assets\visuals\strategicuxresearch\ResearchFramework.tsx
 src\assets\visuals\strategicuxresearch\ResearchOKRMap.tsx
 src\assets\visuals\strategicuxresearch\RITECycleChart.tsx
 src\assets\visuals\teamleadership\skillassessment
+src\assets\visuals\teamleadership\LeadershipFrameworkVisual.tsx
 src\assets\visuals\teamleadership\LeadershipPillars.tsx
 src\assets\visuals\teamleadership\PersonaCard.tsx
 src\assets\visuals\teamleadership\RolesSpider.tsx
@@ -237,8 +250,8 @@ src\components\common\ScrollToTop.tsx
 src\components\common\ThemeToggle.tsx
 src\components\layout\PageLayout.tsx
 src\components\projects\AtossReOps
-src\components\projects\CarInsurance
 src\components\projects\DeleteCase
+src\components\projects\Neuer Ordner
 src\components\projects\SwissLife
 src\components\projects\ZooplusPricing
 src\components\projects\ZooplusReOps
@@ -248,11 +261,12 @@ src\components\projects\AtossReOps\MaturityChart.tsx
 src\components\projects\AtossReOps\MeasuresMatrix.tsx
 src\components\projects\AtossReOps\ResearchRoadmap.tsx
 src\components\projects\AtossReOps\StakeholderGuide.tsx
-src\components\projects\CarInsurance\BeforeAfter_Car.tsx
-src\components\projects\CarInsurance\ImpactGrid_Car.tsx
-src\components\projects\CarInsurance\JourneyMap_Car.tsx
-src\components\projects\CarInsurance\PrototypeAnimationDetailed.tsx
-src\components\projects\CarInsurance\WorkshopAnimation_Car.tsx
+src\components\projects\Neuer Ordner\CarInsurance
+src\components\projects\Neuer Ordner\CarInsurance\BeforeAfter_Car.tsx
+src\components\projects\Neuer Ordner\CarInsurance\ImpactGrid_Car.tsx
+src\components\projects\Neuer Ordner\CarInsurance\JourneyMap_Car.tsx
+src\components\projects\Neuer Ordner\CarInsurance\PrototypeAnimationDetailed.tsx
+src\components\projects\Neuer Ordner\CarInsurance\WorkshopAnimation_Car.tsx
 src\components\projects\SwissLife\Background.tsx
 src\components\projects\SwissLife\Impact.tsx
 src\components\projects\SwissLife\Insights.tsx
@@ -304,12 +318,8 @@ src\components\sections\expertise\strategicuxresearch\StrategicUXOKRSection.tsx
 src\components\sections\expertise\strategicuxresearch\StrategicUXRITESection.tsx
 src\components\sections\expertise\TeamLeadership\skillassessment
 src\components\sections\expertise\TeamLeadership\index.ts
-src\components\sections\expertise\TeamLeadership\RolesVersatilitySection.tsx
-src\components\sections\expertise\TeamLeadership\TeamLeadershipImpactSection.tsx
 src\components\sections\expertise\TeamLeadership\TeamLeadershipPhilosophySection.tsx
 src\components\sections\expertise\TeamLeadership\TeamLeadershipRoleProfileSection.tsx
-src\components\sections\expertise\TeamLeadership\TeamLeadershipRolesExplorer.tsx
-src\components\sections\expertise\TeamLeadership\TeamLeadershipRolesSection.tsx
 src\components\sections\expertise\TeamLeadership\TeamLeadershipSkillsSection.tsx
 src\components\sections\expertise\TeamLeadership\UXRolesExplorer.tsx
 src\components\sections\expertise\TeamLeadership\skillassessment\compontents
@@ -329,6 +339,12 @@ src\components\sections\home\ExpertiseSection.tsx
 src\components\sections\home\index.ts
 src\components\sections\home\MetricsSection.tsx
 src\components\sections\home\ProjectsSection.tsx
+src\components\sections\projects\CarInsurance
+src\components\sections\projects\CarInsurance\BeforeAfter_Car.tsx
+src\components\sections\projects\CarInsurance\ImpactGrid_Car.tsx
+src\components\sections\projects\CarInsurance\JourneyMap_Car.tsx
+src\components\sections\projects\CarInsurance\PrototypeAnimationDetailed.tsx
+src\components\sections\projects\CarInsurance\WorkshopAnimation_Car.tsx
 src\components\ui\accordion.tsx
 src\components\ui\Badge.tsx
 src\components\ui\Button.tsx
@@ -344,9 +360,7 @@ src\components\ui\Tile.tsx
 src\components\ui\TileImage.tsx
 src\components\ui\Toggle.tsx
 src\components\ui\Tokens.tsx
-src\data\personaData.ts
 src\data\skills.ts
-src\data\Textdokument (neu).txt
 src\data\uxRolesPersonas.ts
 src\hooks\useActivePhase.ts
 src\lib\SkillmapColors.ts

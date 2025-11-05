@@ -4,11 +4,12 @@ import { useTranslation } from "react-i18next";
 import ThemeToggle from "@/components/common/ThemeToggle";
 import { typography } from "@/lib/tokens";
 import { cn } from "@/lib/utils";
+import { Lock } from "lucide-react";
 
 type NavItem = {
   id: string;
   link?: string;
-  children?: { id: string; label: string }[];
+  children?: { id: string; label: string; locked?: boolean }[];
 };
 
 const NAV: NavItem[] = [
@@ -25,10 +26,15 @@ const NAV: NavItem[] = [
   {
     id: "projects",
     children: [
-      { id: "projects/adac-car-insurance", label: "ADAC Car Insurance" },
-      { id: "projects/zooplus-researchops", label: "zooplus ResearchOps" },
-      { id: "projects/zooplus-pricing", label: "zooplus Pricing" },
-      { id: "projects/swisslife-b2b2c", label: "Swiss Life B2B2C" },
+      { id: "projects/car-insurance", label: "Car Insurance" },
+      { id: "projects/zooplus-reops", label: "ResearchOps & Agile UX", locked: true },
+      {
+        id: "projects/insurance-broker-discovery",
+        label: "Insurance Broker Discovery Research",
+      },
+      { id: "projects/zooplus-pricing", label: "Pricing Usability Testing" },
+      { id: "projects/delete-case", label: "Micro Interaction", locked: true },
+      { id: "projects/atoss-reops", label: "ReOps Implementation", locked: true },
     ],
   },
   { id: "cv", link: "/cv" },
@@ -129,22 +135,32 @@ export default function NavBar() {
                   {t(`nav.${nav.id}`, nav.id.charAt(0).toUpperCase() + nav.id.slice(1))}
                 </a>
 
-                {/* === Dropdown (bleibt offen bei Hover) === */}
+                {/* === Dropdown === */}
                 {nav.children && (
-                  <ul
-                    className="absolute left-0 top-full hidden group-hover:flex flex-col bg-background border border-border rounded-lg shadow-lg min-w-[220px] py-2 opacity-0 group-hover:opacity-100 transition-opacity duration-150"
-                  >
+                  <ul className="absolute left-0 top-full hidden group-hover:flex flex-col bg-background border border-border rounded-lg shadow-lg min-w-[260px] py-2 opacity-0 group-hover:opacity-100 transition-opacity duration-150">
                     {nav.children.map((child) => (
                       <li key={child.id}>
-                        <Link
-                          to={`/${child.id}`}
-                          className={cn(
-                            typography.subtitle.font,
-                            "block px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 transition"
-                          )}
-                        >
-                          {child.label}
-                        </Link>
+                        {child.locked ? (
+                          <div
+                            className={cn(
+                              typography.subtitle.font,
+                              "flex items-center justify-between px-4 py-2 text-sm text-muted-foreground cursor-not-allowed opacity-70"
+                            )}
+                          >
+                            <span>{child.label}</span>
+                            <Lock size={15} className="opacity-80" />
+                          </div>
+                        ) : (
+                          <Link
+                            to={`/${child.id}`}
+                            className={cn(
+                              typography.subtitle.font,
+                              "block px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 transition"
+                            )}
+                          >
+                            {child.label}
+                          </Link>
+                        )}
                       </li>
                     ))}
                   </ul>
@@ -155,66 +171,7 @@ export default function NavBar() {
               <ThemeToggle />
             </li>
           </ul>
-
-          {/* === Mobile === */}
-          <div className="flex items-center gap-3 md:hidden">
-            <ThemeToggle />
-            <button
-              aria-label="Toggle menu"
-              onClick={() => setOpen((v) => !v)}
-              className="inline-flex items-center justify-center h-10 w-10 rounded-md border border-border text-foreground transition"
-            >
-              <div className={cn("transition-transform duration-300", open && "rotate-45")}>
-                <div className="w-5 h-0.5 bg-current mb-1"></div>
-                <div className={cn("w-5 h-0.5 bg-current", open && "opacity-0")}></div>
-                <div className="w-5 h-0.5 bg-current mt-1"></div>
-              </div>
-            </button>
-          </div>
         </nav>
-
-        {/* === Mobile Menü === */}
-        <div
-          className={cn(
-            "md:hidden overflow-hidden transition-[max-height,opacity] duration-300 ease-in-out border-t border-border bg-background/95 backdrop-blur-sm",
-            open ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
-          )}
-        >
-          <div className="mx-auto w-full max-w-[1900px] px-[3vw] py-3 space-y-2">
-            {NAV.map((nav) => (
-              <div key={nav.id}>
-                <a
-                  href={hrefFor(nav)}
-                  onClick={(e) => handleNavClick(e, nav)}
-                  className={cn(
-                    typography.subtitle.font,
-                    typography.subtitle.size,
-                    typography.subtitle.weight,
-                    "block py-2 text-foreground"
-                  )}
-                >
-                  {t(`nav.${nav.id}`, nav.id.charAt(0).toUpperCase() + nav.id.slice(1))}
-                </a>
-                {nav.children && (
-                  <div className="ml-4 space-y-1">
-                    {nav.children.map((child) => (
-                      <Link
-                        key={child.id}
-                        to={`/${child.id}`}
-                        className={cn(
-                          typography.subtitle.font,
-                          "block py-1 text-sm text-muted-foreground hover:text-foreground transition"
-                        )}
-                      >
-                        {child.label}
-                      </Link>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
       </header>
       <div className="h-20" />
     </>

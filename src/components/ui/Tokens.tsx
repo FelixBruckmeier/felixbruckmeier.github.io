@@ -1,4 +1,3 @@
-// src/components/ui/Tokens.tsx
 import { cn } from "@/lib/utils";
 import {
   typography,
@@ -48,6 +47,9 @@ export function H2({ children, className = "" }: { children: ReactNode; classNam
   );
 }
 
+// ✅ Alias für H2 – kompatibel mit bisherigen Imports (z. B. Title)
+export const Title = H2;
+
 // ✅ H3 nutzt subtitle-Typografie (muted)
 export function H3({ children, className = "" }: { children: ReactNode; className?: string }) {
   return (
@@ -58,6 +60,31 @@ export function H3({ children, className = "" }: { children: ReactNode; classNam
         typography.subtitle.weight,
         typography.subtitle.leading,
         typography.subtitle.color,
+        className
+      )}
+    >
+      {children}
+    </h3>
+  );
+}
+
+// 🆕 SectionHeading – nutzt sectionHeading aus typography
+export function SectionHeading({
+  children,
+  className = "",
+}: {
+  children: ReactNode;
+  className?: string;
+}) {
+  return (
+    <h3
+      className={cn(
+        typography.sectionHeading.font,
+        typography.sectionHeading.size,
+        typography.sectionHeading.weight,
+        typography.sectionHeading.tracking,
+        typography.sectionHeading.leading,
+        typography.sectionHeading.color,
         className
       )}
     >

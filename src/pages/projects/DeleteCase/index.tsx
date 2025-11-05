@@ -1,11 +1,31 @@
+// src/pages/projects/DeleteCase/index.tsx
 import React, { useState } from "react";
 import { useI18n } from "@/i18n";
 
-// ✅ Artefakte & Komponenten
-import UserJourneyMap from "@/components/artefacts/JourneyMap";
-import InsightCard from "@/components/artefacts/InsightCard";
+// ✅ Placeholder-Komponenten (da die echten Artefakte nicht existieren)
+const UserJourneyMap: React.FC = () => (
+  <div className="border border-border rounded-xl p-6 bg-muted/20 text-center text-sm text-muted-foreground">
+    [User Journey Map Placeholder – visual journey would appear here]
+  </div>
+);
 
-// Hilfsfunktion für Zeitformatierung
+const InsightCard: React.FC<{
+  title: string;
+  evidence: string;
+  implication: string;
+}> = ({ title, evidence, implication }) => (
+  <div className="border border-border rounded-xl p-4 bg-background space-y-2">
+    <h4 className="font-semibold">{title}</h4>
+    <p className="text-sm text-muted-foreground">
+      <strong>Evidence:</strong> {evidence}
+    </p>
+    <p className="text-sm text-muted-foreground">
+      <strong>Implication:</strong> {implication}
+    </p>
+  </div>
+);
+
+// ✅ Hilfsfunktion für Zeitformatierung
 function formatTime(seconds: number): string {
   if (seconds < 60) return `${seconds.toFixed(0)} Sekunden`;
   const minutes = seconds / 60;
@@ -28,9 +48,9 @@ function formatTime(seconds: number): string {
 const DeleteCase: React.FC = () => {
   const { t } = useI18n();
 
-  const [users, setUsers] = useState<number | undefined>(100); // default 100
-  const [timeLoss, setTimeLoss] = useState<number | undefined>(10); // default 10 Sekunden
-  const [costPerDay, setCostPerDay] = useState<number | undefined>(400); // default 400 €/Tag
+  const [users, setUsers] = useState<number | undefined>(100);
+  const [timeLoss, setTimeLoss] = useState<number | undefined>(10);
+  const [costPerDay, setCostPerDay] = useState<number | undefined>(400);
   const [result, setResult] = useState<{ time: string; cost: number } | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -53,23 +73,16 @@ const DeleteCase: React.FC = () => {
 
     setError(null);
 
-    // Gesamtzeitverlust in Sekunden (pro Jahr)
     const lostSeconds = users * timeLoss * 365;
-
-    // Formatierte Zeit
     const formattedTime = formatTime(lostSeconds);
-
-    // Kosten: verlorene Zeit in Arbeitstage (1 Tag = 8h)
     let cost = 0;
+
     if (costPerDay && costPerDay > 0) {
       const lostWorkDays = lostSeconds / (60 * 60 * 8);
       cost = lostWorkDays * costPerDay;
     }
 
-    setResult({
-      time: formattedTime,
-      cost,
-    });
+    setResult({ time: formattedTime, cost });
   };
 
   return (

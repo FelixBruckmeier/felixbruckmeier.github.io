@@ -1,19 +1,31 @@
-export { default as Section } from "./Section";
-export { default as Tile } from "./Tile";
-export { default as Button } from "./Button";
-export { default as Badge } from "./Badge";
-export { default as Tag } from "./Tag";
+// ===============================================
+// 🧩 UI INDEX — Centralized Component Exports
+// ===============================================
 
-// Toggle ist ein named export, kein default
+// 🎨 Typography, Colors & Spacing Tokens
+export * from "./Tokens";
+
+// 🧱 Core layout
+export { default as Section } from "./Section";
+export { default as SectionIntro } from "./SectionIntro";
+
+// 🧰 Elements
+export { default as Badge } from "./Badge";
+export { default as Button } from "./Button";
+export { default as InfoTile } from "./InfoTile";
+export { default as Tag } from "./Tag";
+export { default as Tile } from "./Tile";
+export { default as TileImage } from "./TileImage";
+
+// ⚙️ Interactivity & Motion
+export { default as FadeIn } from "./FadeIn";
+export { default as TextReveal } from "./TextReveal";
 export { Toggle } from "./Toggle";
 
-// Accordion hat mehrere named exports
+// 📂 Accordion (mehrere named exports)
 export {
   Accordion,
   AccordionItem,
   AccordionTrigger,
   AccordionContent,
 } from "./accordion";
-
-// Typography, Color & Spacing Tokens (H1, Body, Subtitle, etc.)
-export * from "./Tokens";

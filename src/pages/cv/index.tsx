@@ -10,9 +10,10 @@ export default function CVPage() {
       title="Curriculum Vitae"
       intro="Highlights of my professional background and foundational experience."
     >
-      <CVIntroSection />
+     
       <ProfessionalExperienceSection />
       <PersonalExperienceSection />
+  <CVIntroSection />
     </PageLayout>
   );
 }

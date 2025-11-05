@@ -1,13 +1,18 @@
+// src/App.tsx
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import AppLayout from "@/AppLayout";
 import Home from "@/pages/Home";
 import CVPage from "@/pages/cv";
 
-// 🔹 Temporäre Projekt-Hinweisseite
-import PrivateProjects from "@/pages/projects/PrivateProjects";
+// 🔹 Projektseiten (Ordner mit index.tsx)
+import CarInsurance from "@/pages/projects/CarInsurance";
+import ZooplusReOps from "@/pages/projects/ZooplusReOps";
+import ZooplusPricing from "@/pages/projects/ZooplusPricing";
+import InsuranceBrokerDiscovery from "@/pages/projects/InsuranceBroker";
+import AtossReOps from "@/pages/projects/AtossReOps";
 
-// Expertise-Seiten
+// 🔹 Expertise-Seiten
 import UXStrategy from "@/pages/expertise/UXStrategy";
 import StrategicUXResearch from "@/pages/expertise/StrategicUXResearch";
 import ResearchOps from "@/pages/expertise/ResearchOps";
@@ -15,7 +20,7 @@ import TeamLeadership from "@/pages/expertise/TeamLeadership";
 import ImpactMeasurement from "@/pages/expertise/ImpactMeasurement";
 import SkillAssessmentPage from "@/pages/expertise/TeamLeadership/skillassessment";
 
-// Footer-/Legal-Seiten
+// 🔹 Footer-/Legal-Seiten
 import Imprint from "@/pages/shared/Imprint";
 import Privacy from "@/pages/shared/Privacy";
 
@@ -38,10 +43,18 @@ export default function App() {
           <Route index element={<Home />} />
           <Route path="cv" element={<CVPage />} />
 
-          {/* 🔹 Projekt-Routen (aktuell gesperrt → Hinweisseite) */}
-          <Route path="projects/*" element={<PrivateProjects />} />
+          {/* 🔹 Projektseiten */}
+          <Route path="projects/car-insurance" element={<CarInsurance />} />
+          <Route path="projects/zooplus-reops" element={<ZooplusReOps />} />
+          <Route path="projects/zooplus-pricing" element={<ZooplusPricing />} />
+          <Route
+            path="projects/insurance-broker-discovery"
+            element={<InsuranceBrokerDiscovery />}
+          />
+          <Route path="projects/atoss-reops" element={<AtossReOps />} />
+          <Route path="projects" element={<Navigate to="/" replace />} />
 
-          {/* 🔹 Expertise-Routen */}
+          {/* 🔹 Expertise */}
           <Route path="expertise/ux-strategy" element={<UXStrategy />} />
           <Route
             path="expertise/strategic-ux-research"
@@ -69,4 +82,3 @@ export default function App() {
     </>
   );
 }
-

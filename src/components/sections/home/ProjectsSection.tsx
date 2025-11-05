@@ -1,17 +1,15 @@
+// src/components/sections/home/ProjectsSection.tsx
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Section } from "@/components/ui";
-import SectionIntro from "@/components/ui/SectionIntro";
-import TextReveal from "@/components/ui/TextReveal";
-import FadeIn from "@/components/ui/FadeIn";
-import TileImage from "@/components/ui/TileImage";
+import { Section, SectionIntro, TextReveal, FadeIn, TileImage } from "@/components/ui";
 import { spacing, layout } from "@/lib/tokens";
 import { cn } from "@/lib/utils";
+import { Lock } from "lucide-react";
 
 // 📸 Projektbilder (optimiert via vite-imagetools)
 import carInsuranceImg from "@/assets/images/projects/carinsurance/CarInsurance.png?w=400;800&format=webp;png&as=picture";
 import reopsAgileImg from "@/assets/images/projects/reopsagile/ResearchOpsAgileUX.jpg?w=400;800&format=webp;png&as=picture";
-import b2b2cImg from "@/assets/images/projects/b2b2c/B2B2COptimization.jpg?w=400;800&format=webp;png&as=picture";
+import insuranceBrokerImg from "@/assets/images/projects/b2b2c/B2B2COptimization.jpg?w=400;800&format=webp;png&as=picture";
 import pricingImg from "@/assets/images/projects/pricingtesting/PricingUsabilityTesting.jpg?w=400;800&format=webp;png&as=picture";
 import microinteractionImg from "@/assets/images/projects/amicrointeraction/optimize.jpg?w=400;800&format=webp;png&as=picture";
 import reopsImplImg from "@/assets/images/projects/reopsimplement/ReOpsimplementation.jpg?w=400;800&format=webp;png&as=picture";
@@ -25,36 +23,42 @@ export default function ProjectsSection() {
       title: "Car Insurance",
       desc: "Reduced friction and improved conversion.",
       image: carInsuranceImg,
+      locked: false,
     },
     {
       to: "/projects/zooplus-reops",
       title: "ResearchOps & Agile UX",
       desc: "Governance, templates & enablement at scale.",
       image: reopsAgileImg,
+      locked: true,
     },
     {
-      to: "/projects/swiss-life-b2b2c",
-      title: "B2B2C Optimization",
-      desc: "Qual & quant insights aligned to business goals.",
-      image: b2b2cImg,
+      to: "/projects/insurance-broker-discovery",
+      title: "Insurance Broker Discovery Research",
+      desc: "Contextual interviews & synthesis for product clarity.",
+      image: insuranceBrokerImg,
+      locked: false,
     },
     {
       to: "/projects/zooplus-pricing",
       title: "Pricing Usability Testing",
       desc: "Clarity in pricing components and PDP details.",
       image: pricingImg,
+      locked: false,
     },
     {
       to: "/projects/delete-case",
       title: "Micro Interaction",
       desc: "Simplifying repetitive workflows efficiently.",
       image: microinteractionImg,
+      locked: true,
     },
     {
       to: "/projects/atoss-reops",
       title: "ReOps Implementation",
       desc: "Empowering UX teams through ResearchOps foundations.",
       image: reopsImplImg,
+      locked: true,
     },
   ];
 
@@ -73,7 +77,6 @@ export default function ProjectsSection() {
         </TextReveal>
       </SectionIntro>
 
-      {/* --- Projects Tiles (3 pro Zeile Desktop) --- */}
       <div
         className={cn(
           "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3",
@@ -83,14 +86,35 @@ export default function ProjectsSection() {
       >
         {projects.map((p, i) => (
           <FadeIn key={i} delay={0.2 + i * 0.1}>
-            <Link to={p.to}>
-              <TileImage
-                image={p.image}
-                title={p.title}
-                caption={p.desc}
-                className="group rounded-xl overflow-hidden"
-              />
-            </Link>
+            <div className="relative group">
+              {/* 🔓 Klickbare Projekte */}
+              {!p.locked ? (
+                <Link to={p.to}>
+                  <TileImage
+                    image={p.image}
+                    title={p.title}
+                    caption={p.desc}
+                    className="group rounded-xl overflow-hidden"
+                  />
+                </Link>
+              ) : (
+                // 🔒 Gesperrte Projekte — kein Klick, kein Cursor-Wechsel
+                <div className="relative rounded-xl overflow-hidden select-none cursor-default">
+                  <TileImage
+                    image={p.image}
+                    title={p.title}
+                    caption={p.desc}
+                    className="rounded-xl overflow-hidden opacity-70"
+                  />
+                  <div className="absolute inset-0 bg-black/50 flex items-center justify-center rounded-xl">
+                    <Lock
+                      className="text-white opacity-90 w-12 h-12 drop-shadow-lg transition-none"
+                      strokeWidth={1.5}
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
           </FadeIn>
         ))}
       </div>
