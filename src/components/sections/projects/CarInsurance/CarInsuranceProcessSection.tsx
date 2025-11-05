@@ -15,7 +15,7 @@ import journeyImg from "@/assets/images/projects/carinsurance/journey.png";
 import wsImg from "@/assets/images/projects/carinsurance/ws.png";
 import protoImg from "@/assets/images/projects/carinsurance/proto.png";
 import testingImg from "@/assets/images/projects/carinsurance/testing.png";
-import deliveryImg from "@/assets/images/projects/carinsurance/untitled.png";
+import deliveryImg from "@/assets/images/projects/carinsurance/Untitled.png";
 
 export default function CarInsuranceProcessSection() {
   const steps = [
