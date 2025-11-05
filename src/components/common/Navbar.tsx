@@ -1,10 +1,11 @@
+// src/components/common/NavBar.tsx
 import { Link, useLocation } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import ThemeToggle from "@/components/common/ThemeToggle";
 import { typography } from "@/lib/tokens";
 import { cn } from "@/lib/utils";
-import { Lock } from "lucide-react";
+import { Lock, Menu, X } from "lucide-react";
 
 type NavItem = {
   id: string;
@@ -171,7 +172,65 @@ export default function NavBar() {
               <ThemeToggle />
             </li>
           </ul>
+
+          {/* === Mobile Burger Button === */}
+          <button
+            onClick={() => setOpen(!open)}
+            className="md:hidden text-foreground focus:outline-none"
+            aria-label="Toggle menu"
+          >
+            {open ? <X size={26} /> : <Menu size={26} />}
+          </button>
         </nav>
+
+        {/* === Mobile Menu === */}
+        {open && (
+          <div className="md:hidden bg-background border-t border-border/40">
+            <ul className="flex flex-col items-start p-4 space-y-4">
+              {NAV.map((nav) => (
+                <li key={nav.id}>
+                  <a
+                    href={hrefFor(nav)}
+                    onClick={(e) => handleNavClick(e, nav)}
+                    className={cn(
+                      typography.subtitle.font,
+                      typography.subtitle.size,
+                      typography.subtitle.weight,
+                      "block text-muted-foreground hover:text-foreground transition"
+                    )}
+                  >
+                    {t(`nav.${nav.id}`, nav.id.charAt(0).toUpperCase() + nav.id.slice(1))}
+                  </a>
+
+                  {nav.children && (
+                    <ul className="pl-4 mt-1 space-y-2">
+                      {nav.children.map((child) => (
+                        <li key={child.id}>
+                          {child.locked ? (
+                            <span className="flex items-center gap-2 text-sm text-muted-foreground opacity-70">
+                              <Lock size={14} />
+                              {child.label}
+                            </span>
+                          ) : (
+                            <Link
+                              to={`/${child.id}`}
+                              className="block text-sm text-muted-foreground hover:text-foreground"
+                            >
+                              {child.label}
+                            </Link>
+                          )}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </li>
+              ))}
+              <li>
+                <ThemeToggle />
+              </li>
+            </ul>
+          </div>
+        )}
       </header>
       <div className="h-20" />
     </>

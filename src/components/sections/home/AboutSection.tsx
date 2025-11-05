@@ -1,4 +1,3 @@
-// src/components/sections/home/AboutSection.tsx
 import Section from "@/components/ui/Section";
 import FadeIn from "@/components/ui/FadeIn";
 import TextReveal from "@/components/ui/TextReveal";
@@ -17,12 +16,13 @@ export default function AboutSection() {
       >
         {/* === Text-Bereich === */}
         <div className="text-block order-1 md:order-1 md:col-start-1 flex flex-col">
-          <FadeIn delay={0.1}>
+          <FadeIn delay={0.05}>
             <TextReveal
               variant="word"
-              stagger={0.04}
-              duration={0.45}
-              ease="easeOut"
+              stagger={0.05}
+              duration={0.6}
+              delay={0.05}
+              ease="easeInOut"
               className="text-left text-foreground font-bold text-5xl mb-8"
             >
               Hello!
@@ -32,21 +32,23 @@ export default function AboutSection() {
           <FadeIn delay={0.25}>
             <TextReveal
               variant="word"
-              stagger={0.04}
-              duration={0.4}
-              ease="easeOut"
+              stagger={0.05}
+              duration={0.5}
+              delay={0.05}
+              ease="easeInOut"
               className="text-left text-foreground font-semibold text-lg mb-4"
             >
               I’m a UX Research Lead focused on grounding decisions in evidence.
             </TextReveal>
           </FadeIn>
 
-          <FadeIn delay={0.35}>
+          <FadeIn delay={0.45}>
             <TextReveal
               variant="word"
-              stagger={0.04}
-              duration={0.45}
-              ease="easeOut"
+              stagger={0.05}
+              duration={0.5}
+              delay={0.1}
+              ease="easeInOut"
               className="text-left text-muted-foreground leading-relaxed max-w-prose"
             >
               I support teams in shaping meaningful strategies.
@@ -56,19 +58,19 @@ export default function AboutSection() {
 
           {/* === CTA (Desktop) === */}
           <div className="hidden md:flex flex-wrap gap-4 w-full mt-8">
-            <FadeIn delay={0.45}>
+            <FadeIn delay={0.65}>
               <Button asChild variant="secondary" size="lg">
                 <a href="#projects">See Projects ↓</a>
               </Button>
             </FadeIn>
 
-            <FadeIn delay={0.55}>
+            <FadeIn delay={0.75}>
               <Button asChild variant="secondary" size="lg">
                 <a href="#expertise">Explore Expertise ↓</a>
               </Button>
             </FadeIn>
 
-            <FadeIn delay={0.65}>
+            <FadeIn delay={0.85}>
               <Button asChild variant="secondary" size="lg">
                 <a href="/cv">View CV →</a>
               </Button>
@@ -78,7 +80,7 @@ export default function AboutSection() {
 
         {/* === Bild-Bereich === */}
         <div className="image-block order-2 md:order-2 md:col-start-2">
-          <FadeIn delay={0.25}>
+          <FadeIn delay={0.2}>
             <img
               src={profileImg}
               alt="Portrait of Felix Bruckmeier"
@@ -92,19 +94,19 @@ export default function AboutSection() {
 
         {/* === CTA Mobile === */}
         <div className="order-3 md:hidden flex flex-wrap gap-4 mt-8 w-full">
-          <FadeIn delay={0.45}>
+          <FadeIn delay={0.65}>
             <Button asChild variant="secondary" size="lg" className="w-full">
               <a href="#projects">See Projects ↓</a>
             </Button>
           </FadeIn>
 
-          <FadeIn delay={0.55}>
+          <FadeIn delay={0.75}>
             <Button asChild variant="secondary" size="lg" className="w-full">
               <a href="#expertise">Explore Expertise ↓</a>
             </Button>
           </FadeIn>
 
-          <FadeIn delay={0.65}>
+          <FadeIn delay={0.85}>
             <Button asChild variant="secondary" size="lg" className="w-full">
               <a href="/cv">View CV →</a>
             </Button>
@@ -113,7 +115,7 @@ export default function AboutSection() {
       </div>
 
       {/* === Quote === */}
-      <FadeIn delay={0.75}>
+      <FadeIn delay={1.0}>
         <p className="mt-12 text-center text-muted-foreground italic text-sm md:text-base">
           “UX Research is not for perfectionists. We strive for something better than perfection — something real.”
         </p>
