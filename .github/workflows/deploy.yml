@@ -26,16 +26,16 @@ jobs:
           node-version: 20
           cache: npm
 
-      - name: Clean install deps
+      - name: Clean install dependencies
         run: |
           rm -rf node_modules
           npm install
 
-      # 🩹 Workaround: Rollup Native Binary für Linux explizit installieren
-      # (um npm optional-deps Bug auf GitHub Actions zu umgehen)
-      - name: Ensure Rollup native binary is present
+      # 🩹 Fix for Rollup optional deps + Sharp Linux binary
+      - name: Ensure native binaries (rollup + sharp)
         run: |
           npm install -D @rollup/rollup-linux-x64-gnu@latest || true
+          npm install --os=linux --cpu=x64 sharp || true
 
       - name: Build
         run: npm run build
