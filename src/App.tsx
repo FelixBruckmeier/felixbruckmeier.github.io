@@ -24,7 +24,11 @@ import SkillAssessmentPage from "@/pages/expertise/TeamLeadership/skillassessmen
 import Imprint from "@/pages/shared/Imprint";
 import Privacy from "@/pages/shared/Privacy";
 
-// 🔹 Scroll-to-top Component
+/**
+ * ScrollToTop
+ * ------------------------------
+ * Scrollt beim Wechsel der Route ganz nach oben
+ */
 function ScrollToTop() {
   const { pathname } = useLocation();
   useEffect(() => {
@@ -33,10 +37,35 @@ function ScrollToTop() {
   return null;
 }
 
+/**
+ * ScrollToHash
+ * ------------------------------
+ * Sorgt dafür, dass bei einem Link wie "/#contact"
+ * sofort zur Section gescrollt wird, auch wenn die Seite neu geladen wird.
+ */
+function ScrollToHash() {
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.hash) {
+      // kleine Verzögerung, bis DOM vollständig steht
+      setTimeout(() => {
+        const el = document.querySelector(location.hash);
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }, 120);
+    }
+  }, [location]);
+
+  return null;
+}
+
 export default function App() {
   return (
     <>
       <ScrollToTop />
+      <ScrollToHash />
       <Routes>
         <Route path="/" element={<AppLayout />}>
           {/* 🔹 Hauptseiten */}
