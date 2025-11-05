@@ -20,22 +20,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node (LTS)
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
 
-      - name: Clean install dependencies
-        run: |
-          rm -rf node_modules
-          npm install
+      - name: Install dependencies
+        run: npm ci
 
-      # 🩹 Fix for Rollup optional deps + Sharp Linux binary
-      - name: Ensure native binaries (rollup + sharp)
+      - name: Fix missing Linux binaries for LightningCSS and Sharp
         run: |
-          npm install -D @rollup/rollup-linux-x64-gnu@latest || true
-          npm install --os=linux --cpu=x64 sharp || true
+          npm install --os=linux --cpu=x64 sharp
+          npm install --os=linux --cpu=x64 lightningcss
 
       - name: Build
         run: npm run build
