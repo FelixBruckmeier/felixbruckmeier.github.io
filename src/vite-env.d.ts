@@ -34,3 +34,7 @@ declare module "*.mp4" {
   const value: string;
   export default value;
 }
+
+/* 👇 neu hinzufügen */
+declare module '*&as=picture';
+declare module '*?*';

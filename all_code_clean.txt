@@ -232,13 +232,14 @@ export default function LanguageToggle() {
 
 
 ==== \src\components\common\Navbar.tsx ====
+// src/components/common/NavBar.tsx
 import { Link, useLocation } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import ThemeToggle from "@/components/common/ThemeToggle";
 import { typography } from "@/lib/tokens";
 import { cn } from "@/lib/utils";
-import { Lock } from "lucide-react";
+import { Lock, Menu, X } from "lucide-react";
 
 type NavItem = {
   id: string;
@@ -405,7 +406,65 @@ export default function NavBar() {
               <ThemeToggle />
             </li>
           </ul>
+
+          {/* === Mobile Burger Button === */}
+          <button
+            onClick={() => setOpen(!open)}
+            className="md:hidden text-foreground focus:outline-none"
+            aria-label="Toggle menu"
+          >
+            {open ? <X size={26} /> : <Menu size={26} />}
+          </button>
         </nav>
+
+        {/* === Mobile Menu === */}
+        {open && (
+          <div className="md:hidden bg-background border-t border-border/40">
+            <ul className="flex flex-col items-start p-4 space-y-4">
+              {NAV.map((nav) => (
+                <li key={nav.id}>
+                  <a
+                    href={hrefFor(nav)}
+                    onClick={(e) => handleNavClick(e, nav)}
+                    className={cn(
+                      typography.subtitle.font,
+                      typography.subtitle.size,
+                      typography.subtitle.weight,
+                      "block text-muted-foreground hover:text-foreground transition"
+                    )}
+                  >
+                    {t(`nav.${nav.id}`, nav.id.charAt(0).toUpperCase() + nav.id.slice(1))}
+                  </a>
+
+                  {nav.children && (
+                    <ul className="pl-4 mt-1 space-y-2">
+                      {nav.children.map((child) => (
+                        <li key={child.id}>
+                          {child.locked ? (
+                            <span className="flex items-center gap-2 text-sm text-muted-foreground opacity-70">
+                              <Lock size={14} />
+                              {child.label}
+                            </span>
+                          ) : (
+                            <Link
+                              to={`/${child.id}`}
+                              className="block text-sm text-muted-foreground hover:text-foreground"
+                            >
+                              {child.label}
+                            </Link>
+                          )}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </li>
+              ))}
+              <li>
+                <ThemeToggle />
+              </li>
+            </ul>
+          </div>
+        )}
       </header>
       <div className="h-20" />
     </>
@@ -506,20 +565,57 @@ export default function PrivacySection() {
 }
 
 
-==== \src\components\common\ScrollToTop.tsx ====
-// src/components/common/ScrollToTop.tsx
+==== \src\components\common\ScrollToHash.tsx ====
+// src/components/common/ScrollToHash.tsx
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
-export default function ScrollToTop() {
-  const { pathname } = useLocation();
+export default function ScrollToHash() {
+  const location = useLocation();
 
   useEffect(() => {
-    window.scrollTo({
-      top: 0,
-      behavior: "instant", // oder "smooth" für sanftes Scrollen
-    });
-  }, [pathname]);
+    if (location.hash) {
+      const target = document.querySelector(location.hash);
+      if (target) {
+        setTimeout(() => {
+          target.scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 100); // kurze Verzögerung, damit DOM sicher aufgebaut ist
+      }
+    }
+  }, [location]);
+
+  return null;
+}
+
+
+==== \src\components\common\ScrollToTop.tsx ====
+// src/components/common/ScrollToHash.tsx
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
+
+export default function ScrollToHash() {
+  const location = useLocation();
+
+  useEffect(() => {
+    const scrollToTarget = () => {
+      if (window.location.hash) {
+        const target = document.querySelector(window.location.hash);
+        if (target) {
+          setTimeout(() => {
+            target.scrollIntoView({ behavior: "smooth", block: "start" });
+          }, 80);
+        }
+      }
+    };
+
+    // reagiert auf Route-Wechsel UND Hash-Änderungen
+    scrollToTarget();
+    window.addEventListener("hashchange", scrollToTarget);
+
+    return () => {
+      window.removeEventListener("hashchange", scrollToTarget);
+    };
+  }, [location]);
 
   return null;
 }
@@ -3421,7 +3517,7 @@ import {
 export default function PricingPage() {
   return (
     <PageLayout
-      title="zooplus — Pricing Usability Testing"
+      title="Pricing Usability Testing"
       intro="From hesitation to trust — clarifying how prices are perceived, understood, and believed."
       headerImage={headerImg}
       width="wide"
@@ -3512,34 +3608,25 @@ export default function PrivacyPage() {
 // src/pages/Home.tsx
 import PageLayout from "@/components/layout/PageLayout";
 
-// 🔹 Startseiten-Sections
 import {
   AboutSection,
   ExpertiseSection,
   ProjectsSection,
   ContactSection,
+  ContactFormSection, 
 } from "@/components/sections/home";
 
-// 🔹 KPI-Section
 import MetricsSection from "@/components/sections/home/MetricsSection";
 
 export default function Home() {
   return (
     <PageLayout>
-      {/* ===== About Section (Intro mit Portrait + Buttons) ===== */}
       <AboutSection />
-
-      {/* ===== KPI-Section ===== */}
       <MetricsSection />
-
-      {/* ===== Expertise Section ===== */}
       <ExpertiseSection />
-
-      {/* ===== Projects Section ===== */}
       <ProjectsSection />
-
-      {/* ===== Kontakt Section ===== */}
       <ContactSection />
+      <ContactFormSection />
     </PageLayout>
   );
 }
@@ -3613,7 +3700,11 @@ import SkillAssessmentPage from "@/pages/expertise/TeamLeadership/skillassessmen
 import Imprint from "@/pages/shared/Imprint";
 import Privacy from "@/pages/shared/Privacy";
 
-// 🔹 Scroll-to-top Component
+/**
+ * ScrollToTop
+ * ------------------------------
+ * Scrollt beim Wechsel der Route ganz nach oben
+ */
 function ScrollToTop() {
   const { pathname } = useLocation();
   useEffect(() => {
@@ -3622,10 +3713,35 @@ function ScrollToTop() {
   return null;
 }
 
+/**
+ * ScrollToHash
+ * ------------------------------
+ * Sorgt dafür, dass bei einem Link wie "/#contact"
+ * sofort zur Section gescrollt wird, auch wenn die Seite neu geladen wird.
+ */
+function ScrollToHash() {
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.hash) {
+      // kleine Verzögerung, bis DOM vollständig steht
+      setTimeout(() => {
+        const el = document.querySelector(location.hash);
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }, 120);
+    }
+  }, [location]);
+
+  return null;
+}
+
 export default function App() {
   return (
     <>
       <ScrollToTop />
+      <ScrollToHash />
       <Routes>
         <Route path="/" element={<AppLayout />}>
           {/* 🔹 Hauptseiten */}

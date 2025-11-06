@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import jsPDF from "jspdf";
-import { Subtitle, MutedText } from "@/components/ui/Tokens"; 
+import { Subtitle, MutedText } from "@/components/ui/Tokens";
+import Button from "@/components/ui/Button"; // ✅ default import statt { Button }
 import { cn } from "@/lib/utils";
 
 const roleProfiles: Record<string, string[]> = {
@@ -53,81 +54,81 @@ const roleProfiles: Record<string, string[]> = {
     "Amplify the Practice",
     "Strategic Direction",
   ],
-  Individuell: [],
+  Custom: [],
 };
 
 const themes: Record<string, { name: string; description: string }[]> = {
   "Coordination & Data Management": [
-    { name: "Data Capture", description: "Daten systematisch erfassen, dokumentieren und strukturieren." },
-    { name: "Well-Managed Data", description: "Rohdaten klar organisieren, sodass sie nachvollziehbar und wiederverwendbar bleiben." },
+    { name: "Data Capture", description: "Systematically record, document, and structure data." },
+    { name: "Well-Managed Data", description: "Organize raw data clearly to ensure transparency and reusability." },
   ],
   "Evaluative Testing": [
-    { name: "Heuristic Analysis", description: "Interface anhand etablierter Heuristiken bewerten." },
-    { name: "Usability Test", description: "Gezielte Tests, um Nutzerfreundlichkeit und Probleme zu erkennen." },
-    { name: "Information Architecture Study", description: "Struktur und Navigation von Inhalten untersuchen." },
-    { name: "Concept Test", description: "Ideen und Prototypen frühzeitig mit Nutzern validieren." },
-    { name: "Bug & Defect Tracking", description: "Nutzungsprobleme und Fehler dokumentieren und nachverfolgen." },
+    { name: "Heuristic Analysis", description: "Evaluate interfaces based on established heuristics." },
+    { name: "Usability Test", description: "Conduct targeted tests to identify usability issues and problems." },
+    { name: "Information Architecture Study", description: "Investigate the structure and navigation of content." },
+    { name: "Concept Test", description: "Validate ideas and prototypes with users early on." },
+    { name: "Bug & Defect Tracking", description: "Document and track usability issues and defects." },
   ],
   "Debrief & Analysis": [
-    { name: "Interview Debrief", description: "Nach Interviews Erkenntnisse austauschen und sichern." },
-    { name: "Video Analysis", description: "Videoaufzeichnungen systematisch analysieren." },
-    { name: "Affinity Map", description: "Ergebnisse clustern, um Muster und Themen sichtbar zu machen." },
-    { name: "Data Wall", description: "Visuelle Datenpunkte zur gemeinsamen Synthese im Team nutzen." },
+    { name: "Interview Debrief", description: "Share and capture insights after user interviews." },
+    { name: "Video Analysis", description: "Systematically analyze video recordings." },
+    { name: "Affinity Map", description: "Cluster results to reveal patterns and themes." },
+    { name: "Data Wall", description: "Use visual data points to collaboratively synthesize findings." },
   ],
   "Interview Planning & Execution": [
-    { name: "Study Plan", description: "Ablauf und Ziele einer Studie planen und dokumentieren." },
-    { name: "Participant Segments & Screening", description: "Zielgruppen definieren und passende Teilnehmer auswählen." },
-    { name: "User Interview", description: "Gespräche führen, um Einblicke in Nutzerbedürfnisse zu gewinnen." },
-    { name: "Field Interview", description: "Interviews im Nutzungskontext durchführen." },
-    { name: "Experience Sample / Diary Study", description: "Langfristige Studien, in denen Nutzer ihre Erlebnisse festhalten." },
-    { name: "Interview Protocol", description: "Leitfaden für Interviews entwickeln und einsetzen." },
-    { name: "Actionable Research Question", description: "Forschungsfragen formulieren, die konkrete Handlungen ermöglichen." },
+    { name: "Study Plan", description: "Plan and document the goals and structure of a study." },
+    { name: "Participant Segments & Screening", description: "Define target audiences and select suitable participants." },
+    { name: "User Interview", description: "Conduct interviews to understand user needs." },
+    { name: "Field Interview", description: "Conduct interviews in real-world usage contexts." },
+    { name: "Experience Sample / Diary Study", description: "Run longitudinal studies where users record their experiences." },
+    { name: "Interview Protocol", description: "Develop and apply an interview guide." },
+    { name: "Actionable Research Question", description: "Formulate research questions that lead to concrete actions." },
   ],
   "Basic Quantitative Work": [
-    { name: "Surveys & Questionnaires", description: "Fragebögen entwickeln und auswerten." },
-    { name: "Exploratory Quantitative Analysis", description: "Zahlen und Metriken untersuchen, um Muster zu erkennen." },
-    { name: "Product Analytics", description: "Nutzungsdaten analysieren, um Verhalten zu verstehen." },
+    { name: "Surveys & Questionnaires", description: "Develop and analyze questionnaires." },
+    { name: "Exploratory Quantitative Analysis", description: "Explore metrics and numbers to identify patterns." },
+    { name: "Product Analytics", description: "Analyze product usage data to understand behavior." },
   ],
   Synthesis: [
-    { name: "Exploratory Research", description: "Neue Themenbereiche untersuchen, um Chancen zu identifizieren." },
-    { name: "Exploratory Qualitative Analysis", description: "Qualitative Daten interpretieren und in Erkenntnisse überführen." },
-    { name: "Journey Map", description: "Erfahrungen entlang der Customer Journey visualisieren." },
-    { name: "Sensemaking Workshop", description: "Im Team Daten reflektieren und Muster ableiten." },
-    { name: "Conceptual Model", description: "Abstrakte Modelle entwickeln, um komplexe Systeme zu erklären." },
+    { name: "Exploratory Research", description: "Investigate new topics to identify opportunities." },
+    { name: "Exploratory Qualitative Analysis", description: "Interpret qualitative data to derive insights." },
+    { name: "Journey Map", description: "Visualize experiences along the customer journey." },
+    { name: "Sensemaking Workshop", description: "Reflect on data as a team to identify key patterns." },
+    { name: "Conceptual Model", description: "Develop abstract models to explain complex systems." },
   ],
   "Stakeholder Engagement": [
-    { name: "Stakeholder Interview", description: "Interviews mit Stakeholdern zur Klärung von Annahmen und Zielen." },
-    { name: "Stakeholder Assumption Workshop", description: "Workshops, um Hypothesen und Annahmen gemeinsam zu prüfen." },
+    { name: "Stakeholder Interview", description: "Interview stakeholders to clarify assumptions and goals." },
+    { name: "Stakeholder Assumption Workshop", description: "Collaboratively review and challenge assumptions." },
   ],
   "Structured Modeling": [
-    { name: "Service Blueprint", description: "Darstellung von Abläufen und Berührungspunkten einer Dienstleistung." },
-    { name: "User Personas", description: "Typische Nutzerprofile erstellen, um Bedürfnisse zu repräsentieren." },
-    { name: "Jobs to be Done", description: "Analyse der ‚Aufgaben‘, die Nutzer mit Produkten lösen wollen." },
+    { name: "Service Blueprint", description: "Visualize service processes and touchpoints." },
+    { name: "User Personas", description: "Create user archetypes to represent key needs." },
+    { name: "Jobs to be Done", description: "Analyze the ‘jobs’ users want to accomplish with a product." },
   ],
   "Integration in Service Delivery": [
-    { name: "Research-Driven Design Project", description: "Designentscheidungen durch Forschungsergebnisse leiten." },
-    { name: "A/B Test", description: "Varianten von Produkten testen und vergleichen." },
-    { name: "Beta Test", description: "Produkt vor Veröffentlichung mit realen Nutzern testen." },
-    { name: "Development Cycle Coupling", description: "Research in agile Entwicklungszyklen integrieren." },
-    { name: "Design Sprint", description: "Kurze Innovationszyklen mit Nutzerfeedback verbinden." },
-    { name: "Cadenced User Studies", description: "Regelmäßig wiederkehrende Nutzerstudien durchführen." },
+    { name: "Research-Driven Design Project", description: "Use research insights to guide design decisions." },
+    { name: "A/B Test", description: "Test and compare product variants." },
+    { name: "Beta Test", description: "Test a product with real users before release." },
+    { name: "Development Cycle Coupling", description: "Integrate research into agile development cycles." },
+    { name: "Design Sprint", description: "Combine rapid innovation cycles with user feedback." },
+    { name: "Cadenced User Studies", description: "Conduct recurring user studies regularly." },
   ],
   Broadcasting: [
-    { name: "Effective Reporting", description: "Ergebnisse klar und überzeugend kommunizieren." },
-    { name: "Research Evangelization", description: "Research sichtbar machen und für dessen Wert werben." },
+    { name: "Effective Reporting", description: "Communicate findings clearly and persuasively." },
+    { name: "Research Evangelization", description: "Make research visible and advocate its value." },
   ],
   "Business Alignment": [
-    { name: "Customer Advisory Council", description: "Kunden regelmäßig einbeziehen, um Feedback zu sichern." },
-    { name: "Front-Line Collaboration", description: "Mit Kundensupport oder Vertrieb zusammenarbeiten, um Insights zu gewinnen." },
+    { name: "Customer Advisory Council", description: "Engage customers regularly to ensure feedback." },
+    { name: "Front-Line Collaboration", description: "Collaborate with support or sales to gather insights." },
   ],
   "Amplify the Practice": [
-    { name: "Research Training", description: "Teams und Kollegen in Research-Methoden schulen." },
-    { name: "Public Project Index", description: "Zentrale Übersicht über Forschungsprojekte bereitstellen." },
+    { name: "Research Training", description: "Train teams and colleagues in research methods." },
+    { name: "Public Project Index", description: "Provide a central overview of research projects." },
   ],
   "Strategic Direction": [
-    { name: "Product Roadmap", description: "Forschung in langfristige Produktplanung einbringen." },
-    { name: "User Needs Inception", description: "Grundlegende Nutzerbedürfnisse frühzeitig erfassen." },
-    { name: "Product & Design Strategy", description: "Forschungsergebnisse in strategische Ausrichtungen übersetzen." },
+    { name: "Product Roadmap", description: "Integrate research into long-term product planning." },
+    { name: "User Needs Inception", description: "Capture fundamental user needs early on." },
+    { name: "Product & Design Strategy", description: "Translate research findings into strategic direction." },
   ],
 };
 
@@ -147,11 +148,8 @@ export default function SkillmapForm({ onDataChange }: { onDataChange: (data: an
     }));
   };
 
-  // ✅ Nur noch Rollenpflicht, keine Pflicht zur Bewertung
-  const isComplete = () => !!role;
-
   const generateMap = () => {
-    const requiredThemes = role === "Individuell" ? Object.keys(themes) : roleProfiles[role];
+    const requiredThemes = role === "Custom" ? Object.keys(themes) : roleProfiles[role];
     const aggregated = requiredThemes.map((theme) => {
       const skills = themes[theme] || [];
       const avgMastery =
@@ -170,14 +168,14 @@ export default function SkillmapForm({ onDataChange }: { onDataChange: (data: an
     if (!aggregatedData) return;
     const doc = new jsPDF();
     doc.setFontSize(18);
-    doc.text("Skillmap Ergebnis", 14, 20);
+    doc.text("Skillmap Results", 14, 20);
     doc.setFontSize(12);
-    doc.text(`Rolle: ${role}`, 14, 30);
+    doc.text(`Role: ${role}`, 14, 30);
     let y = 40;
     doc.setFont("helvetica", "bold");
-    doc.text("Thema", 14, y);
+    doc.text("Theme", 14, y);
     doc.text("Mastery", 100, y);
-    doc.text("Relevanz", 150, y);
+    doc.text("Relevance", 150, y);
     doc.setFont("helvetica", "normal");
     y += 10;
     aggregatedData.forEach((d) => {
@@ -195,36 +193,37 @@ export default function SkillmapForm({ onDataChange }: { onDataChange: (data: an
 
   return (
     <div className="space-y-8 px-4 sm:px-6 md:px-0 md:mx-auto md:max-w-4xl">
-      {/* Rollen-Auswahl */}
       <div className="mb-6 space-y-2">
-        <label className="block font-medium">Bitte wähle deine Rolle:</label>
+        <label className="block font-medium">Please select your role:</label>
         <select value={role} onChange={(e) => setRole(e.target.value)} className="border rounded-lg px-3 py-2">
-          <option value="">-- Rolle auswählen --</option>
+          <option value="">-- Select role --</option>
           {Object.keys(roleProfiles).map((r) => (
-            <option key={r} value={r}>{r}</option>
+            <option key={r} value={r}>
+              {r}
+            </option>
           ))}
         </select>
       </div>
 
-      {/* Erklärung */}
       {role && (
         <p className="text-gray-700 mt-4">
-          Bitte bewerten Sie die folgenden Skills und Aufgabengebiete: <br />
-          <strong>Mastery:</strong> 0 = keine Kenntnisse, 1 = Grundkenntnisse, 2 = arbeitet unter Anleitung, 3 = selbstständig, 4 = Experte. <br />
-          <strong>Relevanz:</strong> 0 = nicht relevant, 5 = sehr hohe Relevanz für Ihre Rolle/Aufgaben.
+          Please rate the following skills and topic areas: <br />
+          <strong>Mastery:</strong> 0 = no experience, 1 = basic, 2 = guided, 3 = independent, 4 = expert. <br />
+          <strong>Relevance:</strong> 0 = not relevant, 5 = highly relevant to your current role or tasks.
         </p>
       )}
 
-      {/* Skills */}
       {role &&
-        (role === "Individuell" ? Object.entries(themes) : Object.entries(themes).filter(([theme]) => roleProfiles[role].includes(theme))).map(([theme, skills]) => (
+        (role === "Custom"
+          ? Object.entries(themes)
+          : Object.entries(themes).filter(([theme]) => roleProfiles[role].includes(theme))
+        ).map(([theme, skills]) => (
           <div key={theme} className="space-y-6 md:px-0 px-2">
             <Subtitle className="mb-1">{theme}</Subtitle>
 
-            {/* Labels Desktop */}
             <div className="hidden md:grid grid-cols-2 gap-8 w-2/3 ml-auto mb-2">
               <div className="text-center text-sm font-medium text-gray-600">Mastery</div>
-              <div className="text-center text-sm font-medium text-gray-600">Relevanz</div>
+              <div className="text-center text-sm font-medium text-gray-600">Relevance</div>
             </div>
 
             {skills.map((skill) => (
@@ -234,41 +233,47 @@ export default function SkillmapForm({ onDataChange }: { onDataChange: (data: an
                   onClick={() => setOpenSkill(openSkill === skill.name ? null : skill.name)}
                 >
                   <div className="flex items-center justify-between w-full md:w-1/3">
-                    <MutedText className="font-medium truncate" title={skill.name}>{skill.name}</MutedText>
+                    <MutedText className="font-medium truncate" title={skill.name}>
+                      {skill.name}
+                    </MutedText>
                     {openSkill === skill.name ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full md:w-2/3">
-                    {/* Mastery */}
                     <div className="flex flex-col items-center w-full">
                       <span className="text-xs text-gray-500 md:hidden mb-1">Mastery</span>
                       <div className="flex gap-2 justify-center w-full flex-nowrap overflow-x-hidden">
                         {masteryScale.map((val) => (
-                          <button
+                          <Button
                             key={val}
-                            type="button"
-                            onClick={(e) => { e.stopPropagation(); handleChange(skill.name, "mastery", val); }}
-                            className={`px-3 py-1 rounded-lg border text-sm whitespace-nowrap ${
-                              ratings[skill.name]?.mastery === val ? "bg-blue-600 text-white border-blue-600" : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
-                            }`}
-                          >{val}</button>
+                            variant={ratings[skill.name]?.mastery === val ? "primary" : "secondary"}
+                            size="sm"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleChange(skill.name, "mastery", val);
+                            }}
+                          >
+                            {val}
+                          </Button>
                         ))}
                       </div>
                     </div>
 
-                    {/* Relevanz */}
                     <div className="flex flex-col items-center w-full">
-                      <span className="text-xs text-gray-500 md:hidden mb-1">Relevanz</span>
+                      <span className="text-xs text-gray-500 md:hidden mb-1">Relevance</span>
                       <div className="flex gap-2 justify-center w-full flex-nowrap overflow-x-hidden">
                         {relevanceScale.map((val) => (
-                          <button
+                          <Button
                             key={val}
-                            type="button"
-                            onClick={(e) => { e.stopPropagation(); handleChange(skill.name, "relevance", val); }}
-                            className={`px-3 py-1 rounded-lg border text-sm whitespace-nowrap ${
-                              ratings[skill.name]?.relevance === val ? "bg-green-600 text-white border-green-600" : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
-                            }`}
-                          >{val}</button>
+                            variant={ratings[skill.name]?.relevance === val ? "primary" : "secondary"}
+                            size="sm"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleChange(skill.name, "relevance", val);
+                            }}
+                          >
+                            {val}
+                          </Button>
                         ))}
                       </div>
                     </div>
@@ -288,26 +293,15 @@ export default function SkillmapForm({ onDataChange }: { onDataChange: (data: an
           </div>
         ))}
 
-      {/* Buttons */}
       {role && (
         <div className="flex justify-center mt-8 gap-4">
-          <button
-            onClick={generateMap}
-            disabled={!role}
-            className={`px-6 py-3 rounded-xl font-medium transition ${
-              role ? "bg-blue-600 text-white hover:bg-blue-700" : "bg-gray-300 text-gray-500 cursor-not-allowed"
-            }`}
-          >
-            Map erstellen
-          </button>
-
+          <Button variant="primary" onClick={generateMap} disabled={!role}>
+            Generate Skillmap
+          </Button>
           {aggregatedData && (
-            <button
-              onClick={downloadPDF}
-              className="px-6 py-3 rounded-xl font-medium bg-green-600 text-white hover:bg-green-700 transition"
-            >
-              Download PDF
-            </button>
+            <Button variant="secondary" onClick={downloadPDF}>
+              Download as PDF
+            </Button>
           )}
         </div>
       )}
