@@ -1,3 +1,4 @@
+// src/components/sections/strategicuxresearch/StrategicUXRITESection.tsx
 import { Section } from "@/components/ui";
 import SectionIntro from "@/components/ui/SectionIntro";
 import Tile from "@/components/ui/Tile";
@@ -8,32 +9,38 @@ import RITECycleChart from "@/assets/visuals/strategicuxresearch/RITECycleChart"
 
 /**
  * Section: Rapid Iterative Testing & Evaluation (RITE)
- * 100% DS-konform — keine lokalen Margins oder Abstände
+ * DS-konform — einheitliche Typografie, Spacing, Icons und Tile-Struktur
  */
 export default function StrategicUXRITESection() {
   const tiles = [
     {
-      title: "Speed",
+      icon: "⚡",
+      title: "Speed – Iterating Immediately",
       text: "Design changes are applied immediately — minimizing time between discovery and validation.",
     },
     {
-      title: "Collaboration",
+      icon: "🤝",
+      title: "Collaboration – Shared Observation",
       text: "Researchers, designers, and developers observe together — fostering shared understanding and faster iteration.",
     },
     {
-      title: "Learning",
+      icon: "💡",
+      title: "Learning – Continuous Discovery",
       text: "Each round builds insight and confidence, turning testing into a continuous learning process.",
     },
     {
-      title: "Impact",
+      icon: "🚀",
+      title: "Impact – Early Resolution",
       text: "Usability issues are solved early, saving up to 60% of design and development time.",
     },
     {
-      title: "Adaptability",
+      icon: "🔄",
+      title: "Adaptability – Real-Time Feedback",
       text: "Works even with incomplete requirements — feedback uncovers new needs early and reduces change requests.",
     },
     {
-      title: "Advocacy",
+      icon: "📣",
+      title: "Advocacy – Visible Research",
       text: "Visible, team-based testing promotes UX awareness and strengthens research credibility across the organization.",
     },
   ];
@@ -63,11 +70,14 @@ export default function StrategicUXRITESection() {
       {/* --- Key Benefits --- */}
       <Subtitle>Key Benefits</Subtitle>
 
-      <div className={cn(layout.gridCols3, spacing.gap6, spacing.mt8)}>
+      <div className={cn(layout.gridCols3, spacing.gap6, spacing.mt12)}>
         {tiles.map((item) => (
-          <Tile key={item.title} variant="static">
-            <Subtitle>{item.title}</Subtitle>
-            <Body>{item.text}</Body>
+          <Tile key={item.title} variant="static" className="flex flex-col items-start">
+            <div className="flex items-center gap-2 mb-2">
+              <span>{item.icon}</span>
+              <Subtitle>{item.title}</Subtitle>
+            </div>
+            <Body className="leading-relaxed">{item.text}</Body>
           </Tile>
         ))}
       </div>

@@ -9,8 +9,27 @@ import ResearchInPD from "@/assets/visuals/uxstrategy/ResearchinPD";
 /**
  * Section: From Discovery to Delivery
  * DS-konform — einheitliche Typografie, spacing und tile padding
+ * Mit Icons im OKR-Stil
  */
 export default function DiscoveryDelivery() {
+  const tiles = [
+    {
+      icon: "🔍",
+      title: "Discovery",
+      text: "Exploring user needs, motivations, and market opportunities through contextual inquiry and generative research. Insights inform early strategy and opportunity framing.",
+    },
+    {
+      icon: "🧪",
+      title: "Prototyping",
+      text: "Translating findings into testable concepts. I enable teams to validate assumptions quickly and iterate towards solutions that balance impact, feasibility, and usability.",
+    },
+    {
+      icon: "📈",
+      title: "Optimize",
+      text: "Embedding measurement and continuous evaluation into the product loop. Research evolves from validation to a self-sustaining learning system.",
+    },
+  ];
+
   return (
     <Section
       id="discovery-delivery"
@@ -25,31 +44,22 @@ export default function DiscoveryDelivery() {
       </SectionIntro>
 
       <div className={cn(layout.gridCols3, spacing.gap6, spacing.mt8)}>
-        <Tile variant="static">
-          <Subtitle>Discovery</Subtitle>
-          <Body>
-            Exploring user needs, motivations, and market opportunities through contextual
-            inquiry and generative research. Insights inform early strategy and opportunity
-            framing.
-          </Body>
-        </Tile>
-
-        <Tile variant="static">
-          <Subtitle>Prototyping</Subtitle>
-          <Body>
-            Translating findings into testable concepts. I enable teams to validate
-            assumptions quickly and iterate towards solutions that balance impact,
-            feasibility, and usability.
-          </Body>
-        </Tile>
-
-        <Tile variant="static">
-          <Subtitle>Optimize</Subtitle>
-          <Body>
-            Embedding measurement and continuous evaluation into the product loop.
-            Research evolves from validation to a self-sustaining learning system.
-          </Body>
-        </Tile>
+        {tiles.map((item) => (
+          <Tile
+            key={item.title}
+            variant="static"
+            className={cn(
+              spacing.p6,
+              "flex flex-col justify-start text-left rounded-2xl shadow-sm"
+            )}
+          >
+            <div className="flex items-center gap-2 mb-2">
+              <span>{item.icon}</span>
+              <Subtitle>{item.title}</Subtitle>
+            </div>
+            <Body className="leading-relaxed">{item.text}</Body>
+          </Tile>
+        ))}
       </div>
 
       <div className={cn("w-full flex justify-center", spacing.mt20)}>

@@ -47,12 +47,11 @@ export default function LeadershipFrameworkVisual({
         culture: "#FFF4D9",
       };
 
-  // dunklere, gedämpfte Highlights für Dark Mode
   const highlightColors = isDark
     ? {
-        enablement: "#5f4a6b", // dunkleres, gedecktes Lila
-        mentoring: "#56634f", // olivgrün, leicht entsättigt
-        culture: "#705846",   // warmes, dunkles Braun
+        enablement: "#5f4a6b",
+        mentoring: "#56634f",
+        culture: "#705846",
       }
     : {
         enablement: "#D5BFD3",
@@ -148,8 +147,8 @@ export default function LeadershipFrameworkVisual({
           ))}
         </svg>
 
-        {/* === Boxen === */}
-        {principles.map(({ title, desc, icon: Icon, x, y, color, highlight }, i) => (
+        {/* === Boxen (Icons entfernt) === */}
+        {principles.map(({ title, desc, x, y, color, highlight }, i) => (
           <div
             key={i}
             className={cn(
@@ -168,25 +167,8 @@ export default function LeadershipFrameworkVisual({
             }}
           >
             <div className="flex flex-col items-center gap-1.5 sm:gap-2">
-              <div className="flex items-center justify-center w-6 h-6 sm:w-8 sm:h-8 border border-muted-foreground/30 rounded-md bg-white/60 dark:bg-neutral-900/40">
-                <Icon className="w-4 h-4 sm:w-5 sm:h-5 text-muted-foreground" />
-              </div>
-
-              {/* Desktop wie Tile */}
-              <div className="hidden md:block">
-                <Subtitle className="text-foreground">{title}</Subtitle>
-                <Body className={cn(colors.muted.text)}>{desc}</Body>
-              </div>
-
-              {/* Mobile kompakt */}
-              <div className="md:hidden">
-                <h3 className="font-semibold text-[0.95rem] text-foreground">
-                  {title}
-                </h3>
-                <p className={cn(colors.muted.text, "text-[0.85rem] leading-snug")}>
-                  {desc}
-                </p>
-              </div>
+              <Subtitle className="text-foreground">{title}</Subtitle>
+              <Body className={cn(colors.muted.text)}>{desc}</Body>
             </div>
           </div>
         ))}

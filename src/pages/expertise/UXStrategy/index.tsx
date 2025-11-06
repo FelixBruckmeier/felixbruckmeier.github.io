@@ -2,6 +2,7 @@
 import PageLayout from "@/components/layout/PageLayout";
 import headerImg from "@/assets/images/expertise/uxstrategy/schach1.jpg";
 import {
+  ValueOfUXStrategy,
   VisionAlignment,
   DiscoveryDelivery,
   Prioritization,
@@ -21,6 +22,7 @@ export default function UXStrategyPage() {
       headerImage={headerImg}
       width="wide" // ✅ sorgt für denselben Container wie auf Home
     >
+      <ValueOfUXStrategy />
       <VisionAlignment />
       <DiscoveryDelivery />
       <Prioritization />

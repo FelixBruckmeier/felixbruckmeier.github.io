@@ -3,9 +3,10 @@ import PageLayout from "@/components/layout/PageLayout";
 import headerImg from "@/assets/images/expertise/impactmeasurement/impact.jpg";
 import {
   ImpactMeasurementIntroSection,
-  ImpactMeasurementFrameworkSection,
-  ImpactMeasurementMetricsSection,
-  ImpactMeasurementROISection,
+  ImpactMeasurementResearchSection,
+  ImpactMeasurementUXSection,
+  ImpactMeasurementHeartSection,
+  ImpactMeasurementSummarySection,
 } from "@/components/sections/expertise/impactmeasurement";
 
 /**
@@ -22,9 +23,10 @@ export default function ImpactMeasurementPage() {
       width="wide" // ✅ identisch zu Home
     >
       <ImpactMeasurementIntroSection />
-      <ImpactMeasurementFrameworkSection />
-      <ImpactMeasurementMetricsSection />
-      <ImpactMeasurementROISection />
+      <ImpactMeasurementResearchSection />
+      <ImpactMeasurementUXSection />
+      <ImpactMeasurementHeartSection />
+      <ImpactMeasurementSummarySection />
     </PageLayout>
   );
 }

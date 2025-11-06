@@ -9,7 +9,7 @@ import {
 export default function PricingPage() {
   return (
     <PageLayout
-      title="zooplus — Pricing Usability Testing"
+      title="Pricing Usability Testing"
       intro="From hesitation to trust — clarifying how prices are perceived, understood, and believed."
       headerImage={headerImg}
       width="wide"

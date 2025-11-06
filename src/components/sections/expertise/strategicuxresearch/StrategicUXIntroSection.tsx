@@ -1,29 +1,72 @@
-// src/components/sections/expertise/strategicux/StrategicUXIntroSection.tsx
 import { Section } from "@/components/ui";
-import { Body } from "@/components/ui/Tokens";
-import { colors, spacing } from "@/lib/tokens";
+import SectionIntro from "@/components/ui/SectionIntro";
+import { Tile } from "@/components/ui";
+import { Subtitle, Body } from "@/components/ui/Tokens";
+import { layout, spacing } from "@/lib/tokens";
 import { cn } from "@/lib/utils";
 
-export default function StrategicUXIntroSection() {
+/**
+ * Section: Strategic UX Research — Making UX Strategy Work in Practice
+ * Mit Icons im OKR-Stil (Emoji-basiert)
+ */
+export default function ValueOfStrategicUXResearch() {
+  const tiles = [
+    {
+      icon: "🧭",
+      title: "Planning Framework",
+      text: "Research creates value only when it answers the right questions. I apply structured planning frameworks that link business intent, hypotheses, and methods — ensuring focus before execution and clarity after.",
+    },
+    {
+      icon: "🔄",
+      title: "Adaptive Methods",
+      text: "Strategic research must fit different delivery models. From classic studies to agile loops, I tailor methods to context. Using the RITE process, for example, enables fast, iterative testing within agile environments.",
+    },
+    {
+      icon: "📊",
+      title: "Research OKRs as Business Link",
+      text: "Research OKRs connect everyday learning with company objectives. They turn insights into measurable progress and ensure UX Research contributes directly to strategic outcomes.",
+    },
+  ];
+
   return (
     <Section
-      id="intro"
-      title="Strategic UX Research — How I Turn UX Strategy into Action"
+      id="value-research"
+      title="Strategic UX Research — Making UX Strategy Work in Practice"
       spacing="lg"
     >
-      <div className={cn("flex flex-col gap-6")}>
-        <Body className="text-foreground text-lg font-semibold">
-          Turning UX Research from isolated insights into a system that drives clarity,
-          alignment, and confident decisions.
-        </Body>
+      {/* --- Storytelling Intro --- */}
+      <SectionIntro>
+        UX Strategy sets the vision — but it remains abstract until research
+        brings it to life. That’s when the real work begins, and it’s no
+        surprise that many organizations struggle to connect their strategy to
+        real user insight and continuous learning.
+        <br />
+        <br />
+        My approach to <strong>Strategic UX Research</strong> closes that gap.
+        It turns strategy into an operational practice — one that adapts to
+        different team setups, fuels iteration, and ties research outcomes
+        directly to business goals. I focus on three areas that make UX Strategy
+        truly work in practice.
+      </SectionIntro>
 
-        <Body className={cn(colors.muted.text, spacing.mt4, "max-w-prose")}>
-          Where UX Strategy connects vision, process, and prioritization, Strategic UX Research
-          brings it to life — operationalizing clarity, iteration, and measurable impact across
-          the entire product lifecycle. Without a strategic approach, research remains tactical
-          and isolated. By linking insights to company OKRs, research becomes a driver of
-          alignment, innovation, and growth.
-        </Body>
+      {/* --- Tiles with icons --- */}
+      <div className={cn(layout.gridCols3, spacing.gap6, spacing.mt12)}>
+        {tiles.map((item) => (
+          <Tile
+            key={item.title}
+            variant="static"
+            className={cn(
+              spacing.p6,
+              "flex flex-col justify-start text-left rounded-2xl shadow-sm"
+            )}
+          >
+            <div className="flex items-center gap-2 mb-2">
+              <span>{item.icon}</span>
+              <Subtitle>{item.title}</Subtitle>
+            </div>
+            <Body className="leading-relaxed">{item.text}</Body>
+          </Tile>
+        ))}
       </div>
     </Section>
   );

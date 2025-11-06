@@ -6,39 +6,47 @@ import { layout, spacing } from "@/lib/tokens";
 import { cn } from "@/lib/utils";
 
 /**
- * Section: The Value of UX Strategy
- * DS-konform mit zentralem Farbmanagement
+ * Section: The Purpose of UX Strategy (Storytelling + concise Tiles version)
+ * Mit Icons im OKR-Stil
  */
 export default function ValueOfUXStrategy() {
+  const tiles = [
+    {
+      icon: "🎯",
+      title: "Shared Vision",
+      text: "Aligning user needs, business goals, and technical feasibility to create a common understanding of value and direction.",
+    },
+    {
+      icon: "🔍",
+      title: "Continuous Research",
+      text: "Building systems that connect discovery, prototyping, and optimization — making learning a constant driver of better decisions.",
+    },
+    {
+      icon: "⚖️",
+      title: "Setting Priorities",
+      text: "Helping teams decide where deep exploration is needed and where quick feedback is enough — balancing impact, time, and confidence.",
+    },
+  ];
+
   return (
-    <Section id="value" title="The Value of UX Strategy" spacing="lg">
+    <Section id="value" title="The Purpose of UX Strategy" spacing="lg">
       {/* --- Storytelling Intro --- */}
       <SectionIntro>
-        In today’s product culture, speed often replaces clarity.
-        Teams ship fast — but rarely stop to ask whether they’re moving in the right direction.
+        Many teams work with great dedication – but without shared direction.
+        Research, design, and business often move in parallel:
+        insights fade, decisions rely on assumptions,
+        and speed replaces focus.
         <br />
         <br />
-        <strong>UX Strategy</strong> reframes development around learning and alignment instead of
-        output — helping organizations make decisions with purpose, not just momentum.
-        It turns design and research into a shared language for confident, evidence-based progress.
+        <strong>UX Strategy</strong> brings these strands together.
+        It clarifies where teams are heading, what they’re learning,
+        and how research drives impact.
+        My work focuses on three levers that turn activity into alignment.
       </SectionIntro>
 
-      {/* --- Value Tiles --- */}
+      {/* --- Tiles --- */}
       <div className={cn(layout.gridCols3, spacing.gap6, spacing.mt12)}>
-        {[
-          {
-            title: "Alignment",
-            text: "Every strategic decision connects business goals, user needs, and design intent — creating shared direction across teams.",
-          },
-          {
-            title: "Impact",
-            text: "Insights and frameworks guide priorities at every level — ensuring that effort turns into meaningful business and user outcomes.",
-          },
-          {
-            title: "Confidence",
-            text: "Stakeholders trust UX because it delivers measurable value and supports decisions with clarity and evidence.",
-          },
-        ].map((item) => (
+        {tiles.map((item) => (
           <Tile
             key={item.title}
             variant="static"
@@ -47,17 +55,13 @@ export default function ValueOfUXStrategy() {
               "flex flex-col justify-start text-left rounded-2xl shadow-sm"
             )}
           >
-            <Subtitle className={spacing.mb2}>{item.title}</Subtitle>
+            <div className="flex items-center gap-2 mb-2">
+              <span>{item.icon}</span>
+              <Subtitle>{item.title}</Subtitle>
+            </div>
             <Body className="leading-relaxed">{item.text}</Body>
           </Tile>
         ))}
-      </div>
-
-      {/* --- Closing Quote --- */}
-      <div className={cn("text-center", spacing.mt12)}>
-        <Subtitle className="italic">
-          “UX Strategy turns motion into meaning — and progress into impact.”
-        </Subtitle>
       </div>
     </Section>
   );

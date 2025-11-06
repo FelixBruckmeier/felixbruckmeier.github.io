@@ -83,24 +83,17 @@ export default function RITECycleChart() {
 
   return (
     <div className="relative flex flex-col justify-center items-center w-full">
-      {/* --- Mobile: Button über Grafik --- */}
-      <div className="block md:hidden mb-4">
-        <button
-          onClick={() => setIsRunning((prev) => !prev)}
-          className={`px-5 py-2 rounded-lg transition font-medium ${
-            isRunning
-              ? "bg-muted text-foreground hover:bg-muted/80"
-              : "bg-primary text-primary-foreground hover:bg-primary/90"
-          }`}
-        >
-          {isRunning ? "Stop Rotation" : "Start Rotation"}
-        </button>
-      </div>
-
       {/* --- Grafik + Motto darunter + Text rechts --- */}
       <div className="flex flex-col md:flex-row items-center md:items-start justify-center gap-10 md:gap-20">
         {/* --- Grafik + Motto block --- */}
         <div className="flex flex-col items-center">
+          {/* Motto über Grafik (nur Mobile) */}
+          <p
+            className={`${typography.subtitle.font} italic text-center text-foreground mb-4 block md:hidden`}
+          >
+            “Test early. Fix fast. Learn continuously.”
+          </p>
+
           {/* SVG Diagram (mobile zentriert) */}
           <svg
             viewBox="0 0 400 400"
@@ -178,12 +171,26 @@ export default function RITECycleChart() {
             })()}
           </svg>
 
-          {/* Motto direkt unter Grafik */}
+          {/* Motto unter Grafik (nur Desktop) */}
           <p
-            className={`${typography.subtitle.font} italic text-center text-foreground mt-6 md:mt-8`}
+            className={`${typography.subtitle.font} italic text-center text-foreground mt-6 hidden md:block`}
           >
             “Test early. Fix fast. Learn continuously.”
           </p>
+
+          {/* --- Mobile: Button zwischen Grafik und Text --- */}
+          <div className="block md:hidden mt-5">
+            <button
+              onClick={() => setIsRunning((prev) => !prev)}
+              className={`px-5 py-2 rounded-lg transition font-medium ${
+                isRunning
+                  ? "bg-muted text-foreground hover:bg-muted/80"
+                  : "bg-primary text-primary-foreground hover:bg-primary/90"
+              }`}
+            >
+              {isRunning ? "Stop Rotation" : "Start Rotation"}
+            </button>
+          </div>
         </div>
 
         {/* Text rechts (Desktop only) */}
@@ -228,3 +235,4 @@ export default function RITECycleChart() {
     </div>
   );
 }
+

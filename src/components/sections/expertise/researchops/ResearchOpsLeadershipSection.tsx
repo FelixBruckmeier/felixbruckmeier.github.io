@@ -6,19 +6,22 @@ import { layout, spacing } from "@/lib/tokens";
 import { cn } from "@/lib/utils";
 
 /**
- * ResearchOps Leadership Section — DS-conform
+ * ResearchOps Leadership Section — DS-conform + Icons
  */
 export default function ResearchOpsLeadershipSection() {
   const tiles = [
     {
+      icon: "🧩",
       title: "System Thinking",
       text: "I map the ecosystem of people, tools, and processes to remove friction and increase research velocity.",
     },
     {
+      icon: "🤝",
       title: "Cross-Functional Alignment",
       text: "I partner with Product, Design, and Data to make research a shared responsibility — not a siloed function.",
     },
     {
+      icon: "🌱",
       title: "Culture Building",
       text: "I turn ResearchOps into a mindset — a way for teams to learn continuously, measure impact, and grow together.",
     },
@@ -41,9 +44,16 @@ export default function ResearchOpsLeadershipSection() {
 
       <div className={cn(layout.gridCols3, spacing.gap6, spacing.mt10, spacing.mb20)}>
         {tiles.map((item) => (
-          <Tile key={item.title} variant="static" className={cn("h-full", spacing.p6)}>
-            <Subtitle>{item.title}</Subtitle>
-            <Body className="text-muted-foreground">{item.text}</Body>
+          <Tile
+            key={item.title}
+            variant="static"
+            className={cn("h-full", spacing.p6, "flex flex-col justify-start")}
+          >
+            <div className="flex items-center gap-2 mb-2">
+              <span>{item.icon}</span>
+              <Subtitle>{item.title}</Subtitle>
+            </div>
+            <Body className="text-muted-foreground leading-relaxed">{item.text}</Body>
           </Tile>
         ))}
       </div>

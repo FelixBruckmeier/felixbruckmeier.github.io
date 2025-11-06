@@ -3,7 +3,7 @@ import { Section } from "@/components/ui";
 import SectionIntro from "@/components/ui/SectionIntro";
 import LeadershipFrameworkVisual from "@/assets/visuals/teamleadership/LeadershipFrameworkVisual";
 import Button from "@/components/ui/Button";
-import { Rewind, FastForward, Play, Pause } from "lucide-react";
+import { Rewind, FastForward, Play, Pause, Target, Users, Lightbulb } from "lucide-react";
 import { Subtitle, Body } from "@/components/ui/Tokens";
 import { cn } from "@/lib/utils";
 import { colors } from "@/lib/tokens";
@@ -50,19 +50,23 @@ export default function TeamLeadershipPhilosophySection() {
       title: "Enablement over Control",
       body:
         "True leadership is not about managing every step — it's about creating structures where others can thrive, make decisions, and own outcomes.",
+      icon: Target,
     },
     {
       title: "Mentoring & Coaching",
       body:
         "Through 1:1 mentoring, peer learning, and role modeling, I help designers and researchers develop confidence, autonomy, and strategic thinking.",
+      icon: Users,
     },
     {
       title: "Culture of Excellence",
       body:
         "I foster a culture built on curiosity, collaboration, and craftsmanship — where quality is a shared value, not a top-down mandate.",
+      icon: Lightbulb,
     },
   ];
   const text = texts[safePhase];
+  const Icon = text.icon;
 
   const changePhase = (dir: number) => {
     const next = clampPhase(safePhase + dir);
@@ -90,14 +94,15 @@ export default function TeamLeadershipPhilosophySection() {
   return (
     <Section id="leadership-philosophy" title="My Leadership Philosophy" spacing="lg">
       <SectionIntro>
-       I believe good leadership doesn’t need much, quite the opposite. It’s about returning to a few essential principles.
-It doesn’t require complex models or frameworks, but genuine collaboration, something we all carry within us.<br /><br />
-
-For me, leadership is about enablement,  creating structure and trust that give people the space to do their best work.
-When ownership replaces oversight, teams grow naturally and often go beyond what anyone expected.
+        I believe good leadership doesn’t need much, quite the opposite. It’s about returning to a
+        few essential principles. It doesn’t require complex models or frameworks, but genuine
+        collaboration, something we all carry within us.<br />
+        <br />
+        For me, leadership is about enablement, creating structure and trust that give people the
+        space to do their best work. When ownership replaces oversight, teams grow naturally and
+        often go beyond what anyone expected.
       </SectionIntro>
 
-      {/* ⬇️ Abstand zwischen Intro und Diagramm deutlich erhöht (≈ 3 Zeilen) */}
       <div className="mt-16 flex flex-col lg:flex-row items-center justify-center gap-14 w-full max-w-[1200px] mx-auto px-4">
         {/* === Diagramm === */}
         <div className="relative flex justify-center items-center w-full max-w-[720px] aspect-[6/5]">
@@ -111,7 +116,11 @@ When ownership replaces oversight, teams grow naturally and often go beyond what
             style={{ opacity: fadeOpacity, transition: "opacity 0s linear" }}
             className="max-w-[440px]"
           >
-            <Subtitle>{text.title}</Subtitle>
+            {/* === Icon vor Überschrift === */}
+            <div className="flex items-center justify-center lg:justify-start gap-2 mb-2">
+              <Icon className="w-5 h-5 text-muted-foreground" />
+              <Subtitle>{text.title}</Subtitle>
+            </div>
             <Body className={cn(colors.muted.text, "text-base md:text-lg leading-relaxed mt-2")}>
               {text.body}
             </Body>

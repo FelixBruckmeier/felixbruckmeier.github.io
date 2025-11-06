@@ -1,3 +1,4 @@
+// src/components/sections/strategicuxresearch/StrategicUXOKRSection.tsx
 import { Section } from "@/components/ui";
 import SectionIntro from "@/components/ui/SectionIntro";
 import Tile from "@/components/ui/Tile";
@@ -7,27 +8,27 @@ import { cn } from "@/lib/utils";
 
 /**
  * Section: UX Research OKRs
- * 100% DS-konform, statische Tiles, einheitliche Typografie
+ * DS-konform — einheitliche Typografie, Abstände und Icon-Zeilenstruktur
  */
 export default function StrategicUXOKRSection() {
   const tiles = [
     {
+      icon: "🧩",
       level: "Level 1",
       title: "Supports – Aligning with OKRs",
       text: "UX Research aligns with existing company OKRs, validating assumptions and supporting ongoing initiatives.",
-      icon: "🧩",
     },
     {
+      icon: "🎯",
       level: "Level 2",
       title: "Influences – Informing OKRs",
       text: "Research insights begin to inform goal-setting and define measurable impact, bridging user value and business metrics.",
-      icon: "🎯",
     },
     {
+      icon: "🚀",
       level: "Level 3",
       title: "Defines – Driving OKRs",
       text: "UX Research drives strategic priorities. Objectives are grounded in user evidence and organizational learning.",
-      icon: "🚀",
     },
   ];
 
@@ -37,6 +38,7 @@ export default function StrategicUXOKRSection() {
       title="UX Research OKRs — Linking Research to Business Strategy"
       spacing="lg"
     >
+      {/* --- Storytelling Intro --- */}
       <SectionIntro>
         Strategic UX Research doesn’t end with insight — it connects learning to direction.
         UX Research OKRs link research efforts directly to company strategy, ensuring that
@@ -55,22 +57,21 @@ export default function StrategicUXOKRSection() {
         It’s a gradual, sometimes rocky journey — one that’s best understood in levels:
       </SectionIntro>
 
-      {/* === Tile Grid === */}
+      {/* --- Tile Grid --- */}
       <div className={cn(layout.gridCols3, spacing.gap6, spacing.mt12)}>
         {tiles.map((item) => (
           <Tile key={item.title} variant="static" className="flex flex-col items-start">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 mb-2">
               <span>{item.icon}</span>
               <Subtitle>{item.level}</Subtitle>
             </div>
-
             <Subtitle>{item.title}</Subtitle>
-            <Body>{item.text}</Body>
+            <Body className="leading-relaxed">{item.text}</Body>
           </Tile>
         ))}
       </div>
 
-      {/* === Outro Text === */}
+      {/* --- Outro Text --- */}
       <div className={cn(spacing.mt16)}>
         <Subtitle>From Alignment to Leadership</Subtitle>
         <Body>
