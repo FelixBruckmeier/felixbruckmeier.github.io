@@ -3,8 +3,8 @@
 // ================================
 export const palette = {
   notion: {
-    default: { text: "text-[#373530] dark:text-[#D4D4D4]", bg: "bg-[#F7F7F7] dark:bg-[#191919]" },
-    gray: { text: "text-[#787774] dark:text-[#9B9B9B]", bg: "bg-[#F1F1EF] dark:bg-[#252525]" },
+    default: { text: "text-[#4A4846] dark:text-[#D4D4D4]", bg: "bg-[#F7F7F7] dark:bg-[#191919]" },
+    gray: { text: "text-[#4A4846] dark:text-[#D4D4D4]", bg: "bg-[#F1F1EF] dark:bg-[#252525]" },
     brown: { text: "text-[#976D57] dark:text-[#A27763]", bg: "bg-[#F3EEEE] dark:bg-[#2E2724]" },
     orange: { text: "text-[#CC782F] dark:text-[#CB7B37]", bg: "bg-[#F8ECDF] dark:bg-[#36291F]" },
     yellow: { text: "text-[#C29343] dark:text-[#C19138]", bg: "bg-[#FAF3DD] dark:bg-[#372E20]" },

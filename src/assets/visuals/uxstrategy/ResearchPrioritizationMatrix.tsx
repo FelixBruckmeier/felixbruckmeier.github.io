@@ -3,7 +3,28 @@ import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { notionHexMap } from "@/lib/tokens";
 import Button from "@/components/ui/Button";
-import { Rewind, FastForward, Play, Pause } from "lucide-react";
+
+// ✅ Gefüllte monochrome Icons (solid style, theme-abhängig)
+const IconPlay = () => (
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M5 3.5v17l14-8.5-14-8.5z" />
+  </svg>
+);
+const IconPause = () => (
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M6 4h4v16H6zm8 0h4v16h-4z" />
+  </svg>
+);
+const IconForward = () => (
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M4 4v16l8-8-8-8zm8 0v16l8-8-8-8z" />
+  </svg>
+);
+const IconBack = () => (
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M20 4v16l-8-8 8-8zm-8 0v16l-8-8 8-8z" />
+  </svg>
+);
 
 export default function ResearchPrioritizationMatrix() {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -27,28 +48,27 @@ export default function ResearchPrioritizationMatrix() {
   }, [isPlaying]);
 
   const texts = [
-  {
-    title: "Research Heavy",
-    body:
-      "When problem clarity is low but the risk of getting it wrong is high, my role as UX Lead is to initiate deep generative research — defining direction through contextual inquiry, JTBD interviews, and diary studies. This ensures that product decisions are grounded in user reality before we invest in solutions.",
-  },
-  {
-    title: "Design Heavy",
-    body:
-      "When both clarity and risk are high, I guide the team toward iterative prototyping and evaluative testing. My focus here is on reducing design risk and ensuring that solutions are validated early with representative users before development resources are committed.",
-  },
-  {
-    title: "Research Light",
-    body:
-      "When risk and clarity are both low, I advocate for lightweight exploration — quick user touchpoints and directional feedback that maintain momentum without over-investing. The goal is to stay user-informed while keeping the product team agile.",
-  },
-  {
-    title: "Ship It & Measure",
-    body:
-      "When clarity and risk are low, I enable the team to launch confidently and learn post-release. In this context, my role shifts toward defining measurement frameworks — connecting A/B testing, behavioral analytics, and feedback loops to inform future iterations.",
-  },
-];
-
+    {
+      title: "Research Heavy",
+      body:
+        "When problem clarity is low but the risk of getting it wrong is high, my role as UX Lead is to initiate deep generative research — defining direction through contextual inquiry, JTBD interviews, and diary studies. This ensures that product decisions are grounded in user reality before we invest in solutions.",
+    },
+    {
+      title: "Design Heavy",
+      body:
+        "When both clarity and risk are high, I guide the team toward iterative prototyping and evaluative testing. My focus here is on reducing design risk and ensuring that solutions are validated early with representative users before development resources are committed.",
+    },
+    {
+      title: "Research Light",
+      body:
+        "When risk and clarity are both low, I advocate for lightweight exploration — quick user touchpoints and directional feedback that maintain momentum without over-investing. The goal is to stay user-informed while keeping the product team agile.",
+    },
+    {
+      title: "Ship It & Measure",
+      body:
+        "When clarity and risk are low, I enable the team to launch confidently and learn post-release. In this context, my role shifts toward defining measurement frameworks — connecting A/B testing, behavioral analytics, and feedback loops to inform future iterations.",
+    },
+  ];
 
   const fadeCycle = { initial: { opacity: 0, y: 10 }, animate: { opacity: 1, y: 0 }, exit: { opacity: 0, y: -10 } };
 
@@ -81,7 +101,7 @@ export default function ResearchPrioritizationMatrix() {
         <svg viewBox={`0 0 ${W} ${H}`} className="matrix-svg w-full h-auto" aria-labelledby="title desc" role="img">
           <title id="title">UX Research Prioritization Matrix</title>
 
-          {/* === Quadranten (wie besprochen) === */}
+          {/* === Quadranten === */}
           <motion.rect x={px0} y={py0} width={size / 2} height={size / 2}
             fill={colors.shipMeasure}
             animate={{ fill: index === 3 ? highlight.shipMeasure : colors.shipMeasure }}
@@ -106,7 +126,7 @@ export default function ResearchPrioritizationMatrix() {
             <line x1={px0} y1={cy} x2={px1} y2={cy} strokeWidth="1" />
           </g>
 
-          {/* === Achsenbeschriftungen (wiederhergestellt) === */}
+          {/* === Achsenbeschriftungen === */}
           <g className="text-muted-foreground dark:fill-white">
             <line x1={px0} y1={xAxisY} x2={px1} y2={xAxisY} stroke="currentColor" strokeWidth="1.5" />
             <path d={`M ${px1 + AR} ${xAxisY} l ${-AR} ${-AR / 2} l 0 ${AR} z`} fill="currentColor" />
@@ -121,24 +141,20 @@ export default function ResearchPrioritizationMatrix() {
             <text transform={`translate(${yAxisX - 45}, ${cy}) rotate(-90)`} textAnchor="middle" className="font-semibold text-xl">Problem clarity</text>
           </g>
 
-          {/* === Beschriftungen in Quadranten === */}
+          {/* === Beschriftungen === */}
           <g className="text-foreground text-[15px] leading-tight dark:fill-white">
-            {/* oben links → Ship It & Measure */}
             <text x={(px0 + cx) / 2} y={(py0 + cy) / 2 - 8} textAnchor="middle" className="font-semibold">Ship It & Measure</text>
             <text x={(px0 + cx) / 2} y={(py0 + cy) / 2 + 10} textAnchor="middle" className="text-foreground/70">A/B Testing</text>
             <text x={(px0 + cx) / 2} y={(py0 + cy) / 2 + 28} textAnchor="middle" className="text-foreground/70">Behavioral Analysis</text>
 
-            {/* oben rechts → Design Heavy */}
             <text x={(cx + px1) / 2} y={(py0 + cy) / 2 - 8} textAnchor="middle" className="font-semibold">Design Heavy</text>
             <text x={(cx + px1) / 2} y={(py0 + cy) / 2 + 10} textAnchor="middle" className="text-foreground/70">Iterative Design</text>
             <text x={(cx + px1) / 2} y={(py0 + cy) / 2 + 28} textAnchor="middle" className="text-foreground/70">Prototype Tests</text>
             <text x={(cx + px1) / 2} y={(py0 + cy) / 2 + 46} textAnchor="middle" className="text-foreground/70">Comprehension Tests</text>
 
-            {/* unten links → Research Light */}
             <text x={(px0 + cx) / 2} y={(cy + py1) / 2 - 8} textAnchor="middle" className="font-semibold">Research Light</text>
             <text x={(px0 + cx) / 2} y={(cy + py1) / 2 + 12} textAnchor="middle" className="text-foreground/70">Semi-Structured Interviews</text>
 
-            {/* unten rechts → Research Heavy */}
             <text x={(cx + px1) / 2} y={(cy + py1) / 2 - 8} textAnchor="middle" className="font-semibold">Research Heavy</text>
             <text x={(cx + px1) / 2} y={(cy + py1) / 2 + 10} textAnchor="middle" className="text-foreground/70">JTBD Interviews</text>
             <text x={(cx + px1) / 2} y={(cy + py1) / 2 + 28} textAnchor="middle" className="text-foreground/70">Contextual Inquiry</text>
@@ -146,11 +162,17 @@ export default function ResearchPrioritizationMatrix() {
           </g>
         </svg>
 
-        {/* === Buttons & Text unverändert === */}
+        {/* === Mobile Controls === */}
         <div className="flex lg:hidden justify-center items-center gap-3 mt-6">
-          <Button variant="secondary" onClick={() => setIndex((index - 1 + texts.length) % texts.length)}><Rewind className="w-5 h-5" /></Button>
-          <Button variant="secondary" onClick={() => setIsPlaying((p) => !p)}>{isPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}</Button>
-          <Button variant="secondary" onClick={() => setIndex((index + 1) % texts.length)}><FastForward className="w-5 h-5" /></Button>
+          <Button variant="secondary" onClick={() => setIndex((index - 1 + texts.length) % texts.length)}>
+            <IconBack />
+          </Button>
+          <Button variant="secondary" onClick={() => setIsPlaying((p) => !p)}>
+            {isPlaying ? <IconPause /> : <IconPlay />}
+          </Button>
+          <Button variant="secondary" onClick={() => setIndex((index + 1) % texts.length)}>
+            <IconForward />
+          </Button>
         </div>
 
         <div className="block lg:hidden text-base md:text-lg text-muted-foreground mt-6">
@@ -174,9 +196,15 @@ export default function ResearchPrioritizationMatrix() {
           </AnimatePresence>
         </div>
         <div className="flex justify-center items-center gap-3 mt-12">
-          <Button variant="secondary" onClick={() => setIndex((index - 1 + texts.length) % texts.length)}><Rewind className="w-5 h-5" /></Button>
-          <Button variant="secondary" onClick={() => setIsPlaying((p) => !p)}>{isPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}</Button>
-          <Button variant="secondary" onClick={() => setIndex((index + 1) % texts.length)}><FastForward className="w-5 h-5" /></Button>
+          <Button variant="secondary" onClick={() => setIndex((index - 1 + texts.length) % texts.length)}>
+            <IconBack />
+          </Button>
+          <Button variant="secondary" onClick={() => setIsPlaying((p) => !p)}>
+            {isPlaying ? <IconPause /> : <IconPlay />}
+          </Button>
+          <Button variant="secondary" onClick={() => setIndex((index + 1) % texts.length)}>
+            <IconForward />
+          </Button>
         </div>
       </div>
     </div>

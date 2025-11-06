@@ -1,36 +1,8 @@
+// src/assets/visuals/strategicuxresearch/RITECycleChart.tsx
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { typography } from "@/lib/tokens";
-
-const phases = [
-  {
-    id: 0,
-    label: "1. Prototype",
-    description:
-      "I usually start by helping the team turn early ideas into something testable — even if it’s rough. At this stage, my goal is not to validate, but to learn fast by giving people something tangible to react to. Without this step, discussions often stay conceptual, and decisions are driven more by opinion than by real user behavior.",
-    fillLight: "#E9F3F7",
-    text: "#447ACB",
-    baseAngle: -90,
-  },
-  {
-    id: 1,
-    label: "2. Review",
-    description:
-      "Together with designers, developers, and sometimes product managers, I run quick usability sessions. We observe how users interact with the prototype, discuss pain points immediately, and align on what’s worth changing. Observing together is essential — it builds shared understanding and keeps feedback connected and actionable.",
-    fillLight: "#FAF3DD",
-    text: "#C19138",
-    baseAngle: 30,
-  },
-  {
-    id: 2,
-    label: "3. Refine",
-    description:
-      "Right after each review, we apply small, focused changes and test again — often within the same day. This fast loop keeps momentum high and helps everyone see progress in real time. If iteration takes too long, insights lose momentum and the connection between research and design weakens.",
-    fillLight: "#EEF3ED",
-    text: "#4F9768",
-    baseAngle: 150,
-  },
-];
+import Button from "@/components/ui/Button";
 
 export default function RITECycleChart() {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -39,6 +11,38 @@ export default function RITECycleChart() {
   const [autoPause, setAutoPause] = useState(false);
   const requestRef = useRef<number>();
   const lastPauseTime = useRef<number>(0);
+
+  const isDark = document.documentElement.classList.contains("dark");
+
+  const phases = [
+    {
+      id: 0,
+      label: "1. Prototype",
+      description:
+        "I usually start by helping the team turn early ideas into something testable — even if it’s rough. At this stage, my goal is not to validate, but to learn fast by giving people something tangible to react to. Without this step, discussions often stay conceptual, and decisions are driven more by opinion than by real user behavior.",
+      fill: isDark ? "#1F282D" : "#E9F3F7",
+      text: isDark ? "#6CA6FF" : "#447ACB",
+      baseAngle: -90,
+    },
+    {
+      id: 1,
+      label: "2. Review",
+      description:
+        "Together with designers, developers, and sometimes product managers, I run quick usability sessions. We observe how users interact with the prototype, discuss pain points immediately, and align on what’s worth changing. Observing together is essential — it builds shared understanding and keeps feedback connected and actionable.",
+      fill: isDark ? "#372E20" : "#FAF3DD",
+      text: isDark ? "#E6B85C" : "#C19138",
+      baseAngle: 30,
+    },
+    {
+      id: 2,
+      label: "3. Refine",
+      description:
+        "Right after each review, we apply small, focused changes and test again — often within the same day. This fast loop keeps momentum high and helps everyone see progress in real time. If iteration takes too long, insights lose momentum and the connection between research and design weakens.",
+      fill: isDark ? "#242B26" : "#EEF3ED",
+      text: isDark ? "#78C794" : "#4F9768",
+      baseAngle: 150,
+    },
+  ];
 
   const center = { x: 200, y: 200 };
   const radius = 135;
@@ -83,44 +87,38 @@ export default function RITECycleChart() {
 
   return (
     <div className="relative flex flex-col justify-center items-center w-full">
-      {/* --- Grafik + Motto darunter + Text rechts --- */}
       <div className="flex flex-col md:flex-row items-center md:items-start justify-center gap-10 md:gap-20">
-        {/* --- Grafik + Motto block --- */}
+        {/* Grafik + Motto */}
         <div className="flex flex-col items-center">
-          {/* Motto über Grafik (nur Mobile) */}
           <p
             className={`${typography.subtitle.font} italic text-center text-foreground mb-4 block md:hidden`}
           >
             “Test early. Fix fast. Learn continuously.”
           </p>
 
-          {/* SVG Diagram (mobile zentriert) */}
+          {/* SVG */}
           <svg
             viewBox="0 0 400 400"
-            className="w-[320px] h-[320px] sm:w-[360px] sm:h-[360px] md:w-[460px] md:h-[460px] mx-auto"
+            className="w-[320px] h-[320px] sm:w-[360px] sm:h-[360px] md:w-[460px] md:h-[460px] mx-auto transition-colors"
           >
-            {/* Outer cycle */}
             <circle
               cx={center.x}
               cy={center.y}
               r={radius}
-              stroke="#9CA3AF"
+              stroke={isDark ? "#555" : "#9CA3AF"}
               strokeWidth="7"
               fill="none"
             />
-
-            {/* RITE center */}
             <text
               x={center.x}
               y={center.y + 10}
               textAnchor="middle"
               className={`${typography.sectionTitle.font} ${typography.sectionTitle.size} ${typography.sectionTitle.weight}`}
-              fill="#373530"
+              fill={isDark ? "#f0f0f0" : "#373530"}
             >
               RITE
             </text>
 
-            {/* Phase circles */}
             {phases.map((p) => {
               const angle = p.baseAngle + angleOffset;
               const rad = (angle * Math.PI) / 180;
@@ -128,7 +126,7 @@ export default function RITECycleChart() {
               const y = center.y + radius * Math.sin(rad);
               return (
                 <g key={p.id}>
-                  <circle cx={x} cy={y} r="59" fill={p.fillLight} />
+                  <circle cx={x} cy={y} r="59" fill={p.fill} />
                   <text
                     x={x}
                     y={y + 5}
@@ -142,7 +140,7 @@ export default function RITECycleChart() {
               );
             })}
 
-            {/* Tangential arrow */}
+            {/* Pfeil */}
             {(() => {
               const arrowAngle = angleOffset - 30;
               const rad = (arrowAngle * Math.PI) / 180;
@@ -165,35 +163,30 @@ export default function RITECycleChart() {
               return (
                 <path
                   d={`M ${leftX},${leftY} L ${headX},${headY} L ${rightX},${rightY} Z`}
-                  fill="#9CA3AF"
+                  fill={isDark ? "#777" : "#9CA3AF"}
                 />
               );
             })()}
           </svg>
 
-          {/* Motto unter Grafik (nur Desktop) */}
           <p
             className={`${typography.subtitle.font} italic text-center text-foreground mt-6 hidden md:block`}
           >
             “Test early. Fix fast. Learn continuously.”
           </p>
 
-          {/* --- Mobile: Button zwischen Grafik und Text --- */}
+          {/* Mobile Button */}
           <div className="block md:hidden mt-5">
-            <button
+            <Button
+              variant="secondary"
               onClick={() => setIsRunning((prev) => !prev)}
-              className={`px-5 py-2 rounded-lg transition font-medium ${
-                isRunning
-                  ? "bg-muted text-foreground hover:bg-muted/80"
-                  : "bg-primary text-primary-foreground hover:bg-primary/90"
-              }`}
             >
               {isRunning ? "Stop Rotation" : "Start Rotation"}
-            </button>
+            </Button>
           </div>
         </div>
 
-        {/* Text rechts (Desktop only) */}
+        {/* Text rechts */}
         <div className="max-w-md md:w-[340px] mt-[48px] md:mt-[64px] min-h-[320px]">
           <AnimatePresence mode="wait">
             <motion.div
@@ -210,7 +203,7 @@ export default function RITECycleChart() {
                 {phases[activeIndex].label}
               </h3>
               <p
-                className={`${typography.body.font} ${typography.body.size} text-[--color-muted] leading-relaxed`}
+                className={`${typography.body.font} ${typography.body.size} text-[--color-muted-foreground] leading-relaxed`}
               >
                 {phases[activeIndex].description}
               </p>
@@ -219,18 +212,14 @@ export default function RITECycleChart() {
         </div>
       </div>
 
-      {/* --- Desktop: Button unter Grafik --- */}
+      {/* Desktop Button */}
       <div className="hidden md:block mt-6">
-        <button
+        <Button
+          variant="secondary"
           onClick={() => setIsRunning((prev) => !prev)}
-          className={`px-5 py-2 rounded-lg transition font-medium ${
-            isRunning
-              ? "bg-muted text-foreground hover:bg-muted/80"
-              : "bg-primary text-primary-foreground hover:bg-primary/90"
-          }`}
         >
           {isRunning ? "Stop Rotation" : "Start Rotation"}
-        </button>
+        </Button>
       </div>
     </div>
   );

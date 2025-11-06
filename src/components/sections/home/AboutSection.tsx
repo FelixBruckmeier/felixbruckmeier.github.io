@@ -51,8 +51,9 @@ export default function AboutSection() {
               ease="easeInOut"
               className="text-left text-muted-foreground leading-relaxed max-w-prose"
             >
-              I support teams in shaping meaningful strategies.
-              Most of my work happens in the space between what people need and what businesses can deliver — a space that’s often messy and full of trade-offs. I navigate ambiguity, conflicting priorities, and incomplete data, translating them into clarity, direction, and meaningful change.
+              My approach balances quality and scalability.
+I ensure quality by leading and conducting UX Research that meets the highest methodological standards across all phases — discovery, design, and optimization.
+I create scalability by embedding UX Research into organizational structures through ResearchOps, UX strategy, and strategic research initiatives.
             </TextReveal>
           </FadeIn>
 

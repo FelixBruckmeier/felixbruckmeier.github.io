@@ -1,7 +1,28 @@
 import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import Button from "@/components/ui/Button";
-import { Rewind, FastForward, Play, Pause } from "lucide-react";
+
+// ✅ Eigene gefüllte monochrome Icons (schwarz im Light Mode, weiß im Dark Mode)
+const IconPlay = () => (
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M5 3.5v17l14-8.5-14-8.5z" />
+  </svg>
+);
+const IconPause = () => (
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M6 4h4v16H6zm8 0h4v16h-4z" />
+  </svg>
+);
+const IconForward = () => (
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M4 4v16l8-8-8-8zm8 0v16l8-8-8-8z" />
+  </svg>
+);
+const IconBack = () => (
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M20 4v16l-8-8 8-8zm-8 0v16l-8-8 8-8z" />
+  </svg>
+);
 
 export default function VennDiagram() {
   const PHASE_COUNT = 4;
@@ -210,7 +231,7 @@ export default function VennDiagram() {
           </motion.div>
         </div>
 
-        {/* === Text (DS-aligned) === */}
+        {/* === Text === */}
         <div className="relative w-full lg:w-[440px] flex items-center justify-center lg:justify-start text-center lg:text-left min-h-[260px]">
           <div
             key={safePhase}
@@ -230,13 +251,13 @@ export default function VennDiagram() {
       {/* === Controls === */}
       <div className="flex items-center justify-center gap-3 mt-8">
         <Button variant="secondary" size="md" onClick={() => changePhase(-1)}>
-          <Rewind className="w-5 h-5" />
+          <IconBack />
         </Button>
         <Button variant="secondary" size="md" onClick={togglePlay}>
-          {isPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}
+          {isPlaying ? <IconPause /> : <IconPlay />}
         </Button>
         <Button variant="secondary" size="md" onClick={() => changePhase(1)}>
-          <FastForward className="w-5 h-5" />
+          <IconForward />
         </Button>
       </div>
     </div>

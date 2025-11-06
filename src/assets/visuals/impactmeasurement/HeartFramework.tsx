@@ -1,13 +1,17 @@
 /* eslint-disable react/no-unknown-property */
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { typography } from "@/lib/tokens";
 import { cn } from "@/lib/utils";
+import { notionHexMap } from "@/lib/tokens";
 
+const columns = ["Goals", "Signals", "Metrics"];
+
+// 🎨 DS-konforme Farben + Originaltexte
 const categories = [
   {
     name: "Happiness",
-    color: "bg-[#3B82F6]",
+    tone: notionHexMap.blue,
     values: {
       Goals:
         "Increase user satisfaction with usability and the value of the solution.",
@@ -18,7 +22,7 @@ const categories = [
   },
   {
     name: "Engagement",
-    color: "bg-[#8B5CF6]",
+    tone: notionHexMap.purple,
     values: {
       Goals: "Ensure users interact with the solution regularly and actively.",
       Signals: "High usage frequency.",
@@ -27,7 +31,7 @@ const categories = [
   },
   {
     name: "Adoption",
-    color: "bg-[#EF4444]",
+    tone: notionHexMap.brown,
     values: {
       Goals:
         "New users should integrate the solution into their processes quickly and sustainably.",
@@ -37,7 +41,7 @@ const categories = [
   },
   {
     name: "Retention",
-    color: "bg-[#F59E0B]",
+    tone: notionHexMap.green,
     values: {
       Goals: "Ensure long-term usage of the solution.",
       Signals: "Users return and continue using the solution over time.",
@@ -46,7 +50,7 @@ const categories = [
   },
   {
     name: "Task Success",
-    color: "bg-[#EAB308]",
+    tone: notionHexMap.yellow,
     values: {
       Goals: "Users should be able to complete their tasks efficiently.",
       Signals: "Users successfully accomplish their tasks.",
@@ -56,12 +60,31 @@ const categories = [
   },
 ];
 
-const columns = ["Goals", "Signals", "Metrics"];
-
 export default function HeartFramework() {
+  const [isDark, setIsDark] = useState(
+    document.documentElement.classList.contains("dark")
+  );
+
+  useEffect(() => {
+    const observer = new MutationObserver(() =>
+      setIsDark(document.documentElement.classList.contains("dark"))
+    );
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+    return () => observer.disconnect();
+  }, []);
+
+  const headerBg = "var(--color-muted)";
+  const cellBg = "var(--color-card)";
+  const borderColor = "var(--color-border)";
+  const textColor = "var(--color-foreground)";
+  const subText = "var(--color-muted-foreground)";
+
   return (
-    <div className="w-full max-w-7xl mx-auto mt-8 px-2">
-      {/* ===== DESKTOP LAYOUT ===== */}
+    <div className="w-full max-w-7xl mx-auto mt-8 px-2 transition-colors duration-300">
+      {/* ===== DESKTOP ===== */}
       <motion.div
         className="hidden md:grid gap-2"
         style={{ gridTemplateColumns: "repeat(4, 1fr)" }}
@@ -69,7 +92,6 @@ export default function HeartFramework() {
         whileInView="visible"
         viewport={{ once: true, amount: 0.3 }}
       >
-        {/* Leere Ecke */}
         <div></div>
 
         {/* Kopfzeile */}
@@ -77,21 +99,21 @@ export default function HeartFramework() {
           <motion.div
             key={col}
             className={cn(
-              "rounded-md p-4 text-center text-white font-semibold",
+              "rounded-md p-4 text-center font-semibold border",
               typography.body.font,
               typography.body.size
             )}
-            style={{ backgroundColor: "#474747" }}
+            style={{
+              backgroundColor: headerBg,
+              borderColor,
+              color: textColor,
+            }}
             variants={{
               hidden: { opacity: 0, y: 20 },
               visible: {
                 opacity: 1,
                 y: 0,
-                transition: {
-                  delay: 0.4 + i * 0.3,
-                  duration: 0.8,
-                  ease: [0.33, 1.02, 0.68, 1],
-                },
+                transition: { delay: 0.2 + i * 0.2, duration: 0.5 },
               },
             }}
           >
@@ -101,62 +123,62 @@ export default function HeartFramework() {
 
         {/* Zeilen */}
         {categories.map((cat, rowIndex) => {
-          const baseDelay = 1 + rowIndex * 0.5;
+          const baseDelay = 0.4 + rowIndex * 0.2;
+          const accentBg = isDark ? cat.tone.text + "40" : cat.tone.bg;
+          const accentText = isDark ? cat.tone.bg : cat.tone.text;
+
           return (
             <React.Fragment key={cat.name}>
+              {/* Kategorie */}
               <motion.div
                 className={cn(
-                  `${cat.color} text-white font-semibold rounded-md p-4 text-center flex items-center justify-center`,
+                  "font-semibold rounded-md p-4 text-center flex items-center justify-center border",
                   typography.subtitle.font,
                   typography.subtitle.size
                 )}
+                style={{
+                  backgroundColor: accentBg,
+                  borderColor,
+                  color: accentText,
+                }}
                 variants={{
-                  hidden: { opacity: 0, x: -40 },
+                  hidden: { opacity: 0, x: -30 },
                   visible: {
                     opacity: 1,
                     x: 0,
-                    transition: {
-                      delay: baseDelay,
-                      duration: 0.8,
-                      ease: [0.33, 1.02, 0.68, 1],
-                    },
+                    transition: { delay: baseDelay, duration: 0.5 },
                   },
                 }}
               >
                 {cat.name}
               </motion.div>
 
+              {/* Werte */}
               {columns.map((col, colIndex) => (
                 <motion.div
                   key={`${cat.name}-${col}`}
                   className={cn(
-                    "rounded-md p-4 leading-relaxed text-white",
+                    "rounded-md p-4 border leading-relaxed",
                     typography.body.font,
                     typography.body.size
                   )}
-                  style={{ backgroundColor: "#767676" }}
+                  style={{
+                    backgroundColor: cellBg,
+                    borderColor,
+                    color: textColor,
+                  }}
                   variants={{
                     hidden: { opacity: 0, y: 20 },
                     visible: {
                       opacity: 1,
                       y: 0,
                       transition: {
-                        delay: baseDelay + 0.3 + colIndex * 0.3,
-                        duration: 0.8,
-                        ease: [0.33, 1.02, 0.68, 1],
+                        delay: baseDelay + 0.2 + colIndex * 0.2,
+                        duration: 0.5,
                       },
                     },
                   }}
                 >
-                  <div
-                    className={cn(
-                      "font-medium text-gray-200 mb-1",
-                      typography.small.font,
-                      typography.small.size
-                    )}
-                  >
-                    {col}
-                  </div>
                   {cat.values[col]}
                 </motion.div>
               ))}
@@ -165,66 +187,76 @@ export default function HeartFramework() {
         })}
       </motion.div>
 
-      {/* ===== MOBILE LAYOUT ===== */}
+      {/* ===== MOBILE ===== */}
       <div className="flex flex-col gap-6 md:hidden mt-6">
-        {categories.map((cat, i) => (
-          <motion.div
-            key={cat.name}
-            className="rounded-xl overflow-hidden shadow-md"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.3 }}
-            variants={{
-              hidden: { opacity: 0, y: 40 },
-              visible: {
-                opacity: 1,
-                y: 0,
-                transition: {
-                  delay: i * 0.5,
-                  duration: 0.9,
-                  ease: [0.33, 1.02, 0.68, 1],
+        {categories.map((cat, i) => {
+          const accentBg = isDark ? cat.tone.text + "40" : cat.tone.bg;
+          const accentText = isDark ? cat.tone.bg : cat.tone.text;
+          return (
+            <motion.div
+              key={cat.name}
+              className="rounded-xl overflow-hidden border transition-colors duration-300"
+              style={{ borderColor }}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.3 }}
+              variants={{
+                hidden: { opacity: 0, y: 30 },
+                visible: {
+                  opacity: 1,
+                  y: 0,
+                  transition: { delay: i * 0.2, duration: 0.6 },
                 },
-              },
-            }}
-          >
-            {/* Kategorie-Titel */}
-            <div
-              className={cn(
-                `${cat.color} text-white px-4 py-3 font-semibold`,
-                typography.subtitle.font,
-                typography.subtitle.size
-              )}
+              }}
             >
-              {cat.name}
-            </div>
+              {/* Kategorie-Header */}
+              <div
+                className={cn(
+                  "px-4 py-3 font-semibold",
+                  typography.subtitle.font,
+                  typography.subtitle.size
+                )}
+                style={{
+                  backgroundColor: accentBg,
+                  color: accentText,
+                }}
+              >
+                {cat.name}
+              </div>
 
-            {/* Inhalte */}
-            <div
-              className={cn(
-                "bg-[#767676] text-white p-4 space-y-3 leading-relaxed",
-                typography.body.font,
-                typography.body.size
-              )}
-            >
-              {columns.map((col) => (
-                <div key={`${cat.name}-${col}`}>
-                  <div
-                    className={cn(
-                      "font-medium text-gray-200 mb-1",
-                      typography.small.font,
-                      typography.small.size
-                    )}
-                  >
-                    {col}
+              {/* Inhalte */}
+              <div
+                className={cn(
+                  "p-4 space-y-3 border-t leading-relaxed",
+                  typography.body.font,
+                  typography.body.size
+                )}
+                style={{
+                  backgroundColor: cellBg,
+                  borderColor,
+                  color: textColor,
+                }}
+              >
+                {columns.map((col) => (
+                  <div key={`${cat.name}-${col}`}>
+                    <div
+                      className={cn(
+                        "font-medium mb-1",
+                        typography.small.font,
+                        typography.small.size
+                      )}
+                      style={{ color: subText }}
+                    >
+                      {col}
+                    </div>
+                    {cat.values[col]}
                   </div>
-                  {cat.values[col]}
-                </div>
-              ))}
-            </div>
-          </motion.div>
-        ))}
+                ))}
+              </div>
+            </motion.div>
+          );
+        })}
       </div>
     </div>
   );
 }
-

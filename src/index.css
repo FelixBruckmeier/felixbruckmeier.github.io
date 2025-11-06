@@ -4,7 +4,7 @@
 @custom-variant dark (&:is(.dark *));
 
 /* ================================
-   THEME TOKENS
+   THEME TOKENS (vereinheitlicht)
    ================================ */
 @theme {
   --breakpoint-sm: 40rem;
@@ -19,11 +19,11 @@
 
   /* Colors (Light) */
   --color-background: #ffffff;
-  --color-foreground: #0a0a0a;
+  --color-foreground: #2f2f2f;          /* Einheitliches Grau für alle Texte */
   --color-border: #e5e5e5;
 
-  --color-muted: #f8f9fa;
-  --color-muted-foreground: #6b7280;
+  --color-muted: #f3f3f3;
+  --color-muted-foreground: #2f2f2f;    /* identisch mit foreground */
 
   --color-primary: #0a0a0a;
   --color-primary-foreground: #ffffff;
@@ -40,11 +40,11 @@
    ================================ */
 .dark {
   --color-background: #0b0b0b;
-  --color-foreground: #f8f8f8;
+  --color-foreground: #c8c8c8;          /* Einheitliches Hellgrau für alle Texte */
   --color-border: #2a2a2a;
 
   --color-muted: #1a1a1a;
-  --color-muted-foreground: #a1a1aa;
+  --color-muted-foreground: #d6d6d6;    /* identisch mit foreground */
 
   --color-primary: #f8f8f8;
   --color-primary-foreground: #0a0a0a;
@@ -77,21 +77,19 @@ html,
 body {
   margin: 0;
   padding: 0;
-  overflow-y: scroll; /* reserviert Scrollbalkenplatz */
-  overflow-x: clip;   /* verhindert horizontales Verschieben */
+  overflow-y: scroll;
+  overflow-x: clip;
   width: 100%;
   background: var(--color-background);
   color: var(--color-foreground);
 }
-
 
 /* ✅ Weiches Scrollen aktivieren */
 html {
   scroll-behavior: smooth;
 }
 
-/* ✅ Normale Bilder & SVGs skalieren richtig,
-   Hero-/Headerbilder mit data-hero bleiben unberührt */
+/* ✅ Normale Bilder & SVGs skalieren richtig */
 img:not([data-hero]),
 svg:not([data-hero]) {
   max-width: 100%;
@@ -137,7 +135,7 @@ svg:not([data-hero]) {
   /* Tiles */
   .tile {
     @apply rounded-xl border border-border bg-muted 
-           p-4 text-center text-sm text-muted-foreground 
+           p-4 text-center text-sm text-foreground 
            transition-colors duration-200 
            hover:bg-muted/70;
   }
@@ -152,22 +150,22 @@ svg:not([data-hero]) {
   }
 
   h1 {
-    @apply font-display font-extrabold tracking-tight;
+    @apply font-display font-extrabold tracking-tight text-foreground;
   }
 
   h2 {
-    @apply font-display font-bold;
+    @apply font-display font-bold text-foreground;
   }
 
   h3 {
-    @apply font-display font-semibold;
+    @apply font-display font-semibold text-foreground;
   }
 
   p {
-    @apply leading-relaxed text-muted-foreground;
+    @apply leading-relaxed text-foreground;
   }
 
   small {
-    @apply text-sm text-muted-foreground;
+    @apply text-sm text-foreground;
   }
 }

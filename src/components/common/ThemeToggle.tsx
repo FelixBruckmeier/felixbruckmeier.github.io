@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { Moon, Sun } from "lucide-react";
+import Button from "@/components/ui/Button";
 
 type Mode = "light" | "dark";
 
@@ -24,14 +26,19 @@ export default function ThemeToggle() {
   }, [theme]);
 
   return (
-    <button
+    <Button
+      variant="secondary" // ✅ leicht grau hinterlegt wie in Button.tsx
+      size="icon"
       aria-label="Toggle theme"
       onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-      className="rounded-md border border-neutral-300 dark:border-neutral-700 px-2 py-1 text-xs
-                 text-neutral-700 dark:text-neutral-300"
-      title={theme === "dark" ? "Switch to light" : "Switch to dark"}
+      title={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+      className="transition-colors"
     >
-      {theme === "dark" ? "Light" : "Dark"}
-    </button>
+      {theme === "dark" ? (
+        <Sun className="h-5 w-5 text-foreground" />
+      ) : (
+        <Moon className="h-5 w-5 text-foreground" />
+      )}
+    </Button>
   );
 }

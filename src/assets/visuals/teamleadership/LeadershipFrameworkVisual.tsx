@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Users, Target, Lightbulb } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { colors, spacing, radii, shadows } from "@/lib/tokens";
+import { colors, spacing } from "@/lib/tokens";
 import { Subtitle, Body } from "@/components/ui/Tokens";
 
 export default function LeadershipFrameworkVisual({
@@ -42,21 +42,22 @@ export default function LeadershipFrameworkVisual({
         culture: "#1d1710",
       }
     : {
-        enablement: "#F3E6EF",
-        mentoring: "#E6F3FA",
-        culture: "#FFF4D9",
+        enablement: "#F9F3F8",
+        mentoring: "#EEF7FB",
+        culture: "#FFF9EC",
       };
 
+  // === Kräftigeres Highlight im Light Mode ===
   const highlightColors = isDark
     ? {
-        enablement: "#5f4a6b",
-        mentoring: "#56634f",
-        culture: "#705846",
+        enablement: "#6a5077",
+        mentoring: "#5b6c48",
+        culture: "#7d604a",
       }
     : {
-        enablement: "#D5BFD3",
-        mentoring: "#BFDDEB",
-        culture: "#FFDFA8",
+        enablement: "#D6AFD2", // stärkerer, aber noch harmonischer Ton
+        mentoring: "#A6D2E6",
+        culture: "#FFD68A",
       };
 
   const principles = [
@@ -147,31 +148,31 @@ export default function LeadershipFrameworkVisual({
           ))}
         </svg>
 
-        {/* === Boxen (Icons entfernt) === */}
-        {principles.map(({ title, desc, x, y, color, highlight }, i) => (
-          <div
-            key={i}
-            className={cn(
-              "absolute text-center border transition-colors duration-700",
-              colors.border,
-              radii.lg,
-              shadows.sm,
-              "p-[0.65rem] sm:p-3 bg-opacity-90"
-            )}
-            style={{
-              width: "clamp(110px, 26vw, 190px)",
-              left: `${x}%`,
-              top: `${y}%`,
-              transform: "translate(-50%, -50%)",
-              backgroundColor: activeIndex === i ? highlight : color,
-            }}
-          >
-            <div className="flex flex-col items-center gap-1.5 sm:gap-2">
-              <Subtitle className="text-foreground">{title}</Subtitle>
-              <Body className={cn(colors.muted.text)}>{desc}</Body>
+        {/* === Boxen === */}
+        {principles.map(({ title, desc, x, y, color, highlight }, i) => {
+          const isActive = activeIndex === i;
+          return (
+            <div
+              key={i}
+              className={cn(
+                "absolute text-center transition-colors duration-500 rounded-lg",
+                "p-[0.65rem] sm:p-3 bg-opacity-90"
+              )}
+              style={{
+                width: "clamp(110px, 26vw, 190px)",
+                left: `${x}%`,
+                top: `${y}%`,
+                transform: "translate(-50%, -50%)",
+                backgroundColor: isActive ? highlight : color,
+              }}
+            >
+              <div className="flex flex-col items-center gap-1.5 sm:gap-2">
+                <Subtitle className="text-foreground">{title}</Subtitle>
+                <Body className={cn(colors.muted.text)}>{desc}</Body>
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

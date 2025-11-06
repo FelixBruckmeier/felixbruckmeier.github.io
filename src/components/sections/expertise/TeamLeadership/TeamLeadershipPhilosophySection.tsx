@@ -3,10 +3,32 @@ import { Section } from "@/components/ui";
 import SectionIntro from "@/components/ui/SectionIntro";
 import LeadershipFrameworkVisual from "@/assets/visuals/teamleadership/LeadershipFrameworkVisual";
 import Button from "@/components/ui/Button";
-import { Rewind, FastForward, Play, Pause, Target, Users, Lightbulb } from "lucide-react";
+import { Target, Users, Lightbulb } from "lucide-react";
 import { Subtitle, Body } from "@/components/ui/Tokens";
 import { cn } from "@/lib/utils";
 import { colors } from "@/lib/tokens";
+
+// ✅ Eigene minimalistische gefüllte SVG-Icons (neutral schwarz/weiß, theme-abhängig)
+const IconPlay = () => (
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M5 3.5v17l14-8.5-14-8.5z" />
+  </svg>
+);
+const IconPause = () => (
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M6 4h4v16H6zm8 0h4v16h-4z" />
+  </svg>
+);
+const IconForward = () => (
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M4 4v16l8-8-8-8zm8 0v16l8-8-8-8z" />
+  </svg>
+);
+const IconBack = () => (
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M20 4v16l-8-8 8-8zm-8 0v16l-8-8 8-8z" />
+  </svg>
+);
 
 export default function TeamLeadershipPhilosophySection() {
   const PHASE_COUNT = 3;
@@ -126,31 +148,31 @@ export default function TeamLeadershipPhilosophySection() {
             </Body>
           </div>
 
-          {/* === Desktop: fixierte Buttons direkt unter Text === */}
+          {/* === Desktop Buttons === */}
           <div className="hidden md:flex items-center justify-center lg:justify-start gap-3 mt-10 absolute bottom-0 left-1/2 lg:left-0 -translate-x-1/2 lg:translate-x-0">
             <Button variant="secondary" size="md" onClick={() => changePhase(-1)}>
-              <Rewind className="w-5 h-5" />
+              <IconBack />
             </Button>
             <Button variant="secondary" size="md" onClick={togglePlay}>
-              {isPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}
+              {isPlaying ? <IconPause /> : <IconPlay />}
             </Button>
             <Button variant="secondary" size="md" onClick={() => changePhase(1)}>
-              <FastForward className="w-5 h-5" />
+              <IconForward />
             </Button>
           </div>
         </div>
       </div>
 
-      {/* === Mobile: Buttons unterhalb der ganzen Section === */}
+      {/* === Mobile Buttons === */}
       <div className="flex md:hidden items-center justify-center gap-3 mt-8">
         <Button variant="secondary" size="md" onClick={() => changePhase(-1)}>
-          <Rewind className="w-5 h-5" />
+          <IconBack />
         </Button>
         <Button variant="secondary" size="md" onClick={togglePlay}>
-          {isPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}
+          {isPlaying ? <IconPause /> : <IconPlay />}
         </Button>
         <Button variant="secondary" size="md" onClick={() => changePhase(1)}>
-          <FastForward className="w-5 h-5" />
+          <IconForward />
         </Button>
       </div>
     </Section>
