@@ -27,12 +27,12 @@ export default function ThemeToggle() {
 
   return (
     <Button
-      variant="secondary" // ✅ leicht grau hinterlegt wie in Button.tsx
-      size="icon"
+      variant="secondary"
+      size="sm" // ⚙️ war "icon" → ersetzt durch sm + custom sizing
       aria-label="Toggle theme"
       onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
       title={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
-      className="transition-colors"
+      className="w-9 h-9 p-0 transition-colors flex items-center justify-center"
     >
       {theme === "dark" ? (
         <Sun className="h-5 w-5 text-foreground" />
