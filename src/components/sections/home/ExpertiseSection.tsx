@@ -51,9 +51,13 @@ export default function ExpertiseSection() {
           ease="easeOut"
           className="inherit"
         >
-          I help companies build sustainable products by transforming deep user
-          insights into actionable strategies. My mission is to scale the user's
-          voice and empower organizations to make user-centered decisions.
+          These areas of expertise reflect what I’ve learned — and continue to
+          learn — about transforming deep user insights into strategy,
+          structure, and measurable impact. Over the years, I’ve seen how
+          empathy and evidence can shape not only better products but also
+          stronger teams and processes. I help organizations build sustainable,
+          user-centered products, make confident, evidence-based decisions, and
+          continuously grow their UX maturity.
         </TextReveal>
       </SectionIntro>
 

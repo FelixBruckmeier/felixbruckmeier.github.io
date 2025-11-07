@@ -72,8 +72,7 @@ export default function ProjectsSection() {
           ease="easeOut"
           className="inherit"
         >
-          A selection of research and operations projects — from foundational
-          insights to usability testing and scalable ResearchOps systems.
+          I’m passionate about guiding teams through the entire spectrum of UX research — from foundational discovery to evaluative testing. I combine qualitative and quantitative methods, mixed-method and triangulation approaches, analytics, and design thinking workshops to turn complex questions into meaningful insights. My work connects agile UX, research-driven project management, and the integration of AI into research and product development.
         </TextReveal>
       </SectionIntro>
 

@@ -38,8 +38,7 @@ export default function AboutSection() {
               ease="easeInOut"
               className="text-left text-foreground font-semibold text-lg mb-4"
             >
-              I’m a UX Research Lead focused on grounding decisions in evidence.
-            </TextReveal>
+I’m a UX Research Lead who believes successful products start with empathy for their users. My work focuses on helping teams transform that empathy into evidence-based, user-centric decisions.            </TextReveal>
           </FadeIn>
 
           <FadeIn delay={0.45}>
@@ -53,7 +52,7 @@ export default function AboutSection() {
             >
               My approach balances quality and scalability.
 I ensure quality by leading and conducting UX Research that meets the highest methodological standards across all phases — discovery, design, and optimization.
-I create scalability by embedding UX Research into organizational structures through ResearchOps, UX strategy, and strategic research initiatives.
+I create scalability by embedding UX Research into organizational structures through ResearchOps an UX strategy.
             </TextReveal>
           </FadeIn>
 

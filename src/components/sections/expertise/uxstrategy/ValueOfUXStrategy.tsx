@@ -31,18 +31,17 @@ export default function ValueOfUXStrategy() {
   return (
     <Section id="value" title="The Purpose of UX Strategy" spacing="lg">
       {/* --- Storytelling Intro --- */}
-      <SectionIntro>
-        Many teams work with great dedication – but without shared direction.
-        Research, design, and business often move in parallel:
-        insights fade, decisions rely on assumptions,
-        and speed replaces focus.
-        <br />
-        <br />
-        <strong>UX Strategy</strong> brings these strands together.
-        It clarifies where teams are heading, what they’re learning,
-        and how research drives impact.
-        My work focuses on three levers that turn activity into alignment.
-      </SectionIntro>
+     <SectionIntro>
+  Many teams work with great dedication — yet without a shared direction. Research,
+  design, and business often move in parallel: insights fade, decisions rely on
+  assumptions, and speed replaces focus. <strong>For most UX professionals, that’s nothing new.</strong>
+  <br /><br />
+  But this is exactly where a strong <strong>UX strategy</strong> makes the difference. It
+  brings these strands together — clarifying where teams are heading, what they’re
+  learning, and how research creates impact. <strong>My work focuses on three levers that turn
+  activity into alignment.</strong>
+</SectionIntro>
+
 
       {/* --- Tiles --- */}
       <div className={cn(layout.gridCols3, spacing.gap6, spacing.mt12)}>

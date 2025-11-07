@@ -11,12 +11,12 @@ export default function MetricsSection() {
     {
       number: "10+",
       title: "Years Experience",
-      desc: "UX strategy and research leadership across teams",
+      desc: "UX strategy and UX Research leadership across teams",
     },
     {
       number: "25+",
       title: "Research Methods",
-      desc: "Full spectrum of qualitative and quantitative approaches",
+      desc: "Full spectrum of qualitative and quantitative methods",
     },
     {
       number: "5",
@@ -24,9 +24,9 @@ export default function MetricsSection() {
       desc: "Cross-domain expertise from e-commerce to finance",
     },
     {
-      number: "200+",
+      number: "150+",
       title: "Studies Conducted",
-      desc: "End-to-end research across product development phases",
+      desc: "End-to-end UX Research across all product development phases",
     },
   ];
 

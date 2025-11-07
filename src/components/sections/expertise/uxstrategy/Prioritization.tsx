@@ -8,30 +8,40 @@ import ResearchPrioritizationMatrix from "@/assets/visuals/uxstrategy/ResearchPr
 
 /**
  * Section: UX Research Prioritization
- * Shows matrix and explanatory framework intro.
+ * Storytelling + klare Framework-Einführung
  */
-
 export default function Prioritization() {
   return (
-    <Section id="research-prioritization" title="3. UX Research Prioritization" spacing="lg">
+    <Section
+      id="research-prioritization"
+      title="3. UX Research Prioritization"
+      spacing="lg"
+    >
       {/* --- Intro text --- */}
       <SectionIntro>
-        No team has infinite time. UX Strategy means also knowing when to go deep and when to move fast.
-I guide teams in prioritizing research based on two key dimensions:
-
-Problem clarity — how well we understand user needs
-
-Risk of getting it wrong — how costly a wrong decision would be
-
-This ensures that every research effort matches context, balancing impact, time, and confidence.
-         <br />It maps two dimensions that drive research prioritization: <br />
+        Resource efficiency is a fundamental principle of sound business.
+        No team has infinite time — which makes it essential to know{" "}
+        <strong>when to go deep and when to move fast</strong>.
+        <br />
+        <br />
+        I help teams prioritize their research by balancing effort and impact —
+        deciding where deep exploration creates the most value and where quick
+        validation is enough.
+        <br />
+        <br />
+        This framework maps two key dimensions that guide every research decision:
+        <br />
         <br />
         • <strong>Problem clarity</strong> — how well we understand what users need
         <br />
-        • <strong>Risk of getting it wrong</strong> — how costly a mistake would be
+        • <strong>Risk of getting it wrong</strong> — how costly a wrong decision
+        would be
         <br />
         <br />
-             </SectionIntro>
+        By combining these two perspectives, teams can match each research activity
+        to its context — finding the right balance between{" "}
+        <strong>impact, time, and confidence</strong>.
+      </SectionIntro>
 
       {/* --- Centered matrix visual --- */}
       <div className={cn("flex justify-center mt-12 mb-8")}>
@@ -42,3 +52,4 @@ This ensures that every research effort matches context, balancing impact, time,
     </Section>
   );
 }
+
