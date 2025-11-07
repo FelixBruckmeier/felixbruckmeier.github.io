@@ -80,6 +80,20 @@ const ROLES: Role[] = [
       "Contextual research (e.g., ADAC) → exposed redesign opportunities.",
     ],
   },
+  {
+    id: "exp-empiriecom",
+    company: "empiriecom GmbH & Co. KG",
+    role: "Consultant, User-Centered Design",
+    period: "Feb 2016 – Jul 2018",
+    tags: ["E-commerce", "UX", "Quant"],
+    bullets: [
+      "Conducted A/B tests, e.g., evaluating a fit prediction algorithm and optimal display of payment methods.",
+      "Led a project developing a Usability Index as a success KPI for online shops (factor analysis).",
+      "Generated exploratory hypotheses across the entire customer journey through user labs and usability tests.",
+      "Applied Kano analysis to measure the satisfaction impact of new web features and services.",
+      "Analyzed the checkout flow using mouse tracking (form, funnel, and heatmap analysis) to identify friction points.",
+    ],
+  },
 ];
 
 const allTags = Array.from(new Set(ROLES.flatMap((r) => r.tags))).sort();
@@ -160,7 +174,11 @@ export default function CVPreview({ hideCTA = false }: { hideCTA?: boolean }) {
         type="multiple"
         value={openItems}
         onValueChange={(vals) => setOpenItems(vals)}
-        className={cn("relative border-l border-border", spacing.pl8, spacing.stackLg)}
+        className={cn(
+          "relative border-l border-border",
+          spacing.pl8,
+          spacing.stackLg
+        )}
       >
         {filtered.map((r) => (
           <AccordionItem
