@@ -3,7 +3,7 @@ import headerImg from "@/assets/images/projects/workshop/haderws.jpg";
 import {
   WorkshopBLUFSection,
   WorkshopProcessSection,
-  WorkshopImpactSection,
+
 } from "@/components/sections/projects/workshop";
 
 /**
@@ -21,7 +21,7 @@ export default function WorkshopPage() {
     >
       <WorkshopBLUFSection />
       <WorkshopProcessSection />
-      <WorkshopImpactSection />
+      
     </PageLayout>
   );
 }
