@@ -5,12 +5,13 @@ import AppLayout from "@/AppLayout";
 import Home from "@/pages/Home";
 import CVPage from "@/pages/cv";
 
-// 🔹 Projektseiten (Ordner mit index.tsx)
+// 🔹 Projektseiten
 import CarInsurance from "@/pages/projects/CarInsurance";
 import ZooplusReOps from "@/pages/projects/ZooplusReOps";
 import ZooplusPricing from "@/pages/projects/ZooplusPricing";
 import InsuranceBrokerDiscovery from "@/pages/projects/InsuranceBroker";
 import AtossReOps from "@/pages/projects/AtossReOps";
+import WorkshopPage from "@/pages/projects/workshop"; // ✅ NEU hinzugefügt
 
 // 🔹 Expertise-Seiten
 import UXStrategy from "@/pages/expertise/UXStrategy";
@@ -24,11 +25,7 @@ import SkillAssessmentPage from "@/pages/expertise/TeamLeadership/skillassessmen
 import Imprint from "@/pages/shared/Imprint";
 import Privacy from "@/pages/shared/Privacy";
 
-/**
- * ScrollToTop
- * ------------------------------
- * Scrollt beim Wechsel der Route ganz nach oben
- */
+/** ScrollToTop */
 function ScrollToTop() {
   const { pathname } = useLocation();
   useEffect(() => {
@@ -37,18 +34,11 @@ function ScrollToTop() {
   return null;
 }
 
-/**
- * ScrollToHash
- * ------------------------------
- * Sorgt dafür, dass bei einem Link wie "/#contact"
- * sofort zur Section gescrollt wird, auch wenn die Seite neu geladen wird.
- */
+/** ScrollToHash */
 function ScrollToHash() {
   const location = useLocation();
-
   useEffect(() => {
     if (location.hash) {
-      // kleine Verzögerung, bis DOM vollständig steht
       setTimeout(() => {
         const el = document.querySelector(location.hash);
         if (el) {
@@ -57,7 +47,6 @@ function ScrollToHash() {
       }, 120);
     }
   }, [location]);
-
   return null;
 }
 
@@ -81,6 +70,7 @@ export default function App() {
             element={<InsuranceBrokerDiscovery />}
           />
           <Route path="projects/atoss-reops" element={<AtossReOps />} />
+          <Route path="projects/workshop" element={<WorkshopPage />} /> {/* ✅ NEU */}
           <Route path="projects" element={<Navigate to="/" replace />} />
 
           {/* 🔹 Expertise */}

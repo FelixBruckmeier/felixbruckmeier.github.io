@@ -13,6 +13,7 @@ import insuranceBrokerImg from "@/assets/images/projects/b2b2c/B2B2COptimization
 import pricingImg from "@/assets/images/projects/pricingtesting/PricingUsabilityTesting.jpg?w=400;800&format=webp;png&as=picture";
 import microinteractionImg from "@/assets/images/projects/amicrointeraction/optimize.jpg?w=400;800&format=webp;png&as=picture";
 import reopsImplImg from "@/assets/images/projects/reopsimplement/ReOpsimplementation.jpg?w=400;800&format=webp;png&as=picture";
+import workshopImg from "@/assets/images/projects/workshop/haderws.jpg?w=400;800&format=webp;png&as=picture";
 
 export default function ProjectsSection() {
   const { t } = useTranslation();
@@ -59,6 +60,14 @@ export default function ProjectsSection() {
       desc: "Empowering UX teams through ResearchOps foundations.",
       image: reopsImplImg,
       locked: true,
+    },
+    // 🆕 Neues Projekt: Team UX Research Culture Kickstart
+    {
+      to: "/projects/workshop",
+      title: "Team UX Research Culture Kickstart",
+      desc: "Building alignment and ownership through co-creation.",
+      image: workshopImg,
+      locked: false,
     },
   ];
 

@@ -472,6 +472,7 @@ export default function NavBar() {
 }
 
 
+
 ==== \src\components\common\PrivacySection.tsx ====
 import Section from "@/components/ui/Section";
 import Tile from "@/components/ui/Tile";
@@ -565,64 +566,10 @@ export default function PrivacySection() {
 }
 
 
-==== \src\components\common\ScrollToHash.tsx ====
-// src/components/common/ScrollToHash.tsx
-import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
-
-export default function ScrollToHash() {
-  const location = useLocation();
-
-  useEffect(() => {
-    if (location.hash) {
-      const target = document.querySelector(location.hash);
-      if (target) {
-        setTimeout(() => {
-          target.scrollIntoView({ behavior: "smooth", block: "start" });
-        }, 100); // kurze Verzögerung, damit DOM sicher aufgebaut ist
-      }
-    }
-  }, [location]);
-
-  return null;
-}
-
-
-==== \src\components\common\ScrollToTop.tsx ====
-// src/components/common/ScrollToHash.tsx
-import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
-
-export default function ScrollToHash() {
-  const location = useLocation();
-
-  useEffect(() => {
-    const scrollToTarget = () => {
-      if (window.location.hash) {
-        const target = document.querySelector(window.location.hash);
-        if (target) {
-          setTimeout(() => {
-            target.scrollIntoView({ behavior: "smooth", block: "start" });
-          }, 80);
-        }
-      }
-    };
-
-    // reagiert auf Route-Wechsel UND Hash-Änderungen
-    scrollToTarget();
-    window.addEventListener("hashchange", scrollToTarget);
-
-    return () => {
-      window.removeEventListener("hashchange", scrollToTarget);
-    };
-  }, [location]);
-
-  return null;
-}
-
-
 ==== \src\components\common\ThemeToggle.tsx ====
 import { useEffect, useState } from "react";
+import { Moon, Sun } from "lucide-react";
+import Button from "@/components/ui/Button";
 
 type Mode = "light" | "dark";
 
@@ -648,15 +595,20 @@ export default function ThemeToggle() {
   }, [theme]);
 
   return (
-    <button
+    <Button
+      variant="secondary"
+      size="sm" // ⚙️ war "icon" → ersetzt durch sm + custom sizing
       aria-label="Toggle theme"
       onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-      className="rounded-md border border-neutral-300 dark:border-neutral-700 px-2 py-1 text-xs
-                 text-neutral-700 dark:text-neutral-300"
-      title={theme === "dark" ? "Switch to light" : "Switch to dark"}
+      title={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+      className="w-9 h-9 p-0 transition-colors flex items-center justify-center"
     >
-      {theme === "dark" ? "Light" : "Dark"}
-    </button>
+      {theme === "dark" ? (
+        <Sun className="h-5 w-5 text-foreground" />
+      ) : (
+        <Moon className="h-5 w-5 text-foreground" />
+      )}
+    </Button>
   );
 }
 
@@ -2626,8 +2578,8 @@ export const tagColorMap: Record<string, NotionColor> = {
 // ================================
 export const palette = {
   notion: {
-    default: { text: "text-[#373530] dark:text-[#D4D4D4]", bg: "bg-[#F7F7F7] dark:bg-[#191919]" },
-    gray: { text: "text-[#787774] dark:text-[#9B9B9B]", bg: "bg-[#F1F1EF] dark:bg-[#252525]" },
+    default: { text: "text-[#4A4846] dark:text-[#D4D4D4]", bg: "bg-[#F7F7F7] dark:bg-[#191919]" },
+    gray: { text: "text-[#4A4846] dark:text-[#D4D4D4]", bg: "bg-[#F1F1EF] dark:bg-[#252525]" },
     brown: { text: "text-[#976D57] dark:text-[#A27763]", bg: "bg-[#F3EEEE] dark:bg-[#2E2724]" },
     orange: { text: "text-[#CC782F] dark:text-[#CB7B37]", bg: "bg-[#F8ECDF] dark:bg-[#36291F]" },
     yellow: { text: "text-[#C29343] dark:text-[#C19138]", bg: "bg-[#FAF3DD] dark:bg-[#372E20]" },
@@ -3505,6 +3457,38 @@ export default function InsuranceBrokerDiscovery() {
 }
 
 
+==== \src\pages\projects\workshop\index.tsx ====
+// src/pages/projects/WorkshopPage.tsx
+import PageLayout from "@/components/layout/PageLayout";
+import headerImg from "@/assets/images/projects/workshop/haderws.jpg";
+import {
+  WorkshopBLUFSection,
+  WorkshopProcessSection,
+  WorkshopImpactSection,
+} from "@/components/sections/projects/Workshop";
+
+/**
+ * UX Research Maturity Workshop Page
+ * --------------------------------------------
+ * - Consistent layout and structure with other Project Pages (e.g. CarInsurance, ResearchOps)
+ * - Uses shared PageLayout component for unified design
+ */
+export default function WorkshopPage() {
+  return (
+    <PageLayout
+      title="UX Research Maturity Workshop"
+      intro="From assessment to alignment — co-creating actionable solutions to advance UX Research maturity."
+      headerImage={headerImg}
+      width="wide"
+    >
+      <WorkshopBLUFSection />
+      <WorkshopProcessSection />
+      <WorkshopImpactSection />
+    </PageLayout>
+  );
+}
+
+
 ==== \src\pages\projects\ZooplusPricing\index.tsx ====
 import PageLayout from "@/components/layout/PageLayout";
 import headerImg from "@/assets/images/projects/pricingtesting/PricingUsabilityTesting.jpg";
@@ -3842,7 +3826,7 @@ export default i18n;
 @custom-variant dark (&:is(.dark *));
 
 /* ================================
-   THEME TOKENS
+   THEME TOKENS (vereinheitlicht)
    ================================ */
 @theme {
   --breakpoint-sm: 40rem;
@@ -3857,11 +3841,11 @@ export default i18n;
 
   /* Colors (Light) */
   --color-background: #ffffff;
-  --color-foreground: #0a0a0a;
+  --color-foreground: #2f2f2f;          /* Einheitliches Grau für alle Texte */
   --color-border: #e5e5e5;
 
-  --color-muted: #f8f9fa;
-  --color-muted-foreground: #6b7280;
+  --color-muted: #f3f3f3;
+  --color-muted-foreground: #2f2f2f;    /* identisch mit foreground */
 
   --color-primary: #0a0a0a;
   --color-primary-foreground: #ffffff;
@@ -3878,11 +3862,11 @@ export default i18n;
    ================================ */
 .dark {
   --color-background: #0b0b0b;
-  --color-foreground: #f8f8f8;
+  --color-foreground: #c8c8c8;          /* Einheitliches Hellgrau für alle Texte */
   --color-border: #2a2a2a;
 
   --color-muted: #1a1a1a;
-  --color-muted-foreground: #a1a1aa;
+  --color-muted-foreground: #d6d6d6;    /* identisch mit foreground */
 
   --color-primary: #f8f8f8;
   --color-primary-foreground: #0a0a0a;
@@ -3915,21 +3899,19 @@ html,
 body {
   margin: 0;
   padding: 0;
-  overflow-y: scroll; /* reserviert Scrollbalkenplatz */
-  overflow-x: clip;   /* verhindert horizontales Verschieben */
+  overflow-y: scroll;
+  overflow-x: clip;
   width: 100%;
   background: var(--color-background);
   color: var(--color-foreground);
 }
-
 
 /* ✅ Weiches Scrollen aktivieren */
 html {
   scroll-behavior: smooth;
 }
 
-/* ✅ Normale Bilder & SVGs skalieren richtig,
-   Hero-/Headerbilder mit data-hero bleiben unberührt */
+/* ✅ Normale Bilder & SVGs skalieren richtig */
 img:not([data-hero]),
 svg:not([data-hero]) {
   max-width: 100%;
@@ -3975,7 +3957,7 @@ svg:not([data-hero]) {
   /* Tiles */
   .tile {
     @apply rounded-xl border border-border bg-muted 
-           p-4 text-center text-sm text-muted-foreground 
+           p-4 text-center text-sm text-foreground 
            transition-colors duration-200 
            hover:bg-muted/70;
   }
@@ -3990,23 +3972,23 @@ svg:not([data-hero]) {
   }
 
   h1 {
-    @apply font-display font-extrabold tracking-tight;
+    @apply font-display font-extrabold tracking-tight text-foreground;
   }
 
   h2 {
-    @apply font-display font-bold;
+    @apply font-display font-bold text-foreground;
   }
 
   h3 {
-    @apply font-display font-semibold;
+    @apply font-display font-semibold text-foreground;
   }
 
   p {
-    @apply leading-relaxed text-muted-foreground;
+    @apply leading-relaxed text-foreground;
   }
 
   small {
-    @apply text-sm text-muted-foreground;
+    @apply text-sm text-foreground;
   }
 }
 
@@ -4079,30 +4061,9 @@ declare module "*.mp4" {
   export default value;
 }
 
-
-==== \types\vite-imagetools.d.ts ====
-/// <reference types="vite/client" />
-
-declare module '*&as=picture' {
-  const src: {
-    sources: {
-      srcset: string;
-      type: string;
-      sizes?: string;
-    }[];
-    img: {
-      src: string;
-      width: number;
-      height: number;
-    };
-  };
-  export default src;
-}
-
-declare module '*?w=*' {
-  const src: string;
-  export default src;
-}
+/* ?? neu hinzuf�gen */
+declare module '*&as=picture';
+declare module '*?*';
 
 
 ==== \components.json ====
@@ -4328,42 +4289,6 @@ export default {
     "rollup-parseAst.d.ts"
   ]
 }
-
-
-==== \vite.config.d.ts ====
-declare const _default: import("vite").UserConfig;
-export default _default;
-
-
-==== \vite.config.js ====
-// vite.config.ts
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
-import { imagetools } from "vite-imagetools";
-import { fileURLToPath } from "node:url";
-import { dirname, resolve } from "node:path";
-// __dirname in ESM nachbauen
-var __filename = fileURLToPath(import.meta.url);
-var __dirname = dirname(__filename);
-// Prüfen, ob wir in GitHub Actions laufen
-var isActions = process.env.GITHUB_ACTIONS === "true";
-export default defineConfig({
-    plugins: [
-        react(),
-        imagetools(), // 🆕 automatisches Bild-Optimierungs-Plugin
-    ],
-    base: "/", // User/Org Pages: Root
-    build: {
-        outDir: isActions ? "dist" : "docs", // Actions → dist, lokal → docs
-    },
-    resolve: {
-        alias: {
-            "@": resolve(__dirname, "src"),
-        },
-    },
-    // Optional: sorgt dafür, dass WebP & PNG sauber importiert werden
-    assetsInclude: ["**/*.png", "**/*.jpg", "**/*.jpeg", "**/*.webp"],
-});
 
 
 ==== \vite.config.ts ====
