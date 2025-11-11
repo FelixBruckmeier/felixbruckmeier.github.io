@@ -34,13 +34,14 @@ const NAV: NavItem[] = [
         label: "Insurance Broker Discovery Research",
       },
       { id: "projects/zooplus-pricing", label: "Pricing Usability Testing" },
-
-      // ✅ Newly added Workshop project entry:
       {
         id: "projects/workshop",
         label: "UX Research Maturity Workshop",
       },
-
+      {
+        id: "projects/kanostrategy",
+        label: "UX Strategy with the Kano Model", // ✅ NEU
+      },
       { id: "projects/delete-case", label: "Micro Interaction", locked: true },
       { id: "projects/atoss-reops", label: "ReOps Implementation", locked: true },
     ],

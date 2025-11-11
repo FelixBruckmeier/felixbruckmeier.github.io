@@ -11,7 +11,8 @@ import ZooplusReOps from "@/pages/projects/ZooplusReOps";
 import ZooplusPricing from "@/pages/projects/ZooplusPricing";
 import InsuranceBrokerDiscovery from "@/pages/projects/InsuranceBroker";
 import AtossReOps from "@/pages/projects/AtossReOps";
-import WorkshopPage from "@/pages/projects/workshop"; // ✅ NEU hinzugefügt
+import WorkshopPage from "@/pages/projects/workshop";
+import KanoStrategyPage from "@/pages/projects/kanostrategy"; // ✅ NEU hinzugefügt
 
 // 🔹 Expertise-Seiten
 import UXStrategy from "@/pages/expertise/UXStrategy";
@@ -70,7 +71,8 @@ export default function App() {
             element={<InsuranceBrokerDiscovery />}
           />
           <Route path="projects/atoss-reops" element={<AtossReOps />} />
-          <Route path="projects/workshop" element={<WorkshopPage />} /> {/* ✅ NEU */}
+          <Route path="projects/workshop" element={<WorkshopPage />} />
+          <Route path="projects/kanostrategy" element={<KanoStrategyPage />} /> {/* ✅ NEU */}
           <Route path="projects" element={<Navigate to="/" replace />} />
 
           {/* 🔹 Expertise */}

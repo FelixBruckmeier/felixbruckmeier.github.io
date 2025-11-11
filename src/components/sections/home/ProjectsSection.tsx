@@ -14,6 +14,7 @@ import pricingImg from "@/assets/images/projects/pricingtesting/PricingUsability
 import microinteractionImg from "@/assets/images/projects/amicrointeraction/optimize.jpg?w=400;800&format=webp;png&as=picture";
 import reopsImplImg from "@/assets/images/projects/reopsimplement/ReOpsimplementation.jpg?w=400;800&format=webp;png&as=picture";
 import workshopImg from "@/assets/images/projects/workshop/haderws.jpg?w=400;800&format=webp;png&as=picture";
+import kanoStrategyImg from "@/assets/images/projects/kanostrategy/headerkano.jpg?w=400;800&format=webp;png&as=picture"; // ✅ NEU
 
 export default function ProjectsSection() {
   const { t } = useTranslation();
@@ -48,6 +49,13 @@ export default function ProjectsSection() {
       locked: false,
     },
     {
+      to: "/projects/kanostrategy",
+      title: "UX Strategy with the Kano Model", // ✅ NEU
+      desc: "Using the Kano model to identify customer-impacting features.",
+      image: kanoStrategyImg,
+      locked: false,
+    },
+    {
       to: "/projects/delete-case",
       title: "Micro Interaction",
       desc: "Simplifying repetitive workflows efficiently.",
@@ -61,7 +69,6 @@ export default function ProjectsSection() {
       image: reopsImplImg,
       locked: true,
     },
-    // 🆕 Neues Projekt: Team UX Research Culture Kickstart
     {
       to: "/projects/workshop",
       title: "Team UX Research Culture Kickstart",

@@ -32,8 +32,7 @@ const ROLES: Role[] = [
     bullets: [
       "Optimized UX and analytics for an Etsy based webshop → improved customer journey & conversion.",
       "Ran small scale user tests and experiments → informed product presentation & pricing.",
-      "Scaled UX Research via ResearchOps (RITE, Office Hours, trainings) → 30% faster test cycles.",
-      "Ran MaxDiff with 250+ users → data-driven prioritization of Workforce Management.",
+     
     ],
   },
   {
@@ -43,10 +42,10 @@ const ROLES: Role[] = [
     period: "January 2025 – May 2025",
     tags: ["Leadership", "Enterprise", "B2B"],
     bullets: [
-      "Established ResearchOps structures (check-ins, lean UX & Agile UX framework) → expanded research coverage to 70% of projects.",
-      "Delivered feature prioritization via Conjoint & surveys (>1,000 customers).",
-      "Partnered with CX/Analytics → accelerated resolution of key pain points.",
-      "Mentored teams in research → raised UX maturity across organization.",
+      "Established ResearchOps structures (UX check-ins, lean UX & Agile UX framework) → expanded UX Research coverage to 70% of projects.",
+      "Delivered feature prioritization via Conjoint or Kano surveys (>1,000 customers).",
+      "Partnered with CX/Analytics → identified key pain points in Customer Experience.",
+      "Mentored teams in UX Research → raised UX maturity across organization.",
     ],
   },
   {
@@ -59,6 +58,7 @@ const ROLES: Role[] = [
       "Led UX Research and Strategy initiatives across cross-functional teams.",
       "Established ResearchOps structures and workflows for scaling research.",
       "Delivered insights that shaped product and design roadmaps across cross-functional teams.",
+ "Mentored teams in UX Research → CoPs to enable UX Research skills.",
     ],
   },
   {
@@ -68,7 +68,7 @@ const ROLES: Role[] = [
     period: "May 2020 – June 2022",
     tags: ["Insurance", "B2B2C", "Quant"],
     bullets: [
-      "Drove B2B2C research as Epic Owner in SAFe → informed 3 new product features.",
+      "Drove B2B2C research as Epic Owner in SAFe → informed and user centered development for new product features.",
       "Facilitated 3+ stakeholder workshops → aligned on user-driven innovation.",
       "Advanced ResearchOps & DesignOps → UX maturity improved from Emerging.",
     ],
