@@ -22,12 +22,13 @@ interface AccordionItemProps
   variant?: "default" | "tile" | "timeline";
   title?: string;
   subtitle?: string;
+  summary?: string; // <----- NEU
 }
 
 const AccordionItem = React.forwardRef<
   React.ElementRef<typeof AccordionPrimitive.Item>,
   AccordionItemProps
->(({ className, children, variant = "default", title, subtitle, ...props }, ref) => {
+>(({ className, children, variant = "default", title, subtitle, summary, ...props }, ref) => {
   const timelineDot =
     variant === "timeline" ? (
       <span
@@ -46,32 +47,24 @@ const AccordionItem = React.forwardRef<
     className
   );
 
-  const content = (
-    <>
-      {title && (
-        <AccordionTrigger className={cn("flex flex-col items-start w-full gap-2")}>
-          <Subtitle>{title}</Subtitle>
-          {subtitle && <Body className={colors.muted.text}>{subtitle}</Body>}
-        </AccordionTrigger>
-      )}
-      {children}
-    </>
-  );
-
   return (
     <AccordionPrimitive.Item ref={ref} className={baseClasses} {...props}>
       {timelineDot}
       {variant === "default" ? (
-        content
+        <>
+          <AccordionTrigger title={title} subtitle={subtitle} summary={summary} />
+          {children}
+        </>
       ) : (
         <Tile
           className={cn(
             "w-full text-left border-none",
-            colors.tile.bg,   // ✅ Designsystem-Hintergrundgrau
-            colors.tile.text  // ✅ Designsystem-Textfarbe
+            colors.tile.bg,
+            colors.tile.text
           )}
         >
-          {content}
+          <AccordionTrigger title={title} subtitle={subtitle} summary={summary} />
+          {children}
         </Tile>
       )}
     </AccordionPrimitive.Item>
@@ -79,15 +72,22 @@ const AccordionItem = React.forwardRef<
 });
 AccordionItem.displayName = "AccordionItem";
 
+interface TriggerProps
+  extends React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Trigger> {
+  title?: string;
+  subtitle?: string;
+  summary?: string;
+}
+
 const AccordionTrigger = React.forwardRef<
   React.ElementRef<typeof AccordionPrimitive.Trigger>,
-  React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Trigger>
->(({ className, children, ...props }, ref) => (
+  TriggerProps
+>(({ className, children, title, subtitle, summary, ...props }, ref) => (
   <AccordionPrimitive.Header className="flex w-full">
     <AccordionPrimitive.Trigger
       ref={ref}
       className={cn(
-        "flex flex-1 items-center justify-between text-left [&[data-state=open]>svg]:rotate-180]",
+        "flex flex-col items-start w-full gap-1 text-left [&[data-state=open]>svg]:rotate-180] relative",
         spacing.py4,
         transitions.default,
         typography.small.font,
@@ -98,11 +98,26 @@ const AccordionTrigger = React.forwardRef<
       )}
       {...props}
     >
-      {children}
+      {/* TITLE */}
+      {title && <Subtitle>{title}</Subtitle>}
+
+      {/* SUBTITLE */}
+      {subtitle && (
+        <Body className={colors.muted.text}>{subtitle}</Body>
+      )}
+
+      {/* SUMMARY — wird IMMER angezeigt (collapsed UND expanded) */}
+      {summary && (
+        <Body className={cn(colors.muted.text, "text-sm mt-1")}>
+          {summary}
+        </Body>
+      )}
+
+      {/* ICON */}
       <ChevronDown
         className={cn(
+          "absolute right-0 top-1/2 -translate-y-1/2 transition-transform duration-200",
           icon.md,
-          "shrink-0 transition-transform duration-200",
           colors.muted.text
         )}
       />
@@ -122,7 +137,9 @@ const AccordionContent = React.forwardRef<
     )}
     {...props}
   >
-    <Body className={cn(spacing.pb4, "pt-0 text-left", className)}>{children}</Body>
+    <Body className={cn(spacing.pb4, "pt-0 text-left", className)}>
+      {children}
+    </Body>
   </AccordionPrimitive.Content>
 ));
 AccordionContent.displayName = AccordionPrimitive.Content.displayName;

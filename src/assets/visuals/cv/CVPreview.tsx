@@ -19,7 +19,9 @@ type Role = {
   role: string;
   period: string;
   tags: string[];
+  summary?: string;
   bullets?: string[];
+  sections?: { title: string; bullets: string[] }[];
 };
 
 const ROLES: Role[] = [
@@ -29,75 +31,128 @@ const ROLES: Role[] = [
     role: "UX Research Consultant",
     period: "2023 – present",
     tags: ["Consulting", "B2C", "ResearchOps"],
+    summary:
+      "Leading UX Research initiatives for small businesses and online shops, focusing on optimizing customer journeys and enabling data-driven improvements.",
     bullets: [
       "Optimized UX and analytics for an Etsy based webshop → improved customer journey & conversion.",
       "Ran small scale user tests and experiments → informed product presentation & pricing.",
-     
     ],
   },
+
   {
     id: "exp-atoss",
     company: "ATOSS Software SE",
     role: "UX Research Lead",
     period: "January 2025 – May 2025",
     tags: ["Leadership", "Enterprise", "B2B"],
+    summary:
+      "Focused on scaling UX Research and embedding user-centered practices across agile product and design teams.",
     bullets: [
-      "Established ResearchOps structures (UX check-ins, lean UX & Agile UX framework) → expanded UX Research coverage to 70% of projects.",
-      "Delivered feature prioritization via Conjoint or Kano surveys (>1,000 customers).",
-      "Partnered with CX/Analytics → identified key pain points in Customer Experience.",
-      "Mentored teams in UX Research → raised UX maturity across organization.",
+      "Conducted a comprehensive ResearchOps assessment, developed solutions, prioritized them, and created an implementation roadmap.",
+      "Evaluated design concepts using a quantitative survey (preference modeling), enabling key design decisions.",
+      "Uncovered key user requirements for creating and customizing dashboards, shaping the direction of a new workforce management feature.",
+      "Mentored teams in UX Research to strengthen research capabilities and decision-making.",
     ],
   },
+
   {
     id: "exp-zooplus",
     company: "zooplus SE",
     role: "UX Research Lead",
     period: "July 2022 – December 2024",
     tags: ["Leadership", "E-commerce", "ResearchOps"],
-    bullets: [
-      "Led UX Research and Strategy initiatives across cross-functional teams.",
-      "Established ResearchOps structures and workflows for scaling research.",
-      "Delivered insights that shaped product and design roadmaps across cross-functional teams.",
- "Mentored teams in UX Research → CoPs to enable UX Research skills.",
+    summary:
+      "Focused on establishing and scaling UX Research and ResearchOps practices to support zooplus’ transition into a marketplace ecosystem.",
+    sections: [
+      {
+        title: "ResearchOps – Standardizing & Scaling UX Research",
+        bullets: [
+          "Built and led a company-wide ResearchOps program, defining structures, processes, and governance to scale UX Research.",
+          "Introduced the RITE process and made rapid, iterative testing a core practice across design teams.",
+          "Implemented a UX Research OKR framework and developed ROI models (including CLTV-based calculations).",
+          "Oversaw operational governance including tooling, GDPR, budgeting, licensing, and training.",
+          "Initiated a UX Research Maturity Assessment to guide long-term development.",
+        ],
+      },
+      {
+        title: "UXR Democratization & Capability Building",
+        bullets: [
+          "Founded and led the ‘Mouseflower’ Research Community of Practice to build behavioral analytics skills.",
+          "Launched UX Office Hours and a company-wide enablement program to democratize research.",
+          "Introduced new research tools and AI-supported methods and adapted a ResearchOps skills framework.",
+          "Increased UX visibility through a methods card set and cross-team enablement.",
+        ],
+      },
+      {
+        title: "Agile UX & Strategic Collaboration",
+        bullets: [
+          "Integrated UCD and UX Research into agile workflows at initiative, epic, and team level.",
+          "Expanded methodological diversity with agile-friendly approaches such as hallway tests, heuristic reviews, RITE, and surveys.",
+          "Supported strategic prioritization through Kano analyses, WSJF input, and research-driven decision frameworks.",
+          "Developed leadership-oriented measurement models to demonstrate research impact.",
+        ],
+      },
+      {
+        title: "Key Strategic Initiatives",
+        bullets: [
+          "Zootracker — Led quantitative concept evaluation to guide design direction.",
+          "Navigation Redesign — Drove discovery research, usability testing, and eye-tracking validation.",
+          "Marketplace — Led summative testing and a Kano analysis to inform the Marketplace strategy.",
+          "Puppy Club — Conducted user research and supported prototyping for early product definition.",
+        ],
+      },
     ],
   },
+
   {
     id: "exp-swisslife",
     company: "Swiss Life AG",
     role: "Senior UX Researcher",
     period: "May 2020 – June 2022",
     tags: ["Insurance", "B2B2C", "Quant"],
+    summary:
+      "Led the establishment of a centralized UX Research function, driving strategic research initiatives across B2B2C insurance ecosystems.",
     bullets: [
-      "Drove B2B2C research as Epic Owner in SAFe → informed and user centered development for new product features.",
-      "Facilitated 3+ stakeholder workshops → aligned on user-driven innovation.",
-      "Advanced ResearchOps & DesignOps → UX maturity improved from Emerging.",
+      "Guided the development of an occupational disability insurance bundle through focus groups, Conjoint analysis, and iterative concept creation.",
+      "Identified core needs and pain points of insurance brokers during the digitalization of internal and external tools; prioritized measures and created a user-value-oriented roadmap.",
+      "Facilitated ideation and co-creation workshops to develop new advisor support tools.",
+      "Managed research tools (Mouseflow, Lamapoll, Matomo) and created shared knowledge bases and templates.",
+      "Conducted evaluative usability tests for existing tools and drove UX improvements.",
+      "Embedded Human-Centered Design into the organization’s transition to SAFe.",
+      "Implemented scalable ResearchOps structures across Sales, Customer Support, and CX.",
     ],
   },
+
   {
     id: "exp-kaiserxlabs",
     company: "Kaiser X Labs GmbH (Allianz)",
     role: "UX Researcher",
     period: "August 2018 – April 2020",
     tags: ["Insurance", "Quant", "Experiments"],
+    summary:
+      "Focused on understanding user behavior and translating insights into data-driven product and service improvements.",
     bullets: [
-      "Conducted mixed methods studies (interviews, surveys, MaxDiff) → clear feature prioritization.",
-      "User research in an agile team in the Agile Training Center (ATC) of Allianz.",
-      "Conducted mixed-method approach for a Robo Advisor (finance) to enter the German market → defined USP and prioritization.",
-      "Contextual research with ADAC consultants → exposed flaws in legacy sales tool, enabled redesign.",
+      "Evaluated services and features of a new Service Hub using Kano analysis and developed a strategic UX roadmap.",
+      "Iteratively developed a new concept for insurance information letters using formative and summative usability testing.",
+      "Provided methodological guidance on A/B tests, hypothesis design, insights interpretation, and decision-making.",
+      "Led a fintech robo-advisor research initiative, conducting MaxDiff and survey studies to identify segment needs and define USPs for market entry.",
     ],
   },
+
   {
     id: "exp-empiriecom",
     company: "empiriecom GmbH & Co. KG",
     role: "Consultant, User-Centered Design",
     period: "February 2016 – July 2018",
     tags: ["E-commerce", "UX", "Quant"],
+    summary:
+      "Drove experimentation and quantitative UX insights to continuously improve e-commerce conversion and overall UX performance.",
     bullets: [
-      "Conducted A/B tests, e.g., evaluating a fit prediction algorithm and optimal display of payment methods.",
-      "Led a project developing a Usability Index as a success KPI for online shops (factor analysis).",
-      "Generated exploratory hypotheses across the entire customer journey through user labs and usability tests.",
-      "Applied Kano analysis to measure the satisfaction impact of new web features and services.",
-      "Analyzed the checkout flow using mouse tracking (form, funnel, and heatmap analysis) to identify friction points.",
+      "Conducted A/B tests evaluating fit prognosis algorithms and optimizing payment method presentation.",
+      "Developed a usability index (KPI) using factor analysis to measure UX performance in online shops.",
+      "Generated exploratory hypotheses across the customer journey via user labs, usability tests, and behavioral insights.",
+      "Performed Kano analyses to assess satisfaction impact of new features and services.",
+      "Analyzed mouse tracking data (funnels, heatmaps) to identify friction points and usability issues.",
     ],
   },
 ];
@@ -195,7 +250,22 @@ export default function CVPreview({ hideCTA = false }: { hideCTA?: boolean }) {
             subtitle={`${r.role} · ${r.period}`}
           >
             <AccordionContent>
-              {r.bullets && r.bullets.length > 0 && (
+              {r.summary && (
+                <p className="mb-4 text-muted-foreground">{r.summary}</p>
+              )}
+
+              {r.sections ? (
+                r.sections.map((section, i) => (
+                  <div key={i} className="mb-4">
+                    <p className="font-bold mt-4 mb-2">{section.title}</p>
+                    <ul className="list-disc list-inside pl-4 space-y-1 text-muted-foreground">
+                      {section.bullets.map((b, j) => (
+                        <li key={j}>{b}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ))
+              ) : r.bullets ? (
                 <ul
                   className={cn(
                     spacing.stackSm,
@@ -211,7 +281,8 @@ export default function CVPreview({ hideCTA = false }: { hideCTA?: boolean }) {
                     <li key={j}>{b}</li>
                   ))}
                 </ul>
-              )}
+              ) : null}
+
               <div className={cn(spacing.mt3, "flex flex-wrap", spacing.gap2)}>
                 {r.tags.map((tag) => (
                   <Badge key={tag} color={tagColorMap[tag] ?? "default"}>

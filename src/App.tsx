@@ -10,7 +10,6 @@ import CarInsurance from "@/pages/projects/CarInsurance";
 import ZooplusReOps from "@/pages/projects/ZooplusReOps";
 import ZooplusPricing from "@/pages/projects/ZooplusPricing";
 import InsuranceBrokerDiscovery from "@/pages/projects/InsuranceBroker";
-import AtossReOps from "@/pages/projects/AtossReOps";
 import WorkshopPage from "@/pages/projects/workshop";
 import KanoStrategyPage from "@/pages/projects/kanostrategy"; // ✅ NEU hinzugefügt
 
@@ -70,19 +69,25 @@ export default function App() {
             path="projects/insurance-broker-discovery"
             element={<InsuranceBrokerDiscovery />}
           />
-          <Route path="projects/atoss-reops" element={<AtossReOps />} />
+          
           <Route path="projects/workshop" element={<WorkshopPage />} />
-          <Route path="projects/kanostrategy" element={<KanoStrategyPage />} /> {/* ✅ NEU */}
+          <Route
+            path="projects/kanostrategy"
+            element={<KanoStrategyPage />}
+          /> {/* ✅ NEU */}
           <Route path="projects" element={<Navigate to="/" replace />} />
 
-          {/* 🔹 Expertise */}
+          {/* 🔹 Expertise-Seiten */}
           <Route path="expertise/ux-strategy" element={<UXStrategy />} />
           <Route
             path="expertise/strategic-ux-research"
             element={<StrategicUXResearch />}
           />
           <Route path="expertise/researchops" element={<ResearchOps />} />
-          <Route path="expertise/team-leadership" element={<TeamLeadership />} />
+          <Route
+            path="expertise/team-leadership"
+            element={<TeamLeadership />}
+          />
           <Route
             path="expertise/team-leadership/skillassessment"
             element={<SkillAssessmentPage />}
