@@ -2,7 +2,7 @@ felixbruckmeier.github.io
 docs
 prompts
 public
-scripts
+scriptsfghfgh
 src
 types
 .gitignore
