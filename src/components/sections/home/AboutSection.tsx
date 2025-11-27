@@ -5,9 +5,8 @@ import Button from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
 import { colors } from "@/lib/tokens";
 
-// ✅ Nutzt dein vorhandenes Bild:
-// C:/Users/felix/Documents/GitHub/felixbruckmeier.github.io/src/assets/images/projects/uxportfolio/cover.png
-import profileImg from "@/assets/images/projects/uxportfolio/cover.png";
+// ✅ Richtiges Profilbild laden
+import profileImg from "@/assets/images/home/pb.png";
 
 export default function AboutSection() {
   return (
@@ -93,9 +92,10 @@ export default function AboutSection() {
               src={profileImg}
               alt="Portrait of Felix Bruckmeier"
               className={cn(
-                "rounded-2xl shadow-lg mx-auto w-[70%] md:w-[80%] object-cover aspect-[4/5]",
-                colors.border
-              )}
+  "rounded-2xl shadow-lg mx-auto w-[70%] md:w-[80%] object-cover object-[center_20%] aspect-[4/5]",
+  colors.border
+)}
+
             />
           </FadeIn>
         </div>
