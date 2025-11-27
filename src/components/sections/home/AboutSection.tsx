@@ -4,7 +4,10 @@ import TextReveal from "@/components/ui/TextReveal";
 import Button from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
 import { colors } from "@/lib/tokens";
-import profileImg from "@/assets/profile-felix.png";
+
+// ✅ Nutzt dein vorhandenes Bild:
+// C:/Users/felix/Documents/GitHub/felixbruckmeier.github.io/src/assets/images/projects/uxportfolio/cover.png
+import profileImg from "@/assets/images/projects/uxportfolio/cover.png";
 
 export default function AboutSection() {
   return (
@@ -38,7 +41,10 @@ export default function AboutSection() {
               ease="easeInOut"
               className="text-left text-foreground font-semibold text-lg mb-4"
             >
-I’m a UX Research Lead who believes successful products start with empathy for their users. My work focuses on helping teams transform that empathy into evidence-based, user-centric decisions.            </TextReveal>
+              I’m a UX Research Lead who believes successful products start with empathy
+              for their users. My work focuses on helping teams transform that empathy
+              into evidence-based, user-centric decisions.
+            </TextReveal>
           </FadeIn>
 
           <FadeIn delay={0.45}>
@@ -50,9 +56,11 @@ I’m a UX Research Lead who believes successful products start with empathy for
               ease="easeInOut"
               className="text-left text-muted-foreground leading-relaxed max-w-prose"
             >
-              My approach balances quality and scalability.
-I ensure quality by leading and conducting UX Research that meets the highest methodological standards across all phases — discovery, design, and optimization.
-I create scalability by embedding UX Research into organizational structures through ResearchOps an UX strategy.
+              My approach balances quality and scalability. I ensure quality by leading
+              and conducting UX Research that meets the highest methodological standards
+              across all phases — discovery, design, and optimization. I create
+              scalability by embedding UX Research into organizational structures through
+              ResearchOps and UX strategy.
             </TextReveal>
           </FadeIn>
 
@@ -117,7 +125,8 @@ I create scalability by embedding UX Research into organizational structures thr
       {/* === Quote === */}
       <FadeIn delay={1.0}>
         <p className="mt-12 text-center text-muted-foreground italic text-sm md:text-base">
-          “UX Research is not for perfectionists. We strive for something better than perfection — something real.”
+          “UX Research is not for perfectionists. We strive for something better than
+          perfection — something real.”
         </p>
       </FadeIn>
     </Section>

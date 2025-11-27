@@ -1,4 +1,3 @@
-// src/components/sections/home/ProjectsSection.tsx
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Section, SectionIntro, TextReveal, FadeIn, TileImage } from "@/components/ui";
@@ -14,7 +13,10 @@ import pricingImg from "@/assets/images/projects/pricingtesting/PricingUsability
 import microinteractionImg from "@/assets/images/projects/amicrointeraction/optimize.jpg?w=400;800&format=webp;png&as=picture";
 import reopsImplImg from "@/assets/images/projects/reopsimplement/ReOpsimplementation.jpg?w=400;800&format=webp;png&as=picture";
 import workshopImg from "@/assets/images/projects/workshop/haderws.jpg?w=400;800&format=webp;png&as=picture";
-import kanoStrategyImg from "@/assets/images/projects/kanostrategy/headerkano.jpg?w=400;800&format=webp;png&as=picture"; // ✅ NEU
+import kanoStrategyImg from "@/assets/images/projects/kanostrategy/headerkano.jpg?w=400;800&format=webp;png&as=picture";
+
+// 📸 NEU – UX Portfolio Projektbild
+import uxPortfolioImg from "@/assets/images/projects/uxportfolio/cover.png?w=400;800&format=webp;png&as=picture";
 
 export default function ProjectsSection() {
   const { t } = useTranslation();
@@ -50,7 +52,7 @@ export default function ProjectsSection() {
     },
     {
       to: "/projects/kanostrategy",
-      title: "UX Strategy with the Kano Model", // ✅ NEU
+      title: "UX Strategy with the Kano Model",
       desc: "Using the Kano model to identify customer-impacting features.",
       image: kanoStrategyImg,
       locked: false,
@@ -76,6 +78,13 @@ export default function ProjectsSection() {
       image: workshopImg,
       locked: false,
     },
+    {
+      to: "/projects/ux-portfolio",
+      title: "UX Portfolio Website",
+      desc: "Design System, IA, performance & architecture of this portfolio.",
+      image: uxPortfolioImg,
+      locked: false,
+    },
   ];
 
   return (
@@ -88,7 +97,12 @@ export default function ProjectsSection() {
           ease="easeOut"
           className="inherit"
         >
-          I’m passionate about guiding teams through the entire spectrum of UX research — from foundational discovery to evaluative testing. I combine qualitative and quantitative methods, mixed-method and triangulation approaches, analytics, and design thinking workshops to turn complex questions into meaningful insights. My work connects agile UX, research-driven project management, and the integration of AI into research and product development.
+          I’m passionate about guiding teams through the entire spectrum of UX research —
+          from foundational discovery to evaluative testing. I combine qualitative and
+          quantitative methods, mixed-method and triangulation approaches, analytics, and
+          design thinking workshops to turn complex questions into meaningful insights.
+          My work connects agile UX, research-driven project management, and the integration
+          of AI into research and product development.
         </TextReveal>
       </SectionIntro>
 
@@ -102,7 +116,6 @@ export default function ProjectsSection() {
         {projects.map((p, i) => (
           <FadeIn key={i} delay={0.2 + i * 0.1}>
             <div className="relative group">
-              {/* 🔓 Klickbare Projekte */}
               {!p.locked ? (
                 <Link to={p.to}>
                   <TileImage
@@ -113,7 +126,6 @@ export default function ProjectsSection() {
                   />
                 </Link>
               ) : (
-                // 🔒 Gesperrte Projekte — kein Klick, kein Cursor-Wechsel
                 <div className="relative rounded-xl overflow-hidden select-none cursor-default">
                   <TileImage
                     image={p.image}

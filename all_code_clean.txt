@@ -697,6 +697,696 @@ export default function PageLayout({
 
 
 
+==== \src\components\sections\home\AboutSection.tsx ====
+import Section from "@/components/ui/Section";
+import FadeIn from "@/components/ui/FadeIn";
+import TextReveal from "@/components/ui/TextReveal";
+import Button from "@/components/ui/Button";
+import { cn } from "@/lib/utils";
+import { colors } from "@/lib/tokens";
+
+// ✅ Nutzt dein vorhandenes Bild:
+// C:/Users/felix/Documents/GitHub/felixbruckmeier.github.io/src/assets/images/projects/uxportfolio/cover.png
+import profileImg from "@/assets/images/projects/uxportfolio/cover.png";
+
+export default function AboutSection() {
+  return (
+    <Section id="about" borderBottom>
+      <div
+        className={cn(
+          "flex flex-col md:grid md:grid-cols-[1.1fr_0.9fr] gap-10 items-center"
+        )}
+      >
+        {/* === Text-Bereich === */}
+        <div className="text-block order-1 md:order-1 md:col-start-1 flex flex-col">
+          <FadeIn delay={0.05}>
+            <TextReveal
+              variant="word"
+              stagger={0.05}
+              duration={0.6}
+              delay={0.05}
+              ease="easeInOut"
+              className="text-left text-foreground font-bold text-5xl mb-8"
+            >
+              Hello!
+            </TextReveal>
+          </FadeIn>
+
+          <FadeIn delay={0.25}>
+            <TextReveal
+              variant="word"
+              stagger={0.05}
+              duration={0.5}
+              delay={0.05}
+              ease="easeInOut"
+              className="text-left text-foreground font-semibold text-lg mb-4"
+            >
+              I’m a UX Research Lead who believes successful products start with empathy
+              for their users. My work focuses on helping teams transform that empathy
+              into evidence-based, user-centric decisions.
+            </TextReveal>
+          </FadeIn>
+
+          <FadeIn delay={0.45}>
+            <TextReveal
+              variant="word"
+              stagger={0.05}
+              duration={0.5}
+              delay={0.1}
+              ease="easeInOut"
+              className="text-left text-muted-foreground leading-relaxed max-w-prose"
+            >
+              My approach balances quality and scalability. I ensure quality by leading
+              and conducting UX Research that meets the highest methodological standards
+              across all phases — discovery, design, and optimization. I create
+              scalability by embedding UX Research into organizational structures through
+              ResearchOps and UX strategy.
+            </TextReveal>
+          </FadeIn>
+
+          {/* === CTA (Desktop) === */}
+          <div className="hidden md:flex flex-wrap gap-4 w-full mt-8">
+            <FadeIn delay={0.65}>
+              <Button asChild variant="secondary" size="lg">
+                <a href="#projects">See Projects ↓</a>
+              </Button>
+            </FadeIn>
+
+            <FadeIn delay={0.75}>
+              <Button asChild variant="secondary" size="lg">
+                <a href="#expertise">Explore Expertise ↓</a>
+              </Button>
+            </FadeIn>
+
+            <FadeIn delay={0.85}>
+              <Button asChild variant="secondary" size="lg">
+                <a href="/cv">View CV →</a>
+              </Button>
+            </FadeIn>
+          </div>
+        </div>
+
+        {/* === Bild-Bereich === */}
+        <div className="image-block order-2 md:order-2 md:col-start-2">
+          <FadeIn delay={0.2}>
+            <img
+              src={profileImg}
+              alt="Portrait of Felix Bruckmeier"
+              className={cn(
+                "rounded-2xl shadow-lg mx-auto w-[70%] md:w-[80%] object-cover aspect-[4/5]",
+                colors.border
+              )}
+            />
+          </FadeIn>
+        </div>
+
+        {/* === CTA Mobile === */}
+        <div className="order-3 md:hidden flex flex-wrap gap-4 mt-8 w-full">
+          <FadeIn delay={0.65}>
+            <Button asChild variant="secondary" size="lg" className="w-full">
+              <a href="#projects">See Projects ↓</a>
+            </Button>
+          </FadeIn>
+
+          <FadeIn delay={0.75}>
+            <Button asChild variant="secondary" size="lg" className="w-full">
+              <a href="#expertise">Explore Expertise ↓</a>
+            </Button>
+          </FadeIn>
+
+          <FadeIn delay={0.85}>
+            <Button asChild variant="secondary" size="lg" className="w-full">
+              <a href="/cv">View CV →</a>
+            </Button>
+          </FadeIn>
+        </div>
+      </div>
+
+      {/* === Quote === */}
+      <FadeIn delay={1.0}>
+        <p className="mt-12 text-center text-muted-foreground italic text-sm md:text-base">
+          “UX Research is not for perfectionists. We strive for something better than
+          perfection — something real.”
+        </p>
+      </FadeIn>
+    </Section>
+  );
+}
+
+
+==== \src\components\sections\home\ContactFormSection.tsx ====
+// src/components/sections/ContactFormSection.tsx
+import { useState } from "react";
+import Section from "@/components/ui/Section";
+import Button from "@/components/ui/Button";
+import { cn } from "@/lib/utils";
+import { layout, spacing } from "@/lib/tokens";
+
+export default function ContactFormSection() {
+  const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setStatus("sending");
+
+    const form = e.currentTarget;
+    const data = new FormData(form);
+
+    try {
+      const response = await fetch("https://formspree.io/f/meopygny", {
+        method: "POST",
+        headers: { Accept: "application/json" },
+        body: data,
+      });
+
+      if (response.ok) {
+        setStatus("success");
+        form.reset();
+      } else {
+        throw new Error("Fehler beim Senden");
+      }
+    } catch {
+      setStatus("error");
+    }
+  };
+
+  return (
+    <Section
+      id="contact-form"
+            subtitle="Prefer writing over scheduling a call? Send me a message directly via this form."
+      spacing="lg"
+    >
+      <div
+        className={cn(
+          layout.containerNarrow,
+          layout.flexColCenter,
+          spacing.gap8,
+          layout.maxWidthText,
+          "text-center"
+        )}
+      >
+        {status === "success" ? (
+          <div className="p-6 rounded-xl border border-green-400 bg-green-50 text-green-800 dark:bg-green-950 dark:border-green-600 dark:text-green-200">
+            <p>✅ Thank you! Your message has been sent successfully.</p>
+          </div>
+        ) : (
+          <form
+            onSubmit={handleSubmit}
+            className="w-full max-w-xl flex flex-col gap-6 text-left"
+          >
+            <div>
+              <label htmlFor="name" className="block text-sm font-medium mb-1">
+                Name
+              </label>
+              <input
+                id="name"
+                type="text"
+                name="name"
+                required
+                className="w-full rounded-lg border border-border bg-background px-4 py-3 text-foreground focus:outline-none focus:ring-2 focus:ring-accent/60 transition"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium mb-1">
+                Email
+              </label>
+              <input
+                id="email"
+                type="email"
+                name="email"
+                required
+                className="w-full rounded-lg border border-border bg-background px-4 py-3 text-foreground focus:outline-none focus:ring-2 focus:ring-accent/60 transition"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="message" className="block text-sm font-medium mb-1">
+                Message
+              </label>
+              <textarea
+                id="message"
+                name="message"
+                rows={5}
+                required
+                className="w-full rounded-lg border border-border bg-background px-4 py-3 text-foreground focus:outline-none focus:ring-2 focus:ring-accent/60 transition resize-none"
+              />
+            </div>
+
+            <div className="flex justify-center">
+              <Button
+                type="submit"
+                variant="secondary"  // 🔹 geändert von "primary" auf "secondary"
+                size="lg"
+                disabled={status === "sending"}
+              >
+                {status === "sending" ? "Sending..." : "Send Message"}
+              </Button>
+            </div>
+
+            {status === "error" && (
+              <p className="text-sm text-red-600 text-center mt-2">
+                ❌ Something went wrong. Please try again later.
+              </p>
+            )}
+          </form>
+        )}
+      </div>
+    </Section>
+  );
+}
+
+
+==== \src\components\sections\home\ContactSection.tsx ====
+import Section from "@/components/ui/Section";
+import Button from "@/components/ui/Button";
+import { useTranslation } from "react-i18next";
+import { Calendar } from "lucide-react";
+import { spacing, colors, icon, hoverEffects, layout } from "@/lib/tokens";
+import { cn } from "@/lib/utils";
+
+export default function ContactSection() {
+  const { t } = useTranslation();
+  const calendarUrl =
+    "https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ0oPGXHnWXdq3-zK6GQhHm2ESA4SVlsx5ziYevEBxKE7MXlGBWgUN9yuCUp9TsirOrT9kR459cC";
+
+  const handleClick = () =>
+    window.open(calendarUrl, "_blank", "noopener,noreferrer");
+
+  return (
+    <Section id="contact" title="Contact">
+      {/* 🔹 Schmalere Inhaltsbreite */}
+      <div
+        className={cn(
+          layout.containerNarrow,
+          layout.flexColCenter,
+          spacing.gap8,
+          layout.maxWidthText
+        )}
+      >
+        {/* === Klickbare Karte === */}
+        <div
+          onClick={handleClick}
+          className={cn(
+            "cursor-pointer w-full flex flex-col items-center text-center py-10 rounded-xl",
+            hoverEffects.smoothLift,
+            colors.tile.bg,
+            colors.tile.text
+          )}
+        >
+          {/* --- Rundes Icon --- */}
+          <div
+            className={cn(
+              "flex items-center justify-center aspect-square w-20 rounded-full mb-6",
+              colors.notion.blue.bg,
+              colors.notion.blue.text
+            )}
+          >
+            <Calendar className={cn(icon.lg)} />
+          </div>
+
+          {/* --- Titel & Beschreibung --- */}
+          <h3 className="text-xl font-semibold text-foreground">
+            {t("contact.title", "Book a Call")}
+          </h3>
+          <p className="text-muted-foreground mt-2 max-w-sm">
+            {t("contact.cta", "Let’s talk about your UX Research challenge.")}
+          </p>
+        </div>
+
+        {/* === Separater Button === */}
+        <Button variant="secondary" size="lg" onClick={handleClick}>
+          {t("contact.button", "Open Calendar")}
+        </Button>
+      </div>
+    </Section>
+  );
+}
+
+
+==== \src\components\sections\home\ExpertiseSection.tsx ====
+import { Section } from "@/components/ui";
+import SectionIntro from "@/components/ui/SectionIntro";
+import FadeIn from "@/components/ui/FadeIn";
+import TextReveal from "@/components/ui/TextReveal";
+import { useTranslation } from "react-i18next";
+import { cn } from "@/lib/utils";
+import { spacing, layout } from "@/lib/tokens";
+import { Link } from "react-router-dom";
+import TileImage from "@/components/ui/TileImage";
+
+// 🖼️ Expertise-Bilder (optimiert)
+import uxStrategyImg from "@/assets/images/expertise/uxstrategy/schach1.jpg?w=400;800&format=webp;png&as=picture";
+import strategicUxImg from "@/assets/images/expertise/strategicuxresearch/strategicuxr.jpg?w=400;800&format=webp;png&as=picture";
+import researchOpsImg from "@/assets/images/expertise/researchops/plant.jpg?w=400;800&format=webp;png&as=picture";
+import leadershipImg from "@/assets/images/expertise/teamleadership/team.jpg?w=400;800&format=webp;png&as=picture";
+import impactImg from "@/assets/images/expertise/impactmeasurement/impact.jpg?w=400;800&format=webp;png&as=picture";
+
+export default function ExpertiseSection() {
+  const { t } = useTranslation();
+
+  const pillars =
+    (t("expertise.pillars", { returnObjects: true }) as Array<{
+      title: string;
+      caption?: string;
+    }>) ?? [];
+
+  const routesByIndex = [
+    "expertise/ux-strategy",
+    "expertise/strategic-ux-research",
+    "expertise/researchops",
+    "expertise/team-leadership",
+    "expertise/impact-measurement",
+  ];
+
+  const images = [
+    uxStrategyImg,
+    strategicUxImg,
+    researchOpsImg,
+    leadershipImg,
+    impactImg,
+  ];
+
+  return (
+    <Section id="expertise" title={t("expertise.title")} spacing="lg">
+      {/* --- Intro Text --- */}
+      <SectionIntro>
+        <TextReveal
+          stagger={0.06}
+          duration={0.35}
+          delay={0.1}
+          ease="easeOut"
+          className="inherit"
+        >
+          These areas of expertise reflect what I’ve learned — and continue to
+          learn — about transforming deep user insights into strategy,
+          structure, and measurable impact. Over the years, I’ve seen how
+          empathy and evidence can shape not only better products but also
+          stronger teams and processes. I help organizations build sustainable,
+          user-centered products, make confident, evidence-based decisions, and
+          continuously grow their UX maturity.
+        </TextReveal>
+      </SectionIntro>
+
+      {/* --- Expertise Tiles (3 pro Zeile Desktop) --- */}
+      <div
+        className={cn(
+          "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3",
+          spacing.gap8,
+          layout.fullWidth
+        )}
+      >
+        {pillars.slice(0, 5).map((p, i) => {
+          const to = routesByIndex[i] ?? "expertise";
+          const image = images[i];
+          return (
+            <FadeIn key={i} delay={0.2 + i * 0.1}>
+              <Link to={to}>
+                <TileImage
+                  image={image}
+                  title={p.title}
+                  caption={p.caption}
+                  className="group rounded-xl overflow-hidden"
+                />
+              </Link>
+            </FadeIn>
+          );
+        })}
+      </div>
+    </Section>
+  );
+}
+
+
+==== \src\components\sections\home\index.ts ====
+export { default as AboutSection } from "./AboutSection";
+export { default as ExpertiseSection } from "./ExpertiseSection";
+export { default as ProjectsSection } from "./ProjectsSection";
+export { default as ContactSection } from "./ContactSection";
+export { default as ContactFormSection } from "./ContactFormSection"; // 👈 hinzufügen
+
+
+==== \src\components\sections\home\MetricsSection.tsx ====
+import { useEffect, useState } from "react";
+import Section from "@/components/ui/Section";
+import Tile from "@/components/ui/Tile";
+import FadeIn from "@/components/ui/FadeIn";
+import { Body } from "@/components/ui/Tokens";
+import { typography, spacing } from "@/lib/tokens";
+import { cn } from "@/lib/utils";
+
+export default function MetricsSection() {
+  const metrics = [
+    {
+      number: 10,
+      suffix: "+",
+      title: "Years Experience",
+      desc: "UX strategy and research leadership across teams",
+    },
+    {
+      number: 25,
+      suffix: "+",
+      title: "Research Methods",
+      desc: "Full spectrum of qualitative and quantitative approaches",
+    },
+    {
+      number: 5,
+      suffix: "",
+      title: "Industries",
+      desc: "Cross-domain expertise from e-commerce to finance",
+    },
+    {
+      number: 150,
+      suffix: "+",
+      title: "Studies Conducted",
+      desc: "End-to-end research across product development phases",
+    },
+  ];
+
+  return (
+    <div className="w-screen relative left-1/2 right-1/2 -mx-[50vw] border-y border-border/10 bg-transparent md:bg-gray-100 md:dark:bg-neutral-900">
+      <Section id="metrics" spacing="sm" center className="py-12 md:py-20">
+        <div
+          className={cn(
+            "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 text-center",
+            spacing.gap6,
+            spacing.mt4,
+            "mx-auto max-w-screen-xl px-6"
+          )}
+        >
+          {metrics.map((m, i) => (
+            <FadeIn key={i} delay={0.2 + i * 0.1}>
+              <Tile variant="transparent" className="rounded-xl p-6">
+                <AnimatedNumber target={m.number} suffix={m.suffix} />
+
+                <Body className="font-semibold text-foreground mt-1">
+                  {m.title}
+                </Body>
+                <Body className="text-muted-foreground mt-1">{m.desc}</Body>
+              </Tile>
+            </FadeIn>
+          ))}
+        </div>
+      </Section>
+    </div>
+  );
+}
+
+/**
+ * 🔢 Kleine Komponente für animiertes Hochzählen (ohne Buildfehler)
+ */
+function AnimatedNumber({ target, suffix }: { target: number; suffix?: string }) {
+  const [value, setValue] = useState(0);
+
+  useEffect(() => {
+    let start = 0;
+    const duration = 2000; // langsamer zählen (2 Sekunden)
+    const stepTime = 20;
+    const increment = target / (duration / stepTime);
+
+    const timer = setInterval(() => {
+      start += increment;
+      if (start >= target) {
+        start = target;
+        clearInterval(timer);
+      }
+      setValue(Math.floor(start));
+    }, stepTime);
+
+    return () => clearInterval(timer);
+  }, [target]);
+
+  return (
+    <span
+      className={cn(
+        typography.sectionHeading.font,
+        typography.sectionHeading.size,
+        typography.sectionHeading.weight,
+        typography.sectionHeading.tracking,
+        typography.sectionHeading.leading,
+        "text-foreground mb-2 block"
+      )}
+    >
+      {value}
+      {suffix}
+    </span>
+  );
+}
+
+
+==== \src\components\sections\home\ProjectsSection.tsx ====
+import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { Section, SectionIntro, TextReveal, FadeIn, TileImage } from "@/components/ui";
+import { spacing, layout } from "@/lib/tokens";
+import { cn } from "@/lib/utils";
+import { Lock } from "lucide-react";
+
+// 📸 Projektbilder (optimiert via vite-imagetools)
+import carInsuranceImg from "@/assets/images/projects/carinsurance/CarInsurance.png?w=400;800&format=webp;png&as=picture";
+import reopsAgileImg from "@/assets/images/projects/reopsagile/ResearchOpsAgileUX.jpg?w=400;800&format=webp;png&as=picture";
+import insuranceBrokerImg from "@/assets/images/projects/b2b2c/B2B2COptimization.jpg?w=400;800&format=webp;png&as=picture";
+import pricingImg from "@/assets/images/projects/pricingtesting/PricingUsabilityTesting.jpg?w=400;800&format=webp;png&as=picture";
+import microinteractionImg from "@/assets/images/projects/amicrointeraction/optimize.jpg?w=400;800&format=webp;png&as=picture";
+import reopsImplImg from "@/assets/images/projects/reopsimplement/ReOpsimplementation.jpg?w=400;800&format=webp;png&as=picture";
+import workshopImg from "@/assets/images/projects/workshop/haderws.jpg?w=400;800&format=webp;png&as=picture";
+import kanoStrategyImg from "@/assets/images/projects/kanostrategy/headerkano.jpg?w=400;800&format=webp;png&as=picture";
+
+// 📸 NEU – UX Portfolio Projektbild
+import uxPortfolioImg from "@/assets/images/projects/uxportfolio/cover.png?w=400;800&format=webp;png&as=picture";
+
+export default function ProjectsSection() {
+  const { t } = useTranslation();
+
+  const projects = [
+    {
+      to: "/projects/car-insurance",
+      title: "Car Insurance",
+      desc: "Reduced friction and improved conversion.",
+      image: carInsuranceImg,
+      locked: false,
+    },
+    {
+      to: "/projects/zooplus-reops",
+      title: "ResearchOps & Agile UX",
+      desc: "Governance, templates & enablement at scale.",
+      image: reopsAgileImg,
+      locked: true,
+    },
+    {
+      to: "/projects/insurance-broker-discovery",
+      title: "Insurance Broker Discovery Research",
+      desc: "Contextual interviews & synthesis for product clarity.",
+      image: insuranceBrokerImg,
+      locked: false,
+    },
+    {
+      to: "/projects/zooplus-pricing",
+      title: "Pricing Usability Testing",
+      desc: "Clarity in pricing components and PDP details.",
+      image: pricingImg,
+      locked: false,
+    },
+    {
+      to: "/projects/kanostrategy",
+      title: "UX Strategy with the Kano Model",
+      desc: "Using the Kano model to identify customer-impacting features.",
+      image: kanoStrategyImg,
+      locked: false,
+    },
+    {
+      to: "/projects/delete-case",
+      title: "Micro Interaction",
+      desc: "Simplifying repetitive workflows efficiently.",
+      image: microinteractionImg,
+      locked: true,
+    },
+    {
+      to: "/projects/atoss-reops",
+      title: "ReOps Implementation",
+      desc: "Empowering UX teams through ResearchOps foundations.",
+      image: reopsImplImg,
+      locked: true,
+    },
+    {
+      to: "/projects/workshop",
+      title: "Team UX Research Culture Kickstart",
+      desc: "Building alignment and ownership through co-creation.",
+      image: workshopImg,
+      locked: false,
+    },
+    {
+      to: "/projects/ux-portfolio",
+      title: "UX Portfolio Website",
+      desc: "Design System, IA, performance & architecture of this portfolio.",
+      image: uxPortfolioImg,
+      locked: false,
+    },
+  ];
+
+  return (
+    <Section id="projects" title={t("projects.title")} spacing="lg">
+      <SectionIntro>
+        <TextReveal
+          stagger={0.06}
+          duration={0.35}
+          delay={0.1}
+          ease="easeOut"
+          className="inherit"
+        >
+          I’m passionate about guiding teams through the entire spectrum of UX research —
+          from foundational discovery to evaluative testing. I combine qualitative and
+          quantitative methods, mixed-method and triangulation approaches, analytics, and
+          design thinking workshops to turn complex questions into meaningful insights.
+          My work connects agile UX, research-driven project management, and the integration
+          of AI into research and product development.
+        </TextReveal>
+      </SectionIntro>
+
+      <div
+        className={cn(
+          "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3",
+          spacing.gap8,
+          layout.fullWidth
+        )}
+      >
+        {projects.map((p, i) => (
+          <FadeIn key={i} delay={0.2 + i * 0.1}>
+            <div className="relative group">
+              {!p.locked ? (
+                <Link to={p.to}>
+                  <TileImage
+                    image={p.image}
+                    title={p.title}
+                    caption={p.desc}
+                    className="group rounded-xl overflow-hidden"
+                  />
+                </Link>
+              ) : (
+                <div className="relative rounded-xl overflow-hidden select-none cursor-default">
+                  <TileImage
+                    image={p.image}
+                    title={p.title}
+                    caption={p.desc}
+                    className="rounded-xl overflow-hidden opacity-70"
+                  />
+                  <div className="absolute inset-0 bg-black/50 flex items-center justify-center rounded-xl">
+                    <Lock
+                      className="text-white opacity-90 w-12 h-12 drop-shadow-lg transition-none"
+                      strokeWidth={1.5}
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
+          </FadeIn>
+        ))}
+      </div>
+    </Section>
+  );
+}
+
+
 ==== \src\components\ui\accordion.tsx ====
 // src/components/ui/accordion.tsx
 import * as React from "react";
@@ -722,12 +1412,13 @@ interface AccordionItemProps
   variant?: "default" | "tile" | "timeline";
   title?: string;
   subtitle?: string;
+  summary?: string; // <----- NEU
 }
 
 const AccordionItem = React.forwardRef<
   React.ElementRef<typeof AccordionPrimitive.Item>,
   AccordionItemProps
->(({ className, children, variant = "default", title, subtitle, ...props }, ref) => {
+>(({ className, children, variant = "default", title, subtitle, summary, ...props }, ref) => {
   const timelineDot =
     variant === "timeline" ? (
       <span
@@ -746,32 +1437,24 @@ const AccordionItem = React.forwardRef<
     className
   );
 
-  const content = (
-    <>
-      {title && (
-        <AccordionTrigger className={cn("flex flex-col items-start w-full gap-2")}>
-          <Subtitle>{title}</Subtitle>
-          {subtitle && <Body className={colors.muted.text}>{subtitle}</Body>}
-        </AccordionTrigger>
-      )}
-      {children}
-    </>
-  );
-
   return (
     <AccordionPrimitive.Item ref={ref} className={baseClasses} {...props}>
       {timelineDot}
       {variant === "default" ? (
-        content
+        <>
+          <AccordionTrigger title={title} subtitle={subtitle} summary={summary} />
+          {children}
+        </>
       ) : (
         <Tile
           className={cn(
             "w-full text-left border-none",
-            colors.tile.bg,   // ✅ Designsystem-Hintergrundgrau
-            colors.tile.text  // ✅ Designsystem-Textfarbe
+            colors.tile.bg,
+            colors.tile.text
           )}
         >
-          {content}
+          <AccordionTrigger title={title} subtitle={subtitle} summary={summary} />
+          {children}
         </Tile>
       )}
     </AccordionPrimitive.Item>
@@ -779,15 +1462,22 @@ const AccordionItem = React.forwardRef<
 });
 AccordionItem.displayName = "AccordionItem";
 
+interface TriggerProps
+  extends React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Trigger> {
+  title?: string;
+  subtitle?: string;
+  summary?: string;
+}
+
 const AccordionTrigger = React.forwardRef<
   React.ElementRef<typeof AccordionPrimitive.Trigger>,
-  React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Trigger>
->(({ className, children, ...props }, ref) => (
+  TriggerProps
+>(({ className, children, title, subtitle, summary, ...props }, ref) => (
   <AccordionPrimitive.Header className="flex w-full">
     <AccordionPrimitive.Trigger
       ref={ref}
       className={cn(
-        "flex flex-1 items-center justify-between text-left [&[data-state=open]>svg]:rotate-180]",
+        "flex flex-col items-start w-full gap-1 text-left [&[data-state=open]>svg]:rotate-180] relative",
         spacing.py4,
         transitions.default,
         typography.small.font,
@@ -798,11 +1488,26 @@ const AccordionTrigger = React.forwardRef<
       )}
       {...props}
     >
-      {children}
+      {/* TITLE */}
+      {title && <Subtitle>{title}</Subtitle>}
+
+      {/* SUBTITLE */}
+      {subtitle && (
+        <Body className={colors.muted.text}>{subtitle}</Body>
+      )}
+
+      {/* SUMMARY — wird IMMER angezeigt (collapsed UND expanded) */}
+      {summary && (
+        <Body className={cn(colors.muted.text, "text-sm mt-1")}>
+          {summary}
+        </Body>
+      )}
+
+      {/* ICON */}
       <ChevronDown
         className={cn(
+          "absolute right-0 top-1/2 -translate-y-1/2 transition-transform duration-200",
           icon.md,
-          "shrink-0 transition-transform duration-200",
           colors.muted.text
         )}
       />
@@ -822,7 +1527,9 @@ const AccordionContent = React.forwardRef<
     )}
     {...props}
   >
-    <Body className={cn(spacing.pb4, "pt-0 text-left", className)}>{children}</Body>
+    <Body className={cn(spacing.pb4, "pt-0 text-left", className)}>
+      {children}
+    </Body>
   </AccordionPrimitive.Content>
 ));
 AccordionContent.displayName = AccordionPrimitive.Content.displayName;
@@ -3176,6 +3883,205 @@ export default function CVPage() {
 }
 
 
+==== \src\pages\expertise\ImpactMeasurement\index.tsx ====
+// src/pages/expertise/ImpactMeasurement/index.tsx
+import PageLayout from "@/components/layout/PageLayout";
+import headerImg from "@/assets/images/expertise/impactmeasurement/impact.jpg";
+import {
+  ImpactMeasurementIntroSection,
+  ImpactMeasurementResearchSection,
+  ImpactMeasurementUXSection,
+  ImpactMeasurementHeartSection,
+  ImpactMeasurementSummarySection,
+} from "@/components/sections/expertise/impactmeasurement";
+
+/**
+ * Impact Measurement Page
+ * ----------------------------------------------------
+ * Einheitliches Breitenverhalten wie Home
+ */
+export default function ImpactMeasurementPage() {
+  return (
+    <PageLayout
+      title="Impact Measurement"
+      intro="Measuring, proving, and communicating UX impact through metrics that connect user experience to business outcomes."
+      headerImage={headerImg}
+      width="wide" // ✅ identisch zu Home
+    >
+      <ImpactMeasurementIntroSection />
+      <ImpactMeasurementResearchSection />
+      <ImpactMeasurementUXSection />
+      <ImpactMeasurementHeartSection />
+      <ImpactMeasurementSummarySection />
+    </PageLayout>
+  );
+}
+
+
+==== \src\pages\expertise\ResearchOps\index.tsx ====
+// src/pages/expertise/ResearchOps/index.tsx
+import PageLayout from "@/components/layout/PageLayout";
+import headerImg from "@/assets/images/expertise/researchops/plant.jpg";
+import {
+  ResearchOpsIntroSection,
+  ResearchOpsFrameworkSection,
+  ResearchOpsMaturitySection,
+  ResearchOpsValueSection,
+  ResearchOpsLeadershipSection,
+} from "@/components/sections/expertise/researchops";
+
+/**
+ * ResearchOps Page
+ * --------------------------------------------
+ * - Jetzt identisches Breitenverhalten wie Home
+ * - Keine weiteren Änderungen am Layout
+ */
+export default function ResearchOpsPage() {
+  return (
+    <PageLayout
+      title="ResearchOps"
+      intro="Building the systems, culture, and clarity that make research scalable — and strategic."
+      headerImage={headerImg}
+      width="wide" // ✅ sorgt für denselben Container wie auf Home
+    >
+      <ResearchOpsIntroSection />
+      <ResearchOpsFrameworkSection />
+      <ResearchOpsMaturitySection />
+      <ResearchOpsValueSection />
+      <ResearchOpsLeadershipSection />
+    </PageLayout>
+  );
+}
+
+
+==== \src\pages\expertise\StrategicUXResearch\index.tsx ====
+// src/pages/expertise/StrategicUXResearch/index.tsx
+import PageLayout from "@/components/layout/PageLayout";
+import headerImg from "@/assets/images/expertise/strategicuxresearch/strategicuxr.jpg";
+
+import {
+  StrategicUXIntroSection,
+  StrategicUXFrameworkSection,
+  StrategicUXRITESection,
+  StrategicUXOKRSection,
+} from "@/components/sections/expertise/strategicuxresearch";
+
+/**
+ * Strategic UX Research Page
+ * ----------------------------------------------
+ * - exakt gleiches Breiten-/Layout-Verhalten wie Home
+ * - PageLayout liefert nur Hero + Spacing, keine Begrenzung
+ */
+export default function StrategicUXResearchPage() {
+  return (
+    <PageLayout
+      title="Strategic UX Research"
+      intro="Turning UX Research from isolated insights into a strategic system that drives clarity, alignment, and confident decisions."
+      headerImage={headerImg}
+      width="wide" // ✅ sorgt für denselben Container wie auf Home
+    >
+      <StrategicUXIntroSection />
+      <StrategicUXFrameworkSection />
+      <StrategicUXRITESection />
+      <StrategicUXOKRSection />
+    </PageLayout>
+  );
+}
+
+
+==== \src\pages\expertise\TeamLeadership\skillassessment\index.tsx ====
+import PageLayout from "@/components/layout/PageLayout";
+import {
+  SkillAssessmentIntroSection,
+  SkillAssessmentSummarySection,
+} from "@/components/sections/expertise/TeamLeadership/skillassessment";
+
+/**
+ * Skill Assessment Page
+ * - Einheitlich mit allen anderen Expertise-Seiten
+ * - Nutzt PageLayout für Titel & Introtext
+ * - Sections sind DS-konform
+ */
+export default function SkillAssessmentPage() {
+  return (
+    <PageLayout
+      title="Skill Assessment Center"
+      intro="Reflect on your strengths, visualize growth paths, and understand your team's collective skill profile — not for competition, but for clarity and learning."
+    >
+      <SkillAssessmentIntroSection />
+      <SkillAssessmentSummarySection />
+    </PageLayout>
+  );
+}
+
+
+==== \src\pages\expertise\TeamLeadership\index.tsx ====
+// src/pages/expertise/TeamLeadership/index.tsx
+import PageLayout from "@/components/layout/PageLayout";
+import headerImg from "@/assets/images/expertise/teamleadership/team.jpg";
+import {
+  TeamLeadershipPhilosophySection,
+  TeamLeadershipRoleProfileSection,
+  TeamLeadershipSkillsSection,
+} from "@/components/sections/expertise/TeamLeadership";
+import UXRolesExplorer from "@/components/sections/expertise/TeamLeadership/UXRolesExplorer";
+
+/**
+ * Team Leadership & Mentoring
+ * Storytelling sequence:
+ * 1️⃣ Philosophy → 2️⃣ Roles → 3️⃣ UX Roles Explorer → 4️⃣ My Role Profile → 5️⃣ Skills → 6️⃣ Impact
+ */
+export default function TeamLeadershipPage() {
+  return (
+    <PageLayout
+      title="Team Leadership & Mentoring"
+      intro="Building high-performing UX teams through clarity, coaching, and a culture of trust."
+      headerImage={headerImg}
+      width="wide"
+    >
+      <TeamLeadershipPhilosophySection />
+<TeamLeadershipSkillsSection />
+      <UXRolesExplorer />
+      <TeamLeadershipRoleProfileSection />
+    </PageLayout>
+  );
+}
+
+
+==== \src\pages\expertise\UXStrategy\index.tsx ====
+// src/pages/expertise/UXStrategy/index.tsx
+import PageLayout from "@/components/layout/PageLayout";
+import headerImg from "@/assets/images/expertise/uxstrategy/schach1.jpg";
+import {
+  ValueOfUXStrategy,
+  VisionAlignment,
+  DiscoveryDelivery,
+  Prioritization,
+} from "@/components/sections/expertise/uxstrategy";
+
+/**
+ * UX Strategy Page
+ * --------------------------------------------
+ * - Jetzt mit identischem Breitenverhalten wie Home
+ * - Keine weiteren Code- oder Layoutänderungen
+ */
+export default function UXStrategyPage() {
+  return (
+    <PageLayout
+      title="UX Strategy"
+      intro="How evidence-based UX Research connects discovery, design, and delivery — enabling organizations to make confident, user-centered decisions."
+      headerImage={headerImg}
+      width="wide" // ✅ sorgt für denselben Container wie auf Home
+    >
+      <ValueOfUXStrategy />
+      <VisionAlignment />
+      <DiscoveryDelivery />
+      <Prioritization />
+    </PageLayout>
+  );
+}
+
+
 ==== \src\pages\projects\CarInsurance\index.tsx ====
 // src/pages/projects/CarInsurancePage.tsx
 import PageLayout from "@/components/layout/PageLayout";
@@ -3495,6 +4401,39 @@ export default function KanoStrategyPage() {
 }
 
 
+==== \src\pages\projects\UXPortfolio\index.tsx ====
+// src/pages/projects/UXPortfolio/index.tsx
+import PageLayout from "@/components/layout/PageLayout";
+import headerImg from "@/assets/images/headers/home/headerhome.jpg"; // oder ein anderes Bild
+import {
+  UXPortfolioBLUFSection,
+  UXPortfolioProcessSection,
+  UXPortfolioDesignSystemSection,
+  UXPortfolioImpactSection,
+} from "@/components/sections/projects/UXPortfolio";
+
+/**
+ * UX Portfolio Project Page
+ * --------------------------------------------
+ * Treats the portfolio itself as a UX project with a design system.
+ */
+export default function UXPortfolioPage() {
+  return (
+    <PageLayout
+      title="UX Portfolio & Design System"
+      intro="How I turned my personal portfolio into a small product: structured around positioning, a lean design system, and a maintainable content model for projects and expertise."
+      headerImage={headerImg}
+      width="wide"
+    >
+      <UXPortfolioBLUFSection />
+      <UXPortfolioProcessSection />
+      <UXPortfolioDesignSystemSection />
+      <UXPortfolioImpactSection />
+    </PageLayout>
+  );
+}
+
+
 ==== \src\pages\projects\workshop\index.tsx ====
 import PageLayout from "@/components/layout/PageLayout";
 import headerImg from "@/assets/images/projects/workshop/haderws.jpg";
@@ -3707,7 +4646,10 @@ import ZooplusReOps from "@/pages/projects/ZooplusReOps";
 import ZooplusPricing from "@/pages/projects/ZooplusPricing";
 import InsuranceBrokerDiscovery from "@/pages/projects/InsuranceBroker";
 import WorkshopPage from "@/pages/projects/workshop";
-import KanoStrategyPage from "@/pages/projects/kanostrategy"; // ✅ NEU hinzugefügt
+import KanoStrategyPage from "@/pages/projects/kanostrategy";
+
+// 🔹 NEU – Dein UX Portfolio Projekt
+import UXPortfolioPage from "@/pages/projects/UXPortfolio";
 
 // 🔹 Expertise-Seiten
 import UXStrategy from "@/pages/expertise/UXStrategy";
@@ -3751,6 +4693,7 @@ export default function App() {
     <>
       <ScrollToTop />
       <ScrollToHash />
+
       <Routes>
         <Route path="/" element={<AppLayout />}>
           {/* 🔹 Hauptseiten */}
@@ -3765,12 +4708,12 @@ export default function App() {
             path="projects/insurance-broker-discovery"
             element={<InsuranceBrokerDiscovery />}
           />
-          
           <Route path="projects/workshop" element={<WorkshopPage />} />
-          <Route
-            path="projects/kanostrategy"
-            element={<KanoStrategyPage />}
-          /> {/* ✅ NEU */}
+          <Route path="projects/kanostrategy" element={<KanoStrategyPage />} />
+
+          {/* 🔹 NEU – UX Portfolio Projekt */}
+          <Route path="projects/ux-portfolio" element={<UXPortfolioPage />} />
+
           <Route path="projects" element={<Navigate to="/" replace />} />
 
           {/* 🔹 Expertise-Seiten */}
@@ -3780,18 +4723,12 @@ export default function App() {
             element={<StrategicUXResearch />}
           />
           <Route path="expertise/researchops" element={<ResearchOps />} />
-          <Route
-            path="expertise/team-leadership"
-            element={<TeamLeadership />}
-          />
+          <Route path="expertise/team-leadership" element={<TeamLeadership />} />
           <Route
             path="expertise/team-leadership/skillassessment"
             element={<SkillAssessmentPage />}
           />
-          <Route
-            path="expertise/impact-measurement"
-            element={<ImpactMeasurement />}
-          />
+          <Route path="expertise/impact-measurement" element={<ImpactMeasurement />} />
 
           {/* 🔹 Footer-/Legal-Seiten */}
           <Route path="imprint" element={<Imprint />} />

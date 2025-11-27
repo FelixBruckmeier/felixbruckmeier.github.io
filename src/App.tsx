@@ -11,7 +11,10 @@ import ZooplusReOps from "@/pages/projects/ZooplusReOps";
 import ZooplusPricing from "@/pages/projects/ZooplusPricing";
 import InsuranceBrokerDiscovery from "@/pages/projects/InsuranceBroker";
 import WorkshopPage from "@/pages/projects/workshop";
-import KanoStrategyPage from "@/pages/projects/kanostrategy"; // ✅ NEU hinzugefügt
+import KanoStrategyPage from "@/pages/projects/kanostrategy";
+
+// 🔹 NEU – Dein UX Portfolio Projekt
+import UXPortfolioPage from "@/pages/projects/UXPortfolio";
 
 // 🔹 Expertise-Seiten
 import UXStrategy from "@/pages/expertise/UXStrategy";
@@ -55,6 +58,7 @@ export default function App() {
     <>
       <ScrollToTop />
       <ScrollToHash />
+
       <Routes>
         <Route path="/" element={<AppLayout />}>
           {/* 🔹 Hauptseiten */}
@@ -69,12 +73,12 @@ export default function App() {
             path="projects/insurance-broker-discovery"
             element={<InsuranceBrokerDiscovery />}
           />
-          
           <Route path="projects/workshop" element={<WorkshopPage />} />
-          <Route
-            path="projects/kanostrategy"
-            element={<KanoStrategyPage />}
-          /> {/* ✅ NEU */}
+          <Route path="projects/kanostrategy" element={<KanoStrategyPage />} />
+
+          {/* 🔹 NEU – UX Portfolio Projekt */}
+          <Route path="projects/ux-portfolio" element={<UXPortfolioPage />} />
+
           <Route path="projects" element={<Navigate to="/" replace />} />
 
           {/* 🔹 Expertise-Seiten */}
@@ -84,18 +88,12 @@ export default function App() {
             element={<StrategicUXResearch />}
           />
           <Route path="expertise/researchops" element={<ResearchOps />} />
-          <Route
-            path="expertise/team-leadership"
-            element={<TeamLeadership />}
-          />
+          <Route path="expertise/team-leadership" element={<TeamLeadership />} />
           <Route
             path="expertise/team-leadership/skillassessment"
             element={<SkillAssessmentPage />}
           />
-          <Route
-            path="expertise/impact-measurement"
-            element={<ImpactMeasurement />}
-          />
+          <Route path="expertise/impact-measurement" element={<ImpactMeasurement />} />
 
           {/* 🔹 Footer-/Legal-Seiten */}
           <Route path="imprint" element={<Imprint />} />
