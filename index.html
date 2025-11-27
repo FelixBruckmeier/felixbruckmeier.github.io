@@ -18,8 +18,10 @@
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Felix Bruckmeier – Senior UX Researcher" />
-    <meta property="og:description"
-          content="Senior UX Researcher specializing in qualitative & quantitative UX Research, UX strategy, mixed methods and ResearchOps." />
+    <meta
+      property="og:description"
+      content="Senior UX Researcher specializing in qualitative & quantitative UX Research, UX strategy, mixed methods and ResearchOps."
+    />
     <meta property="og:url" content="https://felixbruckmeier.github.io/" />
     <meta property="og:image" content="https://felixbruckmeier.github.io/uxr-social.png" />
     <meta property="og:image:width" content="1200" />
@@ -28,8 +30,10 @@
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Felix Bruckmeier – Senior UX Researcher" />
-    <meta name="twitter:description"
-          content="Senior UX Researcher specializing in qualitative & quantitative UX Research, UX strategy, mixed methods and ResearchOps." />
+    <meta
+      name="twitter:description"
+      content="Senior UX Researcher specializing in qualitative & quantitative UX Research, UX strategy, mixed methods and ResearchOps."
+    />
     <meta name="twitter:image" content="https://felixbruckmeier.github.io/uxr-social.png" />
 
     <!-- Theme Bootstrapping -->
@@ -37,8 +41,7 @@
       (() => {
         try {
           const stored = localStorage.getItem("theme");
-          const prefers =
-            window.matchMedia &&
+          const prefers = window.matchMedia &&
             window.matchMedia("(prefers-color-scheme: dark)").matches;
           const theme = stored ?? (prefers ? "dark" : "light");
           const root = document.documentElement;
@@ -54,7 +57,7 @@
     </script>
 
     <!-- Analytics -->
-    <script data-goatcounter="https://felix.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+    <script async data-goatcounter="https://felix.goatcounter.com/count" src="//gc.zgo.at/count.js"></script>
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="/favicon.png" />
