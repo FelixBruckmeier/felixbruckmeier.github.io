@@ -2,7 +2,10 @@
 import Section from "@/components/ui/Section";
 import SectionIntro from "@/components/ui/SectionIntro";
 import Tile from "@/components/ui/Tile";
-import { SectionHeading, Subtitle, Body, Code } from "@/components/ui/Tokens";
+
+// ❗ FIX: Code entfernt – existiert nicht in Tokens.tsx
+import { SectionHeading, Subtitle, Body } from "@/components/ui/Tokens";
+
 import { colors, spacing, layout } from "@/lib/tokens";
 
 export function UXPortfolioDesignSystemSection() {
@@ -38,8 +41,7 @@ export function UXPortfolioDesignSystemSection() {
               <Body className={colors.muted.text}>
                 <ul className="list-disc pl-5 space-y-1">
                   <li>
-                    <code>colors.background</code>, <code>colors.primary</code>,
-                    {" "}
+                    <code>colors.background</code>, <code>colors.primary</code>,{" "}
                     <code>colors.accent</code> map to CSS variables in{" "}
                     <code>index.css</code>.
                   </li>
@@ -54,6 +56,7 @@ export function UXPortfolioDesignSystemSection() {
                 </ul>
               </Body>
             </Tile>
+
             <Tile variant="static">
               <Subtitle>Typography & spacing</Subtitle>
               <Body className={colors.muted.text}>
@@ -68,8 +71,9 @@ export function UXPortfolioDesignSystemSection() {
                     vertical rhythm consistent across pages.
                   </li>
                   <li>
-                    Layout helpers (e.g. <code>layout.containerDynamic</code>)
-                    avoid ad-hoc max-widths scattered in components.
+                    Layout helpers (e.g.{" "}
+                    <code>layout.containerDynamic</code>) avoid ad-hoc
+                    max-widths scattered in components.
                   </li>
                 </ul>
               </Body>
@@ -105,6 +109,7 @@ export function UXPortfolioDesignSystemSection() {
                 </ul>
               </Body>
             </Tile>
+
             <Tile variant="static">
               <Subtitle>Section & SectionIntro</Subtitle>
               <Body className={colors.muted.text}>
@@ -118,8 +123,8 @@ export function UXPortfolioDesignSystemSection() {
                     width and typographic style.
                   </li>
                   <li>
-                    All project content (including this case study) is built as
-                    combinations of these primitives.
+                    All project content is built as combinations of these
+                    primitives.
                   </li>
                 </ul>
               </Body>
@@ -134,45 +139,38 @@ export function UXPortfolioDesignSystemSection() {
             <Body className={colors.muted.text}>
               Components in <code>components/ui</code> are intentionally small
               and composable. They cover just enough to express hierarchy,
-              emphasis, and relationships without turning into a heavy design
-              system.
+              emphasis, and relationships without becoming heavy.
             </Body>
           </div>
+
           <div className="lg:col-span-2 grid gap-6 md:grid-cols-2">
             <Tile variant="static">
               <Subtitle>Tiles, Tags, Badges</Subtitle>
               <Body className={colors.muted.text}>
                 <ul className="list-disc pl-5 space-y-1">
                   <li>
-                    <code>Tile</code> handles surface style & hover behaviour
-                    for cards.
+                    <code>Tile</code> handles surface style & hover behaviour.
                   </li>
                   <li>
-                    <code>Tag</code> and <code>Badge</code> use Notion color
-                    tokens to encode meaning (e.g. strategy, research, ops).
+                    <code>Tag</code> + <code>Badge</code> use Notion palette for
+                    semantic meaning.
                   </li>
-                  <li>
-                    Used consistently in projects to denote methods, roles, and
-                    themes.
-                  </li>
+                  <li>Used to denote methods, roles, and themes.</li>
                 </ul>
               </Body>
             </Tile>
+
             <Tile variant="static">
               <Subtitle>Typography components</Subtitle>
               <Body className={colors.muted.text}>
                 <ul className="list-disc pl-5 space-y-1">
                   <li>
-                    <code>H1</code>, <code>SectionHeading</code>, <code>Body</code>,{" "}
-                    <code>Small</code>, <code>Quote</code> wrap token
-                    typography.
+                    <code>H1</code>, <code>SectionHeading</code>,{" "}
+                    <code>Body</code>, <code>Small</code>, <code>Quote</code>{" "}
+                    wrap token typography.
                   </li>
                   <li>
-                    Ensures headings in case studies match site-wide hierarchy
-                    without repeating classes.
-                  </li>
-                  <li>
-                    Makes refactoring type scale a single change in{" "}
+                    Refactoring type scale becomes a single change in{" "}
                     <code>tokens.ts</code>.
                   </li>
                 </ul>
@@ -186,38 +184,32 @@ export function UXPortfolioDesignSystemSection() {
           <div className="lg:col-span-1">
             <SectionHeading>4. Behaviour & theming</SectionHeading>
             <Body className={colors.muted.text}>
-              Behaviour is handled in lightweight hooks and components. Dark mode
-              and scrolling are treated as system-level concerns instead of
-              one-off hacks.
+              Behaviour lives in lightweight hooks. Dark mode and scroll handling
+              are treated as system-level concerns.
             </Body>
           </div>
+
           <div className="lg:col-span-2 grid gap-6 md:grid-cols-2">
             <Tile variant="static">
               <Subtitle>ThemeToggle & dark mode</Subtitle>
               <Body className={colors.muted.text}>
                 <ul className="list-disc pl-5 space-y-1">
-                  <li>Theme stored in localStorage and applied before paint.</li>
-                  <li>
-                    Dark mode implemented via CSS variables in{" "}
-                    <code>index.css</code>.
-                  </li>
-                  <li>Images darkened slightly to maintain contrast.</li>
+                  <li>Theme stored in localStorage.</li>
+                  <li>Dark mode uses CSS variables.</li>
+                  <li>Images slightly darkened for contrast.</li>
                 </ul>
               </Body>
             </Tile>
+
             <Tile variant="static">
-              <Subtitle>Navigation & scroll behaviour</Subtitle>
+              <Subtitle>Navigation & scrolling</Subtitle>
               <Body className={colors.muted.text}>
                 <ul className="list-disc pl-5 space-y-1">
                   <li>
-                    Navbar tracks active section via IntersectionObserver on the
-                    home page.
+                    Navbar tracks active section via IntersectionObserver.
                   </li>
                   <li>Hash navigation respects fixed header via scroll-margin.</li>
-                  <li>
-                    Routes reset scroll on navigation, and hashes scroll
-                    smoothly to anchors.
-                  </li>
+                  <li>Smooth scrolling for anchors.</li>
                 </ul>
               </Body>
             </Tile>
