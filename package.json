@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build --outDir docs",
+    "build": "tsc -b && vite build",
     "preview": "vite preview",
     "check:i18n": "node scripts/check-missing-translations.js",
     "check:i18n:reverse": "node scripts/check-missing-translations-reverse.js",
