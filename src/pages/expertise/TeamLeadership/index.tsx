@@ -27,8 +27,11 @@ export default function TeamLeadershipPage() {
       width="wide"
     >
 
-      {/* ⭐ SEO direkt nach PageLayout */}
-      <SEOPage page="expertise_teamLeadership" />
+      {/* ⭐ SEO (Meta, OG, Twitter, Canonical) */}
+      <SEOPage 
+        page="expertise_teamLeadership"
+        url="https://felixbruckmeier.github.io/expertise/team-leadership"
+      />
 
       <TeamLeadershipPhilosophySection />
       <TeamLeadershipSkillsSection />

@@ -28,8 +28,11 @@ export default function InsuranceBrokerDiscovery() {
       headerImage={headerImg}
       width="wide"
     >
-      {/* ⭐ SEO */}
-      <SEOPage page="project_insuranceBroker" />
+      {/* ⭐ SEO (Meta, OG, Twitter, Canonical) */}
+      <SEOPage
+        page="project_insuranceBroker"
+        url="https://felixbruckmeier.github.io/projects/insurance-broker-discovery"
+      />
 
       <BrokerBLUFSection />
       <BrokerProcessSection />

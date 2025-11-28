@@ -24,8 +24,11 @@ export default function CarInsurancePage() {
       headerImage={headerImg}
       width="wide"
     >
-      {/* ⭐ SEO direkt nach PageLayout */}
-      <SEOPage page="project_carInsurance" />
+      {/* ⭐ SEO (Meta, OG, Twitter, Canonical) */}
+      <SEOPage 
+        page="project_carInsurance"
+        url="https://felixbruckmeier.github.io/projects/car-insurance"
+      />
 
       <CarInsuranceBLUFSection />
       <CarInsuranceProcessSection />

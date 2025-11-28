@@ -20,9 +20,11 @@ export default function SkillAssessmentPage() {
       intro="Reflect on your strengths, visualize growth paths, and understand your team's collective skill profile — not for competition, but for clarity and learning."
     >
 
-      {/* ⭐ SEO – indexiert, sichtbar */}
-      <SEOPage page="expertise_teamLeadership_skillassessment" />
-
+      {/* ⭐ SEO – indexed, visible, canonical */}
+      <SEOPage
+        page="expertise_teamLeadership_skillassessment"
+        url="https://felixbruckmeier.github.io/expertise/team-leadership/skillassessment"
+      />
 
       <SkillAssessmentIntroSection />
       <SkillAssessmentSummarySection />

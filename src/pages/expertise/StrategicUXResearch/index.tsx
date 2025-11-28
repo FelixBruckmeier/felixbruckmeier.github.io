@@ -26,8 +26,11 @@ export default function StrategicUXResearchPage() {
       width="wide"
     >
 
-      {/* ⭐ SEO direkt nach PageLayout */}
-      <SEOPage page="expertise_strategicUXResearch" />
+      {/* ⭐ SEO (Meta, OG, Twitter, Canonical) */}
+      <SEOPage 
+        page="expertise_strategicUXResearch"
+        url="https://felixbruckmeier.github.io/expertise/strategic-ux-research"
+      />
 
       <StrategicUXIntroSection />
       <StrategicUXFrameworkSection />

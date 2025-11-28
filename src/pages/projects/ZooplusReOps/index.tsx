@@ -6,7 +6,7 @@ import SEOPage from "@/components/common/SEOPage";
 /**
  * ResearchOps & Agile UX – Work in Progress
  * --------------------------------------------
- * Diese Seite ist noch nicht final und wird nicht indexiert.
+ * This page is still under construction and should NOT be indexed.
  */
 export default function ZooplusReOpsPage() {
   return (
@@ -15,10 +15,10 @@ export default function ZooplusReOpsPage() {
       intro="Establishing structures for scalable, efficient UX Research. (Work in progress)"
       width="wide"
     >
-      {/* ⭐ SEO – nicht indexieren */}
+      {/* ⭐ SEO – noindex, no canonical, no JSON-LD */}
       <SEOPage page="project_zooplusreops" noindex />
 
-      {/* Minimaler Placeholder */}
+      {/* Minimal placeholder */}
       <div className="py-24 text-center text-muted-foreground">
         <h2 className="text-xl font-semibold mb-2">Work in progress</h2>
         <p>More content will follow soon.</p>

@@ -6,8 +6,8 @@ import SEOPage from "@/components/common/SEOPage";
 /**
  * ResearchOps Implementation – Work in Progress
  * --------------------------------------------
- * Diese Seite ist im Aufbau und wird NICHT indexiert.
- * Sie dient nur als Platzhalter für Locked / WIP Projekte.
+ * This page is under construction and should NOT be indexed.
+ * It serves as a placeholder for locked / WIP projects.
  */
 export default function ReOpsImplementationPage() {
   return (
@@ -17,10 +17,10 @@ export default function ReOpsImplementationPage() {
       width="wide"
     >
 
-      {/* ⭐ SEO – existiert, aber wird NICHT indexiert */}
+      {/* ⭐ SEO – noindex, no canonical, no JSON-LD */}
       <SEOPage page="project_reopsimplementation" noindex />
 
-      {/* Minimaler Placeholder */}
+      {/* Minimal placeholder */}
       <div className="py-24 text-center text-muted-foreground">
         <h2 className="text-xl font-semibold mb-3">Work in progress</h2>
         <p className="max-w-xl mx-auto">

@@ -6,7 +6,7 @@ import SEOPage from "@/components/common/SEOPage";
 /**
  * Micro Interaction – Delete Case (WIP)
  * --------------------------------------------
- * Diese Seite ist noch nicht final und soll nicht indexiert werden.
+ * This page is not final and should NOT be indexed.
  */
 export default function DeleteCasePage() {
   return (
@@ -15,10 +15,10 @@ export default function DeleteCasePage() {
       intro="A small change with a massive cumulative impact. (Work in progress)"
       width="wide"
     >
-      {/* ⭐ SEO – nicht indexieren, kein JSON-LD */}
+      {/* ⭐ SEO – noindex, no canonical, no JSON-LD */}
       <SEOPage page="project_deleteCase" noindex />
 
-      {/* Placeholder Inhalt */}
+      {/* Placeholder content */}
       <div className="py-24 text-center text-muted-foreground">
         <h2 className="text-xl font-semibold mb-2">Work in progress</h2>
         <p>More content will follow soon.</p>

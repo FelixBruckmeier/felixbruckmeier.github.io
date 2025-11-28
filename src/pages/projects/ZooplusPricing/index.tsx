@@ -24,9 +24,11 @@ export default function PricingPage() {
       headerImage={headerImg}
       width="wide"
     >
-
-      {/* ⭐ SEO – auto JSON-LD (CaseStudy) */}
-      <SEOPage page="project_pricing" />
+      {/* ⭐ SEO – auto JSON-LD + canonical */}
+      <SEOPage
+        page="project_pricing"
+        url="https://felixbruckmeier.github.io/projects/zooplus-pricing"
+      />
 
       <div className="space-y-28 md:space-y-36">
         <PricingBLUFSection />

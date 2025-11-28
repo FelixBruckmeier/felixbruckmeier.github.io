@@ -27,9 +27,11 @@ export default function ImpactMeasurementPage() {
       width="wide"
     >
 
-      {/* ⭐ SEO direkt nach PageLayout */}
-      <SEOPage page="expertise_impactMeasurement" />
-
+      {/* ⭐ SEO (Meta, OG, Twitter, Canonical) */}
+      <SEOPage 
+        page="expertise_impactMeasurement"
+        url="https://felixbruckmeier.github.io/expertise/impact-measurement"
+      />
 
       <ImpactMeasurementIntroSection />
       <ImpactMeasurementResearchSection />

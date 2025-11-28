@@ -17,8 +17,11 @@ export default function Home() {
   return (
     <PageLayout>
 
-      {/* ⭐ SEO: immer sofort nach PageLayout */}
-      <SEOPage page="home" />
+      {/* ⭐ SEO: always immediately after PageLayout */}
+      <SEOPage 
+        page="home" 
+        url="https://felixbruckmeier.github.io/" 
+      />
 
       <AboutSection />
       <MetricsSection />

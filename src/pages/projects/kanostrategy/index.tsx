@@ -25,8 +25,11 @@ export default function KanoStrategyPage() {
       headerImage={headerImg}
       width="wide"
     >
-      {/* ⭐ SEO */}
-      <SEOPage page="project_kanostrategy" />
+      {/* ⭐ SEO (Meta, OG, Twitter, Canonical) */}
+      <SEOPage
+        page="project_kanostrategy"
+        url="https://felixbruckmeier.github.io/projects/kanostrategy"
+      />
 
       <KanoBLUFSection />
       <KanoProcessSection />

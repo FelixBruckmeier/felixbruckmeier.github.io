@@ -8,18 +8,24 @@ import { colors, spacing } from "@/lib/tokens";
 export default function NotFound() {
   return (
     <>
-      {/* ⭐ SEO für 404-Seiten */}
+      {/* ⭐ SEO for 404 pages */}
       <Helmet>
         <title>404 – Page Not Found</title>
         <meta name="robots" content="noindex, nofollow" />
       </Helmet>
 
-      <main className={cn("min-h-[60vh] grid place-items-center px-6", colors.background.text)}>
+      <main
+        className={cn(
+          "min-h-[60vh] grid place-items-center px-6",
+          colors.background.text
+        )}
+      >
         <div className="text-center">
           <h1 className="text-3xl font-bold">404 — Not Found</h1>
           <p className={cn(spacing.mt2, colors.muted.text)}>
-            Sorry, die Seite gibt’s nicht. Zurück zur Startseite?
+            Sorry, this page does not exist. Back to the homepage?
           </p>
+
           <div className={spacing.mt4}>
             <Button asChild variant="secondary">
               <a href="/">Home</a>

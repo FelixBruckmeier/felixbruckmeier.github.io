@@ -40,12 +40,12 @@ $excludedFilePatterns = @(
 # Ganze Ordner (inkl. Unterordner & Dateien) ausschließen
 $excludedFolderPatterns = @(
     "\\src\\assets\\visuals($|\\.*)",
+"\\src\\components\\sections($|\\.*)",
     "\\src\\components\\sections\\expertise\\researchops($|\\.*)",
     "\\src\\components\\sections\\expertise\\impactmeasurement($|\\.*)",
     "\\src\\components\\secti11:54 28.11.2025ons\\expertise\\strategicuxresearch($|\\.*)",
     "\\src\\components\\sections\\expertise\\TeamLeadership($|\\.*)",
     "\\src\\components\\projects($|\\.*)",
-    "\\src\\pages\\expertise($|\\.*)",
   
     "\\src\\pages\\projects\\AtossReOps($|\\.*)",
     "\\src\\assets($|\\.*)",

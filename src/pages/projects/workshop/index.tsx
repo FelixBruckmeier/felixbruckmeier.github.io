@@ -25,8 +25,11 @@ export default function WorkshopPage() {
       width="wide"
     >
 
-      {/* ⭐ SEO – includes automatic JSON-LD */}
-      <SEOPage page="project_workshop" />
+      {/* ⭐ SEO (Meta, OG, Twitter, Canonical, JSON-LD) */}
+      <SEOPage
+        page="project_workshop"
+        url="https://felixbruckmeier.github.io/projects/workshop"
+      />
 
       <WorkshopBLUFSection />
       <WorkshopProcessSection />

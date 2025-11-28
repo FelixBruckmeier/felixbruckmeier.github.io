@@ -27,9 +27,11 @@ export default function UXStrategyPage() {
       width="wide"
     >
 
-      {/* ⭐ SEO direkt nach PageLayout */}
-      <SEOPage page="expertise_uxStrategy" />
-
+      {/* ⭐ SEO (Meta, OG, Twitter, Canonical) */}
+      <SEOPage 
+        page="expertise_uxStrategy"
+        url="https://felixbruckmeier.github.io/expertise/ux-strategy"
+      />
 
       <ValueOfUXStrategy />
       <VisionAlignment />

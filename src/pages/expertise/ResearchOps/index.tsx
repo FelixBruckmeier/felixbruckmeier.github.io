@@ -27,9 +27,11 @@ export default function ResearchOpsPage() {
       width="wide"
     >
 
-      {/* ⭐ SEO direkt nach PageLayout */}
-      <SEOPage page="expertise_researchOps" />
-
+      {/* ⭐ SEO (Meta, OG, Twitter, Canonical) */}
+      <SEOPage 
+        page="expertise_researchOps"
+        url="https://felixbruckmeier.github.io/expertise/researchops"
+      />
 
       <ResearchOpsIntroSection />
       <ResearchOpsFrameworkSection />

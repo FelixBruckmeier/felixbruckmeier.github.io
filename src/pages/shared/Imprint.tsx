@@ -9,10 +9,13 @@ export default function ImprintPage() {
   return (
     <PageLayout title="Imprint">
 
-      {/* ⭐ SEO – soll indexiert werden */}
-      <SEOPage page="page_imprint" />
+      {/* ⭐ SEO – indexed + canonical */}
+      <SEOPage 
+        page="page_imprint" 
+        url="https://felixbruckmeier.github.io/imprint"
+      />
 
-      {/* ⭐ JSON-LD für Impressum / Website-Betreiber */}
+      {/* ⭐ Custom JSON-LD for legal imprint */}
       <Helmet>
         <script type="application/ld+json">
           {JSON.stringify({
