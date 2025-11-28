@@ -2,7 +2,6 @@
 
 import PageLayout from "@/components/layout/PageLayout";
 import SEOPage from "@/components/common/SEOPage";
-import SEOJsonLD from "@/components/common/SEOJsonLD"; // ⭐ JSON-LD hinzugefügt
 
 /**
  * Micro Interaction – Delete Case (WIP)
@@ -16,11 +15,7 @@ export default function DeleteCasePage() {
       intro="A small change with a massive cumulative impact. (Work in progress)"
       width="wide"
     >
-
-      {/* ⭐ SEO – nicht indexieren */}
-      <SEOPage page="project_deleteCase" noindex />
-
-      {/* ⭐ JSON-LD – WIP: Nur minimale WebPage-Daten, kein Article */}
+      {/* ⭐ SEO – nicht indexieren, kein JSON-LD */}
       <SEOPage page="project_deleteCase" noindex />
 
       {/* Placeholder Inhalt */}

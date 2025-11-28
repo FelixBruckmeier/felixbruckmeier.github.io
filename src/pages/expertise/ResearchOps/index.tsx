@@ -2,7 +2,6 @@
 
 import PageLayout from "@/components/layout/PageLayout";
 import SEOPage from "@/components/common/SEOPage"; 
-import SEOJsonLD from "@/components/common/SEOJsonLD"; // ⭐ JSON-LD ergänzt
 
 import headerImg from "@/assets/images/expertise/researchops/plant.jpg";
 
@@ -31,8 +30,6 @@ export default function ResearchOpsPage() {
       {/* ⭐ SEO direkt nach PageLayout */}
       <SEOPage page="expertise_researchOps" />
 
-      {/* ⭐ JSON-LD strukturiere Daten für Google */}
-      <SEOJsonLD page="expertise_researchOps" />
 
       <ResearchOpsIntroSection />
       <ResearchOpsFrameworkSection />

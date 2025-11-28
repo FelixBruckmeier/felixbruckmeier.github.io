@@ -2,7 +2,6 @@
 
 import PageLayout from "@/components/layout/PageLayout";
 import SEOPage from "@/components/common/SEOPage"; 
-import SEOJsonLD from "@/components/common/SEOJsonLD"; // ⭐ JSON-LD hinzugefügt
 
 import CVIntroSection from "@/components/sections/cv/CVIntroSection";
 import ProfessionalExperienceSection from "@/components/sections/cv/ProfessionalExperienceSection";
@@ -18,8 +17,6 @@ export default function CVPage() {
       {/* ⭐ SEO (Meta, OG, Twitter) */}
       <SEOPage page="cv" />
 
-      {/* ⭐ JSON-LD (strukturierte Daten für Google) */}
-      <SEOJsonLD page="cv" />
 
       <ProfessionalExperienceSection />
       <PersonalExperienceSection />

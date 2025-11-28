@@ -2,7 +2,6 @@
 
 import PageLayout from "@/components/layout/PageLayout";
 import SEOPage from "@/components/common/SEOPage"; 
-import SEOJsonLD from "@/components/common/SEOJsonLD"; // ⭐ JSON-LD ergänzt
 
 import headerImg from "@/assets/images/expertise/uxstrategy/schach1.jpg";
 
@@ -31,8 +30,6 @@ export default function UXStrategyPage() {
       {/* ⭐ SEO direkt nach PageLayout */}
       <SEOPage page="expertise_uxStrategy" />
 
-      {/* ⭐ JSON-LD structured data für Google */}
-      <SEOJsonLD page="expertise_uxStrategy" />
 
       <ValueOfUXStrategy />
       <VisionAlignment />

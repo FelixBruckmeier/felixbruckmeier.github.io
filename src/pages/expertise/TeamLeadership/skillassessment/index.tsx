@@ -2,7 +2,6 @@
 
 import PageLayout from "@/components/layout/PageLayout";
 import SEOPage from "@/components/common/SEOPage";
-import SEOJsonLD from "@/components/common/SEOJsonLD"; // ⭐ JSON-LD ergänzt
 
 import {
   SkillAssessmentIntroSection,
@@ -24,8 +23,6 @@ export default function SkillAssessmentPage() {
       {/* ⭐ SEO – indexiert, sichtbar */}
       <SEOPage page="expertise_teamLeadership_skillassessment" />
 
-      {/* ⭐ JSON-LD strukturiere Daten */}
-      <SEOJsonLD page="expertise_teamLeadership_skillassessment" />
 
       <SkillAssessmentIntroSection />
       <SkillAssessmentSummarySection />

@@ -2,7 +2,6 @@
 
 import PageLayout from "@/components/layout/PageLayout";
 import SEOPage from "@/components/common/SEOPage"; 
-import SEOJsonLD from "@/components/common/SEOJsonLD"; // ⭐ JSON-LD ergänzt
 
 import headerImg from "@/assets/images/expertise/teamleadership/team.jpg";
 
@@ -30,9 +29,6 @@ export default function TeamLeadershipPage() {
 
       {/* ⭐ SEO direkt nach PageLayout */}
       <SEOPage page="expertise_teamLeadership" />
-
-      {/* ⭐ JSON-LD structured data */}
-      <SEOJsonLD page="expertise_teamLeadership" />
 
       <TeamLeadershipPhilosophySection />
       <TeamLeadershipSkillsSection />

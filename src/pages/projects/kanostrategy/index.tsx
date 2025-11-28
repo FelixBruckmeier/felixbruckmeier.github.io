@@ -2,7 +2,6 @@
 
 import PageLayout from "@/components/layout/PageLayout";
 import SEOPage from "@/components/common/SEOPage";
-import SEOJsonLD from "@/components/common/SEOJsonLD"; // ⭐ JSON-LD hinzugefügt
 
 import headerImg from "@/assets/images/projects/kanostrategy/headerkano.jpg";
 
@@ -15,8 +14,8 @@ import {
 /**
  * Kano Strategy Project Page
  * --------------------------------------------
- * - Same layout pattern as CarInsurance
- * - SEO + JSON-LD integriert
+ * - Clean page structure
+ * - Automatic SEO + JSON-LD
  */
 export default function KanoStrategyPage() {
   return (
@@ -26,12 +25,8 @@ export default function KanoStrategyPage() {
       headerImage={headerImg}
       width="wide"
     >
-
-      {/* ⭐ SEO direkt nach PageLayout */}
+      {/* ⭐ SEO */}
       <SEOPage page="project_kanostrategy" />
-
-      {/* ⭐ JSON-LD für Case Study (structured data) */}
-      <SEOJsonLD page="project_kanostrategy" />
 
       <KanoBLUFSection />
       <KanoProcessSection />

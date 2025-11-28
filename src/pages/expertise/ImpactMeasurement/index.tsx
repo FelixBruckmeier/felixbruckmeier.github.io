@@ -2,7 +2,6 @@
 
 import PageLayout from "@/components/layout/PageLayout";
 import SEOPage from "@/components/common/SEOPage"; 
-import SEOJsonLD from "@/components/common/SEOJsonLD"; // ⭐ JSON-LD ergänzt
 
 import headerImg from "@/assets/images/expertise/impactmeasurement/impact.jpg";
 
@@ -31,8 +30,6 @@ export default function ImpactMeasurementPage() {
       {/* ⭐ SEO direkt nach PageLayout */}
       <SEOPage page="expertise_impactMeasurement" />
 
-      {/* ⭐ JSON-LD für Google */}
-      <SEOJsonLD page="expertise_impactMeasurement" />
 
       <ImpactMeasurementIntroSection />
       <ImpactMeasurementResearchSection />

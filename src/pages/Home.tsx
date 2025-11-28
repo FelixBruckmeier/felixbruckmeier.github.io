@@ -2,7 +2,6 @@
 
 import PageLayout from "@/components/layout/PageLayout";
 import SEOPage from "@/components/common/SEOPage";  
-import SEOJsonLD from "@/components/common/SEOJsonLD";  // ⭐ JSON-LD hinzugefügt
 
 import {
   AboutSection,
@@ -20,7 +19,6 @@ export default function Home() {
 
       {/* ⭐ SEO: immer sofort nach PageLayout */}
       <SEOPage page="home" />
-      <SEOJsonLD page="home" />
 
       <AboutSection />
       <MetricsSection />

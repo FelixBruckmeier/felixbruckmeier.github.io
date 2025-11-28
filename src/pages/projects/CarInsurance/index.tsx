@@ -2,7 +2,6 @@
 
 import PageLayout from "@/components/layout/PageLayout";
 import SEOPage from "@/components/common/SEOPage";
-import SEOJsonLD from "@/components/common/SEOJsonLD"; // ⭐ JSON-LD hinzugefügt
 
 import headerImg from "@/assets/images/projects/carinsurance/CarInsurance.png";
 
@@ -15,7 +14,7 @@ import {
  * Car Insurance Project Page
  * --------------------------------------------
  * - Konsistentes Layout
- * - SEO + JSON-LD vollständig integriert
+ * - SEO vollständig integriert (JSON-LD wird automatisch erzeugt)
  */
 export default function CarInsurancePage() {
   return (
@@ -25,12 +24,8 @@ export default function CarInsurancePage() {
       headerImage={headerImg}
       width="wide"
     >
-
       {/* ⭐ SEO direkt nach PageLayout */}
       <SEOPage page="project_carInsurance" />
-
-      {/* ⭐ JSON-LD (Article + WebPage + Breadcrumbs) */}
-      <SEOJsonLD page="project_carInsurance" />
 
       <CarInsuranceBLUFSection />
       <CarInsuranceProcessSection />

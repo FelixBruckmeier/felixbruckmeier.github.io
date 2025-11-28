@@ -1,8 +1,7 @@
 // src/pages/projects/InsuranceBroker/index.tsx
 
 import PageLayout from "@/components/layout/PageLayout";
-import SEOPage from "@/components/common/SEOPage"; 
-import SEOJsonLD from "@/components/common/SEOJsonLD"; // ⭐ JSON-LD hinzugefügt
+import SEOPage from "@/components/common/SEOPage";
 
 import headerImg from "@/assets/images/projects/b2b2c/B2B2COptimization.jpg";
 
@@ -15,9 +14,11 @@ import {
 /**
  * Insurance Broker Discovery Project Page
  * --------------------------------------------
- * Struktur identisch zu CarInsurance:
- * - Header mit Bild
- * - 3 inhaltliche Sektionen
+ * Standard Project Structure:
+ * - Header image
+ * - BLUF
+ * - Process
+ * - Impact
  */
 export default function InsuranceBrokerDiscovery() {
   return (
@@ -27,12 +28,8 @@ export default function InsuranceBrokerDiscovery() {
       headerImage={headerImg}
       width="wide"
     >
-
-      {/* ⭐ SEO direkt nach PageLayout */}
+      {/* ⭐ SEO */}
       <SEOPage page="project_insuranceBroker" />
-
-      {/* ⭐ Vollständiges JSON-LD für Live-Projektseite */}
-      <SEOJsonLD page="project_insuranceBroker" />
 
       <BrokerBLUFSection />
       <BrokerProcessSection />
@@ -40,4 +37,3 @@ export default function InsuranceBrokerDiscovery() {
     </PageLayout>
   );
 }
-
