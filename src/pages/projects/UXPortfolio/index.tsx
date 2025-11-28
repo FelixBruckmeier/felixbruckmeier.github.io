@@ -28,10 +28,7 @@ export default function UXPortfolioPage() {
     >
 
       {/* ⭐ SEO – structured data + canonical */}
-      <SEOPage 
-        page="project_uxPortfolio"
-        url="https://felixbruckmeier.github.io/projects/ux-portfolio"
-      />
+      <SEOPage page="project_uxPortfolio" />
 
       <UXPortfolioBLUFSection />
       <UXPortfolioProcessSection />

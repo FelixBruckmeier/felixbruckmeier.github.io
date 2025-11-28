@@ -10,10 +10,7 @@ export default function PrivacyPage() {
     <PageLayout title="Privacy Policy">
 
       {/* ⭐ SEO – privacy page MUST be indexed + canonical */}
-      <SEOPage 
-        page="page_privacy" 
-        url="https://felixbruckmeier.github.io/privacy"
-      />
+      <SEOPage page="page_privacy" />
 
       {/* ⭐ Custom JSON-LD specifically for this page */}
       <Helmet>

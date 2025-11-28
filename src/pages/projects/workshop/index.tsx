@@ -26,10 +26,7 @@ export default function WorkshopPage() {
     >
 
       {/* ⭐ SEO (Meta, OG, Twitter, Canonical, JSON-LD) */}
-      <SEOPage
-        page="project_workshop"
-        url="https://felixbruckmeier.github.io/projects/workshop"
-      />
+      <SEOPage page="project_workshop" />
 
       <WorkshopBLUFSection />
       <WorkshopProcessSection />

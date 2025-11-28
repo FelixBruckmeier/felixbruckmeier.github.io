@@ -11,8 +11,7 @@ export default function ImprintPage() {
 
       {/* ⭐ SEO – indexed + canonical */}
       <SEOPage 
-        page="page_imprint" 
-        url="https://felixbruckmeier.github.io/imprint"
+        page="page_imprint"
       />
 
       {/* ⭐ Custom JSON-LD for legal imprint */}
