@@ -1,11 +1,17 @@
 // src/pages/expertise/TeamLeadership/index.tsx
+
 import PageLayout from "@/components/layout/PageLayout";
+import SEOPage from "@/components/common/SEOPage"; 
+import SEOJsonLD from "@/components/common/SEOJsonLD"; // ⭐ JSON-LD ergänzt
+
 import headerImg from "@/assets/images/expertise/teamleadership/team.jpg";
+
 import {
   TeamLeadershipPhilosophySection,
   TeamLeadershipRoleProfileSection,
   TeamLeadershipSkillsSection,
 } from "@/components/sections/expertise/TeamLeadership";
+
 import UXRolesExplorer from "@/components/sections/expertise/TeamLeadership/UXRolesExplorer";
 
 /**
@@ -21,8 +27,15 @@ export default function TeamLeadershipPage() {
       headerImage={headerImg}
       width="wide"
     >
+
+      {/* ⭐ SEO direkt nach PageLayout */}
+      <SEOPage page="expertise_teamLeadership" />
+
+      {/* ⭐ JSON-LD structured data */}
+      <SEOJsonLD page="expertise_teamLeadership" />
+
       <TeamLeadershipPhilosophySection />
-<TeamLeadershipSkillsSection />
+      <TeamLeadershipSkillsSection />
       <UXRolesExplorer />
       <TeamLeadershipRoleProfileSection />
     </PageLayout>

@@ -1,4 +1,9 @@
+// src/pages/expertise/TeamLeadership/skillassessment/index.tsx
+
 import PageLayout from "@/components/layout/PageLayout";
+import SEOPage from "@/components/common/SEOPage";
+import SEOJsonLD from "@/components/common/SEOJsonLD"; // ⭐ JSON-LD ergänzt
+
 import {
   SkillAssessmentIntroSection,
   SkillAssessmentSummarySection,
@@ -7,8 +12,7 @@ import {
 /**
  * Skill Assessment Page
  * - Einheitlich mit allen anderen Expertise-Seiten
- * - Nutzt PageLayout für Titel & Introtext
- * - Sections sind DS-konform
+ * - Mit SEO-Integration über SEOPage + JSON-LD
  */
 export default function SkillAssessmentPage() {
   return (
@@ -16,6 +20,13 @@ export default function SkillAssessmentPage() {
       title="Skill Assessment Center"
       intro="Reflect on your strengths, visualize growth paths, and understand your team's collective skill profile — not for competition, but for clarity and learning."
     >
+
+      {/* ⭐ SEO – indexiert, sichtbar */}
+      <SEOPage page="expertise_teamLeadership_skillassessment" />
+
+      {/* ⭐ JSON-LD strukturiere Daten */}
+      <SEOJsonLD page="expertise_teamLeadership_skillassessment" />
+
       <SkillAssessmentIntroSection />
       <SkillAssessmentSummarySection />
     </PageLayout>

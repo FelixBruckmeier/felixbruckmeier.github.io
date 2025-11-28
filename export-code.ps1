@@ -42,11 +42,11 @@ $excludedFolderPatterns = @(
     "\\src\\assets\\visuals($|\\.*)",
     "\\src\\components\\sections\\expertise\\researchops($|\\.*)",
     "\\src\\components\\sections\\expertise\\impactmeasurement($|\\.*)",
-    "\\src\\components\\sections\\expertise\\strategicuxresearch($|\\.*)",
+    "\\src\\components\\secti11:54 28.11.2025ons\\expertise\\strategicuxresearch($|\\.*)",
     "\\src\\components\\sections\\expertise\\TeamLeadership($|\\.*)",
     "\\src\\components\\projects($|\\.*)",
     "\\src\\pages\\expertise($|\\.*)",
-    "\\src\\components\\sections($|\\.*)",
+  
     "\\src\\pages\\projects\\AtossReOps($|\\.*)",
     "\\src\\assets($|\\.*)",
     "\\.git($|\\.*)",

@@ -1,6 +1,11 @@
 // src/pages/projects/InsuranceBroker/index.tsx
+
 import PageLayout from "@/components/layout/PageLayout";
+import SEOPage from "@/components/common/SEOPage"; 
+import SEOJsonLD from "@/components/common/SEOJsonLD"; // ⭐ JSON-LD hinzugefügt
+
 import headerImg from "@/assets/images/projects/b2b2c/B2B2COptimization.jpg";
+
 import {
   BrokerBLUFSection,
   BrokerProcessSection,
@@ -22,9 +27,17 @@ export default function InsuranceBrokerDiscovery() {
       headerImage={headerImg}
       width="wide"
     >
+
+      {/* ⭐ SEO direkt nach PageLayout */}
+      <SEOPage page="project_insuranceBroker" />
+
+      {/* ⭐ Vollständiges JSON-LD für Live-Projektseite */}
+      <SEOJsonLD page="project_insuranceBroker" />
+
       <BrokerBLUFSection />
       <BrokerProcessSection />
       <BrokerImpactSection />
     </PageLayout>
   );
 }
+

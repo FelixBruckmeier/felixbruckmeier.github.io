@@ -1,5 +1,9 @@
 // src/pages/expertise/StrategicUXResearch/index.tsx
+
 import PageLayout from "@/components/layout/PageLayout";
+import SEOPage from "@/components/common/SEOPage"; 
+import SEOJsonLD from "@/components/common/SEOJsonLD"; // ⭐ JSON-LD ergänzt
+
 import headerImg from "@/assets/images/expertise/strategicuxresearch/strategicuxr.jpg";
 
 import {
@@ -12,8 +16,7 @@ import {
 /**
  * Strategic UX Research Page
  * ----------------------------------------------
- * - exakt gleiches Breiten-/Layout-Verhalten wie Home
- * - PageLayout liefert nur Hero + Spacing, keine Begrenzung
+ * - Gleiches Breiten-/Layout wie Home
  */
 export default function StrategicUXResearchPage() {
   return (
@@ -21,8 +24,15 @@ export default function StrategicUXResearchPage() {
       title="Strategic UX Research"
       intro="Turning UX Research from isolated insights into a strategic system that drives clarity, alignment, and confident decisions."
       headerImage={headerImg}
-      width="wide" // ✅ sorgt für denselben Container wie auf Home
+      width="wide"
     >
+
+      {/* ⭐ SEO direkt nach PageLayout */}
+      <SEOPage page="expertise_strategicUXResearch" />
+
+      {/* ⭐ JSON-LD strukturiere Daten */}
+      <SEOJsonLD page="expertise_strategicUXResearch" />
+
       <StrategicUXIntroSection />
       <StrategicUXFrameworkSection />
       <StrategicUXRITESection />

@@ -1,43 +1,63 @@
-import { useI18n } from "@/i18n";
+// src/pages/projects/ZooplusReOps/index.tsx
 
-const ZooplusReOps = () => {
-  const { t } = useI18n();
+import PageLayout from "@/components/layout/PageLayout";
+import SEOPage from "@/components/common/SEOPage";
+import { Helmet } from "react-helmet-async";
 
+/**
+ * ResearchOps & Agile UX – Work in Progress
+ * --------------------------------------------
+ * Diese Seite ist noch nicht final und wird nicht indexiert.
+ */
+export default function ZooplusReOpsPage() {
   return (
-    <div className="container-responsive py-16 space-y-12">
-      {/* Header */}
-      <header className="space-y-4">
-        <h1 className="text-4xl font-bold">Zooplus – ResearchOps</h1>
-        <p className="text-foreground max-w-3xl leading-relaxed">
-          {t("zooplusReops.intro", {
-            defaultValue:
-              "Bei Zooplus habe ich ResearchOps-Strukturen etabliert: von der Matrix zur Priorisierung bis hin zum Dashboard für Transparenz und Alignment.",
+    <PageLayout
+      title="ResearchOps & Agile UX"
+      intro="Establishing structures for scalable, efficient UX Research. (Work in progress)"
+      width="wide"
+    >
+      {/* ⭐ SEO – nicht indexieren */}
+      <SEOPage page="project_zooplusreops" noindex />
+
+      {/* ⭐ JSON-LD — WIP Case Study */}
+      <Helmet>
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "CaseStudy",
+            "name": "ResearchOps & Agile UX – Zooplus",
+            "headline": "ResearchOps & Agile UX – Work in Progress",
+            "description":
+              "Early-stage ResearchOps and Agile UX enablement work conducted at Zooplus. (Work in progress)",
+            "image":
+              "https://felixbruckmeier.github.io/assets/images/projects/reopsagile/ResearchOpsAgileUX.jpg",
+            "url": "https://felixbruckmeier.github.io/projects/zooplus-reops",
+            "author": {
+              "@type": "Person",
+              "name": "Felix Bruckmeier"
+            },
+            "isAccessibleForFree": false,
+            "publisher": {
+              "@type": "Organization",
+              "name": "Felix Bruckmeier UX Research",
+              "logo": {
+                "@type": "ImageObject",
+                "url": "https://felixbruckmeier.github.io/og-image.png"
+              }
+            },
+            "potentialAction": {
+              "@type": "ReadAction",
+              "target": "https://felixbruckmeier.github.io/projects/zooplus-reops"
+            }
           })}
-        </p>
-      </header>
+        </script>
+      </Helmet>
 
-      {/* Matrix (war früher mit Dummybild) */}
-      <section className="space-y-4">
-        <h2 className="text-2xl font-semibold">Impact/Effort Matrix</h2>
-        <p className="text-muted-foreground max-w-3xl">
-          Die Maßnahmen wurden anhand von Impact und Aufwand priorisiert und
-          transparent dokumentiert. So konnte das Team schnelle Quick Wins
-          identifizieren und langfristige Initiativen gezielt planen.
-        </p>
-      </section>
-
-      {/* Dashboard (war früher mit Dummybild) */}
-      <section className="space-y-4">
-        <h2 className="text-2xl font-semibold">Research Dashboard</h2>
-        <p className="text-muted-foreground max-w-3xl">
-          Mit einem zentralen Dashboard haben wir Research-Projekte sichtbar
-          gemacht, den Status getrackt und die Abstimmung mit Stakeholdern
-          erleichtert. Ergebnisse wurden dadurch nicht nur schneller geteilt,
-          sondern auch nachhaltiger genutzt.
-        </p>
-      </section>
-    </div>
+      {/* Minimaler Placeholder */}
+      <div className="py-24 text-center text-muted-foreground">
+        <h2 className="text-xl font-semibold mb-2">Work in progress</h2>
+        <p>More content will follow soon.</p>
+      </div>
+    </PageLayout>
   );
-};
-
-export default ZooplusReOps;
+}

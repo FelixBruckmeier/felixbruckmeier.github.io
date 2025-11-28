@@ -1,6 +1,11 @@
 // src/pages/expertise/ImpactMeasurement/index.tsx
+
 import PageLayout from "@/components/layout/PageLayout";
+import SEOPage from "@/components/common/SEOPage"; 
+import SEOJsonLD from "@/components/common/SEOJsonLD"; // ⭐ JSON-LD ergänzt
+
 import headerImg from "@/assets/images/expertise/impactmeasurement/impact.jpg";
+
 import {
   ImpactMeasurementIntroSection,
   ImpactMeasurementResearchSection,
@@ -20,8 +25,15 @@ export default function ImpactMeasurementPage() {
       title="Impact Measurement"
       intro="Measuring, proving, and communicating UX impact through metrics that connect user experience to business outcomes."
       headerImage={headerImg}
-      width="wide" // ✅ identisch zu Home
+      width="wide"
     >
+
+      {/* ⭐ SEO direkt nach PageLayout */}
+      <SEOPage page="expertise_impactMeasurement" />
+
+      {/* ⭐ JSON-LD für Google */}
+      <SEOJsonLD page="expertise_impactMeasurement" />
+
       <ImpactMeasurementIntroSection />
       <ImpactMeasurementResearchSection />
       <ImpactMeasurementUXSection />

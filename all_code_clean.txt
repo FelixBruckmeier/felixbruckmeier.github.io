@@ -697,6 +697,904 @@ export default function PageLayout({
 
 
 
+==== \src\components\sections\cv\CVIntroSection.tsx ====
+// src/components/sections/cv/CVIntroSection.tsx
+import { Section } from "@/components/ui";
+import SectionIntro from "@/components/ui/SectionIntro";
+
+export default function CVIntroSection() {
+  return (
+    <Section id="cv-intro" title="About this CV" spacing="lg">
+      <SectionIntro>
+        A concise overview of my professional journey, skills, and education —
+        highlighting how UX research, strategy, and leadership connect to
+        create measurable impact in products and teams.
+      </SectionIntro>
+      <SectionIntro full>
+        I combine a background in Human-Computer Interaction and organizational
+        psychology with hands-on leadership in UX Research, enabling
+        data-informed, human-centered decision making at scale.
+      </SectionIntro>
+    </Section>
+  );
+}
+
+
+==== \src\components\sections\cv\index.ts ====
+// src/components/sections/cv/index.ts
+export { default as CVIntroSection } from "./CVIntroSection";
+export { default as ProfessionalExperienceSection } from "./ProfessionalExperienceSection";
+// export { default as CoreCompetenciesSection } from "./CoreCompetenciesSection";
+
+
+==== \src\components\sections\cv\PersonalExperienceSection.tsx ====
+// src/components/sections/cv/PersonalExperienceSection.tsx
+import { Section, Tile } from "@/components/ui";
+import { Subtitle, Body } from "@/components/ui/Tokens";
+import { layout, spacing, colors } from "@/lib/tokens";
+import { cn } from "@/lib/utils";
+
+export default function PersonalExperienceSection() {
+  return (
+    <Section id="personal-experience" title="Personal Experience" spacing="lg">
+      <Body className={cn(colors.muted.text, spacing.mb8)}>
+        Complementary to my professional journey — education, expertise areas, and professional
+        communities that form the foundation of my UX leadership and practice.
+      </Body>
+
+      {/* Grid mit 2 Spalten */}
+      <div className={cn("grid sm:grid-cols-2 gap-6 items-start")}>
+        {/* 🧠 Expertise Areas (linke Spalte) */}
+        <div className="space-y-6">
+          <Tile variant="static" className={cn("flex flex-col text-left", spacing.p6)}>
+            <Subtitle className="mb-4">Expertise Areas</Subtitle>
+            <ul className={spacing.stackSm}>
+              <li>
+                <p className="font-medium text-foreground">Discovery Research</p>
+                <Body className={cn(colors.muted.text, "text-sm leading-snug")}>
+                  Contextual inquiries, interviews, field studies, and exploratory analysis.
+                </Body>
+              </li>
+              <li>
+                <p className="font-medium text-foreground">Design Evaluation</p>
+                <Body className={cn(colors.muted.text, "text-sm leading-snug")}>
+                  Usability testing, prototype validation, and continuous RITE testing.
+                </Body>
+              </li>
+              <li>
+                <p className="font-medium text-foreground">Quantitative & Mixed-Methods</p>
+                <Body className={cn(colors.muted.text, "text-sm leading-snug")}>
+                  Surveys, MaxDiff, Conjoint, A/B testing, analytics triangulation.
+                </Body>
+              </li>
+              <li>
+                <p className="font-medium text-foreground">Facilitation</p>
+                <Body className={cn(colors.muted.text, "text-sm leading-snug")}>
+                  Workshop design and moderation (Design Thinking, Journey Mapping, Alignment).
+                </Body>
+              </li>
+              <li>
+                <p className="font-medium text-foreground">ResearchOps & Enablement</p>
+                <Body className={cn(colors.muted.text, "text-sm leading-snug")}>
+                  Repository management, templates, stakeholder onboarding, and governance.
+                </Body>
+              </li>
+            </ul>
+          </Tile>
+
+          {/* 🔧 Tools */}
+          <Tile variant="static" className={cn("flex flex-col text-left", spacing.p6)}>
+            <Subtitle className="mb-4">Tools</Subtitle>
+            <ul className={spacing.stackSm}>
+              <li>
+                <p className="font-medium text-foreground">Research</p>
+                <Body className={cn(colors.muted.text, "text-sm leading-snug")}>
+                  Dovetail, Maze, Hotjar, Lookback, Typeform
+                </Body>
+              </li>
+              <li>
+                <p className="font-medium text-foreground">Design & Collaboration</p>
+                <Body className={cn(colors.muted.text, "text-sm leading-snug")}>
+                  Figma, Miro, Notion, Confluence
+                </Body>
+              </li>
+              <li>
+                <p className="font-medium text-foreground">Data & Analytics</p>
+                <Body className={cn(colors.muted.text, "text-sm leading-snug")}>
+                  SPSS, Excel, GA4, R (basic)
+                </Body>
+              </li>
+            </ul>
+          </Tile>
+
+          {/* 🌐 Memberships & Communities */}
+          <Tile variant="static" className={cn("flex flex-col text-left", spacing.p6)}>
+            <Subtitle className="mb-4">Memberships & Communities</Subtitle>
+            <ul className={spacing.stackSm}>
+              <li>
+                <p className="font-medium text-foreground">ResearchOps Community</p>
+                <Body className={cn(colors.muted.text, "text-sm leading-snug")}>
+                  Active member & contributor since 2022
+                </Body>
+              </li>
+              <li>
+                <p className="font-medium text-foreground">UX Leadership Blog</p>
+                <Body className={cn(colors.muted.text, "text-sm leading-snug")}>
+                  Member & guest contributor, ongoing exchange on leadership in UX research.
+                </Body>
+              </li>
+            </ul>
+          </Tile>
+        </div>
+
+        {/* 🎓 Education + 🚀 Professional Development (rechte Spalte) */}
+        <div className="space-y-6">
+          <Tile variant="static" className={cn("flex flex-col text-left", spacing.p6)}>
+            <Subtitle className="mb-4">Education</Subtitle>
+            <ul className={spacing.stackSm}>
+              <li>
+                <p className="font-medium text-foreground">
+                  M.A. Human-Computer Interaction
+                </p>
+                <Body className={cn(colors.muted.text, "text-sm leading-snug")}>
+                  LMU Munich – Psychology & Pedagogy
+                </Body>
+              </li>
+              <li>
+                <p className="font-medium text-foreground">
+                  B.A. Media & Communication
+                </p>
+                <Body className={cn(colors.muted.text, "text-sm leading-snug")}>
+                  University of Passau – UX & Communication Science
+                </Body>
+              </li>
+            </ul>
+          </Tile>
+
+          <Tile variant="static" className={cn("flex flex-col text-left", spacing.p6)}>
+            <Subtitle className="mb-4">Professional Development</Subtitle>
+            <ul className={spacing.stackSm}>
+              <li>
+                <p className="font-medium text-foreground">
+                  SAFe® Product Manager / Product Owner
+                </p>
+                <Body className={cn(colors.muted.text, "text-sm leading-snug")}>
+                  Scaled Agile Framework – Certification completed 2024
+                </Body>
+              </li>
+              <li>
+                <p className="font-medium text-foreground">
+                  UXQB CPUX-F (User Experience Foundation)
+                </p>
+                <Body className={cn(colors.muted.text, "text-sm leading-snug")}>
+                  Completed self-study of official UXQB curriculum.
+                </Body>
+              </li>
+            </ul>
+          </Tile>
+        </div>
+      </div>
+    </Section>
+  );
+}
+
+
+==== \src\components\sections\cv\ProfessionalExperienceSection.tsx ====
+import { Section } from "@/components/ui";
+import SectionIntro from "@/components/ui/SectionIntro";
+import CVPreview from "@/assets/visuals/cv/CVPreview";
+import Button from "@/components/ui/Button";
+import { Download } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { spacing } from "@/lib/tokens";
+
+export default function ProfessionalExperienceSection() {
+  return (
+    <Section
+      id="professional-experience"
+      title="Professional Experience"
+      spacing="lg"
+    >
+      <SectionIntro>
+        An overview of my professional path — leading UX research initiatives,
+        building ResearchOps systems, and driving evidence-based product decisions.
+      </SectionIntro>
+
+      <CVPreview hideCTA />
+
+      {/* === Download CV Button === */}
+      <div className={cn("flex justify-center", spacing.mt10)}>
+        <Button
+          variant="secondary"
+          size="lg"
+          href="/downloads/CV_Felix_Bruckmeier.pdf"
+          download="Felix_Bruckmeier_CV.pdf"
+        >
+          <Download className="h-5 w-5 mr-2" />
+          Download CV (PDF)
+        </Button>
+      </div>
+    </Section>
+  );
+}
+
+
+==== \src\components\sections\expertise\strategicuxresearch\index.ts ====
+export { default as StrategicUXIntroSection } from "./StrategicUXIntroSection";
+export { default as StrategicUXOKRSection } from "./StrategicUXOKRSection";
+export { default as StrategicUXFrameworkSection } from "./StrategicUXFrameworkSection";
+export { default as StrategicUXRITESection } from "./StrategicUXRITESection";
+
+
+
+==== \src\components\sections\expertise\strategicuxresearch\StrategicUXFrameworkSection.tsx ====
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Section } from "@/components/ui";
+import SectionIntro from "@/components/ui/SectionIntro";
+import { Subtitle, Body } from "@/components/ui/Tokens";
+import Button from "@/components/ui/Button";
+import { spacing, layout, radii, shadows } from "@/lib/tokens";
+import { cn } from "@/lib/utils";
+
+// Illustrationen
+import clarity from "@/assets/images/expertise/strategicuxresearch/1clarity.png";
+import questions from "@/assets/images/expertise/strategicuxresearch/2questions.png";
+import focus from "@/assets/images/expertise/strategicuxresearch/3focus.png";
+import methods from "@/assets/images/expertise/strategicuxresearch/4methods.png";
+import analysis from "@/assets/images/expertise/strategicuxresearch/5analysis.png";
+import integration from "@/assets/images/expertise/strategicuxresearch/6present.png";
+
+const story = [
+  {
+    title: "Clarity – Defining Purpose and Alignment",
+    subtitle: "Understanding why the research exists.",
+    text: "I start by clarifying why the research is needed and what decisions it should inform. This creates shared direction and prevents research from drifting into interesting but irrelevant areas.",
+    image: clarity,
+    quote: "“Without clarity, research lacks focus and impact.”",
+  },
+  {
+    title: "Questions – Turning Uncertainty into Focus",
+    subtitle: "From assumptions to direction.",
+    text: "I translate challenges and assumptions into clear research questions. This step turns uncertainty into structure and ensures that every data point collected supports a real decision.",
+    image: questions,
+    quote: "“If you don’t know your questions, your answers won’t matter.”",
+  },
+  {
+    title: "Refinement – Ensuring Relevance and Precision",
+    subtitle: "Focusing on what truly matters.",
+    text: "I refine and prioritize questions, define hypotheses, and decide which data is most valuable. Skipping this step often leads to research that is too broad or too shallow to produce actionable insights.",
+    image: focus,
+    quote: "“Focused research drives meaningful outcomes.”",
+  },
+  {
+    title: "Methods – Choosing the Right Tools",
+    subtitle: "Connecting questions to reality.",
+    text: "I select the most suitable methods — from interviews to usability tests or analytics — based on the refined questions. Using the wrong method can lead to misleading results and reduce trust in research.",
+    image: methods,
+    quote: "“The right method turns curiosity into credible evidence.”",
+  },
+  {
+    title: "Analysis & Synthesis – Turning Data into Insight",
+    subtitle: "Making sense of what we’ve learned.",
+    text: "I analyze and synthesize findings to uncover meaningful patterns and connections. Without synthesis, data stays fragmented and fails to inform design or strategy.",
+    image: analysis,
+    quote: "“Insight emerges when data meets interpretation.”",
+  },
+  {
+    title: "Integration – Making Research Actionable",
+    subtitle: "Ensuring impact beyond the report.",
+    text: "I integrate findings into product decisions through collaboration, workshops, and reports. Research only creates value when it influences outcomes — otherwise, even great insights fade away.",
+    image: integration,
+    quote: "“Research has value only when it changes what we do.”",
+  },
+];
+
+export default function StrategicUXFrameworkSection() {
+  const [index, setIndex] = useState(0);
+  const scene = story[index];
+
+  const next = () => setIndex((i) => (i < story.length - 1 ? i + 1 : 0));
+  const prev = () => setIndex((i) => (i > 0 ? i - 1 : story.length - 1));
+
+  return (
+    <Section id="framework" title="My Research Planning Framework — Creating Clarity" spacing="lg">
+      <SectionIntro>
+        Solid UX Research starts with the right questions.
+        My research planning framework, inspired by Erika Hall, helps teams move from assumptions
+        to focus — defining what decisions need evidence and how to generate it. This ensures every
+        study directly contributes to strategic intent.
+      </SectionIntro>
+
+      <div className={cn("flex flex-col items-center w-full", spacing.mtLg)}>
+        <div
+          className={cn(
+            "relative w-full flex flex-col md:flex-row md:items-center gap-8",
+            layout.container,
+            radii.xxl,
+            shadows.lg,
+            "pb-12 md:pb-0"
+          )}
+        >
+          {/* IMAGE */}
+          <div className="relative flex-1 w-full">
+            <AnimatePresence mode="wait">
+              <motion.img
+                key={scene.image}
+                src={scene.image}
+                alt={scene.title}
+                initial={{ opacity: 0, scale: 1.05 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.98 }}
+                transition={{ duration: 0.8 }}
+                className="w-full h-auto max-h-[65vh] object-contain rounded-2xl"
+              />
+            </AnimatePresence>
+
+            {/* Buttons unter dem Bild auf Mobile */}
+            <div className="flex justify-center gap-4 mt-4 md:hidden">
+              <Button variant="secondary" onClick={prev}>
+                ← Previous
+              </Button>
+              <Button variant="primary" onClick={next}>
+                Next →
+              </Button>
+            </div>
+          </div>
+
+          {/* TEXT */}
+          <motion.div
+            key={scene.title}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7 }}
+            className={cn("flex-1 text-left md:pl-8")}
+          >
+            <Subtitle>{`${index + 1}. ${scene.title}`}</Subtitle>
+            <Body className="italic text-[--color-muted] mb-2">{scene.subtitle}</Body>
+            <Body className="max-w-prose mb-4">{scene.text}</Body>
+            <Body className="italic text-[--color-foreground]">{scene.quote}</Body>
+          </motion.div>
+        </div>
+
+        {/* Buttons unter Text für Desktop */}
+        <div className="hidden md:flex justify-center gap-6 mt-10">
+          <Button variant="secondary" onClick={prev}>
+            ← Previous
+          </Button>
+          <Button variant="primary" onClick={next}>
+            Next →
+          </Button>
+        </div>
+      </div>
+    </Section>
+  );
+}
+
+
+==== \src\components\sections\expertise\strategicuxresearch\StrategicUXIntroSection.tsx ====
+import { Section } from "@/components/ui";
+import SectionIntro from "@/components/ui/SectionIntro";
+import { Tile } from "@/components/ui";
+import { Subtitle, Body } from "@/components/ui/Tokens";
+import { layout, spacing } from "@/lib/tokens";
+import { cn } from "@/lib/utils";
+
+/**
+ * Section: Strategic UX Research — Making UX Strategy Work in Practice
+ * Mit Icons im OKR-Stil (Emoji-basiert)
+ */
+export default function ValueOfStrategicUXResearch() {
+  const tiles = [
+    {
+      icon: "🧭",
+      title: "Planning Framework",
+      text: "Research creates value only when it answers the right questions. I apply structured planning frameworks that link business intent, hypotheses, and methods — ensuring focus before execution and clarity after.",
+    },
+    {
+      icon: "🔄",
+      title: "Adaptive Methods",
+      text: "Strategic research must fit different delivery models. From classic studies to agile loops, I tailor methods to context. Using the RITE process, for example, enables fast, iterative testing within agile environments.",
+    },
+    {
+      icon: "📊",
+      title: "Research OKRs as Business Link",
+      text: "Research OKRs connect everyday learning with company objectives. They turn insights into measurable progress and ensure UX Research contributes directly to strategic outcomes.",
+    },
+  ];
+
+  return (
+    <Section
+      id="value-research"
+      title="Strategic UX Research — Making UX Strategy Work in Practice"
+      spacing="lg"
+    >
+      {/* --- Storytelling Intro --- */}
+      <SectionIntro>
+        UX Strategy sets the vision — but it remains abstract until research
+        brings it to life. That’s when the real work begins, and it’s no
+        surprise that many organizations struggle to connect their strategy to
+        real user insight and continuous learning.
+        <br />
+        <br />
+        My approach to <strong>Strategic UX Research</strong> closes that gap.
+        It turns strategy into an operational practice — one that adapts to
+        different team setups, fuels iteration, and ties research outcomes
+        directly to business goals. I focus on three areas that make UX Strategy
+        truly work in practice.
+      </SectionIntro>
+
+      {/* --- Tiles with icons --- */}
+      <div className={cn(layout.gridCols3, spacing.gap6, spacing.mt12)}>
+        {tiles.map((item) => (
+          <Tile
+            key={item.title}
+            variant="static"
+            className={cn(
+              spacing.p6,
+              "flex flex-col justify-start text-left rounded-2xl shadow-sm"
+            )}
+          >
+            <div className="flex items-center gap-2 mb-2">
+              <span>{item.icon}</span>
+              <Subtitle>{item.title}</Subtitle>
+            </div>
+            <Body className="leading-relaxed">{item.text}</Body>
+          </Tile>
+        ))}
+      </div>
+    </Section>
+  );
+}
+
+
+==== \src\components\sections\expertise\strategicuxresearch\StrategicUXOKRSection.tsx ====
+// src/components/sections/strategicuxresearch/StrategicUXOKRSection.tsx
+import { Section } from "@/components/ui";
+import SectionIntro from "@/components/ui/SectionIntro";
+import Tile from "@/components/ui/Tile";
+import { Subtitle, Body } from "@/components/ui/Tokens";
+import { layout, spacing } from "@/lib/tokens";
+import { cn } from "@/lib/utils";
+
+/**
+ * Section: UX Research OKRs
+ * DS-konform — einheitliche Typografie, Abstände und Icon-Zeilenstruktur
+ */
+export default function StrategicUXOKRSection() {
+  const tiles = [
+    {
+      icon: "🧩",
+      level: "Level 1",
+      title: "Supports – Aligning with OKRs",
+      text: "UX Research aligns with existing company OKRs, validating assumptions and supporting ongoing initiatives.",
+    },
+    {
+      icon: "🎯",
+      level: "Level 2",
+      title: "Influences – Informing OKRs",
+      text: "Research insights begin to inform goal-setting and define measurable impact, bridging user value and business metrics.",
+    },
+    {
+      icon: "🚀",
+      level: "Level 3",
+      title: "Defines – Driving OKRs",
+      text: "UX Research drives strategic priorities. Objectives are grounded in user evidence and organizational learning.",
+    },
+  ];
+
+  return (
+    <Section
+      id="okr"
+      title="UX Research OKRs — Linking Research to Business Strategy"
+      spacing="lg"
+    >
+      {/* --- Storytelling Intro --- */}
+      <SectionIntro>
+        Strategic UX Research doesn’t end with insight — it connects learning to direction.
+        UX Research OKRs link research efforts directly to company strategy, ensuring that
+        what teams discover also shapes what the organization pursues.
+        <div className="my-6"></div>
+        Instead of existing as a side activity, research becomes part of how strategic priorities
+        are defined, measured, and evolved.
+        <div className="my-6"></div>
+        By aligning learning goals with business objectives, I turn UX Research into a steering
+        mechanism — one that helps organizations see user evidence not as validation, but as
+        orientation. At this level, research informs not just how we build, but why.
+        <div className="my-6"></div>
+        One might ask — isn’t that too good to be true?
+        <div className="my-6"></div>
+        And yes, UX as a leading force within business strategy doesn’t happen overnight.
+        It’s a gradual, sometimes rocky journey — one that’s best understood in levels:
+      </SectionIntro>
+
+      {/* --- Tile Grid --- */}
+      <div className={cn(layout.gridCols3, spacing.gap6, spacing.mt12)}>
+        {tiles.map((item) => (
+          <Tile key={item.title} variant="static" className="flex flex-col items-start">
+            <div className="flex items-center gap-2 mb-2">
+              <span>{item.icon}</span>
+              <Subtitle>{item.level}</Subtitle>
+            </div>
+            <Subtitle>{item.title}</Subtitle>
+            <Body className="leading-relaxed">{item.text}</Body>
+          </Tile>
+        ))}
+      </div>
+
+      {/* --- Outro Text --- */}
+      <div className={cn(spacing.mt16)}>
+        <Subtitle>From Alignment to Leadership</Subtitle>
+        <Body>
+          Having UX Research OKRs is good — but even better is when UX Research itself contributes
+          directly to defining company OKRs. That’s when research moves beyond validation to become
+          a strategic driver — ensuring that what the organization measures truly reflects what
+          users value.
+        </Body>
+      </div>
+    </Section>
+  );
+}
+
+
+==== \src\components\sections\expertise\strategicuxresearch\StrategicUXRITESection.tsx ====
+// src/components/sections/strategicuxresearch/StrategicUXRITESection.tsx
+import { Section } from "@/components/ui";
+import SectionIntro from "@/components/ui/SectionIntro";
+import Tile from "@/components/ui/Tile";
+import { Subtitle, Body } from "@/components/ui/Tokens";
+import { layout, spacing } from "@/lib/tokens";
+import { cn } from "@/lib/utils";
+import RITECycleChart from "@/assets/visuals/strategicuxresearch/RITECycleChart";
+
+/**
+ * Section: Rapid Iterative Testing & Evaluation (RITE)
+ * DS-konform — einheitliche Typografie, Spacing, Icons und Tile-Struktur
+ */
+export default function StrategicUXRITESection() {
+  const tiles = [
+    {
+      icon: "⚡",
+      title: "Speed – Iterating Immediately",
+      text: "Design changes are applied immediately — minimizing time between discovery and validation.",
+    },
+    {
+      icon: "🤝",
+      title: "Collaboration – Shared Observation",
+      text: "Researchers, designers, and developers observe together — fostering shared understanding and faster iteration.",
+    },
+    {
+      icon: "💡",
+      title: "Learning – Continuous Discovery",
+      text: "Each round builds insight and confidence, turning testing into a continuous learning process.",
+    },
+    {
+      icon: "🚀",
+      title: "Impact – Early Resolution",
+      text: "Usability issues are solved early, saving up to 60% of design and development time.",
+    },
+    {
+      icon: "🔄",
+      title: "Adaptability – Real-Time Feedback",
+      text: "Works even with incomplete requirements — feedback uncovers new needs early and reduces change requests.",
+    },
+    {
+      icon: "📣",
+      title: "Advocacy – Visible Research",
+      text: "Visible, team-based testing promotes UX awareness and strengthens research credibility across the organization.",
+    },
+  ];
+
+  return (
+    <Section id="rite" title="Rapid Iterative Testing & Evaluation (RITE)" spacing="lg">
+      <SectionIntro>
+        <strong>RITE</strong> is a pragmatic approach to usability testing that blends speed with
+        learning — making it particularly well-suited for Agile UX environments.
+        Instead of waiting until a study ends, teams iterate as soon as issues appear — often after
+        just a few participants. Each round feeds directly into the next, turning research into a
+        fast cycle of discovery, design, and validation.
+        <div className={spacing.mt6}></div>
+        In the context of Strategic UX Research, RITE operationalizes UX Strategy: it transforms
+        research from isolated checkpoints into a living feedback loop. This approach brings the
+        strategic principle of continuous learning to life — bridging the gap between discovery and
+        delivery through shared understanding and real-time improvement.
+      </SectionIntro>
+
+      {/* --- Animated RITE Cycle --- */}
+      <div className={cn("flex justify-center w-full", spacing.mt16, spacing.mb16)}>
+        <div className="w-full max-w-4xl flex justify-center">
+          <RITECycleChart />
+        </div>
+      </div>
+
+      {/* --- Key Benefits --- */}
+      <Subtitle>Key Benefits</Subtitle>
+
+      <div className={cn(layout.gridCols3, spacing.gap6, spacing.mt12)}>
+        {tiles.map((item) => (
+          <Tile key={item.title} variant="static" className="flex flex-col items-start">
+            <div className="flex items-center gap-2 mb-2">
+              <span>{item.icon}</span>
+              <Subtitle>{item.title}</Subtitle>
+            </div>
+            <Body className="leading-relaxed">{item.text}</Body>
+          </Tile>
+        ))}
+      </div>
+
+      {/* --- Critical Reflection --- */}
+      <div className={cn(spacing.mt16)}>
+        <Subtitle>Critical Reflection</Subtitle>
+        <Body>
+          RITE isn’t meant to deliver perfect data; it’s meant to drive progress. In areas like
+          healthcare, safety-critical systems, or regulated industries, strict methodological
+          control is essential — and RITE wouldn’t be the right choice. But in many organizations,
+          especially where UX Research is still evolving, it’s often more valuable to encourage
+          participation, curiosity, and shared ownership than to insist on perfection.
+          <br />
+          <br />
+          In my own RITE practice, I often mix and match fast methods — hallway or guerrilla
+          testing, AI-based eye-tracking analysis, expert reviews, and more — sometimes even running
+          them in parallel. This keeps the process quick and adaptive, while still ensuring that
+          insights stay grounded in real user behavior.
+          <br />
+          <br />
+          Putting too much emphasis on rigor too early can make UX Research seem theoretical or
+          rigid. Used with awareness, RITE helps strike the right balance between learning fast and
+          learning well.
+        </Body>
+      </div>
+    </Section>
+  );
+}
+
+
+==== \src\components\sections\expertise\uxstrategy\DiscoveryDelivery.tsx ====
+import { Section } from "@/components/ui";
+import SectionIntro from "@/components/ui/SectionIntro";
+import { layout, spacing } from "@/lib/tokens";
+import { cn } from "@/lib/utils";
+import ResearchInPD from "@/assets/visuals/uxstrategy/ResearchinPD";
+
+/**
+ * Section: From Discovery to Delivery
+ * Storytelling-Version mit Refinement Funnel Erklärung
+ */
+export default function DiscoveryDelivery() {
+  return (
+    <Section
+      id="discovery-delivery"
+      title="2. From Discovery to Delivery — Turning UX Research into a Continuous, Structured Practice"
+      spacing="lg"
+    >
+      <SectionIntro>
+        User-centered development is not a static process — it’s a{" "}
+        <strong>continuous cycle of learning</strong>.
+        Questions, ideas, and assumptions constantly emerge from business goals,
+        design sprints, analytics dashboards, and user feedback. Without structure,
+        these inputs compete for attention, and the connection between research,
+        design, and data begins to fragment.
+        <br />
+        <br />
+        That’s why I designed the{" "}
+        <strong>UX Research Refinement Funnel</strong> — a framework to{" "}
+        <strong>turn demand into direction</strong>.
+      </SectionIntro>
+
+      <div className={cn("w-full flex justify-center", spacing.mt12, spacing.mb16)}>
+        <div className="w-full max-w-6xl">
+          <ResearchInPD />
+        </div>
+      </div>
+
+      <SectionIntro>
+        New opportunities, hypotheses, and signals from ongoing{" "}
+        <strong>User Research</strong>, <strong>Lean UX</strong>, and{" "}
+        <strong>Data Analytics</strong> flow into a shared funnel. There, they’re
+        refined, prioritized, and guided into the right process stream:
+        <br />
+        <br />
+        <ul className="list-disc list-inside">
+          <li>
+            <strong>Discovery → User Research:</strong> exploring user needs, pain
+            points, and early concepts.
+          </li>
+          <li>
+            <strong>Prototyping → Lean UX:</strong> designing, testing, and iterating
+            solutions in short, agile cycles.
+          </li>
+          <li>
+            <strong>Optimization → Data Analytics:</strong> validating live
+            performance and uncovering next improvement opportunities.
+          </li>
+        </ul>
+        <br />
+        Each stream connects back into the others, creating a{" "}
+        <strong>continuous loop of learning</strong>, where insights feed progress —
+        and progress generates new questions.
+        <br />
+        <br />
+        But building such a system isn’t a solo effort.
+        I see it as a <strong>team exercise</strong> — bringing researchers, designers,
+        product managers, and analysts together to establish a shared rhythm of
+        learning. My role as a <strong>UX Researcher</strong> is to{" "}
+        <strong>enable teams</strong> to structure their work this way: to connect
+        discovery with delivery, to integrate UX into agile practice, and to make
+        sure that evidence and empathy drive every product decision.
+      </SectionIntro>
+    </Section>
+  );
+}
+
+
+==== \src\components\sections\expertise\uxstrategy\index.ts ====
+export { default as VisionAlignment } from "./VisionAlignment";
+export { default as DiscoveryDelivery } from "./DiscoveryDelivery";
+export { default as Prioritization } from "./Prioritization";
+export { default as ValueOfUXStrategy } from "./ValueOfUXStrategy";
+
+
+==== \src\components\sections\expertise\uxstrategy\Prioritization.tsx ====
+import { Section } from "@/components/ui";
+import SectionIntro from "@/components/ui/SectionIntro";
+import { layout, spacing } from "@/lib/tokens";
+import { cn } from "@/lib/utils";
+
+// ✅ nutzt deine vorhandene Matrix-Komponente
+import ResearchPrioritizationMatrix from "@/assets/visuals/uxstrategy/ResearchPrioritizationMatrix";
+
+/**
+ * Section: UX Research Prioritization
+ * Storytelling + klare Framework-Einführung
+ */
+export default function Prioritization() {
+  return (
+    <Section
+      id="research-prioritization"
+      title="3. UX Research Prioritization"
+      spacing="lg"
+    >
+      {/* --- Intro text --- */}
+      <SectionIntro>
+        Resource efficiency is a fundamental principle of sound business.
+        No team has infinite time — which makes it essential to know{" "}
+        <strong>when to go deep and when to move fast</strong>.
+        <br />
+        <br />
+        I help teams prioritize their research by balancing effort and impact —
+        deciding where deep exploration creates the most value and where quick
+        validation is enough.
+        <br />
+        <br />
+        This framework maps two key dimensions that guide every research decision:
+        <br />
+        <br />
+        • <strong>Problem clarity</strong> — how well we understand what users need
+        <br />
+        • <strong>Risk of getting it wrong</strong> — how costly a wrong decision
+        would be
+        <br />
+        <br />
+        By combining these two perspectives, teams can match each research activity
+        to its context — finding the right balance between{" "}
+        <strong>impact, time, and confidence</strong>.
+      </SectionIntro>
+
+      {/* --- Centered matrix visual --- */}
+      <div className={cn("flex justify-center mt-12 mb-8")}>
+        <div className="w-full max-w-none flex justify-center">
+          <ResearchPrioritizationMatrix />
+        </div>
+      </div>
+    </Section>
+  );
+}
+
+
+
+==== \src\components\sections\expertise\uxstrategy\ValueOfUXStrategy.tsx ====
+import { Section } from "@/components/ui";
+import SectionIntro from "@/components/ui/SectionIntro";
+import { Tile } from "@/components/ui";
+import { Subtitle, Body } from "@/components/ui/Tokens";
+import { layout, spacing } from "@/lib/tokens";
+import { cn } from "@/lib/utils";
+
+/**
+ * Section: The Purpose of UX Strategy (Storytelling + concise Tiles version)
+ * Mit Icons im OKR-Stil
+ */
+export default function ValueOfUXStrategy() {
+  const tiles = [
+    {
+      icon: "🎯",
+      title: "Shared Vision",
+      text: "Aligning user needs, business goals, and technical feasibility to create a common understanding of value and direction.",
+    },
+    {
+      icon: "🔍",
+      title: "Continuous Research",
+      text: "Building systems that connect discovery, prototyping, and optimization — making learning a constant driver of better decisions.",
+    },
+    {
+      icon: "⚖️",
+      title: "Setting Priorities",
+      text: "Helping teams decide where deep exploration is needed and where quick feedback is enough — balancing impact, time, and confidence.",
+    },
+  ];
+
+  return (
+    <Section id="value" title="The Purpose of UX Strategy" spacing="lg">
+      {/* --- Storytelling Intro --- */}
+     <SectionIntro>
+  Many teams work with great dedication — yet without a shared direction. Research,
+  design, and business often move in parallel: insights fade, decisions rely on
+  assumptions, and speed replaces focus. <strong>For most UX professionals, that’s nothing new.</strong>
+  <br /><br />
+  But this is exactly where a strong <strong>UX strategy</strong> makes the difference. It
+  brings these strands together — clarifying where teams are heading, what they’re
+  learning, and how research creates impact. <strong>My work focuses on three levers that turn
+  activity into alignment.</strong>
+</SectionIntro>
+
+
+      {/* --- Tiles --- */}
+      <div className={cn(layout.gridCols3, spacing.gap6, spacing.mt12)}>
+        {tiles.map((item) => (
+          <Tile
+            key={item.title}
+            variant="static"
+            className={cn(
+              spacing.p6,
+              "flex flex-col justify-start text-left rounded-2xl shadow-sm"
+            )}
+          >
+            <div className="flex items-center gap-2 mb-2">
+              <span>{item.icon}</span>
+              <Subtitle>{item.title}</Subtitle>
+            </div>
+            <Body className="leading-relaxed">{item.text}</Body>
+          </Tile>
+        ))}
+      </div>
+    </Section>
+  );
+}
+
+
+==== \src\components\sections\expertise\uxstrategy\VisionAlignment.tsx ====
+import { Section } from "@/components/ui";
+import SectionIntro from "@/components/ui/SectionIntro";
+import { spacing } from "@/lib/tokens";
+import { cn } from "@/lib/utils";
+import VennDiagram from "@/assets/visuals/uxstrategy/VennDiagram";
+
+export default function VisionAlignment() {
+  return (
+    <Section id="vision-alignment" title="1. Vision & Alignment — Creating the Big Picture" spacing="lg">
+     <SectionIntro>
+  Every strategy begins with alignment. But alignment doesn’t just happen — it’s
+  built through <strong>communication</strong>.
+  <br /><br />
+  In most companies, <strong>business</strong> and <strong>technology</strong> speak their own
+  languages, while the <strong>user’s voice</strong> often goes unheard.
+  <strong> As UX professionals, we become that voice</strong> — translating needs into
+  stories that make sense to both sides.
+  <br /><br />
+  And when those stories connect, something powerful happens:
+  <strong> teams start moving in the same direction</strong>, guided by a shared,
+  <strong> user-centered vision.</strong>
+</SectionIntro>
+
+
+      <div className={cn("flex justify-center", spacing.mt12)}>
+        <VennDiagram />
+      </div>
+    </Section>
+  );
+}
+
+
 ==== \src\components\sections\home\AboutSection.tsx ====
 import Section from "@/components/ui/Section";
 import FadeIn from "@/components/ui/FadeIn";
@@ -705,9 +1603,8 @@ import Button from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
 import { colors } from "@/lib/tokens";
 
-// ✅ Nutzt dein vorhandenes Bild:
-// C:/Users/felix/Documents/GitHub/felixbruckmeier.github.io/src/assets/images/projects/uxportfolio/cover.png
-import profileImg from "@/assets/images/projects/uxportfolio/cover.png";
+// ✅ Richtiges Profilbild laden
+import profileImg from "@/assets/images/home/pb.png";
 
 export default function AboutSection() {
   return (
@@ -793,9 +1690,10 @@ export default function AboutSection() {
               src={profileImg}
               alt="Portrait of Felix Bruckmeier"
               className={cn(
-                "rounded-2xl shadow-lg mx-auto w-[70%] md:w-[80%] object-cover aspect-[4/5]",
-                colors.border
-              )}
+  "rounded-2xl shadow-lg mx-auto w-[70%] md:w-[80%] object-cover object-[center_20%] aspect-[4/5]",
+  colors.border
+)}
+
             />
           </FadeIn>
         </div>
@@ -1380,6 +2278,2921 @@ export default function ProjectsSection() {
               )}
             </div>
           </FadeIn>
+        ))}
+      </div>
+    </Section>
+  );
+}
+
+
+==== \src\components\sections\projects\CarInsurance\CarInsuranceBLUFSection.tsx ====
+// src/components/sections/projects/CarInsurance/CarInsuranceBLUFSection.tsx
+import { Section } from "@/components/ui";
+import SectionIntro from "@/components/ui/SectionIntro";
+import { Tile } from "@/components/ui";
+import { Subtitle, Body } from "@/components/ui/Tokens";
+import { layout, spacing } from "@/lib/tokens";
+import { cn } from "@/lib/utils";
+
+export function CarInsuranceBLUFSection() {
+  const impact = [
+    {
+      value: "−40%",
+      label: "Friction in key steps",
+      desc: "Measured through rapid usability iterations",
+    },
+    {
+      value: "↑ Confidence",
+      label: "Advisor sentiment",
+      desc: "Qualitative shifts post-rollout",
+    },
+    {
+      value: "Reusable",
+      label: "Design patterns",
+      desc: "Guidelines adopted across modules",
+    },
+  ];
+
+  return (
+    <Section id="bluf" spacing="xl" title="Turning apologies into confidence">
+      <SectionIntro>
+        ADAC’s in-branch advisors use a digital tool to guide customers through complex car insurance options.
+        Over the years, that tool had grown heavy — slowing down conversations and eroding trust.
+        <br />
+        <br />
+        We redesigned the experience around clarity, timing, and reassurance — enabling advisors to focus on their customers, not their tools.
+        <br />
+        <br />
+        <strong>My Role:</strong> UX Research — conducted <strong>contextual interviews</strong> in simulated advisory
+        sessions, facilitated <strong>journey mapping</strong> and <strong>Grounded Theory synthesis</strong>, and led
+        <strong> stakeholder workshops</strong> to align design and business priorities.
+      </SectionIntro>
+
+      <div className={cn(layout.gridCols3, spacing.gap6, spacing.mt10)}>
+        {impact.map((item, i) => (
+          <Tile key={i} variant="static">
+            <Subtitle>{item.value}</Subtitle>
+            <Body className="font-medium">{item.label}</Body>
+            <Body className="text-sm text-muted-foreground mt-1">
+              {item.desc}
+            </Body>
+          </Tile>
+        ))}
+      </div>
+    </Section>
+  );
+}
+
+
+==== \src\components\sections\projects\CarInsurance\CarInsuranceImpactSection.tsx ====
+import { Section } from "@/components/ui";
+import SectionIntro from "@/components/ui/SectionIntro";
+import { Tile } from "@/components/ui";
+import { Subtitle, Body } from "@/components/ui/Tokens";
+import { layout, spacing } from "@/lib/tokens";
+import { cn } from "@/lib/utils";
+
+export function CarInsuranceImpactSection() {
+  const impact = [
+    {
+      title: "−40%",
+      desc: "Less friction in critical steps — measured via RITE usability rounds.",
+    },
+    {
+      title: "↑ Confidence",
+      desc: "Qualitative uplift in advisor assurance and user satisfaction.",
+    },
+    {
+      title: "Scalable System",
+      desc: "Reusable design patterns implemented across insurance modules.",
+    },
+  ];
+
+  return (
+    <Section id="impact" title="Impact Snapshot" spacing="xl">
+      <SectionIntro>
+        Through rapid iterations and close collaboration with advisors, we improved speed, trust,
+        and conversation quality — setting a new design standard for insurance consultations.
+      </SectionIntro>
+
+      <div className={cn(layout.gridCols3, spacing.gap6, spacing.mt12)}>
+        {impact.map((item, i) => (
+          <Tile key={i} variant="static">
+            <Subtitle>{item.title}</Subtitle>
+            <Body className="text-muted-foreground mt-2">{item.desc}</Body>
+          </Tile>
+        ))}
+      </div>
+    </Section>
+  );
+}
+
+
+==== \src\components\sections\projects\CarInsurance\CarInsuranceProcessSection.tsx ====
+// src/components/sections/projects/CarInsurance/CarInsuranceProcessSection.tsx
+import { Section } from "@/components/ui";
+import SectionIntro from "@/components/ui/SectionIntro";
+import { SectionHeading, Body, Subtitle } from "@/components/ui/Tokens";
+import FadeIn from "@/components/ui/FadeIn";
+import { Tile } from "@/components/ui";
+import { spacing, layout } from "@/lib/tokens";
+import { cn } from "@/lib/utils";
+import { Eye, Zap, Compass, ShieldAlert, ThumbsUp } from "lucide-react";
+
+// 📸 Image imports
+import discoveryImg from "@/assets/images/projects/carinsurance/discovery.png";
+import mappingImg from "@/assets/images/projects/carinsurance/mapping.jpg";
+import journeyImg from "@/assets/images/projects/carinsurance/journey.png";
+import wsImg from "@/assets/images/projects/carinsurance/ws.png";
+import protoImg from "@/assets/images/projects/carinsurance/proto.png";
+import testingImg from "@/assets/images/projects/carinsurance/testing.png";
+import deliveryImg from "@/assets/images/projects/carinsurance/Untitled.png";
+
+export default function CarInsuranceProcessSection() {
+  const steps = [
+    {
+      title: "Discovery",
+      caption: "Contextual interviews at ADAC branches",
+      desc: (
+        <>
+          We conducted <strong>contextual interviews</strong> with advisors, simulating
+          <strong> real customer consultations</strong> in a <strong>role-play setting</strong>.
+          This method allowed us to understand how <strong>time pressure</strong>, <strong>unclear input fields</strong>,
+          and <strong>system constraints</strong> influenced their decision-making and communication style.
+          Rather than simply observing, we engaged in authentic advisory dialogues to uncover
+          <strong> workflow interruptions</strong>, <strong>redundant inputs</strong>, and missing
+          <strong> contextual guidance</strong> that caused hesitation and frustration. These insights became the
+          foundation for understanding where <strong>friction originates</strong> and how <strong>interface clarity</strong>
+          directly affects <strong>advisor confidence</strong> and <strong>customer trust</strong>.
+        </>
+      ),
+      img: discoveryImg,
+    },
+    {
+      title: "Define",
+      caption: "Grounded Theory & Affinity Mapping",
+      desc: (
+        <>
+          Using <b>Grounded Theory</b>, we synthesized hundreds of field notes into recurring <b>themes</b> and 
+          <b> behavioral patterns</b>. Through intensive <b>affinity mapping</b>, we grouped findings by frequency and impact, 
+          identifying clusters around <b>system usability</b>, <b>data entry complexity</b>, and <b>visual overload</b>. 
+          These patterns revealed deep structural issues: inconsistent terminology, lack of validation, and inefficient navigation. 
+          The resulting framework allowed us to create <b>clear problem statements</b>, prioritize <b>design opportunities</b>, 
+          and focus on high-impact areas that would most improve <b>advisor efficiency</b> and <b>user satisfaction</b>.
+        </>
+      ),
+      img: mappingImg,
+    },
+    {
+      title: "Journey Mapping",
+      caption: "Understanding the counseling flow",
+      desc: (
+        <>
+          By creating a detailed <b>journey map</b>, we visualized the full counseling process from both the advisor and customer 
+          perspectives. This map exposed <b>emotional highs</b>, <b>decision bottlenecks</b>, and moments of <b>disengagement</b>. 
+          It highlighted where <b>trust was built or lost</b>, and where <b>information density</b> overwhelmed the user. 
+          Through this visualization, we identified <b>key UX leverage points</b> — phases where design interventions could 
+          most effectively enhance clarity and flow. The journey map became a <b>shared alignment tool</b>, uniting design and 
+          business stakeholders around common priorities.
+        </>
+      ),
+      img: journeyImg,
+    },
+    {
+      title: "Stakeholder Workshop",
+      caption: "Building shared understanding",
+      desc: (
+        <>
+          We organized a <b>collaborative workshop</b> with stakeholders from <b>business, product, and IT</b>, creating an open space 
+          to review user insights and discuss their strategic relevance. By translating research data into <b>visual pain-point maps</b>, 
+          we helped decision-makers connect user struggles to measurable outcomes. The workshop produced <b>consensus on priorities</b>, 
+          established <b>shared ownership</b> of the problems, and laid the groundwork for <b>design principles</b> rooted in both 
+          user empathy and business goals. This alignment ensured that the next design phase started with <b>clarity and momentum</b>.
+        </>
+      ),
+      img: wsImg,
+    },
+    {
+      title: "Design Principles",
+      caption: "Guiding clarity and confidence",
+      desc: (
+        <>
+          From synthesis, we derived five <b>Design Principles</b> that guided every subsequent iteration.
+        </>
+      ),
+    },
+    {
+      title: "Prototype",
+      caption: "Bringing principles to life",
+      desc: (
+        <>
+          Guided by the principles, we built an <b>interactive prototype</b> focusing on <b>adaptive field logic</b>, 
+          <b> contextual help</b>, and a <b>modern visual hierarchy</b>. Each design decision aimed to reduce 
+          <b> cognitive load</b> while maintaining task context. Real advisors participated in early validation sessions, 
+          helping us refine <b>microinteractions</b>, <b>error handling</b>, and <b>visual cues</b>. The prototype evolved 
+          through several quick iterations, resulting in an interface that was both <b>efficient</b> and 
+          <b> intuitively learnable</b> for first-time users.
+        </>
+      ),
+      img: protoImg,
+    },
+    {
+      title: "User Testing",
+      caption: "Validating flow & confidence",
+      desc: (
+        <>
+          Using the <b>RITE method</b>, we conducted rapid usability tests with live advisors to validate flow and comprehension. 
+          Each iteration targeted specific <b>interaction bottlenecks</b>, measuring changes in <b>task clarity</b>, 
+          <b> completion speed</b>, and <b>error recovery</b>. By combining <b>qualitative feedback</b> with performance metrics, 
+          we iteratively optimized navigation, visual hierarchy, and feedback timing. Over several rounds, user <b>confidence</b> 
+          and <b>satisfaction</b> increased significantly, proving the value of <b>continuous testing and iteration</b>.
+        </>
+      ),
+      img: testingImg,
+    },
+    {
+      title: "Delivery",
+      caption: "From prototype to production",
+      desc: (
+        <>
+          The final step translated the validated prototype into a <b>scalable UI system</b> and <b>pattern library</b>, ensuring 
+          <b> consistency</b> and <b>accessibility</b> across all advisor tools. Close collaboration with developers guaranteed 
+          <b> pixel-level fidelity</b> and adherence to <b>UX standards</b>. By embedding the new components into the design system, 
+          the project not only improved advisor experience but also provided <b>long-term efficiency</b> for ongoing development 
+          and maintenance — creating a solid foundation for <b>future enhancements</b>.
+        </>
+      ),
+      img: deliveryImg,
+    },
+  ];
+
+  const PRINCIPLES = [
+    { title: "Design for clarity", desc: "Reduce ambiguity to build trust. Make inputs, outcomes, and next steps unmistakably clear.", icon: Eye },
+    { title: "Design for momentum", desc: "Streamline tasks without sacrificing understanding. Keep users moving with less cognitive load.", icon: Zap },
+    { title: "Guide with structure", desc: "Expose progress, context, and what’s next. Orientation should be effortless at any point.", icon: Compass },
+    { title: "Prevent accidental drop-offs", desc: "Make exits intentional and recovery obvious. Confirm risky actions and support graceful undo.", icon: ShieldAlert },
+    { title: "Empower confidence", desc: "Use plain language, timely feedback, and validation so advisors feel assured and in control.", icon: ThumbsUp },
+  ];
+
+  return (
+    <Section id="process" title="From Field Insights to Rollout" spacing="lg">
+      <SectionIntro>
+        A Design Thinking journey — from observation to measurable impact.
+        Each phase provided actionable insights that shaped the next iteration.
+      </SectionIntro>
+
+      <div className={cn("flex flex-col space-y-40 md:space-y-52", spacing.mt12)}>
+        {steps.map((step, i) => (
+          <div key={i} className={cn("flex flex-col items-center text-center gap-14 md:gap-20")}>
+            <FadeIn delay={i * 0.1}>
+              <div
+                className={cn(
+                  "w-full md:w-3/4 flex flex-col md:flex-row items-start text-left gap-10",
+                  i % 2 === 1 && "md:flex-row-reverse"
+                )}
+              >
+                <div className="w-full md:w-1/2 space-y-4">
+                  <SectionHeading>{step.title}</SectionHeading>
+                  <Body>{step.desc}</Body>
+                </div>
+                <div className="w-full md:w-1/2 flex items-center justify-center">
+                  <p className="italic text-sm opacity-70">{step.caption}</p>
+                </div>
+              </div>
+            </FadeIn>
+
+            {step.title === "Design Principles" ? (
+              <FadeIn delay={0.2}>
+                <div className={cn(layout.gridCols3, spacing.gap6, "w-full md:w-5/6")}>
+                  {PRINCIPLES.map((p, j) => {
+                    const Icon = p.icon;
+                    return (
+                      <Tile key={j} variant="static">
+                        <div className="flex items-center gap-2 mb-2">
+                          <Icon className="w-5 h-5 text-blue-500 dark:text-blue-400" />
+                          <Subtitle>{p.title}</Subtitle>
+                        </div>
+                        <Body className="text-muted-foreground">{p.desc}</Body>
+                      </Tile>
+                    );
+                  })}
+                </div>
+              </FadeIn>
+            ) : (
+              step.img && (
+                <FadeIn delay={0.2}>
+                  <div className="w-full md:w-5/6 flex justify-center">
+                    <img
+                      src={step.img}
+                      alt={step.title}
+                      className="w-full h-auto max-w-5xl rounded-2xl shadow-md object-contain"
+                      loading="lazy"
+                    />
+                  </div>
+                </FadeIn>
+              )
+            )}
+          </div>
+        ))}
+      </div>
+    </Section>
+  );
+}
+
+
+==== \src\components\sections\projects\CarInsurance\index.ts ====
+// =========================================
+// 🚗 ADAC Car Insurance Project Sections
+// =========================================
+
+export { CarInsuranceBLUFSection } from "./CarInsuranceBLUFSection";
+export { CarInsuranceImpactSection } from "./CarInsuranceImpactSection";
+
+// 🧩 Hauptprozessabschnitt (Discovery → Delivery)
+export { default as CarInsuranceProcessSection } from "./CarInsuranceProcessSection";
+
+
+==== \src\components\sections\projects\kanostrategy\index.ts ====
+// =========================================
+// 📊 KANO Strategy Project Sections
+// =========================================
+
+export { KanoBLUFSection } from "./KanoBLUFSection";
+export { KanoImpactSection } from "./KanoImpactSection";
+export { default as KanoProcessSection } from "./KanoProcessSection";
+
+
+==== \src\components\sections\projects\kanostrategy\KanoBLUFSection.tsx ====
+// src/components/sections/projects/kanostrategy/KanoBLUFSection.tsx
+import { Section } from "@/components/ui";
+import SectionIntro from "@/components/ui/SectionIntro";
+import { Tile } from "@/components/ui";
+import { Subtitle, Body } from "@/components/ui/Tokens";
+import { layout, spacing } from "@/lib/tokens";
+import { cn } from "@/lib/utils";
+
+export function KanoBLUFSection() {
+  const impact = [
+    {
+      value: "16",
+      label: "Features evaluated",
+      desc: "Across multiple service categories",
+    },
+    {
+      value: "↑ Confidence",
+      label: "Stakeholder alignment",
+      desc: "Shared understanding of user value and priorities",
+    },
+    {
+      value: "→ Roadmap",
+      label: "Strategy outcome",
+      desc: "Directly linked to product prioritization",
+    },
+  ];
+
+  return (
+    <Section id="bluf" spacing="xl" title="From ideas to impact — the Kano Strategy">
+      <SectionIntro>
+        The Product Team wanted to strengthen customer loyalty through the app by introducing new
+        services and features. However, from the vast pool of ideas, it was unclear which would truly
+        matter from the customer's perspective.
+        <br />
+        <br />
+        The Kano model ranks these features based on their satisfaction-driving potential — providing
+        a framework that is both <strong>pragmatic and robust</strong>. The resulting prioritization,
+        grounded in <strong>Kano categories</strong>, translates directly into a
+        <strong> customer-centric Product Roadmap</strong>.
+        <br />
+        <br />
+        <strong>My Role:</strong> UX Research &amp; Strategy — led the stakeholder workshop, designed
+        the Kano survey, analyzed quantitative results, and delivered a
+        <strong> customer-driven Product Roadmap</strong>.
+      </SectionIntro>
+
+      <div className={cn(layout.gridCols3, spacing.gap6, spacing.mt10)}>
+        {impact.map((item, i) => (
+          <Tile key={i} variant="static">
+            <Subtitle>{item.value}</Subtitle>
+            <Body className="font-medium">{item.label}</Body>
+            <Body className="text-sm text-muted-foreground mt-1">{item.desc}</Body>
+          </Tile>
+        ))}
+      </div>
+    </Section>
+  );
+}
+
+
+==== \src\components\sections\projects\kanostrategy\KanoImpactSection.tsx ====
+import { Section } from "@/components/ui";
+import SectionIntro from "@/components/ui/SectionIntro";
+import { Tile } from "@/components/ui";
+import { Subtitle, Body } from "@/components/ui/Tokens";
+import { layout, spacing } from "@/lib/tokens";
+import { cn } from "@/lib/utils";
+
+export function KanoImpactSection() {
+  const impact = [
+    {
+      title: "M > O > A > I",
+      desc: "A clear, evidence-based hierarchy for feature prioritization.",
+    },
+    {
+      title: "Customer-Centric Roadmap",
+      desc: "Shifted internal discussion from assumptions to measurable user value.",
+    },
+    {
+      title: "Strategic Confidence",
+      desc: "Data-driven clarity guided investment decisions and alignment.",
+    },
+  ];
+
+  return (
+    <Section id="impact" title="Impact Snapshot" spacing="xl">
+      <SectionIntro>
+        The Kano study delivered a quantifiable foundation for product strategy —
+        identifying which features truly matter to users, and which don’t.
+      </SectionIntro>
+
+      <div className={cn(layout.gridCols3, spacing.gap6, spacing.mt12)}>
+        {impact.map((item, i) => (
+          <Tile key={i} variant="static">
+            <Subtitle>{item.title}</Subtitle>
+            <Body className="text-muted-foreground mt-2">{item.desc}</Body>
+          </Tile>
+        ))}
+      </div>
+    </Section>
+  );
+}
+
+
+==== \src\components\sections\projects\kanostrategy\KanoProcessSection.tsx ====
+// src/components/sections/projects/kanostrategy/KanoProcessSection.tsx
+import { Section } from "@/components/ui";
+import SectionIntro from "@/components/ui/SectionIntro";
+import { SectionHeading, Body } from "@/components/ui/Tokens";
+import FadeIn from "@/components/ui/FadeIn";
+import { spacing, layout } from "@/lib/tokens";
+import { cn } from "@/lib/utils";
+
+// 🖼️ Bilder & GIFs
+import shwsImg from "@/assets/images/projects/kanostrategy/shws.png";
+import kanoTechniqueImg from "@/assets/images/projects/kanostrategy/kanotechnik.png";
+import analysisImg from "@/assets/images/projects/kanostrategy/analysis.png";
+import resultsImg from "@/assets/images/projects/kanostrategy/results.png";
+
+// 🎞️ Alle Prototyping-GIFs
+import gif1 from "@/assets/images/projects/kanostrategy/A56UN3iVPsZzo6kW.gif";
+import gif2 from "@/assets/images/projects/kanostrategy/c0R243Jnkygm1KGf.gif";
+import gif3 from "@/assets/images/projects/kanostrategy/DYD9Z208m0c0QhPr.gif";
+import gif4 from "@/assets/images/projects/kanostrategy/eC5IqXMpwn1uyeWQ.gif";
+import gif5 from "@/assets/images/projects/kanostrategy/fTFVmLhQ4e7tR6uR.gif";
+import gif6 from "@/assets/images/projects/kanostrategy/kDBRa28BbXdwTi8F.gif";
+import gif7 from "@/assets/images/projects/kanostrategy/NrwM2G5C5puInENi.gif";
+import gif8 from "@/assets/images/projects/kanostrategy/PuqbnZ6OMY5NWXKZ.gif";
+import gif9 from "@/assets/images/projects/kanostrategy/wAqf8jxzWy6I7hwZ.gif";
+import gif10 from "@/assets/images/projects/kanostrategy/Xi7pzlYCdiztglmX.gif";
+
+export default function KanoProcessSection() {
+  const PROTOTYPE_GIFS = [gif1, gif2, gif3, gif4, gif5, gif6, gif7, gif8, gif9, gif10];
+
+  return (
+    <Section id="process" title="From Stakeholder Alignment to Kano-Backed Strategy" spacing="lg">
+      <SectionIntro>
+        A focused, evidence-based journey — from <strong>shared understanding</strong> to{" "}
+        <strong>data-backed prioritization</strong>.  
+        Each phase contributed to <strong>strategic clarity</strong> and a{" "}
+        <strong>customer-centered roadmap</strong>.
+      </SectionIntro>
+
+      <div className={cn("flex flex-col space-y-40 md:space-y-52", spacing.mt12)}>
+        {/* 1) Stakeholder Workshop */}
+        <div className={cn("flex flex-col items-center text-center gap-14 md:gap-20")}>
+          <FadeIn>
+            <div className={cn("w-full md:w-3/4 flex flex-col md:flex-row items-start text-left gap-10")}>
+              <div className="w-full md:w-1/2 space-y-4">
+                <SectionHeading>Stakeholder Workshop</SectionHeading>
+                <Body>
+                  We kicked off with a <strong>collaborative workshop</strong> to collect ideas,
+                  cluster similar solutions, and align on a shortlist of{" "}
+                  <strong>~16 key services and features</strong> for evaluation.  
+                  The session fostered <strong>shared ownership</strong> of the challenge and
+                  clarified <strong>success criteria</strong> across business, product, and UX.
+                </Body>
+              </div>
+              <div className="w-full md:w-1/2 flex items-center justify-center">
+                <p className="italic text-sm opacity-70">Co-creation for clarity & focus</p>
+              </div>
+            </div>
+          </FadeIn>
+
+          <FadeIn delay={0.15}>
+            <div className="w-full md:w-5/6 flex justify-center">
+              <img
+                src={shwsImg}
+                alt="Stakeholder workshop board"
+                className="w-full h-auto max-w-5xl rounded-2xl shadow-md object-contain"
+                loading="lazy"
+              />
+            </div>
+          </FadeIn>
+        </div>
+
+        {/* 2) Prototyping & Design */}
+        <div className={cn("flex flex-col items-center text-center gap-14 md:gap-20")}>
+          <FadeIn>
+            <div
+              className={cn(
+                "w-full md:w-3/4 flex flex-col md:flex-row-reverse items-start text-left gap-10"
+              )}
+            >
+              <div className="w-full md:w-1/2 space-y-4">
+                <SectionHeading>Prototyping & Design</SectionHeading>
+                <Body>
+                  To ensure respondents understood each idea equally, we created{" "}
+                  <strong>lightweight animated prototypes</strong>.  
+                  Short <strong>GIFs visualized value and interaction</strong>, reducing ambiguity
+                  and making evaluation faster and more reliable.
+                </Body>
+              </div>
+              <div className="w-full md:w-1/2 flex items-center justify-center">
+                <p className="italic text-sm opacity-70">Lightweight demos for crisp evaluation</p>
+              </div>
+            </div>
+          </FadeIn>
+
+          <FadeIn delay={0.15}>
+            <div className={cn("w-full md:w-5/6", layout.fullWidth)}>
+              <div className={cn("grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3", spacing.gap6)}>
+                {PROTOTYPE_GIFS.map((src, idx) => (
+                  <div
+                    key={idx}
+                    className="rounded-2xl overflow-hidden border border-border bg-muted/30"
+                  >
+                    <img
+                      src={src}
+                      alt={`Prototype demo ${idx + 1}`}
+                      className="w-full h-auto object-cover"
+                      loading="lazy"
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </FadeIn>
+        </div>
+
+        {/* 3) Kano-specific Survey */}
+        <div className={cn("flex flex-col items-center text-center gap-14 md:gap-20")}>
+          <FadeIn>
+            <div
+              className={cn("w-full md:w-3/4 flex flex-col md:flex-row items-start text-left gap-10")}
+            >
+              <div className="w-full md:w-1/2 space-y-4">
+                <SectionHeading>Kano-specific Survey</SectionHeading>
+                <Body>
+                  Each feature was rated using the paired Kano questions — one for{" "}
+                  <strong>presence</strong> and one for <strong>absence</strong>.  
+                  This revealed whether users saw it as{" "}
+                  <strong>Must-be (M)</strong>, <strong>Performance (O)</strong>,{" "}
+                  <strong>Attractive (A)</strong>, or <strong>Indifferent (I)</strong>.  
+                  The result: a <strong>quantitative hierarchy of satisfaction impact</strong> —
+                  the foundation for strategic prioritization.
+                </Body>
+              </div>
+              <div className="w-full md:w-1/2 flex items-center justify-center">
+                <p className="italic text-sm opacity-70">Paired questions for clear categorization</p>
+              </div>
+            </div>
+          </FadeIn>
+
+          <FadeIn delay={0.15}>
+            <div className="w-full md:w-5/6 flex justify-center">
+              <img
+                src={kanoTechniqueImg}
+                alt="Kano survey technique and feature list example"
+                className="w-full h-auto max-w-5xl rounded-2xl shadow-md object-contain"
+                loading="lazy"
+              />
+            </div>
+          </FadeIn>
+        </div>
+
+        {/* 4) Data Analysis & Scoring */}
+        <div className={cn("flex flex-col items-center text-center gap-14 md:gap-20")}>
+          <FadeIn>
+            <div
+              className={cn(
+                "w-full md:w-3/4 flex flex-col md:flex-row-reverse items-start text-left gap-10"
+              )}
+            >
+              <div className="w-full md:w-1/2 space-y-4">
+                <SectionHeading>Data Analysis & Scoring</SectionHeading>
+                <Body>
+                  We applied both <strong>discrete</strong> and <strong>continuous</strong> scoring
+                  to triangulate results.  
+                  This produced a <strong>more reliable categorization</strong> and highlighted
+                  potential <strong>trade-offs between satisfaction and risk</strong>.
+                </Body>
+              </div>
+              <div className="w-full md:w-1/2 flex items-center justify-center">
+                <p className="italic text-sm opacity-70">Discrete × continuous for confidence</p>
+              </div>
+            </div>
+          </FadeIn>
+
+          <FadeIn delay={0.15}>
+            <div className="w-full md:w-5/6 flex justify-center">
+              <img
+                src={analysisImg}
+                alt="Comparative analysis of Kano scoring methods"
+                className="w-full h-auto max-w-5xl rounded-2xl shadow-md object-contain"
+                loading="lazy"
+              />
+            </div>
+          </FadeIn>
+        </div>
+
+        {/* 5) Results */}
+        <div className={cn("flex flex-col items-center text-center gap-14 md:gap-20")}>
+          <FadeIn>
+            <div
+              className={cn("w-full md:w-3/4 flex flex-col md:flex-row items-start text-left gap-10")}
+            >
+              <div className="w-full md:w-1/2 space-y-4">
+                <SectionHeading>Results</SectionHeading>
+                <Body>
+                  The final visualization positioned features across Kano quadrants, clarifying where
+                  to invest first:  
+                  focus on <strong>Must-be</strong> essentials, drive growth with{" "}
+                  <strong>Performance</strong> factors, and add{" "}
+                  <strong>Attractive</strong> delighters to stand out.  
+                  <strong>Indifferent</strong> items were de-prioritized — a{" "}
+                  <strong>clear, data-grounded strategy</strong>.
+                </Body>
+              </div>
+              <div className="w-full md:w-1/2 flex items-center justify-center">
+                <p className="italic text-sm opacity-70">Prioritize M &gt; O &gt; A &gt; I</p>
+              </div>
+            </div>
+          </FadeIn>
+
+          <FadeIn delay={0.15}>
+            <div className="w-full md:w-5/6 flex justify-center">
+              <img
+                src={resultsImg}
+                alt="Kano results with features in quadrants"
+                className="w-full h-auto max-w-5xl rounded-2xl shadow-md object-contain"
+                loading="lazy"
+              />
+            </div>
+          </FadeIn>
+        </div>
+      </div>
+    </Section>
+  );
+}
+
+
+==== \src\components\sections\projects\swisslife\brokerBLUFSection.tsx ====
+// src/components/sections/projects/InsuranceBroker/brokerBLUFSection.tsx
+import { Section } from "@/components/ui";
+import SectionIntro from "@/components/ui/SectionIntro";
+import { Tile } from "@/components/ui";
+import { Subtitle, Body } from "@/components/ui/Tokens";
+import { layout, spacing } from "@/lib/tokens";
+import { cn } from "@/lib/utils";
+
+export function BrokerBLUFSection() {
+  const highlights = [
+    {
+      value: "Advisor Journey",
+      label: "Mapped process",
+      desc: "Visualized the full advisory process — from discovery to closing, focusing on trust, timing, and hand-offs to shape the product strategy.",
+    },
+    {
+      value: "11 Insights",
+      label: "Grounded Theory clusters",
+      desc: "Extracted needs, motivations, and pain points based on contextual fieldwork following grounded theory techniques.",
+    },
+    {
+      value: "Prioritized",
+      label: "Usage requirements",
+      desc: "Ranked list of broker-critical needs, defining what to address first to unlock efficiency and adoption in the following roadmap.",
+    },
+  ];
+
+  return (
+    <Section id="bluf" spacing="xl" title="From Fragmentation to Flow">
+      <SectionIntro>
+        Insurance brokers navigate complex advisory workflows shaped by personal trust, fragmented tools, and client-specific routines.
+        <br />
+        <br />
+        Our goal was to uncover how digital solutions can meaningfully support these analog-heavy processes without disrupting the human connection at their core.
+        <br />
+        <br />
+        <strong>My Role:</strong> UX Research — conducted <strong>contextual interviews</strong> and <strong>field observations</strong>, facilitated <strong>Grounded Theory synthesis</strong>, and prioritized broker needs to inform design and strategy.
+      </SectionIntro>
+
+      <div className={cn(layout.gridCols3, spacing.gap6, spacing.mt10)}>
+        {highlights.map((item, i) => (
+          <Tile key={i} variant="static">
+            <Subtitle>{item.value}</Subtitle>
+            <Body className="font-medium">{item.label}</Body>
+            <Body className="text-sm text-muted-foreground mt-1">
+              {item.desc}
+            </Body>
+          </Tile>
+        ))}
+      </div>
+    </Section>
+  );
+}
+
+export default BrokerBLUFSection;
+
+
+==== \src\components\sections\projects\swisslife\brokerImpactSection.tsx ====
+// src/components/sections/projects/InsuranceBroker/brokerImpactSection.tsx
+import { Section } from "@/components/ui";
+import SectionIntro from "@/components/ui/SectionIntro";
+import { Tile } from "@/components/ui";
+import { Subtitle, Body } from "@/components/ui/Tokens";
+import { layout, spacing } from "@/lib/tokens";
+import { cn } from "@/lib/utils";
+
+export default function BrokerImpactSection() {
+  const wins = [
+    {
+      k: "Clarity at decision points",
+      d: "Eligibility, prerequisites, and ‘what’s next’ clarified where trust is at stake.",
+    },
+    {
+      k: "Less duplicate inputs",
+      d: "Lean path for recurring tasks; data reuse guided by broker flow.",
+    },
+    {
+      k: "Common language",
+      d: "Terminology aligned to how brokers explain risk, value, and fit.",
+    },
+  ];
+
+  return (
+    <Section id="impact" spacing="lg" title="Impact & what changed">
+      <SectionIntro>
+        The discovery didn’t stop at insights — it changed decisions. We turned broker-validated
+        needs into delivery guardrails that keep teams aligned while they ship.
+      </SectionIntro>
+
+      <div className={cn(layout.gridCols3, spacing.gap6, spacing.mt10)}>
+        {wins.map((w, i) => (
+          <Tile key={i} variant="static">
+            <Subtitle>{w.k}</Subtitle>
+            <Body className="text-muted-foreground mt-1">{w.d}</Body>
+          </Tile>
+        ))}
+      </div>
+    </Section>
+  );
+}
+
+
+
+==== \src\components\sections\projects\swisslife\brokerProcessSection.tsx ====
+// src/components/sections/projects/InsuranceBroker/brokerProcessSection.tsx
+import { Section } from "@/components/ui";
+import SectionIntro from "@/components/ui/SectionIntro";
+import { SectionHeading, Body } from "@/components/ui/Tokens";
+import FadeIn from "@/components/ui/FadeIn";
+import { spacing, layout } from "@/lib/tokens";
+import { cn } from "@/lib/utils";
+
+// 📸 Images
+import wallImg from "@/assets/images/projects/b2b2c/analyewall.png";
+import artefact1Img from "@/assets/images/projects/b2b2c/artefakt1.png";
+import artefact2Img from "@/assets/images/projects/b2b2c/artefakt2.png";
+import journeyImg from "@/assets/images/projects/b2b2c/beratungsjourney.png";
+import locationsImg from "@/assets/images/projects/b2b2c/locations.png";
+import needsImg from "@/assets/images/projects/b2b2c/nutzungsanforderungen.png";
+// ✅ Neu: Discussion-Guide-Bild
+import dgImg from "@/assets/images/projects/b2b2c/dg.png";
+
+export default function BrokerProcessSection() {
+  const steps = [
+    {
+      title: "Contextual Interviews",
+      caption: "Real advisory conversations in broker environments",
+      desc: (
+        <>
+          We conducted <strong>contextual interviews</strong> with brokers in their daily
+          environments, focusing on <strong>how tools, timings, and terms</strong> shape
+          the advisory flow. Instead of abstract opinions, we captured the
+          <strong> live constraints</strong> and the <strong>language</strong> brokers
+          actually use to explain products and value.
+        </>
+      ),
+      img: locationsImg,
+    },
+
+    // ✅ Eingefügter Schritt (nur dieser Block ist neu)
+    {
+      title: "Discussion Guide (before synthesis)",
+      caption: "Structured prompts to probe needs, language, and constraints",
+      desc: (
+        <>
+          We prepared a <strong>discussion guide</strong> to consistently explore
+          <strong> needs</strong>, <strong>motivations</strong>, and <strong>pain points</strong>
+          across interviews — ensuring comparable depth while leaving room for contextual probing.
+        </>
+      ),
+      img: dgImg,
+    },
+
+    {
+      title: "Synthesis (Grounded Theory)",
+      caption: "From notes to themes, from themes to opportunity areas",
+      desc: (
+        <>
+          We coded and clustered observations into <strong>recurring themes</strong>:
+          context gaps, hand-off friction, data duplication, and unclear eligibility cues.
+          The outcome was an <strong>opportunity map</strong> that ranked where clarity and
+          confidence could be improved first.
+        </>
+      ),
+      img: wallImg,
+    },
+    {
+      title: "Journey Mapping",
+      caption: "Advisor–customer journey with trust & timing markers",
+      desc: (
+        <>
+          We mapped the <strong>end-to-end advisory journey</strong> — first contact,
+          scoping, product exploration, decision, and closing — highlighting where
+          <strong> trust is gained or lost</strong>. The map exposed
+          <strong> decision bottlenecks</strong> and where context must be surfaced just-in-time.
+        </>
+      ),
+      img: journeyImg,
+    },
+    {
+      title: "Broker Needs & Constraints",
+      caption: "What must be true for smooth advisory sessions",
+      desc: (
+        <>
+          We distilled <strong>broker-critical needs</strong>: transparent prerequisites,
+          <strong> one-source-of-truth inputs</strong>, and language aligned to how brokers
+          explain risk and value. This became the baseline for scoping content and UI changes.
+        </>
+      ),
+      img: needsImg,
+    },
+    {
+      title: "Artifacts & Decision Support",
+      caption: "Visual models that scale alignment",
+      desc: (
+        <>
+          To move from research to action, we packaged outputs into
+          <strong> actionable artifacts</strong>: problem statements, risk/clarity matrix,
+          and decision guardrails. These keep design and business aligned in delivery.
+        </>
+      ),
+      img: artefact1Img,
+    },
+    {
+      title: "Prioritization & Next Steps",
+      caption: "High-impact fixes first; scalable later",
+      desc: (
+        <>
+          We prioritized opportunities by <strong>broker impact × implementation effort</strong>.
+          Near-term: unify prerequisites & eligibility language; reduce duplicate inputs.
+          Mid-term: embed <strong>contextual cues</strong> and <strong>explainers</strong> at decision points.
+        </>
+      ),
+      img: artefact2Img,
+    },
+  ];
+
+  return (
+    <Section id="process" title="From field insight to actionable change" spacing="lg">
+      <SectionIntro>
+        A discovery stream designed to turn real advisory constraints into a shared,
+        prioritized roadmap — so brokers can focus on people, not on fighting their tools.
+      </SectionIntro>
+
+      <div className={cn("flex flex-col items-center space-y-40 md:space-y-52 text-center", spacing.mt12)}>
+        {steps.map((step, i) => (
+          <div key={i} className="flex flex-col items-center text-center gap-14 md:gap-20 w-full md:w-5/6">
+            <FadeIn delay={i * 0.1}>
+              <div
+                className={cn(
+                  "flex flex-col md:flex-row items-start text-left gap-10",
+                  i % 2 === 1 && "md:flex-row-reverse"
+                )}
+              >
+                <div className="w-full md:w-1/2 space-y-4">
+                  <SectionHeading>{step.title}</SectionHeading>
+                  <Body>{step.desc}</Body>
+                </div>
+                <div className="w-full md:w-1/2 flex items-center justify-center">
+                  <p className="italic text-sm opacity-70">{step.caption}</p>
+                </div>
+              </div>
+            </FadeIn>
+
+            {step.img && (
+              <FadeIn delay={0.2}>
+                <div className="w-full md:w-5/6 flex justify-center">
+                  <img
+                    src={step.img}
+                    alt={step.title}
+                    className="w-full h-auto max-w-5xl rounded-2xl shadow-md object-contain"
+                    loading="lazy"
+                  />
+                </div>
+              </FadeIn>
+            )}
+          </div>
+        ))}
+      </div>
+    </Section>
+  );
+}
+
+
+==== \src\components\sections\projects\swisslife\index.ts ====
+// src/components/sections/projects/InsuranceBroker/index.ts
+export { default as BrokerBLUFSection } from "./brokerBLUFSection";
+export { default as BrokerProcessSection } from "./brokerProcessSection";
+export { default as BrokerImpactSection } from "./brokerImpactSection";
+
+
+==== \src\components\sections\projects\UXPortfolio\index.ts ====
+// src/components/sections/projects/UXPortfolio/index.ts
+export { UXPortfolioBLUFSection } from "./UXPortfolioBLUFSection";
+export { UXPortfolioProcessSection } from "./UXPortfolioProcessSection";
+export { UXPortfolioDesignSystemSection } from "./UXPortfolioDesignSystemSection";
+export { UXPortfolioImpactSection } from "./UXPortfolioImpactSection";
+
+
+==== \src\components\sections\projects\UXPortfolio\UXPortfolioBLUFSection.tsx ====
+// src/components/sections/projects/UXPortfolio/UXPortfolioBLUFSection.tsx
+import Section from "@/components/ui/Section";
+import SectionIntro from "@/components/ui/SectionIntro";
+import Tile from "@/components/ui/Tile";
+import { Subtitle, Body, TagText } from "@/components/ui/Tokens";
+import { colors, spacing } from "@/lib/tokens";
+
+const TAGS = [
+  "Design System",
+  "UX Research Portfolio",
+  "Self-Initiated",
+  "React + Vite",
+  "Tailwind v4",
+];
+
+const FACTS = [
+  { label: "Role", value: "UX Research Lead, Designer & Frontend" },
+  { label: "Scope", value: "End-to-end portfolio & design system" },
+  { label: "Timeframe", value: "Several iterations over multiple weeks" },
+  { label: "Stack", value: "React, TypeScript, Vite, Tailwind v4" },
+];
+
+export function UXPortfolioBLUFSection() {
+  return (
+    <Section
+      id="ux-portfolio-bluf"
+      title="BLUF — A portfolio that behaves like a product"
+      spacing="lg"
+    >
+      <div className="grid gap-10 lg:grid-cols-[minmax(0,2fr)_minmax(0,1.1fr)] items-start">
+        {/* LEFT: Story & Key points */}
+        <div className="space-y-8">
+          <SectionIntro>
+            This portfolio is not just a website – it behaves like a product:
+            it has a clear strategy, an opinionated information architecture,
+            and a reusable design system. The goal: show how I think about UX
+            Research, leadership, and system design by how the site is built,
+            not only by what it says.
+          </SectionIntro>
+
+          <div className="grid gap-6 md:grid-cols-2">
+            <Tile variant="static">
+              <Subtitle>Design goals</Subtitle>
+              <Body className={colors.muted.text}>
+                <ul className="list-disc pl-5 space-y-1">
+                  <li>Make my research & leadership focus obvious in seconds</li>
+                  <li>Focus on clarity and narrative, not visual noise</li>
+                  <li>Be fast, accessible, and easy to extend</li>
+                </ul>
+              </Body>
+            </Tile>
+
+            <Tile variant="static">
+              <Subtitle>System goals</Subtitle>
+              <Body className={colors.muted.text}>
+                <ul className="list-disc pl-5 space-y-1">
+                  <li>Encapsulate layout & typography into tokens</li>
+                  <li>Use sections as storytelling building blocks</li>
+                  <li>Make adding new projects “hostile to inconsistency”</li>
+                </ul>
+              </Body>
+            </Tile>
+          </div>
+
+          <Tile variant="static">
+            <Subtitle>Why this matters</Subtitle>
+            <Body className={colors.muted.text}>
+              Hiring managers and design leaders don’t just read case studies –
+              they read how you structure complexity. This portfolio is designed
+              to communicate my thinking through content, structure, and code:
+              <strong> one coherent story across UX strategy, research practice,
+              and implementation.</strong>
+            </Body>
+          </Tile>
+        </div>
+
+        {/* RIGHT: Tags + Facts */}
+        <aside className="space-y-6">
+          <Tile variant="static" className="space-y-3">
+            <Subtitle>Project in one sentence</Subtitle>
+            <Body className={colors.muted.text}>
+              A UX research portfolio built as a small product: opinionated
+              navigation, a consistent design system, and maintainable content
+              structures that scale with new projects and expertise areas.
+            </Body>
+          </Tile>
+
+          <Tile variant="static" className="space-y-3">
+            <Subtitle>Context</Subtitle>
+            <Body className={colors.muted.text}>
+              Self-initiated portfolio project to showcase how I design,
+              structure, and operationalize UX Research – not only in content,
+              but also in the underlying system and implementation.
+            </Body>
+          </Tile>
+
+          <Tile variant="static" className="space-y-4">
+            <Subtitle>Tags</Subtitle>
+            <div className="flex flex-wrap gap-2">
+              {TAGS.map((tag) => (
+                <span
+                  key={tag}
+                  className="inline-flex items-center rounded-full bg-muted px-3 py-1"
+                >
+                  <TagText>{tag}</TagText>
+                </span>
+              ))}
+            </div>
+          </Tile>
+
+          <Tile variant="static" className="space-y-3">
+            <Subtitle>At a glance</Subtitle>
+            <dl className="grid grid-cols-1 gap-2">
+              {FACTS.map((fact) => (
+                <div key={fact.label} className="flex justify-between gap-4">
+                  <dt className="text-sm text-muted-foreground">
+                    {fact.label}
+                  </dt>
+                  <dd className="text-sm text-foreground text-right">
+                    {fact.value}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </Tile>
+        </aside>
+      </div>
+    </Section>
+  );
+}
+
+
+==== \src\components\sections\projects\UXPortfolio\UXPortfolioDesignSystemSection.tsx ====
+// src/components/sections/projects/UXPortfolio/UXPortfolioDesignSystemSection.tsx
+import Section from "@/components/ui/Section";
+import SectionIntro from "@/components/ui/SectionIntro";
+import Tile from "@/components/ui/Tile";
+
+// ❗ FIX: Code entfernt – existiert nicht in Tokens.tsx
+import { SectionHeading, Subtitle, Body } from "@/components/ui/Tokens";
+
+import { colors, spacing, layout } from "@/lib/tokens";
+
+export function UXPortfolioDesignSystemSection() {
+  return (
+    <Section
+      id="ux-portfolio-design-system"
+      title="Design system — small but opinionated"
+      spacing="lg"
+      borderTop
+    >
+      <SectionIntro>
+        The system is intentionally small. Instead of hundreds of components, it
+        defines a few strong primitives that encode layout, hierarchy, and
+        rhythm: <strong>tokens</strong> for visual decisions and{" "}
+        <strong>Section-level components</strong> for narrative structure.
+        Everything else is composed from these.
+      </SectionIntro>
+
+      <div className="space-y-12">
+        {/* 1. Tokens */}
+        <div className="grid gap-8 lg:grid-cols-3 items-start">
+          <div className="lg:col-span-1">
+            <SectionHeading>1. Tokens.ts</SectionHeading>
+            <Body className={colors.muted.text}>
+              The <code>tokens.ts</code> file centralises the visual language:
+              colors, typography scales, spacing, radii, and hover behaviours.
+              It acts as a bridge between Tailwind utilities and design intent.
+            </Body>
+          </div>
+          <div className="lg:col-span-2 grid gap-6 md:grid-cols-2">
+            <Tile variant="static">
+              <Subtitle>Colors</Subtitle>
+              <Body className={colors.muted.text}>
+                <ul className="list-disc pl-5 space-y-1">
+                  <li>
+                    <code>colors.background</code>, <code>colors.primary</code>,{" "}
+                    <code>colors.accent</code> map to CSS variables in{" "}
+                    <code>index.css</code>.
+                  </li>
+                  <li>
+                    Notion-like color set in{" "}
+                    <code>palette.notion</code> for tags, badges, and charts.
+                  </li>
+                  <li>
+                    Dark mode handled purely via class and CSS variables –
+                    components just consume tokens.
+                  </li>
+                </ul>
+              </Body>
+            </Tile>
+
+            <Tile variant="static">
+              <Subtitle>Typography & spacing</Subtitle>
+              <Body className={colors.muted.text}>
+                <ul className="list-disc pl-5 space-y-1">
+                  <li>
+                    <code>typography.hero</code>,{" "}
+                    <code>sectionTitle</code>, <code>body</code>,{" "}
+                    <code>small</code> define scale & leading.
+                  </li>
+                  <li>
+                    <code>sectionSpacing</code> and <code>spacing.*</code> keep
+                    vertical rhythm consistent across pages.
+                  </li>
+                  <li>
+                    Layout helpers (e.g.{" "}
+                    <code>layout.containerDynamic</code>) avoid ad-hoc
+                    max-widths scattered in components.
+                  </li>
+                </ul>
+              </Body>
+            </Tile>
+          </div>
+        </div>
+
+        {/* 2. Layout primitives */}
+        <div className="grid gap-8 lg:grid-cols-3 items-start">
+          <div className="lg:col-span-1">
+            <SectionHeading>2. Layout primitives</SectionHeading>
+            <Body className={colors.muted.text}>
+              Layout components like <code>PageLayout</code> and{" "}
+              <code>Section</code> encode how content should breathe. They
+              remove layout decisions from case study content, so each project
+              focuses on story instead of CSS.
+            </Body>
+          </div>
+          <div className="lg:col-span-2 grid gap-6 md:grid-cols-2">
+            <Tile variant="static">
+              <Subtitle>PageLayout</Subtitle>
+              <Body className={colors.muted.text}>
+                <ul className="list-disc pl-5 space-y-1">
+                  <li>Optional hero with background image + overlay</li>
+                  <li>
+                    Consistent spacing between sections via{" "}
+                    <code>sectionSpacing.lg</code>
+                  </li>
+                  <li>
+                    Content width not hard-coded – each <code>Section</code>{" "}
+                    decides whether it’s full-width or constrained
+                  </li>
+                </ul>
+              </Body>
+            </Tile>
+
+            <Tile variant="static">
+              <Subtitle>Section & SectionIntro</Subtitle>
+              <Body className={colors.muted.text}>
+                <ul className="list-disc pl-5 space-y-1">
+                  <li>
+                    <code>&lt;Section&gt;</code> standardises container width,
+                    padding, border options, and scroll offset for anchors.
+                  </li>
+                  <li>
+                    <code>SectionIntro</code> provides intro copy with proper
+                    width and typographic style.
+                  </li>
+                  <li>
+                    All project content is built as combinations of these
+                    primitives.
+                  </li>
+                </ul>
+              </Body>
+            </Tile>
+          </div>
+        </div>
+
+        {/* 3. UI elements */}
+        <div className="grid gap-8 lg:grid-cols-3 items-start">
+          <div className="lg:col-span-1">
+            <SectionHeading>3. UI elements</SectionHeading>
+            <Body className={colors.muted.text}>
+              Components in <code>components/ui</code> are intentionally small
+              and composable. They cover just enough to express hierarchy,
+              emphasis, and relationships without becoming heavy.
+            </Body>
+          </div>
+
+          <div className="lg:col-span-2 grid gap-6 md:grid-cols-2">
+            <Tile variant="static">
+              <Subtitle>Tiles, Tags, Badges</Subtitle>
+              <Body className={colors.muted.text}>
+                <ul className="list-disc pl-5 space-y-1">
+                  <li>
+                    <code>Tile</code> handles surface style & hover behaviour.
+                  </li>
+                  <li>
+                    <code>Tag</code> + <code>Badge</code> use Notion palette for
+                    semantic meaning.
+                  </li>
+                  <li>Used to denote methods, roles, and themes.</li>
+                </ul>
+              </Body>
+            </Tile>
+
+            <Tile variant="static">
+              <Subtitle>Typography components</Subtitle>
+              <Body className={colors.muted.text}>
+                <ul className="list-disc pl-5 space-y-1">
+                  <li>
+                    <code>H1</code>, <code>SectionHeading</code>,{" "}
+                    <code>Body</code>, <code>Small</code>, <code>Quote</code>{" "}
+                    wrap token typography.
+                  </li>
+                  <li>
+                    Refactoring type scale becomes a single change in{" "}
+                    <code>tokens.ts</code>.
+                  </li>
+                </ul>
+              </Body>
+            </Tile>
+          </div>
+        </div>
+
+        {/* 4. Behaviour & theming */}
+        <div className="grid gap-8 lg:grid-cols-3 items-start">
+          <div className="lg:col-span-1">
+            <SectionHeading>4. Behaviour & theming</SectionHeading>
+            <Body className={colors.muted.text}>
+              Behaviour lives in lightweight hooks. Dark mode and scroll handling
+              are treated as system-level concerns.
+            </Body>
+          </div>
+
+          <div className="lg:col-span-2 grid gap-6 md:grid-cols-2">
+            <Tile variant="static">
+              <Subtitle>ThemeToggle & dark mode</Subtitle>
+              <Body className={colors.muted.text}>
+                <ul className="list-disc pl-5 space-y-1">
+                  <li>Theme stored in localStorage.</li>
+                  <li>Dark mode uses CSS variables.</li>
+                  <li>Images slightly darkened for contrast.</li>
+                </ul>
+              </Body>
+            </Tile>
+
+            <Tile variant="static">
+              <Subtitle>Navigation & scrolling</Subtitle>
+              <Body className={colors.muted.text}>
+                <ul className="list-disc pl-5 space-y-1">
+                  <li>
+                    Navbar tracks active section via IntersectionObserver.
+                  </li>
+                  <li>Hash navigation respects fixed header via scroll-margin.</li>
+                  <li>Smooth scrolling for anchors.</li>
+                </ul>
+              </Body>
+            </Tile>
+          </div>
+        </div>
+      </div>
+    </Section>
+  );
+}
+
+
+==== \src\components\sections\projects\UXPortfolio\UXPortfolioImpactSection.tsx ====
+// src/components/sections/projects/UXPortfolio/UXPortfolioImpactSection.tsx
+import Section from "@/components/ui/Section";
+import SectionIntro from "@/components/ui/SectionIntro";
+import Tile from "@/components/ui/Tile";
+import { SectionHeading, Subtitle, Body } from "@/components/ui/Tokens";
+import { colors } from "@/lib/tokens";
+
+const IMPACT_METRICS = [
+  {
+    label: "New project setup",
+    before: "1–2 hours",
+    after: "15–20 minutes",
+    note: "Using Section + Tile patterns and existing routes.",
+  },
+  {
+    label: "Design tweaks across pages",
+    before: "Edit many components",
+    after: "Change tokens.ts once",
+    note: "Typography, spacing, and colors centralized.",
+  },
+  {
+    label: "Perceived clarity",
+    before: "Mixed layouts, unclear hierarchy",
+    after: "Consistent structure across Home, Expertise, Projects, CV",
+    note: "Feedback from peers & hiring managers.",
+  },
+];
+
+export function UXPortfolioImpactSection() {
+  return (
+    <Section
+      id="ux-portfolio-impact"
+      title="Impact — clarity for readers, leverage for future me"
+      spacing="lg"
+      borderTop
+      borderBottom
+    >
+      <SectionIntro>
+        The concrete output is “just” a portfolio. The actual value is a small
+        system: every new project or expertise page can be added quickly without
+        re-inventing layout, spacing, or interaction patterns. This reduces
+        friction to update the portfolio and keeps the narrative coherent over
+        time.
+      </SectionIntro>
+
+      <div className="grid gap-10 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)] items-start">
+        {/* LEFT: Metrics & concrete outcomes */}
+        <div className="space-y-8">
+          <SectionHeading>
+            Tangible impact on maintainability and storytelling
+          </SectionHeading>
+
+          <Tile variant="static" className="space-y-4">
+            <Subtitle>System-level impact</Subtitle>
+            <Body className={colors.muted.text}>
+              The design system turned the portfolio from a frozen snapshot into
+              a living artefact. It’s now:
+            </Body>
+            <ul className="list-disc pl-5 space-y-1 text-sm text-muted-foreground">
+              <li>fast to extend when new projects or topics emerge,</li>
+              <li>coherent in how stories are structured and titled, and</li>
+              <li>representative of how I think about UX as a system.</li>
+            </ul>
+          </Tile>
+
+          <Tile variant="static" className="space-y-4">
+            <Subtitle>Before / after for core tasks</Subtitle>
+            <div className="space-y-3">
+              {IMPACT_METRICS.map((m) => (
+                <div key={m.label} className="border-b border-border/40 pb-3 last:border-b-0">
+                  <div className="flex items-baseline justify-between gap-4">
+                    <span className="text-sm font-medium text-foreground">
+                      {m.label}
+                    </span>
+                  </div>
+                  <div className="mt-1 text-xs text-muted-foreground flex flex-wrap gap-4">
+                    <span>
+                      <strong>Before:</strong> {m.before}
+                    </span>
+                    <span>
+                      <strong>After:</strong> {m.after}
+                    </span>
+                  </div>
+                  <p className="mt-1 text-xs text-muted-foreground">{m.note}</p>
+                </div>
+              ))}
+            </div>
+          </Tile>
+        </div>
+
+        {/* RIGHT: Reflection */}
+        <div className="space-y-6">
+          <Tile variant="static" className="space-y-3">
+            <Subtitle>What this shows about my practice</Subtitle>
+            <Body className={colors.muted.text}>
+              This project is a concrete example of how I approach UX Research
+              leadership:
+            </Body>
+            <ul className="list-disc pl-5 space-y-1 text-sm text-muted-foreground">
+              <li>Start with purpose & audience, not components.</li>
+              <li>Design structures that make good decisions easier.</li>
+              <li>Invest in small systems that pay off over many iterations.</li>
+            </ul>
+          </Tile>
+
+          <Tile variant="static" className="space-y-3">
+            <Subtitle>Next steps</Subtitle>
+            <Body className={colors.muted.text}>
+              The system is intentionally lightweight. Future iterations can add
+              small utilities (e.g. more chart primitives, richer timelines)
+              without breaking the existing content model. The “UX portfolio”
+              case study itself will evolve as the design system grows.
+            </Body>
+          </Tile>
+        </div>
+      </div>
+    </Section>
+  );
+}
+
+
+==== \src\components\sections\projects\UXPortfolio\UXPortfolioProcessSection.tsx ====
+// src/components/sections/projects/UXPortfolio/UXPortfolioProcessSection.tsx
+import Section from "@/components/ui/Section";
+import SectionIntro from "@/components/ui/SectionIntro";
+import Tile from "@/components/ui/Tile";
+import { SectionHeading, Subtitle, Body } from "@/components/ui/Tokens";
+import { colors, spacing } from "@/lib/tokens";
+
+type Phase = {
+  id: string;
+  label: string;
+  title: string;
+  question: string;
+  activities: string[];
+  artifacts: string[];
+};
+
+const PHASES: Phase[] = [
+  {
+    id: "discover",
+    label: "01",
+    title: "Positioning & constraints",
+    question: "What should this portfolio signal in the first 10 seconds?",
+    activities: [
+      "Audit of previous portfolio versions and recruiter feedback",
+      "Clarified target audience: design leadership, research leaders, product",
+      "Defined 'non-goals' (no blog, no generic UX 101 content)",
+    ],
+    artifacts: [
+      "Positioning statement & headline options",
+      "List of must-have and nice-to-have sections",
+    ],
+  },
+  {
+    id: "define",
+    label: "02",
+    title: "Information architecture & routing",
+    question: "How do projects, expertise, and CV fit together?",
+    activities: [
+      "Mapped core stories: UX Strategy, ResearchOps, Leadership, Impact",
+      "Separated 'expertise' (how I think) and 'projects' (how I execute)",
+      "Defined URL structure and route patterns (e.g. /expertise/... /projects/...)",
+    ],
+    artifacts: [
+      "Site map & navigation model",
+      "Route configuration in React Router",
+    ],
+  },
+  {
+    id: "design-system",
+    label: "03",
+    title: "Design system & layout primitives",
+    question: "How can I make future content consistent by design?",
+    activities: [
+      "Extracted typography, colors, spacing, layout into tokens.ts",
+      "Created generic Section, SectionIntro, Tile, Button, Tag, Badge components",
+      "Defined content patterns for BLUF, process, and impact sections",
+    ],
+    artifacts: [
+      "Design tokens file (colors, typography, spacing, radii)",
+      "Reusable UI primitives (Section, Tile, Tokens, Button, TileImage, ...)",
+    ],
+  },
+  {
+    id: "implement",
+    label: "04",
+    title: "Implementation & content migration",
+    question: "How do we avoid a tangle of one-off layouts?",
+    activities: [
+      "Rebuilt Home, Expertise, Projects, and CV pages using the DS components",
+      "Refactored older sections into Section + Tile + SectionIntro patterns",
+      "Set up i18n structure for EN/DE navigation and copy",
+    ],
+    artifacts: [
+      "PageLayout as shared shell (hero + content spacing)",
+      "Content components per page (e.g. CarInsuranceBLUFSection, etc.)",
+    ],
+  },
+  {
+    id: "iterate",
+    label: "05",
+    title: "Polish, performance & maintainability",
+    question: "What makes this portfolio pleasant to maintain over time?",
+    activities: [
+      "Optimized images via vite-imagetools and simple picture usage",
+      "Tuned typographic rhythm and vertical spacing via tokens",
+      "Reduced CSS to Tailwind utilities + design tokens; no custom chaos",
+    ],
+    artifacts: [
+      "Consistent spacing scale across pages",
+      "Lean CSS, clear TypeScript structures, and minimal config friction",
+    ],
+  },
+];
+
+export function UXPortfolioProcessSection() {
+  return (
+    <Section
+      id="ux-portfolio-process"
+      title="Process — from a messy playground to a product-ready system"
+      spacing="lg"
+      borderTop
+    >
+      <SectionIntro>
+        The portfolio evolved from a collection of one-off experiments into a
+        structured system. The key decision was to treat it like a product:
+        start with positioning, design the information architecture, then build
+        a design system that makes every new page easier and more consistent.
+      </SectionIntro>
+
+      <div className="grid gap-10 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1.1fr)] items-start">
+        {/* LEFT: Narrative */}
+        <div className="space-y-8">
+          <SectionHeading>
+            Phases & decisions that shaped the system
+          </SectionHeading>
+          <Body className={colors.muted.text}>
+            Each phase had one driving question and clear trade-offs. Instead of
+            over-engineering a full-blown DS, I focused on the smallest set of
+            primitives that:
+          </Body>
+          <ul className="list-disc pl-5 space-y-1 text-sm text-muted-foreground">
+            <li>keep the reading experience calm and focused,</li>
+            <li>avoid layout drift between pages, and</li>
+            <li>allow experiments without breaking the overall structure.</li>
+          </ul>
+        </div>
+
+        {/* RIGHT: Phases as tiles */}
+        <div className="space-y-6">
+          {PHASES.map((phase) => (
+            <Tile key={phase.id} variant="static" className="space-y-3">
+              <div className="flex items-baseline justify-between gap-4">
+                <Subtitle>{phase.title}</Subtitle>
+                <span className="text-xs font-mono text-muted-foreground">
+                  {phase.label}
+                </span>
+              </div>
+
+              <Body className="text-sm text-muted-foreground">
+                <strong className="font-medium">Guiding question:</strong>{" "}
+                {phase.question}
+              </Body>
+
+              <div className="grid gap-2 md:grid-cols-2">
+                <div>
+                  <Body className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-1">
+                    Activities
+                  </Body>
+                  <ul className="list-disc pl-4 space-y-1 text-sm text-muted-foreground">
+                    {phase.activities.map((a) => (
+                      <li key={a}>{a}</li>
+                    ))}
+                  </ul>
+                </div>
+                <div>
+                  <Body className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-1">
+                    Artefacts
+                  </Body>
+                  <ul className="list-disc pl-4 space-y-1 text-sm text-sm text-muted-foreground">
+                    {phase.artifacts.map((a) => (
+                      <li key={a}>{a}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </Tile>
+          ))}
+        </div>
+      </div>
+    </Section>
+  );
+}
+
+
+==== \src\components\sections\projects\workshop\index.ts ====
+export { default as WorkshopBLUFSection } from "./WorkshopBLUFSection";
+export { default as WorkshopProcessSection } from "./WorkshopProcessSection";
+export { default as WorkshopImpactSection } from "./WorkshopImpactSection";
+
+
+==== \src\components\sections\projects\workshop\WorkshopBLUFSection.tsx ====
+// src/components/sections/projects/workshop/WorkshopBLUFSection.tsx
+import { Section } from "@/components/ui";
+import SectionIntro from "@/components/ui/SectionIntro";
+import { Tile } from "@/components/ui";
+import { SectionHeading, Body, Subtitle } from "@/components/ui/Tokens";
+import { layout, spacing } from "@/lib/tokens";
+import { cn } from "@/lib/utils";
+
+export default function WorkshopBLUFSection() {
+  const impact = [
+    {
+      value: "↑ Confidence",
+      label: "Team alignment & ownership",
+      desc: "Shared understanding of maturity and collaboration goals.",
+    },
+    {
+      value: "56",
+      label: "Ideas generated",
+      desc: "Concrete, actionable solutions co-created by the UX Design team.",
+    },
+    {
+      value: "9",
+      label: "Initiatives prioritized",
+      desc: "Selected for roadmap implementation and long-term impact.",
+    },
+  ];
+
+  return (
+    <Section
+      id="bluf"
+      spacing="xl"
+      title="From insight to alignment — transforming UX Research Maturity together"
+    >
+      <SectionIntro>
+        <Body>
+          The <strong>UX Research Maturity Workshop</strong> transformed
+          assessment insights into <strong>collective action</strong>. Through{" "}
+          <strong>co-creation, prioritization,</strong> and{" "}
+          <strong>alignment</strong>, the UX Design team shaped a shared roadmap
+          for growing research maturity across the organization. What began as
+          scattered observations evolved into a{" "}
+          <strong>united, measurable, and people-driven strategy</strong> for
+          progress.
+        </Body>
+
+        <div className={cn("space-y-4", spacing.mt10)}>
+          <SectionHeading>Background</SectionHeading>
+          <Body>
+            Before the workshop, I conducted a comprehensive{" "}
+            <strong>UX Research Maturity assessment</strong> across multiple
+            teams and departments. The findings highlighted{" "}
+            <strong>strong individual capabilities</strong> — but also{" "}
+            <strong>fragmentation</strong> in processes, ownership, and
+            collaboration. Each researcher and designer was doing valuable work,
+            but without a shared <strong>framework</strong> or{" "}
+            <strong>language</strong> to connect their efforts.
+          </Body>
+          <Body>
+            To build meaningful progress, the team needed a{" "}
+            <strong>structured moment to step back</strong>, reflect together,
+            and co-design their next steps. The one-day workshop provided
+            exactly that: a <strong>collaborative space</strong> for turning
+            findings into <strong>actionable initiatives</strong> that everyone
+            could stand behind.
+          </Body>
+        </div>
+
+        <div className={cn("space-y-4", spacing.mt10)}>
+          <SectionHeading>Why it mattered</SectionHeading>
+          <Body>
+            The workshop reframed maturity as a{" "}
+            <strong>collective journey</strong> rather than an external
+            evaluation. It shifted the focus from{" "}
+            <strong>“where we stand”</strong> to{" "}
+            <strong>“where we go next”</strong> — giving the team{" "}
+            <strong>clarity, confidence, and shared momentum</strong>.
+            Conversations that once felt abstract turned into{" "}
+            <strong>tangible goals</strong> and <strong>concrete ownership</strong>.
+          </Body>
+          <Body>
+            It also fostered <strong>empathy</strong> between design and
+            research roles, showing how{" "}
+            <strong>collaboration, governance, and communication</strong> shape
+            the perception and impact of UX Research. Most importantly, it made
+            maturity feel <strong>achievable</strong>.          </Body>
+        </div>
+      </SectionIntro>
+
+      <div className={cn(layout.gridCols3, spacing.gap6, spacing.mt10)}>
+        {impact.map((item, i) => (
+          <Tile key={i} variant="static">
+            <Subtitle>{item.value}</Subtitle>
+            <Body className="font-medium">{item.label}</Body>
+            <Body className="text-sm text-muted-foreground mt-1">
+              {item.desc}
+            </Body>
+          </Tile>
+        ))}
+      </div>
+    </Section>
+  );
+}
+
+
+==== \src\components\sections\projects\workshop\WorkshopImpactSection.tsx ====
+// src/components/sections/projects/workshop/WorkshopImpactSection.tsx
+import { Section } from "@/components/ui";
+import SectionIntro from "@/components/ui/SectionIntro";
+
+export default function WorkshopImpactSection() {
+  return (
+    <Section
+      id="workshop-impact"
+      title="From shared understanding to actionable outcomes"
+      spacing="lg"
+    >
+      <SectionIntro>
+        <p>
+          The workshop not only produced a prioritized list of concrete initiatives
+          but also strengthened collaboration and commitment within the UX Design team.
+          Participants gained a deeper understanding of UX Research challenges,
+          took ownership of solutions, and aligned around a shared maturity vision.
+        </p>
+      </SectionIntro>
+
+      <ul className="mt-8 space-y-3 text-base text-muted-foreground list-disc list-inside">
+        <li>
+          Established a shared understanding of UX Research challenges and maturity gaps
+        </li>
+        <li>Defined and prioritized actionable goals and initiatives</li>
+        <li>Strengthened collaboration, communication, and team ownership</li>
+        <li>Created a roadmap for implementing ResearchOps improvements</li>
+        <li>Set the foundation for sustained UX Research Maturity growth</li>
+      </ul>
+    </Section>
+  );
+}
+
+
+==== \src\components\sections\projects\workshop\WorkshopProcessSection.tsx ====
+// src/components/sections/projects/workshop/WorkshopProcessSection.tsx
+import { Section } from "@/components/ui";
+import SectionIntro from "@/components/ui/SectionIntro";
+import { SectionHeading, Body } from "@/components/ui/Tokens";
+import FadeIn from "@/components/ui/FadeIn";
+import { spacing } from "@/lib/tokens";
+import { cn } from "@/lib/utils";
+
+// 📸 Explicit image imports
+import img1_welcome from "@/assets/images/projects/workshop/1welcome.png";
+import img2_agenda from "@/assets/images/projects/workshop/2agenda.png";
+
+import img3_1 from "@/assets/images/projects/workshop/3_1agendaproblem.png";
+import img3_2 from "@/assets/images/projects/workshop/3_2problemstatement.png";
+import img3_3 from "@/assets/images/projects/workshop/3_3problemgroupwork.png";
+
+import img4_1 from "@/assets/images/projects/workshop/4_1goaldefinitionagenda.png";
+import img4_2 from "@/assets/images/projects/workshop/4_2goaldefgroupwork.png";
+import img4_3 from "@/assets/images/projects/workshop/4_3goaldefgroupwork2.png";
+
+import img5_1 from "@/assets/images/projects/workshop/5_1goalprioagenda.png";
+import img5_2 from "@/assets/images/projects/workshop/5_2goalpriogroupwork.png";
+import img5_3 from "@/assets/images/projects/workshop/5_3goalgripboard.png";
+import img5_break from "@/assets/images/projects/workshop/5_break.png";
+
+import img6_1 from "@/assets/images/projects/workshop/6_1ideateagenda.png";
+import img6_2 from "@/assets/images/projects/workshop/6_2ideagroupwork.png";
+import img6_3 from "@/assets/images/projects/workshop/6_3ideagroupwork2.png";
+
+import img7_1 from "@/assets/images/projects/workshop/7_1selectsolutionagenda.png";
+import img7_2 from "@/assets/images/projects/workshop/7_2selecsolutionboard.png";
+import img7_3 from "@/assets/images/projects/workshop/7_3selectsolutiongroup.png";
+
+export default function WorkshopProcessSection() {
+  const steps = [
+    {
+      title: "Welcome & Overview",
+      caption: "Setting the tone and purpose",
+      desc: (
+        <>
+          We began with a short <strong>welcome</strong> and a clear narrative
+          of <strong>why we were there</strong> — to take collective ownership of
+          <strong> UX Research Maturity</strong> and shape its evolution
+          together. I introduced the <strong>structure of the day</strong>,
+          illustrating how each phase would build on the previous one — from
+          <strong> understanding challenges</strong> to developing,
+          <strong> prioritizing</strong>, and selecting actionable solutions.
+        </>
+      ),
+      imgs: [img1_welcome],
+      reverse: false,
+    },
+    {
+      title: "Workshop Agenda",
+      caption: "Establishing clarity and alignment",
+      desc: (
+        <>
+          Before diving into the exercises, we reviewed the{" "}
+          <strong>agenda</strong>. The goal was{" "}
+          <strong>transparency and alignment</strong> — everyone should know
+          exactly where we were heading.{" "}
+          <strong>Problem → Goals → Prioritization → Ideation → Solution Selection</strong>:
+          a simple but powerful flow that guided our collaboration. We clarified{" "}
+          <strong>expectations, timeboxes, and roles</strong> to make the day
+          feel structured yet creative.
+        </>
+      ),
+      imgs: [img2_agenda],
+      reverse: true,
+    },
+    {
+      title: "Problem Understanding",
+      caption: "Exploring the current pain points",
+      desc: (
+        <>
+          The first phase focused on creating a{" "}
+          <strong>shared understanding</strong> of the current{" "}
+          <strong>problems</strong> surfaced during the assessment. Through{" "}
+          <strong>open discussion</strong> and visual mapping, we sharpened{" "}
+          <strong>problem statements</strong>, uncovering{" "}
+          <strong>root causes</strong> and hidden dependencies. Seeing everyone
+          nod in recognition — realizing they had been facing the same
+          challenges — was a powerful moment of{" "}
+          <strong>alignment and empathy</strong>.
+        </>
+      ),
+      imgs: [img3_1, img3_2, img3_3],
+      reverse: false,
+    },
+    {
+      title: "Goal Definition",
+      caption: "Turning insights into direction",
+      desc: (
+        <>
+          Once we had a clear picture of the challenges, we shifted the energy
+          toward possibility. Each group translated their{" "}
+          <strong>pain points into goals</strong> and{" "}
+          <strong>desired outcomes</strong> — what success would look like if
+          these issues were resolved. This phase turned{" "}
+          <strong>frustration into constructive energy</strong>, transforming
+          barriers into opportunity statements.
+        </>
+      ),
+      imgs: [img4_1, img4_2, img4_3],
+      reverse: true,
+    },
+    {
+      title: "Goal Prioritization",
+      caption: "Focusing on what matters most",
+      desc: (
+        <>
+          Not every goal could be tackled at once. Together, we prioritized them
+          using a simple <strong>Impact × Feasibility matrix</strong>. The
+          discussion revealed shared priorities — moments where{" "}
+          <strong>individual perspectives converged</strong> into a collective
+          sense of “this is where we start.” These decisions gave the upcoming{" "}
+          <strong>ideation phase a sharp and motivating focus</strong>.
+        </>
+      ),
+      imgs: [img5_1, img5_2, img5_3, img5_break],
+      reverse: false,
+    },
+    {
+      title: "Ideation",
+      caption: "Generating ideas together",
+      desc: (
+        <>
+          With focus established, the energy shifted again — this time toward{" "}
+          <strong>creativity and collaboration</strong>. In small groups,
+          participants brainstormed solutions for the top-priority goals,
+          sketching, debating, and building on each other’s ideas. The walls
+          quickly filled with colorful notes, ranging from{" "}
+          <strong>quick wins</strong> to long-term structural improvements. The
+          excitement made it clear:{" "}
+          <strong>the team was co-creating its own future</strong>.
+        </>
+      ),
+      imgs: [img6_1, img6_2, img6_3],
+      reverse: true,
+    },
+    {
+      title: "Solution Selection",
+      caption: "From many ideas to actionable focus",
+      desc: (
+        <>
+          In the final phase, teams <strong>clustered and evaluated</strong>{" "}
+          their ideas based on <strong>value</strong> and{" "}
+          <strong>feasibility</strong>. Together, we refined them into a concise
+          list of <strong>prioritized initiatives</strong> — each with clear{" "}
+          <strong>ownership and next steps</strong>. What began as abstract
+          discussions ended as a <strong>concrete roadmap for progress</strong>.
+          The session closed with visible pride — everyone could see how their
+          input had shaped the plan.
+        </>
+      ),
+      imgs: [img7_1, img7_2, img7_3],
+      reverse: false,
+    },
+  ];
+
+  return (
+    <Section id="workshop-process" title="From Problems to Prioritized Solutions" spacing="lg">
+      <SectionIntro>
+        The workshop followed a <strong>design-thinking rhythm</strong> — moving
+        from <strong>understanding to creation</strong>. Each phase built on the
+        previous one, turning <strong>research insights into collaboration</strong>,
+        and collaboration into <strong>actionable outcomes</strong>. By the end,
+        the team had not only a set of <strong>solutions</strong>, but also a
+        stronger sense of <strong>shared ownership and momentum</strong>.
+      </SectionIntro>
+
+      <div className={cn("flex flex-col space-y-40 md:space-y-52", spacing.mt12)}>
+        {steps.map((step, i) => (
+          <div key={i} className="flex flex-col items-center text-center gap-14 md:gap-20">
+            <FadeIn delay={i * 0.08}>
+              <div
+                className={cn(
+                  "w-full md:w-3/4 flex flex-col md:flex-row items-start text-left gap-10",
+                  step.reverse && "md:flex-row-reverse"
+                )}
+              >
+                <div className="w-full md:w-1/2 space-y-4">
+                  <SectionHeading>{step.title}</SectionHeading>
+                  <Body>{step.desc}</Body>
+                </div>
+                <div className="w-full md:w-1/2 flex items-center justify-center">
+                  {step.caption && <p className="italic text-sm opacity-70">{step.caption}</p>}
+                </div>
+              </div>
+            </FadeIn>
+
+            {step.imgs?.length > 0 && (
+              <FadeIn delay={0.15}>
+                <div className="w-full md:w-5/6">
+                  <div className={cn("grid grid-cols-1 sm:grid-cols-2", spacing.gap6)}>
+                    {step.imgs.map((src, idx) => (
+                      <div key={idx} className="w-full">
+                        <img
+                          src={src}
+                          alt={`${step.title} ${idx + 1}`}
+                          className="w-full h-auto rounded-2xl shadow-md object-contain border border-border"
+                          loading="lazy"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </FadeIn>
+            )}
+          </div>
+        ))}
+      </div>
+    </Section>
+  );
+}
+
+
+==== \src\components\sections\projects\ZooplusPricing\Neuer Ordner\Background.tsx ====
+import React from "react";
+
+export default function Background() {
+  return (
+    <section className="space-y-3">
+      <h2 className="text-xl font-semibold">Kontext & Herausforderung</h2>
+      <p className="text-muted-foreground">
+        Im Zuge des Redesigns von zooplus wurden wir beauftragt, die
+        Preisdarstellung auf der Website zu überarbeiten. Die bisherige
+        Pricing-Komponente wurde von Nutzer:innen teilweise als unklar und
+        schwer verständlich empfunden.
+      </p>
+      <p className="text-muted-foreground">
+        Wichtig: Es handelte sich nicht um eine offene Exploration, sondern um
+        ein <strong>vergleichendes Usability Testing</strong>. Mehrere bereits
+        ausgearbeitete Varianten der Preisdarstellung wurden konkret
+        gegeneinander geprüft, um festzustellen, welche Lösung aus
+        Kundensicht am besten funktioniert.
+      </p>
+      <p className="text-muted-foreground">
+        Getestet wurde in realen Nutzungskontexten der Seite, u. a. auf
+        Produktdetailseiten, in der Mehrbildansicht sowie in Recommendation
+        Engines. Ziel: eine Preisdarstellung, die schneller verstanden wird,
+        Vertrauen stärkt und Entscheidungen erleichtert.
+      </p>
+    </section>
+  );
+}
+
+
+==== \src\components\sections\projects\ZooplusPricing\Neuer Ordner\DiscussionGuide.tsx ====
+import React from "react";
+
+export default function DiscussionGuide() {
+  return (
+    <div className="w-full border border-border rounded-2xl p-6 bg-background shadow-md">
+      <div className="grid md:grid-cols-2 gap-6">
+        {/* Linker Block: Überblick */}
+        <div className="space-y-4">
+          <div className="p-4 border border-border rounded-lg bg-muted/30">
+            <h4 className="font-semibold">Einstieg</h4>
+            <ul className="list-disc pl-5 text-sm text-muted-foreground">
+              <li>Begrüßung & Aufklärung (Ziel, Datenschutz, Incentive)</li>
+              <li>Warming-Up: Shopping-Erfahrungen allgemein</li>
+            </ul>
+          </div>
+          <div className="p-4 border border-border rounded-lg bg-muted/30">
+            <h4 className="font-semibold">Kernfragen</h4>
+            <ul className="list-disc pl-5 text-sm text-muted-foreground">
+              <li>Preisinformationen finden & verstehen</li>
+              <li>Unklarheiten & Stolpersteine</li>
+              <li>Vertrauen in Preisangaben</li>
+            </ul>
+          </div>
+          <div className="p-4 border border-border rounded-lg bg-muted/30">
+            <h4 className="font-semibold">Abschluss</h4>
+            <ul className="list-disc pl-5 text-sm text-muted-foreground">
+              <li>Gesamteindruck der Preisdarstellung</li>
+              <li>Verbesserungsvorschläge</li>
+            </ul>
+          </div>
+        </div>
+
+        {/* Rechter Block: Beispiel-Ausschnitt wie im echten Usability-Test */}
+        <div className="relative p-6 border border-dashed border-border rounded-lg bg-white shadow-inner">
+          <div className="absolute -top-4 left-6 px-2 bg-background text-xs font-semibold uppercase text-muted-foreground">
+            Beispielausschnitt
+          </div>
+
+          <div className="space-y-5 text-sm">
+            {/* Task Nummerierung */}
+            <div>
+              <p className="font-semibold text-blue-600">Task 3:</p>
+              <p className="text-muted-foreground">
+                Vergleichen Sie zwei Produktvarianten und entscheiden Sie, welche
+                Sie bevorzugen würden – und warum.
+              </p>
+            </div>
+
+            {/* Erfolgskriterien */}
+            <div>
+              <p className="font-medium">Erfolgskriterien:</p>
+              <ul className="space-y-1 mt-1">
+                <li className="flex items-center gap-2">
+                  <input type="checkbox" className="w-4 h-4" />
+                  <span>Findet beide Varianten selbstständig</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <input type="checkbox" className="w-4 h-4" />
+                  <span>Kann Unterschiede korrekt beschreiben</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <input type="checkbox" className="w-4 h-4" />
+                  <span>Trifft eine begründete Auswahl</span>
+                </li>
+              </ul>
+            </div>
+
+            {/* Follow-up Fragen */}
+            <div>
+              <p className="font-medium">Eventuelle Nachfragen:</p>
+              <ul className="list-disc pl-5 text-muted-foreground space-y-1">
+                <li>Was hat Ihre Entscheidung beeinflusst?</li>
+                <li>Gab es Punkte, die unklar oder verwirrend waren?</li>
+                <li>
+                  Würden Sie diese Darstellung auch in einer Kaufsituation verstehen?
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+==== \src\components\sections\projects\ZooplusPricing\Neuer Ordner\Findings.tsx ====
+import React from "react";
+
+export default function Findings() {
+  return (
+    <section className="space-y-4">
+      <h2 className="text-xl font-semibold">Ergebnisse & Insights</h2>
+
+      <div className="grid md:grid-cols-2 gap-3">
+        <div className="rounded-xl border p-4 bg-white">
+          <h3 className="font-semibold text-blue-700 mb-2">Wahrnehmung & Klarheit</h3>
+          <p className="text-sm text-gray-700">
+            Klarere und modernere Preiswahrnehmung bei den favorisierten Varianten, jedoch
+            Unsicherheiten bei Zusatzkosten / Bedingungen (z. B. Versand, Services).
+          </p>
+        </div>
+        <div className="rounded-xl border p-4 bg-white">
+          <h3 className="font-semibold text-blue-700 mb-2">Interaktion</h3>
+          <p className="text-sm text-gray-700">
+            Gesamthaft gute Bedienbarkeit. Irritationen: uneinheitliche Tooltips,
+            redundante Formulierungen, ablenkende Sekundärinfos in bestimmten Kontexten.
+          </p>
+        </div>
+        <div className="rounded-xl border p-4 bg-white">
+          <h3 className="font-semibold text-blue-700 mb-2">Vergleichsfähigkeit</h3>
+          <p className="text-sm text-gray-700">
+            Eine kompakte Vergleichsansicht mit 3–4 differenzierenden Merkmalen half
+            Nutzer:innen, schneller zu wählen. Zu viele Details verlangsamen Entscheidungen.
+          </p>
+        </div>
+        <div className="rounded-xl border p-4 bg-white">
+          <h3 className="font-semibold text-blue-700 mb-2">Vertrauen</h3>
+          <p className="text-sm text-gray-700">
+            Transparente Preislogik und klare Kommunikation von Zusatzkosten steigerten
+            Vertrauen und reduzierten Rückfragen.
+          </p>
+        </div>
+      </div>
+
+      <div className="space-y-2">
+        <h3 className="font-semibold">Empfohlene Maßnahmen</h3>
+        <ul className="list-disc pl-6 text-sm text-muted-foreground space-y-1">
+          <li>Klartext statt Fachjargon; präzise Label für Preisbestandteile.</li>
+          <li>Hervorhebung der wichtigsten Kostenpunkte; Einheitlichkeit bei Tooltips.</li>
+          <li>Vergleichsmodus (3–4 Merkmale) statt langer Fließtexte.</li>
+          <li>Empfohlene Option visuell deutlich markieren („Best Choice“).</li>
+        </ul>
+      </div>
+    </section>
+  );
+}
+
+
+==== \src\components\sections\projects\ZooplusPricing\Neuer Ordner\Heatmap.tsx ====
+import React, { useEffect, useRef } from "react";
+
+export default function Heatmap() {
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    const spots = [
+      { x: 350, y: 140, r: 50 },  // Preisbereich
+      { x: 150, y: 120, r: 70 },  // Produktbild
+      { x: 360, y: 230, r: 40 },  // CTA
+      { x: 260, y: 330, r: 80 },  // Beschreibung
+    ];
+
+    const colors = [
+      { color: "rgba(59,10,145,0.3)", offset: 120 },
+      { color: "rgba(37,99,235,0.25)", offset: 90 },
+      { color: "rgba(34,197,94,0.25)", offset: 70 },
+      { color: "rgba(253,224,71,0.3)", offset: 50 },
+      { color: "rgba(249,115,22,0.35)", offset: 30 },
+      { color: "rgba(220,38,38,0.4)", offset: 15 },
+    ];
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    spots.forEach((spot) => {
+      colors.forEach((layer) => {
+        const radius = spot.r + layer.offset;
+        const gradient = ctx.createRadialGradient(
+          spot.x, spot.y, 0, spot.x, spot.y, radius
+        );
+        gradient.addColorStop(0, layer.color);
+        gradient.addColorStop(1, "transparent");
+
+        ctx.fillStyle = gradient;
+        ctx.beginPath();
+        ctx.arc(spot.x, spot.y, radius, 0, 2 * Math.PI);
+        ctx.fill();
+      });
+    });
+  }, []);
+
+  return (
+    <div className="w-full border border-border rounded-2xl p-6 bg-background shadow-md">
+      <div className="flex flex-col md:flex-row gap-8 items-start">
+        {/* Heatmap links */}
+        <div className="relative w-full md:w-2/3 max-w-2xl border border-gray-200 rounded-lg overflow-hidden bg-white shadow-sm">
+          <div className="px-4 py-2 bg-muted/40 border-b border-gray-200 text-sm font-medium">
+            PDP-Heatmap (Beispiel, simuliert)
+          </div>
+
+          {/* Mockup PDP */}
+          <div className="grid grid-cols-2 gap-4 p-4">
+            <div className="h-40 bg-gray-100 border border-gray-300 rounded-md flex items-center justify-center text-gray-400">
+              Produktbild
+            </div>
+            <div className="flex flex-col space-y-3">
+              <div className="h-6 w-3/4 bg-gray-100 rounded"></div>
+              <div className="h-5 w-1/2 bg-gray-100 rounded"></div>
+              <div className="h-16 w-full bg-gray-100 rounded"></div>
+              <button className="px-4 py-2 bg-gray-200 rounded-md w-32 text-gray-500">
+                CTA-Button
+              </button>
+            </div>
+          </div>
+          <div className="px-4 pb-4">
+            <div className="h-16 w-full bg-gray-100 rounded"></div>
+          </div>
+
+          {/* Heatmap Overlay */}
+          <canvas
+            ref={canvasRef}
+            width={600}
+            height={450}
+            className="absolute inset-0 w-full h-full pointer-events-none"
+          />
+        </div>
+
+        {/* Ergebnis rechts */}
+        <div className="md:w-1/3 space-y-4">
+          <p className="text-muted-foreground text-sm leading-relaxed">
+            Ergebnis: Der Preisbereich stand im Zentrum der Aufmerksamkeit,
+            dennoch gab es Missverständnisse bei einzelnen Preiskomponenten.
+            Produktbilder dominierten den Ersteindruck, während CTA und
+            Beschreibung zwar wahrgenommen, aber weniger intensiv betrachtet wurden.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+==== \src\components\sections\projects\ZooplusPricing\Neuer Ordner\Hypotheses.tsx ====
+import React from "react";
+
+export default function Hypotheses() {
+  return (
+    <section className="space-y-3">
+      <h2 className="text-xl font-semibold">Hypothesen</h2>
+      <ul className="list-disc pl-6 space-y-1 text-muted-foreground">
+        <li>Nutzer:innen verstehen die Preisstruktur ohne zusätzliche Erklärtexte.</li>
+        <li>Die neue visuelle Darstellung erhöht Klarheit und Vertrauen.</li>
+        <li>Transparente Zusatzkosten reduzieren Unsicherheiten und Abbrüche.</li>
+      </ul>
+    </section>
+  );
+}
+
+
+==== \src\components\sections\projects\ZooplusPricing\Neuer Ordner\Impact.tsx ====
+import React from "react";
+
+export default function Impact() {
+  return (
+    <div className="border border-border rounded-2xl p-6 bg-background shadow-sm space-y-3">
+      <ul className="list-disc pl-6 space-y-1 text-muted-foreground">
+        <li>Höhere Klarheit & Vertrauen in die Preislogik.</li>
+        <li>Quick Wins: präzisere Tooltips & transparente Zusatzkosten.</li>
+        <li>Fundierte Basis für Rollout & Iterationen im Redesign.</li>
+        <li>Follow-up: A/B-Tests mit finalen Varianten zur Quantifizierung.</li>
+      </ul>
+    </div>
+  );
+}
+
+
+==== \src\components\sections\projects\ZooplusPricing\Neuer Ordner\Methods.tsx ====
+import React from "react";
+
+export default function Methods() {
+  return (
+    <section className="space-y-4">
+      <h2 className="text-xl font-semibold">Forschungsdesign & Methoden</h2>
+      <div className="grid sm:grid-cols-2 gap-3">
+        <div className="card p-4">Remote Usability Tests (GER)</div>
+        <div className="card p-4">Vergleichende Evaluation mehrerer Pricing-Varianten</div>
+        <div className="card p-4">
+          Test in unterschiedlichen Kontexten (PDP, Mehrbildansicht, Recommendation Engine)
+        </div>
+        <div className="card p-4">
+          Leitfadeninterviews zu Preiswahrnehmung, Klarheit & Vertrauen
+        </div>
+      </div>
+
+      <div className="rounded-2xl border border-border p-4 bg-muted/40">
+        <p className="text-sm text-muted-foreground">
+          Studiencharakter: primär <strong>summativ</strong> (fertige Varianten wurden
+          direkt geprüft), mit <strong>formativen Elementen</strong> (Ergebnisse flossen
+          in Auswahl & Feinschliff der finalen Darstellung ein). Grundlage:
+          Human-Centered Design (HCD) – reale Nutzungsszenarien, iterative Abwägung.
+        </p>
+      </div>
+    </section>
+  );
+}
+
+
+==== \src\components\sections\projects\ZooplusPricing\Neuer Ordner\PricingFindingsSection.tsx ====
+import { Section } from "@/components/ui";
+import SectionIntro from "@/components/ui/SectionIntro";
+
+export function PricingFindingsSection() {
+  return (
+    <Section id="findings" spacing="xl" title="Key Insights">
+      <SectionIntro>
+        Users clearly prefer pricing formats that <strong>reduce visual clutter</strong> and
+        <strong> express savings transparently</strong>. Strike-through prices work only when
+        the <strong>reference price is clearly labeled</strong> (e.g. “RRP”).
+        <br />
+        <br />
+        Subscription prices were accepted when the <strong>benefit was explicit</strong>
+        (“Save 5% every month”) and placed next to the one-time price.
+        Overemphasis on discounts, however, <strong>reduced credibility</strong>.
+      </SectionIntro>
+    </Section>
+  );
+}
+
+
+==== \src\components\sections\projects\ZooplusPricing\Neuer Ordner\SectionIcon.tsx ====
+import React from "react";
+import { Tag, Target, FlaskConical, BookOpen, Map, BarChart3, Eye, Lightbulb } from "lucide-react";
+
+type SectionIconProps = {
+  name: string;
+  className?: string;
+};
+
+export default function SectionIcon({ name, className }: SectionIconProps) {
+  const icons: Record<string, JSX.Element> = {
+    title: <Tag className="w-7 h-7 text-blue-600" />,
+    context: <Target className="w-6 h-6 text-blue-600" />,
+    methods: <FlaskConical className="w-6 h-6 text-blue-600" />,
+    guide: <BookOpen className="w-6 h-6 text-blue-600" />,
+    journey: <Map className="w-6 h-6 text-blue-600" />,
+    visawi: <BarChart3 className="w-6 h-6 text-blue-600" />,
+    heatmap: <Eye className="w-6 h-6 text-blue-600" />,
+    insights: <Lightbulb className="w-6 h-6 text-blue-600" />,
+    impact: <Target className="w-6 h-6 text-blue-600" />,
+  };
+
+  return <span className={`inline-flex items-center mr-2 ${className || ""}`}>{icons[name]}</span>;
+}
+
+
+==== \src\components\sections\projects\ZooplusPricing\Neuer Ordner\UserJourney_Icons.tsx ====
+import React from "react";
+
+export function IconHomepage() {
+  return (
+    <div className="flex justify-center">
+      <svg width="100" height="60" viewBox="0 0 100 60" fill="none">
+        {/* Startseite-Rahmen */}
+        <rect x="5" y="10" width="90" height="40" rx="6" fill="#F3F4F6" stroke="#374151" strokeWidth="2" />
+        {/* Header-Balken */}
+        <rect x="10" y="15" width="80" height="6" fill="#D1D5DB" />
+        {/* Content-Block */}
+        <rect x="10" y="25" width="50" height="20" fill="#E5E7EB" />
+        {/* Lupe */}
+        <circle cx="80" cy="35" r="7" stroke="#2563EB" strokeWidth="2" />
+        <line x1="84" y1="39" x2="90" y2="45" stroke="#2563EB" strokeWidth="2" />
+      </svg>
+    </div>
+  );
+}
+
+export function IconPLP() {
+  return (
+    <div className="flex justify-center">
+      <svg width="100" height="60" viewBox="0 0 100 60" fill="none">
+        {/* Produktkarte 1 */}
+        <rect x="10" y="15" width="30" height="30" rx="4" fill="#F3F4F6" stroke="#374151" strokeWidth="2" />
+        <rect x="15" y="40" width="20" height="5" fill="#60A5FA" />
+        {/* Produktkarte 2 */}
+        <rect x="50" y="15" width="30" height="30" rx="4" fill="#F3F4F6" stroke="#374151" strokeWidth="2" />
+        <rect x="55" y="40" width="20" height="5" fill="#2563EB" />
+        {/* Vergleichspfeil */}
+        <line x1="40" y1="30" x2="50" y2="30" stroke="#2563EB" strokeWidth="2" markerEnd="url(#arrow)" />
+        <defs>
+          <marker id="arrow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L6,3 z" fill="#2563EB" />
+          </marker>
+        </defs>
+      </svg>
+    </div>
+  );
+}
+
+export function IconPDP() {
+  return (
+    <div className="flex justify-center">
+      <svg width="100" height="60" viewBox="0 0 100 60" fill="none">
+        {/* Produktdetailseite */}
+        <rect x="10" y="10" width="80" height="40" rx="6" fill="#F3F4F6" stroke="#374151" strokeWidth="2" />
+        {/* Produktbild */}
+        <rect x="15" y="15" width="20" height="20" fill="#E5E7EB" />
+        {/* Varianten-Liste */}
+        <rect x="40" y="15" width="45" height="6" fill="#60A5FA" />
+        <rect x="40" y="25" width="45" height="6" fill="#2563EB" />
+        <rect x="40" y="35" width="45" height="6" fill="#93C5FD" />
+      </svg>
+    </div>
+  );
+}
+
+export function IconCart() {
+  return (
+    <div className="flex justify-center">
+      <svg width="100" height="60" viewBox="0 0 100 60" fill="none">
+        {/* Warenkorb */}
+        <rect x="10" y="10" width="80" height="40" rx="6" fill="#F3F4F6" stroke="#374151" strokeWidth="2" />
+        {/* Produktzeilen */}
+        <rect x="15" y="15" width="70" height="6" fill="#E5E7EB" />
+        <rect x="15" y="25" width="70" height="6" fill="#E5E7EB" />
+        <rect x="15" y="35" width="70" height="6" fill="#E5E7EB" />
+        {/* Preisangaben rechts */}
+        <rect x="65" y="15" width="20" height="6" fill="#60A5FA" />
+        <rect x="65" y="25" width="20" height="6" fill="#2563EB" />
+        <rect x="65" y="35" width="20" height="6" fill="#93C5FD" />
+      </svg>
+    </div>
+  );
+}
+
+
+==== \src\components\sections\projects\ZooplusPricing\Neuer Ordner\UserJourney_P.tsx ====
+import React from "react";
+import { ResponsiveContainer, LineChart, Line } from "recharts";
+import { IconHomepage, IconPLP, IconPDP, IconCart } from "./UserJourney_Icons";
+
+// Journey-Stages mit Icons für Actions
+const stages = [
+  {
+    key: "tp1",
+    label: "Homepage",
+    action: "Inform, discover prices and offers.",
+    pain: "Keine großen Probleme – Nutzer:innen verstehen Preise als ersten Überblick.",
+    opp: "Preise stärker als Qualitätsindikator inszenieren (Trust-Building).",
+    icon: <IconHomepage />,
+  },
+  {
+    key: "tp2",
+    label: "PLP",
+    action: "Compare products and prices.",
+    pain: "Unklarheit über Preiskomponenten – Abo vs. Promo, Strike vs. From vs. RRP.",
+    opp: "Preiskomponenten vereinheitlichen, Jargon vermeiden, konsistente Darstellung.",
+    icon: <IconPLP />,
+  },
+  {
+    key: "tp3",
+    label: "PDP",
+    action: "Buy, inform about variants and prices.",
+    pain: "Hohe kognitive Last – schwer zu berechnen, welches Angebot (Menge, Rabatt, Basispreis, Abo) am besten ist.",
+    opp: "Vergleichslogik vereinfachen, klare Hervorhebung von Best-Choice, Reduktion redundanter Infos.",
+    icon: <IconPDP />,
+  },
+  {
+    key: "tp4",
+    label: "Cart",
+    action: "Buy, review products and prices.",
+    pain: "Kaum Probleme – Darstellung ist klar, Erwartungen werden bestätigt.",
+    opp: "Checkout als Vertrauensmoment nutzen – Sicherheit/Trust-Elemente verstärken, Cross-Selling platzieren.",
+    icon: <IconCart />,
+  },
+];
+
+// Emotions-Kurve (1=negativ, 2=neutral, 3=positiv)
+const emotions = [
+  { value: 3, emoji: "😊" }, // Homepage positiv
+  { value: 2, emoji: "😕" }, // PLP gemischt
+  { value: 1, emoji: "😟" }, // PDP frustrierend
+  { value: 3, emoji: "😌" }, // Cart erleichternd/positiv
+];
+
+export default function UserJourney_P() {
+  return (
+    <div className="w-full overflow-x-auto border border-border rounded-2xl p-4 bg-background shadow-sm">
+      {/* Desktop-Version */}
+      <div className="hidden md:block">
+        <table className="min-w-full text-sm text-center rounded-2xl overflow-hidden">
+          <thead>
+            <tr className="bg-muted/40">
+              <th className="border border-border p-3 w-32"></th>
+              {stages.map((s) => (
+                <th
+                  key={s.key}
+                  className="border border-border p-3 font-semibold"
+                >
+                  {s.label}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {/* Actions */}
+            <tr>
+              <td className="border border-border font-medium p-3">Actions</td>
+              {stages.map((s) => (
+                <td key={s.key} className="border border-border p-3 align-top">
+                  <div className="flex flex-col items-center space-y-2">
+                    {s.icon}
+                    <p>{s.action}</p>
+                  </div>
+                </td>
+              ))}
+            </tr>
+
+            {/* Emotions */}
+            <tr>
+              <td className="border border-border font-medium p-3">Emotions</td>
+              <td colSpan={stages.length} className="border border-border p-3">
+                <div className="h-40 relative">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart
+                      data={emotions.map((e, i) => ({ idx: i, value: e.value }))}
+                    >
+                      <Line
+                        type="monotone"
+                        dataKey="value"
+                        stroke="#2563EB"
+                        strokeWidth={3}
+                        dot={{ r: 0 }}
+                        isAnimationActive={false}
+                      />
+                    </LineChart>
+                  </ResponsiveContainer>
+                  {/* Smileys exakt auf Linie platzieren */}
+                  <div className="absolute inset-0 grid grid-cols-4">
+                    {emotions.map((e, i) => (
+                      <div
+                        key={i}
+                        className="flex justify-center"
+                        style={{
+                          transform: `translateY(${(3 - e.value) * 25}px)`,
+                        }}
+                      >
+                        <span className="text-2xl">{e.emoji}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </td>
+            </tr>
+
+            {/* Pain Points */}
+            <tr>
+              <td className="border border-border font-medium p-3">Pain Points</td>
+              {stages.map((s) => (
+                <td key={s.key} className="border border-border p-3 align-top">
+                  {s.pain}
+                </td>
+              ))}
+            </tr>
+
+            {/* Opportunities */}
+            <tr>
+              <td className="border border-border font-medium p-3">Opportunities</td>
+              {stages.map((s) => (
+                <td key={s.key} className="border border-border p-3 align-top">
+                  {s.opp}
+                </td>
+              ))}
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      {/* Mobile-Version */}
+      <div className="md:hidden space-y-6">
+        {stages.map((s, i) => (
+          <div
+            key={s.key}
+            className="border border-border rounded-2xl p-4 space-y-3"
+          >
+            {/* Nummerierter Kreis + Überschrift */}
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 flex items-center justify-center rounded-full bg-blue-600 text-white font-bold">
+                {i + 1}
+              </div>
+              <h3 className="font-semibold">{s.label}</h3>
+            </div>
+
+            <div>
+              <p className="font-medium">Actions</p>
+              <div className="flex flex-col items-center space-y-2">
+                {s.icon}
+                <p>{s.action}</p>
+              </div>
+            </div>
+            <div>
+              <p className="font-medium">Emotions</p>
+              <span className="text-2xl">{emotions[i].emoji}</span>
+            </div>
+            <div>
+              <p className="font-medium">Pain Points</p>
+              <p className="text-sm text-muted-foreground">{s.pain}</p>
+            </div>
+            <div>
+              <p className="font-medium">Opportunities</p>
+              <p className="text-sm text-muted-foreground">{s.opp}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+
+==== \src\components\sections\projects\ZooplusPricing\index.ts ====
+// src/components/sections/projects/ZooplusPricing/index.ts
+
+export { PricingBLUFSection } from "./PricingBLUFSection";
+export { PricingUseCaseSection } from "./PricingUseCaseSection";
+export { PricingImpactSection } from "./PricingImpactSection";
+
+
+==== \src\components\sections\projects\ZooplusPricing\PricingBLUFSection.tsx ====
+// src/components/sections/projects/ZooplusPricing/PricingBLUFSection.tsx
+import { Section } from "@/components/ui";
+import SectionIntro from "@/components/ui/SectionIntro";
+import { Tile } from "@/components/ui";
+import { Subtitle, Body } from "@/components/ui/Tokens";
+import { layout, spacing } from "@/lib/tokens";
+import { cn } from "@/lib/utils";
+
+export function PricingBLUFSection() {
+  const impact = [
+    {
+      value: "↑ Clarity",
+      label: "Pricing perception",
+      desc: "Users better understood the relation between prices and offers",
+    },
+    {
+      value: "−35%",
+      label: "Cognitive effort",
+      desc: "Measured reduction in time to interpret pricing elements",
+    },
+    {
+      value: "↑ Trust",
+      label: "Brand sentiment",
+      desc: "More positive perception across all pricing touchpoints",
+    },
+  ];
+
+  return (
+    <Section id="bluf" spacing="xl" title="From hesitation to trust">
+      <SectionIntro>
+        As part of the <strong>zooplus rebranding and homepage redesign</strong>,
+        the pricing component was re-evaluated to ensure that price presentation —
+        including discounts, color, and strike prices — is both visually consistent
+        and cognitively clear across pages and components.
+        <br />
+        <br />
+        <strong>My Role:</strong> UX Research Lead — planned and conducted
+        <strong> remote moderated usability tests</strong> (20 participants),
+        analyzed behavioral and emotional responses, and derived actionable
+        design recommendations supported by <strong>VisAWI aesthetic evaluation</strong>.
+      </SectionIntro>
+
+      <div className={cn(layout.gridCols3, spacing.gap6, spacing.mt10)}>
+        {impact.map((item, i) => (
+          <Tile key={i} variant="static">
+            <Subtitle>{item.value}</Subtitle>
+            <Body className="font-medium">{item.label}</Body>
+            <Body className="text-sm text-muted-foreground mt-1">
+              {item.desc}
+            </Body>
+          </Tile>
+        ))}
+      </div>
+    </Section>
+  );
+}
+
+
+==== \src\components\sections\projects\ZooplusPricing\PricingImpactSection.tsx ====
+import { Section } from "@/components/ui";
+import SectionIntro from "@/components/ui/SectionIntro";
+
+export function PricingImpactSection() {
+  return (
+    <Section id="impact" spacing="xl" title="Impact and Learnings">
+      <SectionIntro>
+        The redesigned pricing components led to a measurable increase in
+        <strong> user comprehension</strong> and <strong>perceived fairness</strong>.
+        Key design patterns were integrated into the global design system,
+        ensuring consistency across homepage, PLP, and PDP.
+        <br />
+        <br />
+        Follow-up testing confirmed sustained <strong>trust and conversion</strong> improvements,
+        validating that pricing transparency directly influences
+        <strong> brand credibility</strong> in e-commerce.
+      </SectionIntro>
+    </Section>
+  );
+}
+
+
+==== \src\components\sections\projects\ZooplusPricing\PricingProcessSection.tsx ====
+import { Section } from "@/components/ui";
+import SectionIntro from "@/components/ui/SectionIntro";
+import { SectionHeading, Body } from "@/components/ui/Tokens";
+import FadeIn from "@/components/ui/FadeIn";
+import { cn } from "@/lib/utils";
+import protoImg from "@/assets/images/projects/pricingtesting/protoype.png";
+
+export default function PricingProcessSection() {
+  return (
+    <Section id="pricing-process" title="Approach & Testing Method" spacing="lg">
+      <SectionIntro>
+        We applied a semi-structured, task-based approach with hypotheses and open
+        questions. The sessions were moderated and remote, combining summative and
+        formative usability evaluation elements.
+      </SectionIntro>
+
+      <FadeIn delay={0.1}>
+        <div className="w-full md:w-5/6 mx-auto flex flex-col md:flex-row items-center gap-10 text-left">
+          <div className="w-full md:w-1/2 space-y-4">
+            <SectionHeading>Testing Setup</SectionHeading>
+            <Body>
+              Users were asked to complete tasks across multiple pricing components
+              and share feedback on clarity, trust, and expectation fit. The prototype
+              covered all relevant touchpoints — homepage, PLP, PDP, and cart.
+            </Body>
+            <Body>
+              Participants: pet owners experienced in online shopping for pet
+              supplies. The mix included new and returning customers across
+              demographics.
+            </Body>
+          </div>
+          <div className="w-full md:w-1/2 flex justify-center">
+            <img
+              src={protoImg}
+              alt="Prototype Overview"
+              className="w-full max-w-3xl h-auto rounded-2xl shadow-md object-contain"
+              loading="lazy"
+            />
+          </div>
+        </div>
+      </FadeIn>
+    </Section>
+  );
+}
+
+
+==== \src\components\sections\projects\ZooplusPricing\PricingUseCaseSection.tsx ====
+import { Section } from "@/components/ui";
+import { SectionHeading, Body } from "@/components/ui/Tokens";
+import FadeIn from "@/components/ui/FadeIn";
+import { cn } from "@/lib/utils";
+import { spacing } from "@/lib/tokens";
+
+// 📊 Visual Component Import
+import VisAWI from "@/assets/visuals/projects/ZooplusPricing/VisAWI";
+
+// 📸 Image Imports
+import researchPlanImg from "@/assets/images/projects/pricingtesting/Research Plan.png";
+import prototypeImg from "@/assets/images/projects/pricingtesting/protoype.png";
+import journeyImg from "@/assets/images/projects/pricingtesting/journey.png";
+import findingsImg from "@/assets/images/projects/pricingtesting/findings.png";
+
+export function PricingUseCaseSection() {
+  const steps = [
+    {
+      title: "Context & Objective",
+      caption: "Testing the redesigned pricing components across pages",
+      desc: (
+        <>
+          As part of the <strong>homepage redesign</strong> and visual rebranding,
+          the pricing components — such as <strong>discounts, color cues, and strikethrough prices</strong> —
+          needed to be re-evaluated.  
+          The goal was not only aesthetic consistency, but also a measurable
+          <strong> improvement in user comprehension and trust</strong>.
+          As <strong>UX Research Lead</strong>, I designed and facilitated this usability testing
+          to ensure that design and UX performance aligned across product contexts.
+        </>
+      ),
+      img: researchPlanImg,
+    },
+    {
+      title: "Prototype & Testing Approach",
+      caption: "Remote, semi-structured usability sessions",
+      desc: (
+        <>
+          We tested <strong>several design variants</strong> of the pricing component
+          in a <strong>remote moderated usability setting</strong>.  
+          <strong>20 participants</strong> — all pet owners with online shopping experience — 
+          were asked to perform key purchase-related tasks across <strong>Homepage</strong>,
+          <strong> PLP</strong>, <strong>PDP</strong>, and <strong>Cart</strong>.
+          The session structure combined <strong>task performance</strong> and <strong>open reflection</strong>
+          to surface both usability and perception issues.
+        </>
+      ),
+      img: prototypeImg,
+    },
+    {
+      title: "Key Findings",
+      caption: "From visual trust to conversion clarity",
+      desc: (
+        <>
+          The tests revealed that <strong>color hierarchy</strong> and
+          <strong> discount visibility</strong> were central to trust.
+          Users understood the pricing logic faster when <strong>crossed-out prices</strong>
+          and <strong>percentage savings</strong> were visually grouped.  
+          Ambiguities arose when discount badges competed with product imagery.
+          Based on these insights, we redefined the pricing logic display
+          to be <strong>consistent, legible, and emotionally confident</strong> across contexts.
+        </>
+      ),
+      img: findingsImg,
+    },
+    {
+      title: "User Journey (Pricing Display Perception)",
+      caption: "How users perceived prices along their journey",
+      desc: (
+        <>
+      The <strong>user journey</strong> showed how pricing perception evolved across touchpoints:  
+      <br />
+      <strong>Homepage:</strong> Price as brand signal and entry point.  
+      <br />
+      <strong>PLP:</strong> Price as comparison and decision filter.  
+      <br />
+      <strong>PDP:</strong> Price as value judgment balancing quality, size, and discounts.  
+      <br />
+      <strong>Cart:</strong> Price as confirmation and trust moment.  
+      <br />
+      While initial impressions were positive, <strong>unclear price components</strong> 
+      (e.g., “subscription vs. promotion,” “per-unit vs. total”) caused hesitation — 
+      <strong>clarity and trust returned in the cart.</strong>
+    </>
+      ),
+      img: journeyImg,
+    },
+    {
+      title: "Quantitative Follow-Up",
+      caption: "Assessing aesthetic appeal and trustworthiness (VisAWI)",
+      desc: (
+        <>
+          To complement qualitative findings, we used the standardized
+          <strong> VisAWI questionnaire</strong> to measure users’ perception
+          of <strong>visual aesthetics, consistency, and clarity</strong>.
+          This provided a benchmark for visual design quality
+          — helping ensure that functional clarity aligned with brand expression.
+        </>
+      ),
+      component: <VisAWI />,
+    },
+  ];
+
+  return (
+    <Section
+      id="use-case"
+      title="From Redesign Hypothesis to Validated Pricing Experience"
+      spacing="lg"
+    >
+      <div
+        className={cn(
+          "flex flex-col items-center space-y-40 md:space-y-52 text-center",
+          spacing.mt12
+        )}
+      >
+        {steps.map((step, i) => (
+          <div
+            key={i}
+            className="flex flex-col items-center text-center gap-14 md:gap-20 w-full md:w-5/6"
+          >
+            <FadeIn delay={i * 0.1}>
+              <div
+                className={cn(
+                  "flex flex-col md:flex-row items-start text-left gap-10",
+                  i % 2 === 1 && "md:flex-row-reverse"
+                )}
+              >
+                <div className="w-full md:w-1/2 space-y-4">
+                  <SectionHeading>{step.title}</SectionHeading>
+                  <Body>{step.desc}</Body>
+                </div>
+                <div className="w-full md:w-1/2 flex items-center justify-center">
+                  <p className="italic text-sm opacity-70">{step.caption}</p>
+                </div>
+              </div>
+            </FadeIn>
+
+            {step.component ? (
+              <FadeIn delay={0.2}>
+                <div className="w-full md:w-5/6 flex justify-center">
+                  {step.component}
+                </div>
+              </FadeIn>
+            ) : step.img ? (
+              <FadeIn delay={0.2}>
+                <div className="w-full md:w-5/6 flex justify-center">
+                  <img
+                    src={step.img}
+                    alt={step.title}
+                    className="w-full h-auto max-w-5xl rounded-2xl shadow-md object-contain"
+                    loading="lazy"
+                  />
+                </div>
+              </FadeIn>
+            ) : null}
+          </div>
         ))}
       </div>
     </Section>
@@ -3883,205 +7696,6 @@ export default function CVPage() {
 }
 
 
-==== \src\pages\expertise\ImpactMeasurement\index.tsx ====
-// src/pages/expertise/ImpactMeasurement/index.tsx
-import PageLayout from "@/components/layout/PageLayout";
-import headerImg from "@/assets/images/expertise/impactmeasurement/impact.jpg";
-import {
-  ImpactMeasurementIntroSection,
-  ImpactMeasurementResearchSection,
-  ImpactMeasurementUXSection,
-  ImpactMeasurementHeartSection,
-  ImpactMeasurementSummarySection,
-} from "@/components/sections/expertise/impactmeasurement";
-
-/**
- * Impact Measurement Page
- * ----------------------------------------------------
- * Einheitliches Breitenverhalten wie Home
- */
-export default function ImpactMeasurementPage() {
-  return (
-    <PageLayout
-      title="Impact Measurement"
-      intro="Measuring, proving, and communicating UX impact through metrics that connect user experience to business outcomes."
-      headerImage={headerImg}
-      width="wide" // ✅ identisch zu Home
-    >
-      <ImpactMeasurementIntroSection />
-      <ImpactMeasurementResearchSection />
-      <ImpactMeasurementUXSection />
-      <ImpactMeasurementHeartSection />
-      <ImpactMeasurementSummarySection />
-    </PageLayout>
-  );
-}
-
-
-==== \src\pages\expertise\ResearchOps\index.tsx ====
-// src/pages/expertise/ResearchOps/index.tsx
-import PageLayout from "@/components/layout/PageLayout";
-import headerImg from "@/assets/images/expertise/researchops/plant.jpg";
-import {
-  ResearchOpsIntroSection,
-  ResearchOpsFrameworkSection,
-  ResearchOpsMaturitySection,
-  ResearchOpsValueSection,
-  ResearchOpsLeadershipSection,
-} from "@/components/sections/expertise/researchops";
-
-/**
- * ResearchOps Page
- * --------------------------------------------
- * - Jetzt identisches Breitenverhalten wie Home
- * - Keine weiteren Änderungen am Layout
- */
-export default function ResearchOpsPage() {
-  return (
-    <PageLayout
-      title="ResearchOps"
-      intro="Building the systems, culture, and clarity that make research scalable — and strategic."
-      headerImage={headerImg}
-      width="wide" // ✅ sorgt für denselben Container wie auf Home
-    >
-      <ResearchOpsIntroSection />
-      <ResearchOpsFrameworkSection />
-      <ResearchOpsMaturitySection />
-      <ResearchOpsValueSection />
-      <ResearchOpsLeadershipSection />
-    </PageLayout>
-  );
-}
-
-
-==== \src\pages\expertise\StrategicUXResearch\index.tsx ====
-// src/pages/expertise/StrategicUXResearch/index.tsx
-import PageLayout from "@/components/layout/PageLayout";
-import headerImg from "@/assets/images/expertise/strategicuxresearch/strategicuxr.jpg";
-
-import {
-  StrategicUXIntroSection,
-  StrategicUXFrameworkSection,
-  StrategicUXRITESection,
-  StrategicUXOKRSection,
-} from "@/components/sections/expertise/strategicuxresearch";
-
-/**
- * Strategic UX Research Page
- * ----------------------------------------------
- * - exakt gleiches Breiten-/Layout-Verhalten wie Home
- * - PageLayout liefert nur Hero + Spacing, keine Begrenzung
- */
-export default function StrategicUXResearchPage() {
-  return (
-    <PageLayout
-      title="Strategic UX Research"
-      intro="Turning UX Research from isolated insights into a strategic system that drives clarity, alignment, and confident decisions."
-      headerImage={headerImg}
-      width="wide" // ✅ sorgt für denselben Container wie auf Home
-    >
-      <StrategicUXIntroSection />
-      <StrategicUXFrameworkSection />
-      <StrategicUXRITESection />
-      <StrategicUXOKRSection />
-    </PageLayout>
-  );
-}
-
-
-==== \src\pages\expertise\TeamLeadership\skillassessment\index.tsx ====
-import PageLayout from "@/components/layout/PageLayout";
-import {
-  SkillAssessmentIntroSection,
-  SkillAssessmentSummarySection,
-} from "@/components/sections/expertise/TeamLeadership/skillassessment";
-
-/**
- * Skill Assessment Page
- * - Einheitlich mit allen anderen Expertise-Seiten
- * - Nutzt PageLayout für Titel & Introtext
- * - Sections sind DS-konform
- */
-export default function SkillAssessmentPage() {
-  return (
-    <PageLayout
-      title="Skill Assessment Center"
-      intro="Reflect on your strengths, visualize growth paths, and understand your team's collective skill profile — not for competition, but for clarity and learning."
-    >
-      <SkillAssessmentIntroSection />
-      <SkillAssessmentSummarySection />
-    </PageLayout>
-  );
-}
-
-
-==== \src\pages\expertise\TeamLeadership\index.tsx ====
-// src/pages/expertise/TeamLeadership/index.tsx
-import PageLayout from "@/components/layout/PageLayout";
-import headerImg from "@/assets/images/expertise/teamleadership/team.jpg";
-import {
-  TeamLeadershipPhilosophySection,
-  TeamLeadershipRoleProfileSection,
-  TeamLeadershipSkillsSection,
-} from "@/components/sections/expertise/TeamLeadership";
-import UXRolesExplorer from "@/components/sections/expertise/TeamLeadership/UXRolesExplorer";
-
-/**
- * Team Leadership & Mentoring
- * Storytelling sequence:
- * 1️⃣ Philosophy → 2️⃣ Roles → 3️⃣ UX Roles Explorer → 4️⃣ My Role Profile → 5️⃣ Skills → 6️⃣ Impact
- */
-export default function TeamLeadershipPage() {
-  return (
-    <PageLayout
-      title="Team Leadership & Mentoring"
-      intro="Building high-performing UX teams through clarity, coaching, and a culture of trust."
-      headerImage={headerImg}
-      width="wide"
-    >
-      <TeamLeadershipPhilosophySection />
-<TeamLeadershipSkillsSection />
-      <UXRolesExplorer />
-      <TeamLeadershipRoleProfileSection />
-    </PageLayout>
-  );
-}
-
-
-==== \src\pages\expertise\UXStrategy\index.tsx ====
-// src/pages/expertise/UXStrategy/index.tsx
-import PageLayout from "@/components/layout/PageLayout";
-import headerImg from "@/assets/images/expertise/uxstrategy/schach1.jpg";
-import {
-  ValueOfUXStrategy,
-  VisionAlignment,
-  DiscoveryDelivery,
-  Prioritization,
-} from "@/components/sections/expertise/uxstrategy";
-
-/**
- * UX Strategy Page
- * --------------------------------------------
- * - Jetzt mit identischem Breitenverhalten wie Home
- * - Keine weiteren Code- oder Layoutänderungen
- */
-export default function UXStrategyPage() {
-  return (
-    <PageLayout
-      title="UX Strategy"
-      intro="How evidence-based UX Research connects discovery, design, and delivery — enabling organizations to make confident, user-centered decisions."
-      headerImage={headerImg}
-      width="wide" // ✅ sorgt für denselben Container wie auf Home
-    >
-      <ValueOfUXStrategy />
-      <VisionAlignment />
-      <DiscoveryDelivery />
-      <Prioritization />
-    </PageLayout>
-  );
-}
-
-
 ==== \src\pages\projects\CarInsurance\index.tsx ====
 // src/pages/projects/CarInsurancePage.tsx
 import PageLayout from "@/components/layout/PageLayout";
@@ -5075,7 +8689,40 @@ declare module '*?*';
   <head>
     <meta charset="UTF-8" />
 
-    <!-- Theme bootstrapping: setzt .dark auf <html>, bevor CSS rendert -->
+    <!-- Google Search Console Verification -->
+    <meta name="google-site-verification" content="N1hXubjj5xtLAOx0KP9jxDJ8QxkTfsFbM3ZNtaLwYNg" />
+
+    <!-- Primary Meta Description -->
+    <meta
+      name="description"
+      content="Portfolio of Felix Bruckmeier – Senior UX Researcher driving qualitative & quantitative UX Research, UX strategy, mixed methods and ResearchOps in a Design Thinking, Lean UX and Agile UX approach."
+    />
+
+    <!-- Canonical -->
+    <link rel="canonical" href="https://felixbruckmeier.github.io/" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Felix Bruckmeier – Senior UX Researcher" />
+    <meta
+      property="og:description"
+      content="Specializing in qualitative & quantitative UX Research, UX strategy and ResearchOps."
+    />
+    <meta property="og:url" content="https://felixbruckmeier.github.io/" />
+    <meta property="og:image" content="https://felixbruckmeier.github.io/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Felix Bruckmeier – Senior UX Researcher" />
+    <meta
+      name="twitter:description"
+      content="Specializing in qualitative & quantitative UX Research, UX strategy and ResearchOps."
+    />
+    <meta name="twitter:image" content="https://felixbruckmeier.github.io/og-image.png" />
+
+    <!-- Theme Bootstrapping -->
     <script>
       (() => {
         try {
@@ -5096,7 +8743,7 @@ declare module '*?*';
       })();
     </script>
 
-    <!-- ✅ GoatCounter Analytics -->
+    <!-- Analytics -->
     <script
       data-goatcounter="https://felix.goatcounter.com/count"
       async
@@ -5105,10 +8752,10 @@ declare module '*?*';
 
     <link rel="icon" type="image/png" href="/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Felix Bruckmeier – UX Research</title>
+
+    <title>Felix Bruckmeier – Senior UX Researcher</title>
   </head>
 
-  <!-- WICHTIG: Tokens statt feste Farben -->
   <body class="min-h-screen bg-background text-foreground">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
@@ -5124,7 +8771,7 @@ declare module '*?*';
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build --outDir docs",
+    "build": "tsc -b && vite build",
     "preview": "vite preview",
     "check:i18n": "node scripts/check-missing-translations.js",
     "check:i18n:reverse": "node scripts/check-missing-translations-reverse.js",
