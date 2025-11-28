@@ -20,9 +20,7 @@ export default function SEO({
 }: SEOProps) {
   const fullImage = image ?? "https://felixbruckmeier.github.io/og-image.png";
 
-  const jsonLd = structuredKey
-    ? createStructuredData(structuredKey as any)
-    : null;
+  const jsonLd = structuredKey ? createStructuredData(structuredKey as any) : null;
 
   return (
     <Helmet>
@@ -33,9 +31,9 @@ export default function SEO({
 
       {/* OG */}
       <meta property="og:type" content="website" />
+      {url && <meta property="og:url" content={url} />}
       <meta property="og:title" content={title} />
       <meta property="og:description" content={description} />
-      {url && <meta property="og:url" content={url} />}
       <meta property="og:image" content={fullImage} />
 
       {/* Twitter */}

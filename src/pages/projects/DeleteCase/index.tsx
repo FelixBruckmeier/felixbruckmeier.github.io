@@ -21,7 +21,7 @@ export default function DeleteCasePage() {
       <SEOPage page="project_deleteCase" noindex />
 
       {/* ⭐ JSON-LD – WIP: Nur minimale WebPage-Daten, kein Article */}
-      <SEOJsonLD page="project_deleteCase" minimal />
+      <SEOPage page="project_deleteCase" noindex />
 
       {/* Placeholder Inhalt */}
       <div className="py-24 text-center text-muted-foreground">

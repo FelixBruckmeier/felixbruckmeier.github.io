@@ -1,23 +1,23 @@
-// src/data/structuredData.ts
-
 import { seo } from "@/data/seo";
 
 export function createStructuredData(key: keyof typeof seo) {
   const item = seo[key];
   if (!item) return null;
 
-  // ❌ Für WIP-Pages KEIN JSON-LD
-  if (key.startsWith("project_") && !item.image) return null;
+  // WIP ohne image → niemals JSON-LD
+  if (!item.image) return null;
 
+  // Default WebPage
   const base = {
     "@context": "https://schema.org",
     "@type": "WebPage",
     name: item.title,
     description: item.description,
     url: item.url,
+    image: item.image,
   };
 
-  // Homepage → Organisation + WebSite
+  // Homepage → Website + Person
   if (key === "home") {
     return [
       {
@@ -32,11 +32,12 @@ export function createStructuredData(key: keyof typeof seo) {
         name: "Felix Bruckmeier",
         jobTitle: "Senior UX Researcher",
         url: item.url,
+        image: item.image,
       },
     ];
   }
 
-  // CV → Person
+  // CV → Person Schema
   if (key === "cv") {
     return {
       "@context": "https://schema.org",
@@ -44,10 +45,11 @@ export function createStructuredData(key: keyof typeof seo) {
       name: "Felix Bruckmeier",
       description: item.description,
       url: item.url,
+      image: item.image,
     };
   }
 
-  // Articles → Projekte + Expertise
+  // Expertise + Projects → Article Schema
   if (key.startsWith("project_") || key.startsWith("expertise_")) {
     return {
       "@context": "https://schema.org",
@@ -63,6 +65,7 @@ export function createStructuredData(key: keyof typeof seo) {
     };
   }
 
-  // Imprint & Privacy → WebPage
+  // Default fallback
   return base;
 }
+

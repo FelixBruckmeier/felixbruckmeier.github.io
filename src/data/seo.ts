@@ -1,5 +1,7 @@
 export const seo = {
+  // -----------------------------------
   // HOME & CV
+  // -----------------------------------
   home: {
     title: "Felix Bruckmeier – Senior UX Researcher",
     description:
@@ -16,7 +18,9 @@ export const seo = {
     image: "https://felixbruckmeier.github.io/og-image.png",
   },
 
+  // -----------------------------------
   // EXPERTISE ROOT PAGES
+  // -----------------------------------
   expertise_impactMeasurement: {
     title: "Impact Measurement – UX KPIs & Decision-Making",
     description:
@@ -61,7 +65,9 @@ export const seo = {
     image: "https://felixbruckmeier.github.io/og-image.png",
   },
 
+  // -----------------------------------
   // EXPERTISE SUBPAGE
+  // -----------------------------------
   expertise_teamLeadership_skillassessment: {
     title: "UX Skill Assessment Center – UX Team Leadership",
     description:
@@ -71,7 +77,9 @@ export const seo = {
       "https://felixbruckmeier.github.io/assets/images/expertise/teamleadership/team.jpg",
   },
 
+  // -----------------------------------
   // PROJECTS — LIVE
+  // -----------------------------------
   project_carInsurance: {
     title: "Car Insurance UX Case Study",
     description:
@@ -126,12 +134,15 @@ export const seo = {
       "https://felixbruckmeier.github.io/assets/images/projects/kanostrategy/headerkano.jpg",
   },
 
-  // PROJECTS — WIP (NOINDEX)
+  // -----------------------------------
+  // WIP — NOINDEX
+  // -----------------------------------
   project_deleteCase: {
     title: "Micro Interaction Case Study – Delete Flow",
     description:
       "Optimizing a sensitive micro interaction with research, prototyping and usability validation.",
     url: "https://felixbruckmeier.github.io/projects/delete-case",
+    image: "https://felixbruckmeier.github.io/og-image.png",
   },
 
   project_reopsimplementation: {
@@ -152,11 +163,14 @@ export const seo = {
       "https://felixbruckmeier.github.io/assets/images/projects/reopsagile/ResearchOpsAgileUX.jpg",
   },
 
+  // -----------------------------------
   // LEGAL
+  // -----------------------------------
   page_imprint: {
     title: "Imprint – Felix Bruckmeier",
     description: "Legal imprint and required contact information.",
     url: "https://felixbruckmeier.github.io/imprint",
+    image: "https://felixbruckmeier.github.io/og-image.png",
   },
 
   page_privacy: {
@@ -164,6 +178,7 @@ export const seo = {
     description:
       "Privacy policy and data protection information for this website.",
     url: "https://felixbruckmeier.github.io/privacy",
+    image: "https://felixbruckmeier.github.io/og-image.png",
   },
 } as const;
 
