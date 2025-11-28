@@ -5,7 +5,7 @@ export default function SEOPage({
   page,
   noindex,
 }: {
-  page: SEOKey;
+  page: SEOKey;   // <-- einzig richtige Lösung
   noindex?: boolean;
 }) {
   return (
