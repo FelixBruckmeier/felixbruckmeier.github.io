@@ -1,5 +1,3 @@
-// src/pages/cv/index.tsx
-
 import PageLayout from "@/components/layout/PageLayout";
 import SEOPage from "@/components/common/SEOPage";
 
@@ -14,11 +12,7 @@ export default function CVPage() {
       intro="Highlights of my professional background and foundational experience."
     >
 
-      {/* ⭐ SEO (Meta, OG, Twitter, Canonical) */}
-      <SEOPage 
-        page="cv" 
-        url="https://felixbruckmeier.github.io/cv" 
-      />
+      <SEOPage page="cv" />
 
       <ProfessionalExperienceSection />
       <PersonalExperienceSection />

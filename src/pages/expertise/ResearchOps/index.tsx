@@ -1,5 +1,3 @@
-// src/pages/expertise/ResearchOps/index.tsx
-
 import PageLayout from "@/components/layout/PageLayout";
 import SEOPage from "@/components/common/SEOPage"; 
 
@@ -13,25 +11,16 @@ import {
   ResearchOpsLeadershipSection,
 } from "@/components/sections/expertise/researchops";
 
-/**
- * ResearchOps Page
- * --------------------------------------------
- * - Identisches Breitenverhalten wie Home
- */
 export default function ResearchOpsPage() {
   return (
     <PageLayout
       title="ResearchOps"
-      intro="Building the systems, culture, and clarity that make research scalable — and strategic."
+      intro="Building the systems that make research scalable."
       headerImage={headerImg}
       width="wide"
     >
 
-      {/* ⭐ SEO (Meta, OG, Twitter, Canonical) */}
-      <SEOPage 
-        page="expertise_researchOps"
-        url="https://felixbruckmeier.github.io/expertise/researchops"
-      />
+      <SEOPage page="expertise_researchOps" />
 
       <ResearchOpsIntroSection />
       <ResearchOpsFrameworkSection />

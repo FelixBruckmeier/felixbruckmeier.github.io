@@ -1,12 +1,11 @@
-// src/pages/projects/DeleteCase/index.tsx
-
 import PageLayout from "@/components/layout/PageLayout";
 import SEOPage from "@/components/common/SEOPage";
 
 /**
  * Micro Interaction – Delete Case (WIP)
  * --------------------------------------------
- * This page is not final and should NOT be indexed.
+ * This page is not final and must NOT be indexed.
+ * → noindex = true prevents canonical + JSON-LD
  */
 export default function DeleteCasePage() {
   return (
@@ -15,7 +14,7 @@ export default function DeleteCasePage() {
       intro="A small change with a massive cumulative impact. (Work in progress)"
       width="wide"
     >
-      {/* ⭐ SEO – noindex, no canonical, no JSON-LD */}
+      {/* ⭐ SEO – noindex → no canonical, no JSON-LD */}
       <SEOPage page="project_deleteCase" noindex />
 
       {/* Placeholder content */}

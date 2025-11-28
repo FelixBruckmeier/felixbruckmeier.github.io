@@ -1,5 +1,3 @@
-// src/pages/projects/InsuranceBroker/index.tsx
-
 import PageLayout from "@/components/layout/PageLayout";
 import SEOPage from "@/components/common/SEOPage";
 
@@ -11,28 +9,16 @@ import {
   BrokerImpactSection,
 } from "@/components/sections/projects/swisslife";
 
-/**
- * Insurance Broker Discovery Project Page
- * --------------------------------------------
- * Standard Project Structure:
- * - Header image
- * - BLUF
- * - Process
- * - Impact
- */
 export default function InsuranceBrokerDiscovery() {
   return (
     <PageLayout
       title="Insurance Broker Discovery Research"
-      intro="Understanding how insurance brokers navigate advisory workflows, uncovering friction points and opportunities for digital enablement through field interviews and synthesis workshops."
+      intro="Understanding advisory workflows and friction points."
       headerImage={headerImg}
       width="wide"
     >
-      {/* ⭐ SEO (Meta, OG, Twitter, Canonical) */}
-      <SEOPage
-        page="project_insuranceBroker"
-        url="https://felixbruckmeier.github.io/projects/insurance-broker-discovery"
-      />
+
+      <SEOPage page="project_insuranceBroker" />
 
       <BrokerBLUFSection />
       <BrokerProcessSection />

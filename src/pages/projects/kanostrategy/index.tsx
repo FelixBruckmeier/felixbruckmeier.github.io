@@ -1,5 +1,3 @@
-// src/pages/projects/kanostrategy/index.tsx
-
 import PageLayout from "@/components/layout/PageLayout";
 import SEOPage from "@/components/common/SEOPage";
 
@@ -11,12 +9,6 @@ import {
   KanoImpactSection,
 } from "@/components/sections/projects/kanostrategy";
 
-/**
- * Kano Strategy Project Page
- * --------------------------------------------
- * - Clean page structure
- * - Automatic SEO + JSON-LD
- */
 export default function KanoStrategyPage() {
   return (
     <PageLayout
@@ -26,10 +18,7 @@ export default function KanoStrategyPage() {
       width="wide"
     >
       {/* ⭐ SEO (Meta, OG, Twitter, Canonical) */}
-      <SEOPage
-        page="project_kanostrategy"
-        url="https://felixbruckmeier.github.io/projects/kanostrategy"
-      />
+      <SEOPage page="project_kanostrategy" />
 
       <KanoBLUFSection />
       <KanoProcessSection />
@@ -37,3 +26,4 @@ export default function KanoStrategyPage() {
     </PageLayout>
   );
 }
+

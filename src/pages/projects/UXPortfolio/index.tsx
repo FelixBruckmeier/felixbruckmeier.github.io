@@ -16,7 +16,7 @@ import {
  * UX Portfolio Project Page
  * --------------------------------------------
  * Treated as a case study with design system documentation.
- * JSON-LD is now handled automatically via SEOPage.
+ * JSON-LD is handled automatically via SEOPage.
  */
 export default function UXPortfolioPage() {
   return (

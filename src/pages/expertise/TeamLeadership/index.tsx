@@ -1,5 +1,3 @@
-// src/pages/expertise/TeamLeadership/index.tsx
-
 import PageLayout from "@/components/layout/PageLayout";
 import SEOPage from "@/components/common/SEOPage"; 
 
@@ -13,25 +11,16 @@ import {
 
 import UXRolesExplorer from "@/components/sections/expertise/TeamLeadership/UXRolesExplorer";
 
-/**
- * Team Leadership & Mentoring
- * Storytelling sequence:
- * 1️⃣ Philosophy → 2️⃣ Roles → 3️⃣ UX Roles Explorer → 4️⃣ My Role Profile → 5️⃣ Skills → 6️⃣ Impact
- */
 export default function TeamLeadershipPage() {
   return (
     <PageLayout
       title="Team Leadership & Mentoring"
-      intro="Building high-performing UX teams through clarity, coaching, and a culture of trust."
+      intro="Building high-performing UX teams."
       headerImage={headerImg}
       width="wide"
     >
 
-      {/* ⭐ SEO (Meta, OG, Twitter, Canonical) */}
-      <SEOPage 
-        page="expertise_teamLeadership"
-        url="https://felixbruckmeier.github.io/expertise/team-leadership"
-      />
+      <SEOPage page="expertise_teamLeadership" />
 
       <TeamLeadershipPhilosophySection />
       <TeamLeadershipSkillsSection />

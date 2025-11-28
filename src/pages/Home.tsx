@@ -1,5 +1,3 @@
-// src/pages/Home.tsx
-
 import PageLayout from "@/components/layout/PageLayout";
 import SEOPage from "@/components/common/SEOPage";  
 
@@ -17,11 +15,7 @@ export default function Home() {
   return (
     <PageLayout>
 
-      {/* ⭐ SEO: always immediately after PageLayout */}
-      <SEOPage 
-        page="home" 
-        url="https://felixbruckmeier.github.io/" 
-      />
+      <SEOPage page="home" />
 
       <AboutSection />
       <MetricsSection />
