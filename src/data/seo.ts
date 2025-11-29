@@ -7,7 +7,7 @@ export const seo = {
     description:
       "Senior UX Researcher specializing in qualitative & quantitative methods, UX strategy, ResearchOps and mixed-method insights.",
     url: "https://felixbruckmeier.github.io/",
-    image: "https://felixbruckmeier.github.io/og-image.png",
+    image: "https://felixbruckmeier.github.io/felix-bruckmeier.jpg", // ⭐ UPDATED
   },
 
   cv: {
