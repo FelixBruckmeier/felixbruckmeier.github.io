@@ -207,6 +207,8 @@ src\components\common\ImprintSection.tsx
 src\components\common\LanguageToggle.tsx
 src\components\common\Navbar.tsx
 src\components\common\PrivacySection.tsx
+src\components\common\SEO.tsx
+src\components\common\SEOPage.tsx
 src\components\common\ThemeToggle.tsx
 src\components\layout\PageLayout.tsx
 src\components\sections\cv
@@ -323,7 +325,9 @@ src\components\ui\Tile.tsx
 src\components\ui\TileImage.tsx
 src\components\ui\Toggle.tsx
 src\components\ui\Tokens.tsx
+src\data\seo.ts
 src\data\skills.ts
+src\data\structuredData.ts
 src\data\uxRolesPersonas.ts
 src\hooks\useActivePhase.ts
 src\lib\SkillmapColors.ts
@@ -355,6 +359,7 @@ src\pages\projects\CarInsurance
 src\pages\projects\DeleteCase
 src\pages\projects\InsuranceBroker
 src\pages\projects\kanostrategy
+src\pages\projects\reopsimp
 src\pages\projects\UXPortfolio
 src\pages\projects\workshop
 src\pages\projects\ZooplusPricing
@@ -363,6 +368,7 @@ src\pages\projects\CarInsurance\index.tsx
 src\pages\projects\DeleteCase\index.tsx
 src\pages\projects\InsuranceBroker\index.tsx
 src\pages\projects\kanostrategy\index.tsx
+src\pages\projects\reopsimp\index.tsx
 src\pages\projects\UXPortfolio\index.tsx
 src\pages\projects\workshop\index.tsx
 src\pages\projects\ZooplusPricing\index.tsx

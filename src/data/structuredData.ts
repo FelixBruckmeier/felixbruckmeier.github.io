@@ -1,23 +1,29 @@
 import { seo } from "@/data/seo";
 
+/** 
+ * Das Portrait NUR für Google SERP (nicht für Social Media).
+ * Muss im public/ Ordner liegen.
+ */
+const PERSON_IMAGE = "https://felixbruckmeier.github.io/felix-bruckmeier.jpg";
+
 export function createStructuredData(key: keyof typeof seo) {
   const item = seo[key];
   if (!item) return null;
 
-  // WIP ohne image → niemals JSON-LD
+  // Ohne OG image → kein JSON-LD
   if (!item.image) return null;
 
-  // Default WebPage
+  // 🔹 Default: WebPage Schema (für alles außer Home, CV, Project/Expertise)
   const base = {
     "@context": "https://schema.org",
     "@type": "WebPage",
     name: item.title,
     description: item.description,
     url: item.url,
-    image: item.image,
+    image: item.image, // ← OG-Image für Social Media (Banner)
   };
 
-  // Homepage → Website + Person
+  // 🔹 Homepage → Website + Person
   if (key === "home") {
     return [
       {
@@ -30,14 +36,14 @@ export function createStructuredData(key: keyof typeof seo) {
         "@context": "https://schema.org",
         "@type": "Person",
         name: "Felix Bruckmeier",
-        jobTitle: "Senior UX Researcher",
+        jobTitle: "UX Research Lead",
         url: item.url,
-        image: item.image,
+        image: PERSON_IMAGE, // ← Portrait NUR für Google SERP
       },
     ];
   }
 
-  // CV → Person Schema
+  // 🔹 CV → nur Person Schema
   if (key === "cv") {
     return {
       "@context": "https://schema.org",
@@ -45,18 +51,18 @@ export function createStructuredData(key: keyof typeof seo) {
       name: "Felix Bruckmeier",
       description: item.description,
       url: item.url,
-      image: item.image,
+      image: PERSON_IMAGE, // ← Portrait NUR für Google SERP
     };
   }
 
-  // Expertise + Projects → Article Schema
+  // 🔹 Expertise- & Projektseiten → Article Schema
   if (key.startsWith("project_") || key.startsWith("expertise_")) {
     return {
       "@context": "https://schema.org",
       "@type": "Article",
       headline: item.title,
       description: item.description,
-      image: item.image,
+      image: item.image, // ← OG-Image bleibt Banner
       url: item.url,
       author: {
         "@type": "Person",
@@ -65,7 +71,5 @@ export function createStructuredData(key: keyof typeof seo) {
     };
   }
 
-  // Default fallback
   return base;
 }
-

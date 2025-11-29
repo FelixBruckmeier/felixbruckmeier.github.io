@@ -2806,8 +2806,6 @@ export const UX_ROLES_PERSONAS = {
 
 
 ==== \src\pages\cv\index.tsx ====
-// src/pages/cv/index.tsx
-
 import PageLayout from "@/components/layout/PageLayout";
 import SEOPage from "@/components/common/SEOPage";
 
@@ -2822,11 +2820,7 @@ export default function CVPage() {
       intro="Highlights of my professional background and foundational experience."
     >
 
-      {/* ⭐ SEO (Meta, OG, Twitter, Canonical) */}
-      <SEOPage 
-        page="cv" 
-        url="https://felixbruckmeier.github.io/cv" 
-      />
+      <SEOPage page="cv" />
 
       <ProfessionalExperienceSection />
       <PersonalExperienceSection />
@@ -2837,8 +2831,6 @@ export default function CVPage() {
 
 
 ==== \src\pages\expertise\ImpactMeasurement\index.tsx ====
-// src/pages/expertise/ImpactMeasurement/index.tsx
-
 import PageLayout from "@/components/layout/PageLayout";
 import SEOPage from "@/components/common/SEOPage"; 
 
@@ -2852,25 +2844,16 @@ import {
   ImpactMeasurementSummarySection,
 } from "@/components/sections/expertise/impactmeasurement";
 
-/**
- * Impact Measurement Page
- * ----------------------------------------------------
- * Einheitliches Breitenverhalten wie Home
- */
 export default function ImpactMeasurementPage() {
   return (
     <PageLayout
       title="Impact Measurement"
-      intro="Measuring, proving, and communicating UX impact through metrics that connect user experience to business outcomes."
+      intro="Measuring, proving, and communicating UX impact."
       headerImage={headerImg}
       width="wide"
     >
 
-      {/* ⭐ SEO (Meta, OG, Twitter, Canonical) */}
-      <SEOPage 
-        page="expertise_impactMeasurement"
-        url="https://felixbruckmeier.github.io/expertise/impact-measurement"
-      />
+      <SEOPage page="expertise_impactMeasurement" />
 
       <ImpactMeasurementIntroSection />
       <ImpactMeasurementResearchSection />
@@ -2883,8 +2866,6 @@ export default function ImpactMeasurementPage() {
 
 
 ==== \src\pages\expertise\ResearchOps\index.tsx ====
-// src/pages/expertise/ResearchOps/index.tsx
-
 import PageLayout from "@/components/layout/PageLayout";
 import SEOPage from "@/components/common/SEOPage"; 
 
@@ -2898,25 +2879,16 @@ import {
   ResearchOpsLeadershipSection,
 } from "@/components/sections/expertise/researchops";
 
-/**
- * ResearchOps Page
- * --------------------------------------------
- * - Identisches Breitenverhalten wie Home
- */
 export default function ResearchOpsPage() {
   return (
     <PageLayout
       title="ResearchOps"
-      intro="Building the systems, culture, and clarity that make research scalable — and strategic."
+      intro="Building the systems that make research scalable."
       headerImage={headerImg}
       width="wide"
     >
 
-      {/* ⭐ SEO (Meta, OG, Twitter, Canonical) */}
-      <SEOPage 
-        page="expertise_researchOps"
-        url="https://felixbruckmeier.github.io/expertise/researchops"
-      />
+      <SEOPage page="expertise_researchOps" />
 
       <ResearchOpsIntroSection />
       <ResearchOpsFrameworkSection />
@@ -2929,8 +2901,6 @@ export default function ResearchOpsPage() {
 
 
 ==== \src\pages\expertise\StrategicUXResearch\index.tsx ====
-// src/pages/expertise/StrategicUXResearch/index.tsx
-
 import PageLayout from "@/components/layout/PageLayout";
 import SEOPage from "@/components/common/SEOPage"; 
 
@@ -2943,25 +2913,16 @@ import {
   StrategicUXOKRSection,
 } from "@/components/sections/expertise/strategicuxresearch";
 
-/**
- * Strategic UX Research Page
- * ----------------------------------------------
- * - Gleiches Breiten-/Layout wie Home
- */
 export default function StrategicUXResearchPage() {
   return (
     <PageLayout
       title="Strategic UX Research"
-      intro="Turning UX Research from isolated insights into a strategic system that drives clarity, alignment, and confident decisions."
+      intro="Turning UX Research into a strategic system."
       headerImage={headerImg}
       width="wide"
     >
 
-      {/* ⭐ SEO (Meta, OG, Twitter, Canonical) */}
-      <SEOPage 
-        page="expertise_strategicUXResearch"
-        url="https://felixbruckmeier.github.io/expertise/strategic-ux-research"
-      />
+      <SEOPage page="expertise_strategicUXResearch" />
 
       <StrategicUXIntroSection />
       <StrategicUXFrameworkSection />
@@ -2973,8 +2934,6 @@ export default function StrategicUXResearchPage() {
 
 
 ==== \src\pages\expertise\TeamLeadership\skillassessment\index.tsx ====
-// src/pages/expertise/TeamLeadership/skillassessment/index.tsx
-
 import PageLayout from "@/components/layout/PageLayout";
 import SEOPage from "@/components/common/SEOPage";
 
@@ -2983,23 +2942,14 @@ import {
   SkillAssessmentSummarySection,
 } from "@/components/sections/expertise/TeamLeadership/skillassessment";
 
-/**
- * Skill Assessment Page
- * - Einheitlich mit allen anderen Expertise-Seiten
- * - Mit SEO-Integration über SEOPage + JSON-LD
- */
 export default function SkillAssessmentPage() {
   return (
     <PageLayout
       title="Skill Assessment Center"
-      intro="Reflect on your strengths, visualize growth paths, and understand your team's collective skill profile — not for competition, but for clarity and learning."
+      intro="Reflect on strengths and team capabilities."
     >
 
-      {/* ⭐ SEO – indexed, visible, canonical */}
-      <SEOPage
-        page="expertise_teamLeadership_skillassessment"
-        url="https://felixbruckmeier.github.io/expertise/team-leadership/skillassessment"
-      />
+      <SEOPage page="expertise_teamLeadership_skillassessment" />
 
       <SkillAssessmentIntroSection />
       <SkillAssessmentSummarySection />
@@ -3009,8 +2959,6 @@ export default function SkillAssessmentPage() {
 
 
 ==== \src\pages\expertise\TeamLeadership\index.tsx ====
-// src/pages/expertise/TeamLeadership/index.tsx
-
 import PageLayout from "@/components/layout/PageLayout";
 import SEOPage from "@/components/common/SEOPage"; 
 
@@ -3024,25 +2972,16 @@ import {
 
 import UXRolesExplorer from "@/components/sections/expertise/TeamLeadership/UXRolesExplorer";
 
-/**
- * Team Leadership & Mentoring
- * Storytelling sequence:
- * 1️⃣ Philosophy → 2️⃣ Roles → 3️⃣ UX Roles Explorer → 4️⃣ My Role Profile → 5️⃣ Skills → 6️⃣ Impact
- */
 export default function TeamLeadershipPage() {
   return (
     <PageLayout
       title="Team Leadership & Mentoring"
-      intro="Building high-performing UX teams through clarity, coaching, and a culture of trust."
+      intro="Building high-performing UX teams."
       headerImage={headerImg}
       width="wide"
     >
 
-      {/* ⭐ SEO (Meta, OG, Twitter, Canonical) */}
-      <SEOPage 
-        page="expertise_teamLeadership"
-        url="https://felixbruckmeier.github.io/expertise/team-leadership"
-      />
+      <SEOPage page="expertise_teamLeadership" />
 
       <TeamLeadershipPhilosophySection />
       <TeamLeadershipSkillsSection />
@@ -3054,8 +2993,6 @@ export default function TeamLeadershipPage() {
 
 
 ==== \src\pages\expertise\UXStrategy\index.tsx ====
-// src/pages/expertise/UXStrategy/index.tsx
-
 import PageLayout from "@/components/layout/PageLayout";
 import SEOPage from "@/components/common/SEOPage"; 
 
@@ -3068,26 +3005,16 @@ import {
   Prioritization,
 } from "@/components/sections/expertise/uxstrategy";
 
-/**
- * UX Strategy Page
- * --------------------------------------------
- * - Identisches Breitenverhalten wie Home
- * - JSON-LD + SEO optimiert
- */
 export default function UXStrategyPage() {
   return (
     <PageLayout
       title="UX Strategy"
-      intro="How evidence-based UX Research connects discovery, design, and delivery — enabling organizations to make confident, user-centered decisions."
+      intro="How evidence-based UX Research informs decisions."
       headerImage={headerImg}
       width="wide"
     >
 
-      {/* ⭐ SEO (Meta, OG, Twitter, Canonical) */}
-      <SEOPage 
-        page="expertise_uxStrategy"
-        url="https://felixbruckmeier.github.io/expertise/ux-strategy"
-      />
+      <SEOPage page="expertise_uxStrategy" />
 
       <ValueOfUXStrategy />
       <VisionAlignment />
@@ -3099,8 +3026,6 @@ export default function UXStrategyPage() {
 
 
 ==== \src\pages\projects\CarInsurance\index.tsx ====
-// src/pages/projects/CarInsurance/index.tsx
-
 import PageLayout from "@/components/layout/PageLayout";
 import SEOPage from "@/components/common/SEOPage";
 
@@ -3111,25 +3036,16 @@ import {
   CarInsuranceProcessSection,
 } from "@/components/sections/projects/CarInsurance";
 
-/**
- * Car Insurance Project Page
- * --------------------------------------------
- * - Konsistentes Layout
- * - SEO vollständig integriert (JSON-LD wird automatisch erzeugt)
- */
 export default function CarInsurancePage() {
   return (
     <PageLayout
       title="ADAC – Car Insurance Redesign"
-      intro="From apologies to confidence — rebuilding trust in every conversation."
+      intro="From apologies to confidence."
       headerImage={headerImg}
       width="wide"
     >
-      {/* ⭐ SEO (Meta, OG, Twitter, Canonical) */}
-      <SEOPage 
-        page="project_carInsurance"
-        url="https://felixbruckmeier.github.io/projects/car-insurance"
-      />
+
+      <SEOPage page="project_carInsurance" />
 
       <CarInsuranceBLUFSection />
       <CarInsuranceProcessSection />
@@ -3139,15 +3055,14 @@ export default function CarInsurancePage() {
 
 
 ==== \src\pages\projects\DeleteCase\index.tsx ====
-// src/pages/projects/DeleteCase/index.tsx
-
 import PageLayout from "@/components/layout/PageLayout";
 import SEOPage from "@/components/common/SEOPage";
 
 /**
  * Micro Interaction – Delete Case (WIP)
  * --------------------------------------------
- * This page is not final and should NOT be indexed.
+ * This page is not final and must NOT be indexed.
+ * → noindex = true prevents canonical + JSON-LD
  */
 export default function DeleteCasePage() {
   return (
@@ -3156,7 +3071,7 @@ export default function DeleteCasePage() {
       intro="A small change with a massive cumulative impact. (Work in progress)"
       width="wide"
     >
-      {/* ⭐ SEO – noindex, no canonical, no JSON-LD */}
+      {/* ⭐ SEO – noindex → no canonical, no JSON-LD */}
       <SEOPage page="project_deleteCase" noindex />
 
       {/* Placeholder content */}
@@ -3170,8 +3085,6 @@ export default function DeleteCasePage() {
 
 
 ==== \src\pages\projects\InsuranceBroker\index.tsx ====
-// src/pages/projects/InsuranceBroker/index.tsx
-
 import PageLayout from "@/components/layout/PageLayout";
 import SEOPage from "@/components/common/SEOPage";
 
@@ -3183,28 +3096,16 @@ import {
   BrokerImpactSection,
 } from "@/components/sections/projects/swisslife";
 
-/**
- * Insurance Broker Discovery Project Page
- * --------------------------------------------
- * Standard Project Structure:
- * - Header image
- * - BLUF
- * - Process
- * - Impact
- */
 export default function InsuranceBrokerDiscovery() {
   return (
     <PageLayout
       title="Insurance Broker Discovery Research"
-      intro="Understanding how insurance brokers navigate advisory workflows, uncovering friction points and opportunities for digital enablement through field interviews and synthesis workshops."
+      intro="Understanding advisory workflows and friction points."
       headerImage={headerImg}
       width="wide"
     >
-      {/* ⭐ SEO (Meta, OG, Twitter, Canonical) */}
-      <SEOPage
-        page="project_insuranceBroker"
-        url="https://felixbruckmeier.github.io/projects/insurance-broker-discovery"
-      />
+
+      <SEOPage page="project_insuranceBroker" />
 
       <BrokerBLUFSection />
       <BrokerProcessSection />
@@ -3215,8 +3116,6 @@ export default function InsuranceBrokerDiscovery() {
 
 
 ==== \src\pages\projects\kanostrategy\index.tsx ====
-// src/pages/projects/kanostrategy/index.tsx
-
 import PageLayout from "@/components/layout/PageLayout";
 import SEOPage from "@/components/common/SEOPage";
 
@@ -3228,12 +3127,6 @@ import {
   KanoImpactSection,
 } from "@/components/sections/projects/kanostrategy";
 
-/**
- * Kano Strategy Project Page
- * --------------------------------------------
- * - Clean page structure
- * - Automatic SEO + JSON-LD
- */
 export default function KanoStrategyPage() {
   return (
     <PageLayout
@@ -3243,10 +3136,7 @@ export default function KanoStrategyPage() {
       width="wide"
     >
       {/* ⭐ SEO (Meta, OG, Twitter, Canonical) */}
-      <SEOPage
-        page="project_kanostrategy"
-        url="https://felixbruckmeier.github.io/projects/kanostrategy"
-      />
+      <SEOPage page="project_kanostrategy" />
 
       <KanoBLUFSection />
       <KanoProcessSection />
@@ -3254,6 +3144,7 @@ export default function KanoStrategyPage() {
     </PageLayout>
   );
 }
+
 
 
 ==== \src\pages\projects\reopsimp\index.tsx ====
@@ -3311,7 +3202,7 @@ import {
  * UX Portfolio Project Page
  * --------------------------------------------
  * Treated as a case study with design system documentation.
- * JSON-LD is now handled automatically via SEOPage.
+ * JSON-LD is handled automatically via SEOPage.
  */
 export default function UXPortfolioPage() {
   return (
@@ -3323,10 +3214,7 @@ export default function UXPortfolioPage() {
     >
 
       {/* ⭐ SEO – structured data + canonical */}
-      <SEOPage 
-        page="project_uxPortfolio"
-        url="https://felixbruckmeier.github.io/projects/ux-portfolio"
-      />
+      <SEOPage page="project_uxPortfolio" />
 
       <UXPortfolioBLUFSection />
       <UXPortfolioProcessSection />
@@ -3366,10 +3254,7 @@ export default function WorkshopPage() {
     >
 
       {/* ⭐ SEO (Meta, OG, Twitter, Canonical, JSON-LD) */}
-      <SEOPage
-        page="project_workshop"
-        url="https://felixbruckmeier.github.io/projects/workshop"
-      />
+      <SEOPage page="project_workshop" />
 
       <WorkshopBLUFSection />
       <WorkshopProcessSection />
@@ -3406,10 +3291,7 @@ export default function PricingPage() {
       width="wide"
     >
       {/* ⭐ SEO – auto JSON-LD + canonical */}
-      <SEOPage
-        page="project_pricing"
-        url="https://felixbruckmeier.github.io/projects/zooplus-pricing"
-      />
+      <SEOPage page="project_pricing" />
 
       <div className="space-y-28 md:space-y-36">
         <PricingBLUFSection />
@@ -3466,8 +3348,7 @@ export default function ImprintPage() {
 
       {/* ⭐ SEO – indexed + canonical */}
       <SEOPage 
-        page="page_imprint" 
-        url="https://felixbruckmeier.github.io/imprint"
+        page="page_imprint"
       />
 
       {/* ⭐ Custom JSON-LD for legal imprint */}
@@ -3517,10 +3398,7 @@ export default function PrivacyPage() {
     <PageLayout title="Privacy Policy">
 
       {/* ⭐ SEO – privacy page MUST be indexed + canonical */}
-      <SEOPage 
-        page="page_privacy" 
-        url="https://felixbruckmeier.github.io/privacy"
-      />
+      <SEOPage page="page_privacy" />
 
       {/* ⭐ Custom JSON-LD specifically for this page */}
       <Helmet>
@@ -3546,8 +3424,6 @@ export default function PrivacyPage() {
 
 
 ==== \src\pages\Home.tsx ====
-// src/pages/Home.tsx
-
 import PageLayout from "@/components/layout/PageLayout";
 import SEOPage from "@/components/common/SEOPage";  
 
@@ -3565,11 +3441,7 @@ export default function Home() {
   return (
     <PageLayout>
 
-      {/* ⭐ SEO: always immediately after PageLayout */}
-      <SEOPage 
-        page="home" 
-        url="https://felixbruckmeier.github.io/" 
-      />
+      <SEOPage page="home" />
 
       <AboutSection />
       <MetricsSection />

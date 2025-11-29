@@ -10,7 +10,6 @@ interface SEOProps {
   structuredKey?: string;
 }
 
-// src/components/common/SEO.tsx
 export default function SEO({
   title,
   description,
@@ -19,20 +18,22 @@ export default function SEO({
   noindex,
   structuredKey,
 }: SEOProps) {
+  // OG fallback image → Social Banner
   const fullImage = image ?? "https://felixbruckmeier.github.io/og-image.png";
+
+  // Structured Data (Person/Article/WebPage …)
   const jsonLd = structuredKey ? createStructuredData(structuredKey as any) : null;
 
   return (
     <Helmet>
-      {/* Title & Description */}
+      {/* SEO Meta */}
       <title>{title}</title>
       <meta name="description" content={description} />
 
-      {/* Canonical URL */}
-      {/* ✅ Änderung: keine Canonical, wenn noindex true */}
+      {/* Canonical */}
       {url && !noindex && <link rel="canonical" href={url} />}
 
-      {/* Robots (Noindex) */}
+      {/* Robots */}
       {noindex && <meta name="robots" content="noindex,nofollow" />}
 
       {/* Open Graph */}
@@ -48,7 +49,8 @@ export default function SEO({
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={fullImage} />
 
-      {/* JSON-LD Structured Data */}
+      {/* JSON-LD */}
+
       {jsonLd && (
         <script type="application/ld+json">
           {JSON.stringify(jsonLd)}
