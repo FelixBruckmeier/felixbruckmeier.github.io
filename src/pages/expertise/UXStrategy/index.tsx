@@ -4,7 +4,7 @@ import SEOPage from "@/components/common/SEOPage";
 import headerImg from "@/assets/images/expertise/uxstrategy/schach1.jpg";
 
 import {
-  ValueOfUXStrategy,
+  
   VisionAlignment,
   DiscoveryDelivery,
   Prioritization,
@@ -21,10 +21,11 @@ export default function UXStrategyPage() {
 
       <SEOPage page="expertise_uxStrategy" />
 
-      <ValueOfUXStrategy />
+
       <VisionAlignment />
       <DiscoveryDelivery />
       <Prioritization />
+
     </PageLayout>
   );
 }

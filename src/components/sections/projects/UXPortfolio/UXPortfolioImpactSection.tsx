@@ -1,118 +1,79 @@
 // src/components/sections/projects/UXPortfolio/UXPortfolioImpactSection.tsx
+
 import Section from "@/components/ui/Section";
 import SectionIntro from "@/components/ui/SectionIntro";
 import Tile from "@/components/ui/Tile";
 import { SectionHeading, Subtitle, Body } from "@/components/ui/Tokens";
 import { colors } from "@/lib/tokens";
-
-const IMPACT_METRICS = [
-  {
-    label: "New project setup",
-    before: "1–2 hours",
-    after: "15–20 minutes",
-    note: "Using Section + Tile patterns and existing routes.",
-  },
-  {
-    label: "Design tweaks across pages",
-    before: "Edit many components",
-    after: "Change tokens.ts once",
-    note: "Typography, spacing, and colors centralized.",
-  },
-  {
-    label: "Perceived clarity",
-    before: "Mixed layouts, unclear hierarchy",
-    after: "Consistent structure across Home, Expertise, Projects, CV",
-    note: "Feedback from peers & hiring managers.",
-  },
-];
+import { cn } from "@/lib/utils";
 
 export function UXPortfolioImpactSection() {
   return (
     <Section
       id="ux-portfolio-impact"
-      title="Impact — clarity for readers, leverage for future me"
+      title="Impact — how this system makes my work faster and clearer"
       spacing="lg"
       borderTop
       borderBottom
     >
       <SectionIntro>
-        The concrete output is “just” a portfolio. The actual value is a small
-        system: every new project or expertise page can be added quickly without
-        re-inventing layout, spacing, or interaction patterns. This reduces
-        friction to update the portfolio and keeps the narrative coherent over
-        time.
+        This design system changed how I work on my portfolio. Instead of fixing
+        individual pages, I can now shape the entire experience from a single
+        place. The system gives me speed, clarity, and real long-term leverage.
       </SectionIntro>
 
-      <div className="grid gap-10 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)] items-start">
-        {/* LEFT: Metrics & concrete outcomes */}
-        <div className="space-y-8">
-          <SectionHeading>
-            Tangible impact on maintainability and storytelling
-          </SectionHeading>
+      <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 mt-12">
+        
+        {/* TOKEN CONTROL */}
+        <Tile variant="static" className="space-y-3">
+          <Subtitle>Global control through tokens</Subtitle>
+          <Body className={cn(colors.muted.text)}>
+            With centrally managed tokens, I can adjust typography, spacing and
+            color globally. One change cascades across all pages — something that
+            previously required dozens of individual edits.
+          </Body>
+        </Tile>
 
-          <Tile variant="static" className="space-y-4">
-            <Subtitle>System-level impact</Subtitle>
-            <Body className={colors.muted.text}>
-              The design system turned the portfolio from a frozen snapshot into
-              a living artefact. It’s now:
-            </Body>
-            <ul className="list-disc pl-5 space-y-1 text-sm text-muted-foreground">
-              <li>fast to extend when new projects or topics emerge,</li>
-              <li>coherent in how stories are structured and titled, and</li>
-              <li>representative of how I think about UX as a system.</li>
-            </ul>
-          </Tile>
+        {/* CONSISTENCY */}
+        <Tile variant="static" className="space-y-3">
+          <Subtitle>Consistent storytelling</Subtitle>
+          <Body className={cn(colors.muted.text)}>
+            Every page follows the same narrative pattern. Readers immediately
+            understand the structure, and I no longer have to manually enforce
+            consistency — the system does it by design.
+          </Body>
+        </Tile>
 
-          <Tile variant="static" className="space-y-4">
-            <Subtitle>Before / after for core tasks</Subtitle>
-            <div className="space-y-3">
-              {IMPACT_METRICS.map((m) => (
-                <div key={m.label} className="border-b border-border/40 pb-3 last:border-b-0">
-                  <div className="flex items-baseline justify-between gap-4">
-                    <span className="text-sm font-medium text-foreground">
-                      {m.label}
-                    </span>
-                  </div>
-                  <div className="mt-1 text-xs text-muted-foreground flex flex-wrap gap-4">
-                    <span>
-                      <strong>Before:</strong> {m.before}
-                    </span>
-                    <span>
-                      <strong>After:</strong> {m.after}
-                    </span>
-                  </div>
-                  <p className="mt-1 text-xs text-muted-foreground">{m.note}</p>
-                </div>
-              ))}
-            </div>
-          </Tile>
-        </div>
+        {/* SPEED */}
+        <Tile variant="static" className="space-y-3">
+          <Subtitle>Faster content creation</Subtitle>
+          <Body className={cn(colors.muted.text)}>
+            I can assemble new pages like building blocks: SectionIntro →
+            Story → Impact. The system gives me the frame — I only fill in the
+            content. This turns hours of layout work into minutes.
+          </Body>
+        </Tile>
 
-        {/* RIGHT: Reflection */}
-        <div className="space-y-6">
-          <Tile variant="static" className="space-y-3">
-            <Subtitle>What this shows about my practice</Subtitle>
-            <Body className={colors.muted.text}>
-              This project is a concrete example of how I approach UX Research
-              leadership:
-            </Body>
-            <ul className="list-disc pl-5 space-y-1 text-sm text-muted-foreground">
-              <li>Start with purpose & audience, not components.</li>
-              <li>Design structures that make good decisions easier.</li>
-              <li>Invest in small systems that pay off over many iterations.</li>
-            </ul>
-          </Tile>
+        {/* SCALABILITY */}
+        <Tile variant="static" className="space-y-3">
+          <Subtitle>Built-in scalability</Subtitle>
+          <Body className={cn(colors.muted.text)}>
+            Whether I add one project or ten, the structure stays stable. The
+            design system prevents layout drift and keeps the experience coherent
+            over time.
+          </Body>
+        </Tile>
 
-          <Tile variant="static" className="space-y-3">
-            <Subtitle>Next steps</Subtitle>
-            <Body className={colors.muted.text}>
-              The system is intentionally lightweight. Future iterations can add
-              small utilities (e.g. more chart primitives, richer timelines)
-              without breaking the existing content model. The “UX portfolio”
-              case study itself will evolve as the design system grows.
-            </Body>
-          </Tile>
-        </div>
+        {/* MY WORKING STYLE */}
+        <Tile variant="static" className="space-y-3">
+          <Subtitle>A reflection of how I work</Subtitle>
+          <Body className={cn(colors.muted.text)}>
+            This system expresses my way of working: clarity first, modular
+            thinking, scalable decision-making. I build structures that make good
+            choices easier — for myself and for others.
+          </Body>
+        </Tile>
+
       </div>
     </Section>
   );

@@ -1,149 +1,138 @@
 // src/components/sections/cv/PersonalExperienceSection.tsx
 import { Section, Tile } from "@/components/ui";
 import { Subtitle, Body } from "@/components/ui/Tokens";
-import { layout, spacing, colors } from "@/lib/tokens";
+import { spacing, colors } from "@/lib/tokens";
 import { cn } from "@/lib/utils";
 
 export default function PersonalExperienceSection() {
   return (
     <Section id="personal-experience" title="Personal Experience" spacing="lg">
+      {/* Intro */}
       <Body className={cn(colors.muted.text, spacing.mb8)}>
-        Complementary to my professional journey — education, expertise areas, and professional
-        communities that form the foundation of my UX leadership and practice.
+        A complementary overview of my background — education, core expertise areas
+        and the professional communities that shape my UX practice.
       </Body>
 
-      {/* Grid mit 2 Spalten */}
-      <div className={cn("grid sm:grid-cols-2 gap-6 items-start")}>
-        {/* 🧠 Expertise Areas (linke Spalte) */}
+      <div className="grid sm:grid-cols-2 gap-6 items-start">
+        
+        {/* LEFT COLUMN */}
         <div className="space-y-6">
+          
+          {/* 🧠 Expertise Areas */}
           <Tile variant="static" className={cn("flex flex-col text-left", spacing.p6)}>
             <Subtitle className="mb-4">Expertise Areas</Subtitle>
+
             <ul className={spacing.stackSm}>
-              <li>
-                <p className="font-medium text-foreground">Discovery Research</p>
-                <Body className={cn(colors.muted.text, "text-sm leading-snug")}>
-                  Contextual inquiries, interviews, field studies, and exploratory analysis.
-                </Body>
-              </li>
-              <li>
-                <p className="font-medium text-foreground">Design Evaluation</p>
-                <Body className={cn(colors.muted.text, "text-sm leading-snug")}>
-                  Usability testing, prototype validation, and continuous RITE testing.
-                </Body>
-              </li>
-              <li>
-                <p className="font-medium text-foreground">Quantitative & Mixed-Methods</p>
-                <Body className={cn(colors.muted.text, "text-sm leading-snug")}>
-                  Surveys, MaxDiff, Conjoint, A/B testing, analytics triangulation.
-                </Body>
-              </li>
-              <li>
-                <p className="font-medium text-foreground">Facilitation</p>
-                <Body className={cn(colors.muted.text, "text-sm leading-snug")}>
-                  Workshop design and moderation (Design Thinking, Journey Mapping, Alignment).
-                </Body>
-              </li>
-              <li>
-                <p className="font-medium text-foreground">ResearchOps & Enablement</p>
-                <Body className={cn(colors.muted.text, "text-sm leading-snug")}>
-                  Repository management, templates, stakeholder onboarding, and governance.
-                </Body>
-              </li>
+              <Item
+                title="Discovery Research"
+                text="Contextual inquiries, interviews, field research and exploratory synthesis."
+              />
+              <Item
+                title="Design Evaluation"
+                text="Usability testing with prototypes and continuous RITE testing loops."
+              />
+              <Item
+                title="Quantitative & Mixed Methods"
+                text="Surveys, MaxDiff, Conjoint, analytics triangulation and A/B test interpretation."
+              />
+              <Item
+                title="Facilitation"
+                text="Workshop design and moderation (Design Thinking, Journey Mapping, Alignment)."
+              />
+              <Item
+                title="ResearchOps & Enablement"
+                text="Repositories, templates, onboarding and governance for scalable research."
+              />
             </ul>
           </Tile>
 
           {/* 🔧 Tools */}
           <Tile variant="static" className={cn("flex flex-col text-left", spacing.p6)}>
             <Subtitle className="mb-4">Tools</Subtitle>
+
             <ul className={spacing.stackSm}>
-              <li>
-                <p className="font-medium text-foreground">Research</p>
-                <Body className={cn(colors.muted.text, "text-sm leading-snug")}>
-                  Dovetail, Maze, Hotjar, Lookback, Typeform
-                </Body>
-              </li>
-              <li>
-                <p className="font-medium text-foreground">Design & Collaboration</p>
-                <Body className={cn(colors.muted.text, "text-sm leading-snug")}>
-                  Figma, Miro, Notion, Confluence
-                </Body>
-              </li>
-              <li>
-                <p className="font-medium text-foreground">Data & Analytics</p>
-                <Body className={cn(colors.muted.text, "text-sm leading-snug")}>
-                  SPSS, Excel, GA4, R (basic)
-                </Body>
-              </li>
+              <Item
+                title="Research"
+                text="Dovetail, Maze, Hotjar, Lookback, Typeform"
+              />
+              <Item
+                title="Design & Collaboration"
+                text="Figma, Miro, Notion, Confluence"
+              />
+              <Item
+                title="Data & Analytics"
+                text="GA4, SPSS, Excel, R (basic)"
+              />
             </ul>
           </Tile>
 
-          {/* 🌐 Memberships & Communities */}
+          {/* 🌐 Communities */}
           <Tile variant="static" className={cn("flex flex-col text-left", spacing.p6)}>
             <Subtitle className="mb-4">Memberships & Communities</Subtitle>
+
             <ul className={spacing.stackSm}>
-              <li>
-                <p className="font-medium text-foreground">ResearchOps Community</p>
-                <Body className={cn(colors.muted.text, "text-sm leading-snug")}>
-                  Active member & contributor since 2022
-                </Body>
-              </li>
-              <li>
-                <p className="font-medium text-foreground">UX Leadership Blog</p>
-                <Body className={cn(colors.muted.text, "text-sm leading-snug")}>
-                  Member & guest contributor, ongoing exchange on leadership in UX research.
-                </Body>
-              </li>
+              <Item
+                title="ResearchOps Community"
+                text="Active member since 2022 — contribution on research operations maturity."
+              />
+              <Item
+                title="UX Leadership Community"
+                text="Ongoing exchange on leadership, team culture and research strategy."
+              />
             </ul>
           </Tile>
         </div>
 
-        {/* 🎓 Education + 🚀 Professional Development (rechte Spalte) */}
+        {/* RIGHT COLUMN */}
         <div className="space-y-6">
+
+          {/* 🎓 Education */}
           <Tile variant="static" className={cn("flex flex-col text-left", spacing.p6)}>
             <Subtitle className="mb-4">Education</Subtitle>
+
             <ul className={spacing.stackSm}>
-              <li>
-                <p className="font-medium text-foreground">
-                  M.A. Human-Computer Interaction
-                </p>
-                <Body className={cn(colors.muted.text, "text-sm leading-snug")}>
-                  LMU Munich – Psychology & Pedagogy
-                </Body>
-              </li>
-              <li>
-                <p className="font-medium text-foreground">
-                  B.A. Media & Communication
-                </p>
-                <Body className={cn(colors.muted.text, "text-sm leading-snug")}>
-                  University of Passau – UX & Communication Science
-                </Body>
-              </li>
+              <Item
+                title="M.A. Human–Computer Interaction"
+                text="LMU Munich — psychology, pedagogy and interactive systems."
+              />
+              <Item
+                title="B.A. Media & Communication"
+                text="University of Passau — UX, communication science and empirical research."
+              />
             </ul>
           </Tile>
 
+          {/* 🚀 Development */}
           <Tile variant="static" className={cn("flex flex-col text-left", spacing.p6)}>
             <Subtitle className="mb-4">Professional Development</Subtitle>
+
             <ul className={spacing.stackSm}>
-              <li>
-                <p className="font-medium text-foreground">
-                  SAFe® Product Manager / Product Owner
-                </p>
-                <Body className={cn(colors.muted.text, "text-sm leading-snug")}>
-                  Scaled Agile Framework – Certification completed 2024
-                </Body>
-              </li>
-              <li>
-                <p className="font-medium text-foreground">
-                  UXQB CPUX-F (User Experience Foundation)
-                </p>
-                <Body className={cn(colors.muted.text, "text-sm leading-snug")}>
-                  Completed self-study of official UXQB curriculum.
-                </Body>
-              </li>
+              <Item
+                title="SAFe® Product Manager / Product Owner"
+                text="Scaled Agile Framework — certification completed 2024."
+              />
+              <Item
+                title="UXQB CPUX-F"
+                text="Completed foundation-level training on usability and UX standards."
+              />
             </ul>
           </Tile>
+
         </div>
+
       </div>
     </Section>
+  );
+}
+
+/* 🧩 Small helper component for cleaner markup */
+function Item({ title, text }: { title: string; text: string }) {
+  return (
+    <li>
+      <p className="font-medium text-foreground">{title}</p>
+      <Body className={cn(colors.muted.text, "text-sm leading-snug")}>
+        {text}
+      </Body>
+    </li>
   );
 }

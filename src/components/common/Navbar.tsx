@@ -40,10 +40,15 @@ const NAV: NavItem[] = [
       },
       {
         id: "projects/kanostrategy",
-        label: "UX Strategy with the Kano Model", // ✅ NEU
+        label: "UX Strategy with the Kano Model",
       },
       { id: "projects/delete-case", label: "Micro Interaction", locked: true },
       { id: "projects/atoss-reops", label: "ReOps Implementation", locked: true },
+
+          {
+        id: "projects/ux-portfolio",
+        label: "Design System - Portfolio Website",
+      },
     ],
   },
   { id: "cv", link: "/cv" },

@@ -80,8 +80,8 @@ export default function ProjectsSection() {
     },
     {
       to: "/projects/ux-portfolio",
-      title: "UX Portfolio Website",
-      desc: "Design System, IA, performance & architecture of this portfolio.",
+      title: "Design System - Portfolio Website",
+      desc: "Design System Architecture, Tokenizing, IA Optimization, SEO & Performance.",
       image: uxPortfolioImg,
       locked: false,
     },

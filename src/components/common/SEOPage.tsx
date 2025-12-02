@@ -1,11 +1,12 @@
+// src/components/seo/SEOPage.tsx
 import SEO from "./SEO";
 import { seo, SEOKey } from "@/data/seo";
 
 export default function SEOPage({
   page,
-  noindex,
+  noindex = false,
 }: {
-  page: SEOKey;   // <-- einzig richtige Lösung
+  page: SEOKey;
   noindex?: boolean;
 }) {
   return (

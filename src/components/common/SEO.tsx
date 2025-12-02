@@ -1,3 +1,4 @@
+// src/components/seo/SEO.tsx
 import { Helmet } from "react-helmet-async";
 import { createStructuredData } from "@/data/structuredData";
 
@@ -15,42 +16,46 @@ export default function SEO({
   description,
   image,
   url,
-  noindex,
+  noindex = false,
   structuredKey,
 }: SEOProps) {
-  // OG fallback image → Social Banner
-  const fullImage = image ?? "https://felixbruckmeier.github.io/og-image.png";
+  const fullImage =
+    image ?? "https://felixbruckmeier.github.io/og-image.png";
 
-  // Structured Data (Person/Article/WebPage …)
-  const jsonLd = structuredKey ? createStructuredData(structuredKey as any) : null;
+  const jsonLd =
+    !noindex && structuredKey
+      ? createStructuredData(structuredKey as any)
+      : null;
 
   return (
     <Helmet>
-      {/* SEO Meta */}
+      {/* BASIC SEO */}
       <title>{title}</title>
       <meta name="description" content={description} />
 
-      {/* Canonical */}
+      {/* CANONICAL */}
       {url && !noindex && <link rel="canonical" href={url} />}
 
-      {/* Robots */}
+      {/* ROBOTS */}
       {noindex && <meta name="robots" content="noindex,nofollow" />}
 
-      {/* Open Graph */}
+      {/* OPEN GRAPH */}
       <meta property="og:type" content="website" />
       {url && <meta property="og:url" content={url} />}
       <meta property="og:title" content={title} />
       <meta property="og:description" content={description} />
       <meta property="og:image" content={fullImage} />
+      <meta property="og:site_name" content="Felix Bruckmeier – UX Research & Strategy" />
+      <meta property="og:locale" content="en_US" />
 
-      {/* Twitter */}
+      {/* TWITTER */}
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content={title} />
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={fullImage} />
+      <meta name="twitter:creator" content="@FelixBruckmeier" />
 
-      {/* JSON-LD */}
-
+      {/* STRUCTURED DATA */}
       {jsonLd && (
         <script type="application/ld+json">
           {JSON.stringify(jsonLd)}

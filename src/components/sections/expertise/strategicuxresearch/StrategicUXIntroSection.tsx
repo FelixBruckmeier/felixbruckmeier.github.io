@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 
 /**
  * Section: Strategic UX Research — Making UX Strategy Work in Practice
- * Mit Icons im OKR-Stil (Emoji-basiert)
+ * DS-konform, ohne Shadow/Borders, mit sauberen Tiles
  */
 export default function ValueOfStrategicUXResearch() {
   const tiles = [
@@ -34,14 +34,13 @@ export default function ValueOfStrategicUXResearch() {
       title="Strategic UX Research — Making UX Strategy Work in Practice"
       spacing="lg"
     >
-      {/* --- Storytelling Intro --- */}
+      {/* Intro */}
       <SectionIntro>
         UX Strategy sets the vision — but it remains abstract until research
         brings it to life. That’s when the real work begins, and it’s no
         surprise that many organizations struggle to connect their strategy to
         real user insight and continuous learning.
-        <br />
-        <br />
+        <br /><br />
         My approach to <strong>Strategic UX Research</strong> closes that gap.
         It turns strategy into an operational practice — one that adapts to
         different team setups, fuels iteration, and ties research outcomes
@@ -49,7 +48,7 @@ export default function ValueOfStrategicUXResearch() {
         truly work in practice.
       </SectionIntro>
 
-      {/* --- Tiles with icons --- */}
+      {/* Tiles */}
       <div className={cn(layout.gridCols3, spacing.gap6, spacing.mt12)}>
         {tiles.map((item) => (
           <Tile
@@ -57,13 +56,14 @@ export default function ValueOfStrategicUXResearch() {
             variant="static"
             className={cn(
               spacing.p6,
-              "flex flex-col justify-start text-left rounded-2xl shadow-sm"
+              "flex flex-col justify-start text-left rounded-2xl"
             )}
           >
             <div className="flex items-center gap-2 mb-2">
               <span>{item.icon}</span>
               <Subtitle>{item.title}</Subtitle>
             </div>
+
             <Body className="leading-relaxed">{item.text}</Body>
           </Tile>
         ))}

@@ -1,4 +1,5 @@
 // src/components/sections/strategicuxresearch/StrategicUXOKRSection.tsx
+
 import { Section } from "@/components/ui";
 import SectionIntro from "@/components/ui/SectionIntro";
 import Tile from "@/components/ui/Tile";
@@ -6,10 +7,6 @@ import { Subtitle, Body } from "@/components/ui/Tokens";
 import { layout, spacing } from "@/lib/tokens";
 import { cn } from "@/lib/utils";
 
-/**
- * Section: UX Research OKRs
- * DS-konform — einheitliche Typografie, Abstände und Icon-Zeilenstruktur
- */
 export default function StrategicUXOKRSection() {
   const tiles = [
     {
@@ -49,7 +46,7 @@ export default function StrategicUXOKRSection() {
         <div className="my-6"></div>
         By aligning learning goals with business objectives, I turn UX Research into a steering
         mechanism — one that helps organizations see user evidence not as validation, but as
-        orientation. At this level, research informs not just how we build, but why.
+        orientation.
         <div className="my-6"></div>
         One might ask — isn’t that too good to be true?
         <div className="my-6"></div>
@@ -57,14 +54,22 @@ export default function StrategicUXOKRSection() {
         It’s a gradual, sometimes rocky journey — one that’s best understood in levels:
       </SectionIntro>
 
-      {/* --- Tile Grid --- */}
+      {/* --- Tile Grid (clean, no shadow, no border) --- */}
       <div className={cn(layout.gridCols3, spacing.gap6, spacing.mt12)}>
         {tiles.map((item) => (
-          <Tile key={item.title} variant="static" className="flex flex-col items-start">
+          <Tile
+            key={item.title}
+            variant="static"
+            className={cn(
+              "flex flex-col items-start",
+              spacing.p6 // this ensures consistent spacing without shadow
+            )}
+          >
             <div className="flex items-center gap-2 mb-2">
               <span>{item.icon}</span>
               <Subtitle>{item.level}</Subtitle>
             </div>
+
             <Subtitle>{item.title}</Subtitle>
             <Body className="leading-relaxed">{item.text}</Body>
           </Tile>
