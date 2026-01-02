@@ -32,8 +32,7 @@ export default function SkillmapLegend() {
               </Body>
               <Body className="text-muted-foreground">
                 How confident you feel in a specific theme — from{" "}
-                <strong>0 (no experience)</strong> to{" "}
-                <strong>4 (expert)</strong>.
+                <strong>0 (no experience)</strong> to <strong>4 (expert)</strong>.
               </Body>
             </div>
 
@@ -43,8 +42,7 @@ export default function SkillmapLegend() {
               </Body>
               <Body className="text-muted-foreground">
                 How important this theme currently is in your role — from{" "}
-                <strong>0 (not relevant)</strong> to{" "}
-                <strong>5 (very high)</strong>.
+                <strong>0 (not relevant)</strong> to <strong>5 (very high)</strong>.
               </Body>
             </div>
           </div>
@@ -70,17 +68,19 @@ export default function SkillmapLegend() {
           <div className={`${spacing.mt10} ${layout.flexColCenter}`}>
             <Body className="text-muted-foreground text-center max-w-text">
               Fields in the <strong>upper-right quadrant</strong> represent{" "}
-              <strong>high skill</strong> and{" "}
-              <strong>high relevance</strong> — your potential{" "}
+              <strong>high skill</strong> and <strong>high relevance</strong> — your potential{" "}
               <em>impact areas</em>.
             </Body>
           </div>
         </div>
       </Tile>
 
-      {/* === Interpretation (white background) === */}
-      <div className={`${spacing.mt10} bg-white py-6`}>
+      {/* === Interpretation (wie sonst auch: tile-look statt bg-white) === */}
+      <div
+        className={`${spacing.mt10} ${spacing.p8} ${radii.xl} ${colors.tile.bg} ${colors.tile.text} border border-border`}
+      >
         <Subtitle>How to read the Skillmap</Subtitle>
+
         <Body className="text-muted-foreground max-w-text">
           The Skillmap represents a snapshot of your current research practice — a visual reflection of
           which skills you rely on most, and how confident you feel using them.
@@ -89,9 +89,8 @@ export default function SkillmapLegend() {
           As your work evolves, your map evolves too. Early in your career,{" "}
           <strong>methodological skills</strong> tend to rank higher in relevance, as they directly support
           hands-on research activities. Over time, as you gain mastery and experience, these skills often{" "}
-          <strong>move rightward</strong> (higher skill) and{" "}
-          <strong>downward</strong> (less central to daily work), while{" "}
-          <strong>strategic and leadership skills</strong> rise in relevance.
+          <strong>move rightward</strong> (higher skill) and <strong>downward</strong> (less central to daily work),
+          while <strong>strategic and leadership skills</strong> rise in relevance.
           <br />
           <br />
           The map therefore not only highlights your <strong>current strengths</strong>, but also hints at

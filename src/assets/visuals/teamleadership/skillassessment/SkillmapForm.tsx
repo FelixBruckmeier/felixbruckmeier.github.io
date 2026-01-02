@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import jsPDF from "jspdf";
 import { Subtitle, MutedText } from "@/components/ui/Tokens";
-import Button from "@/components/ui/Button"; // ✅ default import statt { Button }
+import Button from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
+import { skillScale } from "@/lib/tokens";
 
 const roleProfiles: Record<string, string[]> = {
   Junior: [
@@ -132,36 +133,71 @@ const themes: Record<string, { name: string; description: string }[]> = {
   ],
 };
 
+type Rating = { mastery: number | null; relevance: number | null };
+type RatingsState = Record<string, Rating>;
+
 export default function SkillmapForm({ onDataChange }: { onDataChange: (data: any[]) => void }) {
-  const [ratings, setRatings] = useState<{ [key: string]: { mastery: number | null; relevance: number | null } }>({});
+  const [ratings, setRatings] = useState<RatingsState>({});
   const [openSkill, setOpenSkill] = useState<string | null>(null);
   const [role, setRole] = useState<string>("");
   const [aggregatedData, setAggregatedData] = useState<any[] | null>(null);
 
+  // ✅ Snapshot vom letzten "Generate"
+  const [lastGeneratedSnapshot, setLastGeneratedSnapshot] = useState<string>("");
+
   const masteryScale = [0, 1, 2, 3, 4];
   const relevanceScale = [0, 1, 2, 3, 4, 5];
 
-  const handleChange = (skill: string, type: "mastery" | "relevance", value: number) => {
-    setRatings((prev) => ({
+  // ✅ stabiler Vergleich: Ratings => JSON string (sortiert)
+  const currentSnapshot = useMemo(() => {
+    const sortedKeys = Object.keys(ratings).sort();
+    const normalized: Record<string, Rating> = {};
+    for (const k of sortedKeys) normalized[k] = ratings[k];
+    return JSON.stringify(normalized);
+  }, [ratings]);
+
+  const hasGenerated = Boolean(aggregatedData);
+  const isDirty = hasGenerated && currentSnapshot !== lastGeneratedSnapshot;
+
+const handleChange = (skill: string, type: "mastery" | "relevance", value: number) => {
+  setRatings((prev) => {
+    const current = prev[skill]?.[type] ?? null;
+
+    // ✅ Toggle: wenn derselbe Wert nochmal geklickt wird → wieder entfernen (null)
+    const nextValue = current === value ? null : value;
+
+    return {
       ...prev,
-      [skill]: { ...prev[skill], [type]: value },
-    }));
-  };
+      [skill]: {
+        mastery: prev[skill]?.mastery ?? null,
+        relevance: prev[skill]?.relevance ?? null,
+        [type]: nextValue,
+      },
+    };
+  });
+
+  // falls du "Update Skillmap" nur nach Änderungen zeigen willst:
+  // setIsDirty(true);
+};
+
 
   const generateMap = () => {
     const requiredThemes = role === "Custom" ? Object.keys(themes) : roleProfiles[role];
     const aggregated = requiredThemes.map((theme) => {
       const skills = themes[theme] || [];
       const avgMastery =
-        skills.filter((s) => ratings[s.name]?.mastery !== null).reduce((sum, s) => sum + (ratings[s.name]?.mastery || 0), 0) /
-        skills.length;
+        skills.reduce((sum, s) => sum + (ratings[s.name]?.mastery ?? 0), 0) / (skills.length || 1);
       const avgRelevance =
-        skills.filter((s) => ratings[s.name]?.relevance !== null).reduce((sum, s) => sum + (ratings[s.name]?.relevance || 0), 0) /
-        skills.length;
+        skills.reduce((sum, s) => sum + (ratings[s.name]?.relevance ?? 0), 0) / (skills.length || 1);
+
       return { theme, mastery: avgMastery || 0, influence: avgRelevance || 0 };
     });
+
     setAggregatedData(aggregated);
     onDataChange(aggregated);
+
+    // ✅ Snapshot nach erfolgreichem Generate merken
+    setLastGeneratedSnapshot(currentSnapshot);
   };
 
   const downloadPDF = () => {
@@ -195,7 +231,16 @@ export default function SkillmapForm({ onDataChange }: { onDataChange: (data: an
     <div className="space-y-8 px-4 sm:px-6 md:px-0 md:mx-auto md:max-w-4xl">
       <div className="mb-6 space-y-2">
         <label className="block font-medium">Please select your role:</label>
-        <select value={role} onChange={(e) => setRole(e.target.value)} className="border rounded-lg px-3 py-2">
+        <select
+          value={role}
+          onChange={(e) => {
+            setRole(e.target.value);
+            // optional: wenn Role wechselt, kann man als "neues Setup" behandeln
+            // setAggregatedData(null);
+            // setLastGeneratedSnapshot("");
+          }}
+          className="border rounded-lg px-3 py-2"
+        >
           <option value="">-- Select role --</option>
           {Object.keys(roleProfiles).map((r) => (
             <option key={r} value={r}>
@@ -206,7 +251,7 @@ export default function SkillmapForm({ onDataChange }: { onDataChange: (data: an
       </div>
 
       {role && (
-        <p className="text-gray-700 mt-4">
+        <p className="text-foreground/80 mt-4">
           Please rate the following skills and topic areas: <br />
           <strong>Mastery:</strong> 0 = no experience, 1 = basic, 2 = guided, 3 = independent, 4 = expert. <br />
           <strong>Relevance:</strong> 0 = not relevant, 5 = highly relevant to your current role or tasks.
@@ -222,8 +267,8 @@ export default function SkillmapForm({ onDataChange }: { onDataChange: (data: an
             <Subtitle className="mb-1">{theme}</Subtitle>
 
             <div className="hidden md:grid grid-cols-2 gap-8 w-2/3 ml-auto mb-2">
-              <div className="text-center text-sm font-medium text-gray-600">Mastery</div>
-              <div className="text-center text-sm font-medium text-gray-600">Relevance</div>
+              <div className="text-center text-sm font-medium text-muted-foreground">Mastery</div>
+              <div className="text-center text-sm font-medium text-muted-foreground">Relevance</div>
             </div>
 
             {skills.map((skill) => (
@@ -241,40 +286,56 @@ export default function SkillmapForm({ onDataChange }: { onDataChange: (data: an
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full md:w-2/3">
                     <div className="flex flex-col items-center w-full">
-                      <span className="text-xs text-gray-500 md:hidden mb-1">Mastery</span>
+                      <span className="text-xs text-muted-foreground md:hidden mb-1">Mastery</span>
                       <div className="flex gap-2 justify-center w-full flex-nowrap overflow-x-hidden">
-                        {masteryScale.map((val) => (
-                          <Button
-                            key={val}
-                            variant={ratings[skill.name]?.mastery === val ? "primary" : "secondary"}
-                            size="sm"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleChange(skill.name, "mastery", val);
-                            }}
-                          >
-                            {val}
-                          </Button>
-                        ))}
+                        {masteryScale.map((val) => {
+                          const isActive = ratings[skill.name]?.mastery === val;
+                          return (
+                            <button
+                              key={val}
+                              type="button"
+                              className={cn(
+                                skillScale.itemBase,
+                                skillScale.pressed,
+                                isActive ? skillScale.active : skillScale.inactive
+                              )}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleChange(skill.name, "mastery", val);
+                              }}
+                              aria-pressed={isActive}
+                            >
+                              {val}
+                            </button>
+                          );
+                        })}
                       </div>
                     </div>
 
                     <div className="flex flex-col items-center w-full">
-                      <span className="text-xs text-gray-500 md:hidden mb-1">Relevance</span>
+                      <span className="text-xs text-muted-foreground md:hidden mb-1">Relevance</span>
                       <div className="flex gap-2 justify-center w-full flex-nowrap overflow-x-hidden">
-                        {relevanceScale.map((val) => (
-                          <Button
-                            key={val}
-                            variant={ratings[skill.name]?.relevance === val ? "primary" : "secondary"}
-                            size="sm"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleChange(skill.name, "relevance", val);
-                            }}
-                          >
-                            {val}
-                          </Button>
-                        ))}
+                        {relevanceScale.map((val) => {
+                          const isActive = ratings[skill.name]?.relevance === val;
+                          return (
+                            <button
+                              key={val}
+                              type="button"
+                              className={cn(
+                                skillScale.itemBase,
+                                skillScale.pressed,
+                                isActive ? skillScale.active : skillScale.inactive
+                              )}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleChange(skill.name, "relevance", val);
+                              }}
+                              aria-pressed={isActive}
+                            >
+                              {val}
+                            </button>
+                          );
+                        })}
                       </div>
                     </div>
                   </div>
@@ -286,7 +347,7 @@ export default function SkillmapForm({ onDataChange }: { onDataChange: (data: an
                     openSkill === skill.name ? "max-h-40 mt-2" : "max-h-0"
                   )}
                 >
-                  <p className="text-sm text-gray-600">{skill.description}</p>
+                  <p className="text-sm text-muted-foreground">{skill.description}</p>
                 </div>
               </div>
             ))}
@@ -294,15 +355,34 @@ export default function SkillmapForm({ onDataChange }: { onDataChange: (data: an
         ))}
 
       {role && (
-        <div className="flex justify-center mt-8 gap-4">
-          <Button variant="primary" onClick={generateMap} disabled={!role}>
-            Generate Skillmap
-          </Button>
-          {aggregatedData && (
-            <Button variant="secondary" onClick={downloadPDF}>
-              Download as PDF
+        <div className="flex flex-col items-center mt-8 gap-3">
+          {/* ✅ Hinweistext (Punkt 5) */}
+          {/* ✅ Fester Hinweis-Slot (kein Layout-Shift) */}
+<div className="h-6 flex items-center justify-center">
+  <p
+    className={cn(
+      "text-sm text-muted-foreground text-center transition-all duration-200",
+      hasGenerated && isDirty
+        ? "opacity-100 translate-y-0"
+        : "opacity-0 -translate-y-1 pointer-events-none"
+    )}
+  >
+    You’ve made changes that aren’t applied yet.
+  </p>
+</div>
+
+
+          <div className="flex justify-center gap-4">
+            <Button variant="primary" onClick={generateMap} disabled={!role}>
+              {hasGenerated && isDirty ? "Update Skillmap" : "Generate Skillmap"}
             </Button>
-          )}
+
+            {aggregatedData && (
+              <Button variant="secondary" onClick={downloadPDF}>
+                Download as PDF
+              </Button>
+            )}
+          </div>
         </div>
       )}
     </div>

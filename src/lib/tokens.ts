@@ -49,7 +49,7 @@ export const typography = {
     tracking: "tracking-tight",
     leading: "leading-tight",
   },
-    sectionTitle: {
+  sectionTitle: {
     font: "[font-family:var(--font-display)]",
     size: "text-3xl md:text-5xl",
     weight: "font-bold",
@@ -199,7 +199,7 @@ export const spacing = {
 
 // ✅ layout mit dynamischer Breite (für 4K, WQHD usw.)
 export const layout = {
- containerDynamic: "mx-auto w-full max-w-[1900px] px-[3vw]", // 🔹 NEU: responsive Container
+  containerDynamic: "mx-auto w-full max-w-[1900px] px-[3vw]",
   containerNarrow: "mx-auto max-w-[1100px] px-4 sm:px-6 lg:px-8",
   containerDefault: "mx-auto max-w-[1280px] px-6 lg:px-8",
   containerWide: "mx-auto max-w-[1440px] px-8 lg:px-10",
@@ -254,7 +254,8 @@ export const shadows = {
 export const buttonVariants = {
   base: "inline-flex items-center justify-center rounded-3xl px-5 py-2.5 transition-colors duration-200",
   primary: "bg-primary text-primary-foreground hover:bg-neutral-900 dark:hover:bg-neutral-200",
- secondary: "bg-gray-100 dark:bg-neutral-900 border border-border text-foreground hover:bg-gray-200 dark:hover:bg-neutral-800",
+  secondary:
+    "bg-gray-100 dark:bg-neutral-900 border border-border text-foreground hover:bg-gray-200 dark:hover:bg-neutral-800",
   ghost: "text-foreground hover:bg-neutral-200 dark:hover:bg-neutral-700",
   danger: "bg-red-600 text-white hover:bg-red-700",
   success: "bg-green-600 text-white hover:bg-green-700",
@@ -269,6 +270,31 @@ export const buttonSizes = {
 } as const;
 
 // ================================
+// 🟣 SKILLMAP SCALE (NEU)
+// - Kreise wirklich rund (fixe w/h + aspect-square)
+// - Kein Ruckeln: Border/Ring wird immer "reserviert"
+// ================================
+export const skillScale = {
+  itemBase:
+    "inline-flex items-center justify-center select-none " +
+    "w-9 h-9 aspect-square rounded-full " +
+    "text-sm font-medium " +
+    "transition-[transform,background-color,color,border-color,box-shadow] duration-150 ease-out " +
+    "[transform:translateZ(0)] [backface-visibility:hidden] will-change-transform " +
+    // ✅ Reserviere 2px Border immer, damit nix springt
+    "border-2 border-transparent",
+
+  inactive: "bg-muted text-foreground/80 border-border/60 hover:bg-muted/70",
+
+  active:
+    "bg-primary text-primary-foreground border-primary " +
+    "shadow-[0_0_0_3px_rgba(0,0,0,0.06)] dark:shadow-[0_0_0_3px_rgba(255,255,255,0.08)] ",
+
+  // ✅ Optional: leichtes "press" ohne Layout shift
+  pressed: "active:scale-[0.98]",
+} as const;
+
+// ================================
 // 🖱 HOVER EFFECTS
 // ================================
 export const hoverEffects = {
@@ -278,8 +304,11 @@ export const hoverEffects = {
   scale: "transition-transform duration-200 hover:scale-105",
   rotate: "transition-transform duration-200 hover:rotate-6",
   slide: "transition-all duration-300 ease-in-out",
+
   smoothLift:
-    "transition-all duration-300 ease-in-out hover:scale-[1.01] hover:bg-neutral-200 dark:hover:bg-neutral-800",
+    "transition-transform duration-300 ease-out will-change-transform " +
+    "[transform:translateZ(0)] [backface-visibility:hidden] " +
+    "hover:scale-[1.05] hover:bg-neutral-200 dark:hover:bg-neutral-800",
 } as const;
 
 // ================================
@@ -340,6 +369,10 @@ export const notionHexMap = {
   pink: { text: "#B35488", bg: "#F9F2F5" },
   red: { text: "#C4554D", bg: "#FAECEC" },
 } as const;
+
+// ✅ FIX für Build: alter Import-Name weiter unterstützt
+// (src/assets/.../SkillmapColors.ts importiert "notionHex")
+export const notionHex = notionHexMap;
 
 // ================================
 // 📊 CHART TOKEN HELPERS

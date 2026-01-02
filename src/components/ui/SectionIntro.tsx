@@ -36,6 +36,7 @@ export default function SectionIntro({
 
   return (
     <div
+      data-section-intro
       className={cn(
         sectionIntro[effectiveWidth], // max-w-4xl oder volle Breite
         typography.body.font,

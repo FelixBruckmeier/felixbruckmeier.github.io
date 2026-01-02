@@ -1,1407 +1,5 @@
-==== \.github ====
-
-
-==== \node_modules ====
-
-
-==== \public ====
-
-
-==== \src ====
-
-
-==== \.gitignore ====
-node_modules/
-dist/
-
-
-==== \all_code_clean.txt ====
-
-
-==== \components.json ====
-{
-  "$schema": "https://ui.shadcn.com/schema.json",
-  "style": "new-york",
-  "rsc": false,
-  "tsx": true,
-  "tailwind": {
-    "config": "tailwind.config.js",
-    "css": "src/index.css",
-    "baseColor": "neutral",
-    "cssVariables": true,
-    "prefix": ""
-  },
-  "iconLibrary": "lucide",
-  "aliases": {
-    "components": "@/components",
-    "utils": "@/lib/utils",
-    "ui": "@/components/ui",
-    "lib": "@/lib",
-    "hooks": "@/hooks"
-  },
-  "registries": {}
-}
-
-
-==== \export-code.ps1 ====
-# export-clean.ps1
-# Exportiert NUR Code-Dateien (kein .git, keine node_modules, keine PNG/JPG, keine Bin√§rdateien)
-# und schlie√üt definierte Dateien oder ganze Ordner aus (pr√§zise, ohne andere "components"-Dateien zu treffen).
-
-$projectPath = "C:\Users\felix\Documents\GitHub\felixbruckmeier.github.io"
-$outputFile = "$projectPath\all_code_clean.txt"
-
-if (Test-Path $outputFile) { Remove-Item $outputFile }
-
-$allowedExtensions = @("*.ts", "*.tsx", "*.css", "*.json", *.d.ts","*.html", "*.js", "*.md", "*.yml")
-
-$importantFiles = @(
-    "index.html",
-    "package.json",
-    "tsconfig.json",
-    "vite.config.ts",
-    "tailwind.config.js",
-    "postcss.config.js"
-)
-
-foreach ($file in $importantFiles) {
-    $path = Join-Path $projectPath $file
-    if (Test-Path $path -and $file -ne "package-lock.json") {
-        Add-Content $outputFile ("==== $file ====")
-        Get-Content $path | Add-Content $outputFile
-        Add-Content $outputFile "`n"
-    }
-}
-
-# Einzelne Dateien ausschlie√üen (exakte Muster)
-$excludedFilePatterns = @(
-    "\\src\\assets\\visuals\\impactmeasurement\\CostOfUX\.tsx",
-    "\\src\\assets\\visuals\\impactmeasurement\\HeartFramework\.tsx",
-    "\\src\\assets\\visuals\\researchops\\ReOpsWheel\.tsx",
-    "\\src\\assets\\visuals\\uxstrategy\\ResearchinPD\.tsx",
-    "\\src\\assets\\visuals\\uxstrategy\\ResearchPrioritizationMatrix\.tsx",
-    "\\src\\assets\\visuals\\uxstrategy\\VennDiagram\.tsx"
-)
-
-# Ganze Ordner (inkl. Unterordner & Dateien) ausschlie√üen
-$excludedFolderPatterns = @(
-    "\\src\\assets\\visuals($|\\.*)",
-"\\src\\components\\sections($|\\.*)",
-    "\\src\\components\\sections\\expertise\\researchops($|\\.*)",
-    "\\src\\components\\sections\\expertise\\impactmeasurement($|\\.*)",
-    "\\src\\components\\secti11:54 28.11.2025ons\\expertise\\strategicuxresearch($|\\.*)",
-    "\\src\\components\\sections\\expertise\\TeamLeadership($|\\.*)",
-    "\\src\\components\\projects($|\\.*)",
-  
-    "\\src\\lib($|\\.*)",
-    "\\src\\components\\common($|\\.*)",
-    "\\src\\data($|\\.*)",
-    "\\src\\pages($|\\.*)",
-    "\\src\\assets($|\\.*)",
-    "\\.git($|\\.*)",
-    "\\.github\\workflows($|\\.*)",
-    "\\docs($|\\.*)"
-)
-
-Get-ChildItem -Path $projectPath -Recurse -Include $allowedExtensions |
-    Where-Object {
-        $currentFile = $_
-        $currentFile.FullName -notmatch "\\node_modules\\" -and
-        $currentFile.FullName -notmatch "\\.git\\" -and
-        $currentFile.FullName -notmatch "\\docs\\" -and
-        $currentFile.FullName -notmatch "\\dist\\" -and
-        $currentFile.Name -ne "package-lock.json" -and
-        $currentFile.Extension -notmatch "\.png|\.jpg|\.jpeg|\.gif|\.svg|\.ico|\.pdf" -and
-        -not ($excludedFilePatterns | Where-Object { $currentFile.FullName -imatch $_ }) -and
-        -not ($excludedFolderPatterns | Where-Object { $currentFile.FullName -imatch $_ })
-    } |
-    ForEach-Object {
-        $currentFile = $_
-        Add-Content $outputFile ("==== " + $currentFile.FullName.Replace($projectPath, "") + " ====")
-        Get-Content $currentFile.FullName | Add-Content $outputFile
-        Add-Content $outputFile "`n"
-    }
-
-Write-Host "‚úÖ Export abgeschlossen: $outputFile"
-
-
-==== \export-code5.ps1 ====
-# export-files.ps1
-
-# Ordner, die eingelesen werden sollen
-$folders = @(
-  "C:\Users\felix\Documents\GitHub\felixbruckmeier.github.io\src\pages",
-  "C:\Users\felix\Documents\GitHub\felixbruckmeier.github.io\src\lib",
-  "C:\Users\felix\Documents\GitHub\felixbruckmeier.github.io\src\components\sections\home",
-  "C:\Users\felix\Documents\GitHub\felixbruckmeier.github.io\src\components\sections\expertise\uxstrategy",
-  "C:\Users\felix\Documents\GitHub\felixbruckmeier.github.io\src\components\artefacts",
-  "C:\Users\felix\Documents\GitHub\felixbruckmeier.github.io\src\components\ui"
-  "C:\Users\felix\Documents\GitHub\felixbruckmeier.github.io\src\locales"  
-"C:\Users\felix\Documents\GitHub\felixbruckmeier.github.io\src\components\layout"
-"C:\Users\felix\Documents\GitHub\felixbruckmeier.github.io\src\components\common"
-
-
-)
-
-# Ziel-Datei
-$outputFile = "all_code_export.txt"
-
-# Datei leeren/neu erstellen
-"" | Out-File -FilePath $outputFile -Encoding UTF8
-
-foreach ($folder in $folders) {
-    if (-Not (Test-Path $folder)) {
-        Write-Warning "Ordner nicht gefunden: $folder"
-        continue
-    }
-
-    # Nur Dateien direkt im Ordner (keine Unterordner)
-    $files = Get-ChildItem -Path $folder -File
-
-    foreach ($file in $files) {
-        $filePath = $file.FullName
-        $content = Get-Content $filePath -Raw
-
-        # Pfad + Code in die Export-Datei schreiben
-        "`n`n==============================" | Out-File -FilePath $outputFile -Append -Encoding UTF8
-        $filePath | Out-File -FilePath $outputFile -Append -Encoding UTF8
-        "==============================`n" | Out-File -FilePath $outputFile -Append -Encoding UTF8
-        $content | Out-File -FilePath $outputFile -Append -Encoding UTF8
-    }
-}
-
-Write-Host "‚úÖ Export fertig! Alles in $outputFile"
-
-
-==== \index.html ====
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-
-    <!-- Google Search Console Verification -->
-    <meta name="google-site-verification" content="N1hXubjj5xtLAOx0KP9jxDJ8QxkTfsFbM3ZNtaLwYNg" />
-
-    <!-- Primary Meta Description -->
-    <meta
-      name="description"
-      content="Portfolio of Felix Bruckmeier ‚Äì Senior UX Researcher driving qualitative & quantitative UX Research, UX strategy, mixed methods and ResearchOps in a Design Thinking, Lean UX and Agile UX approach."
-    />
-
-    <!-- ‚ùå REMOVED: Canonical (handled by SEOPage per route) -->
-    <!-- <link rel="canonical" href="https://felixbruckmeier.github.io/" /> -->
-
-    <!-- Open Graph -->
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content="Felix Bruckmeier ‚Äì Senior UX Researcher" />
-    <meta
-      property="og:description"
-      content="Specializing in qualitative & quantitative UX Research, UX strategy and ResearchOps."
-    />
-    <meta property="og:url" content="https://felixbruckmeier.github.io/" />
-    <meta property="og:image" content="https://felixbruckmeier.github.io/og-image.png" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-
-    <!-- Twitter -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Felix Bruckmeier ‚Äì Senior UX Researcher" />
-    <meta
-      name="twitter:description"
-      content="Specializing in qualitative & quantitative UX Research, UX strategy and ResearchOps."
-    />
-    <meta name="twitter:image" content="https://felixbruckmeier.github.io/og-image.png" />
-
-    <!-- Theme Bootstrapping -->
-    <script>
-      (() => {
-        try {
-          const stored = localStorage.getItem("theme");
-          const prefers =
-            window.matchMedia &&
-            window.matchMedia("(prefers-color-scheme: dark)").matches;
-          const theme = stored ?? (prefers ? "dark" : "light");
-          const root = document.documentElement;
-          if (theme === "dark") {
-            root.classList.add("dark");
-            root.style.colorScheme = "dark";
-          } else {
-            root.classList.remove("dark");
-            root.style.colorScheme = "light";
-          }
-        } catch {}
-      })();
-    </script>
-
-    <!-- Analytics -->
-    <script
-      data-goatcounter="https://felix.goatcounter.com/count"
-      async
-      src="//gc.zgo.at/count.js"
-    ></script>
-
-    <link rel="icon" type="image/png" href="/favicon.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-    <title>Felix Bruckmeier ‚Äì Senior UX Researcher</title>
-  </head>
-
-  <body class="min-h-screen bg-background text-foreground">
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
-</html>
-
-
-==== \LICENSE ====
-MIT License
-
-Copyright (c) 2025 Felix Bruckmeier
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
-
-==== \ordnerstruktur.txt ====
-felixbruckmeier.github.io
-public
-src
-.gitignore
-all_code_clean.txt
-components.json
-export-code.ps1
-export-code5.ps1
-index.html
-LICENSE
-ordnerstruktur.txt
-package-lock.json
-package.json
-postcss.config.js
-powershell Ordner struktur.txt
-tailwind.config.js
-tsconfig.app.json
-tsconfig.json
-tsconfig.node.json
-tsconfig.node.tsbuildinfo
-tsconfig.tsbuildinfo
-vite.config.ts
-public\404.html
-public\favicon.png
-public\favicon.svg
-public\manifest.webmanifest
-public\og-image.png
-public\public.txt
-public\robots.txt
-public\sitemap.xml
-public\uxr-social.png
-public\uxr-sodddcial.png
-src\assets
-src\components
-src\data
-src\hooks
-src\lib
-src\locales
-src\pages
-src\types
-src\App.tsx
-src\AppLayout.tsx
-src\i18n.ts
-src\index.css
-src\main.tsx
-src\vite-env.d.ts
-src\assets\images
-src\assets\visuals
-src\assets\images\expertise
-src\assets\images\headers
-src\assets\images\home
-src\assets\images\Navigation
-src\assets\images\projects
-src\assets\images\expertise\impactmeasurement
-src\assets\images\expertise\researchops
-src\assets\images\expertise\strategicuxresearch
-src\assets\images\expertise\teamleadership
-src\assets\images\expertise\uxstrategy
-src\assets\images\expertise\impactmeasurement\impact.jpg
-src\assets\images\expertise\researchops\plant.jpg
-src\assets\images\expertise\strategicuxresearch\1clarity.png
-src\assets\images\expertise\strategicuxresearch\2questions.png
-src\assets\images\expertise\strategicuxresearch\3focus.png
-src\assets\images\expertise\strategicuxresearch\4methods.png
-src\assets\images\expertise\strategicuxresearch\5analysis.png
-src\assets\images\expertise\strategicuxresearch\6present.png
-src\assets\images\expertise\strategicuxresearch\strategicuxr.jpg
-src\assets\images\expertise\teamleadership\personas
-src\assets\images\expertise\teamleadership\team.jpg
-src\assets\images\expertise\teamleadership\personas\accessibilityspecialist.png
-src\assets\images\expertise\teamleadership\personas\cxanalyst.png
-src\assets\images\expertise\teamleadership\personas\designmanager.png
-src\assets\images\expertise\teamleadership\personas\interactiondesigner.png
-src\assets\images\expertise\teamleadership\personas\journeymanager.png
-src\assets\images\expertise\teamleadership\personas\requirementsengineer.png
-src\assets\images\expertise\teamleadership\personas\servicedesigner.png
-src\assets\images\expertise\teamleadership\personas\uideveloper.png
-src\assets\images\expertise\teamleadership\personas\uivisualdesigner.png
-src\assets\images\expertise\teamleadership\personas\uxarchitect.png
-src\assets\images\expertise\teamleadership\personas\uxdesigner.png
-src\assets\images\expertise\teamleadership\personas\uxmanager.png
-src\assets\images\expertise\teamleadership\personas\uxresearcher.png
-src\assets\images\expertise\teamleadership\personas\uxstrategist.png
-src\assets\images\expertise\teamleadership\personas\uxwriter.png
-src\assets\images\expertise\uxstrategy\schach1.jpg
-src\assets\images\headers\home
-src\assets\images\headers\home\headerhome.jpg
-src\assets\images\home\pb.png
-src\assets\images\Navigation\logo1.png
-src\assets\images\projects\amicrointeraction
-src\assets\images\projects\b2b2c
-src\assets\images\projects\carinsurance
-src\assets\images\projects\kanostrategy
-src\assets\images\projects\pricingtesting
-src\assets\images\projects\reopsagile
-src\assets\images\projects\reopsimplement
-src\assets\images\projects\uxportfolio
-src\assets\images\projects\workshop
-src\assets\images\projects\amicrointeraction\optimize.jpg
-src\assets\images\projects\b2b2c\analyewall.png
-src\assets\images\projects\b2b2c\artefakt1.png
-src\assets\images\projects\b2b2c\artefakt2.png
-src\assets\images\projects\b2b2c\B2B2COptimization.jpg
-src\assets\images\projects\b2b2c\beratungsjourney.png
-src\assets\images\projects\b2b2c\dg.png
-src\assets\images\projects\b2b2c\locations.png
-src\assets\images\projects\b2b2c\nutzungsanforderungen.png
-src\assets\images\projects\carinsurance\CarInsurance.png
-src\assets\images\projects\carinsurance\discovery.png
-src\assets\images\projects\carinsurance\journey.png
-src\assets\images\projects\carinsurance\mapping.jpg
-src\assets\images\projects\carinsurance\proto.png
-src\assets\images\projects\carinsurance\testing.png
-src\assets\images\projects\carinsurance\Untitled.png
-src\assets\images\projects\carinsurance\ws.png
-src\assets\images\projects\kanostrategy\A56UN3iVPsZzo6kW.gif
-src\assets\images\projects\kanostrategy\analysis.png
-src\assets\images\projects\kanostrategy\c0R243Jnkygm1KGf.gif
-src\assets\images\projects\kanostrategy\DYD9Z208m0c0QhPr.gif
-src\assets\images\projects\kanostrategy\eC5IqXMpwn1uyeWQ.gif
-src\assets\images\projects\kanostrategy\Fbpw2aDKwmTYAdoB.png
-src\assets\images\projects\kanostrategy\fTFVmLhQ4e7tR6uR.gif
-src\assets\images\projects\kanostrategy\headerkano.jpg
-src\assets\images\projects\kanostrategy\kanotechnik.png
-src\assets\images\projects\kanostrategy\kDBRa28BbXdwTi8F.gif
-src\assets\images\projects\kanostrategy\NrwM2G5C5puInENi.gif
-src\assets\images\projects\kanostrategy\PuqbnZ6OMY5NWXKZ.gif
-src\assets\images\projects\kanostrategy\results.png
-src\assets\images\projects\kanostrategy\shws.png
-src\assets\images\projects\kanostrategy\wAqf8jxzWy6I7hwZ.gif
-src\assets\images\projects\kanostrategy\Xi7pzlYCdiztglmX.gif
-src\assets\images\projects\pricingtesting\findings.png
-src\assets\images\projects\pricingtesting\journey.png
-src\assets\images\projects\pricingtesting\PricingUsabilityTesting.jpg
-src\assets\images\projects\pricingtesting\protoype.png
-src\assets\images\projects\pricingtesting\Research Plan.png
-src\assets\images\projects\reopsagile\ResearchOpsAgileUX.jpg
-src\assets\images\projects\reopsimplement\ReOpsimplementation.jpg
-src\assets\images\projects\uxportfolio\cover.png
-src\assets\images\projects\workshop\1welcome.png
-src\assets\images\projects\workshop\2agenda.png
-src\assets\images\projects\workshop\3_1agendaproblem.png
-src\assets\images\projects\workshop\3_2problemstatement.png
-src\assets\images\projects\workshop\3_3problemgroupwork.png
-src\assets\images\projects\workshop\4_1goaldefinitionagenda.png
-src\assets\images\projects\workshop\4_2goaldefgroupwork.png
-src\assets\images\projects\workshop\4_3goaldefgroupwork2.png
-src\assets\images\projects\workshop\5_1goalprioagenda.png
-src\assets\images\projects\workshop\5_2goalpriogroupwork.png
-src\assets\images\projects\workshop\5_3goalgripboard.png
-src\assets\images\projects\workshop\5_break.png
-src\assets\images\projects\workshop\6_1ideateagenda.png
-src\assets\images\projects\workshop\6_2ideagroupwork.png
-src\assets\images\projects\workshop\6_3ideagroupwork2.png
-src\assets\images\projects\workshop\7_1selectsolutionagenda.png
-src\assets\images\projects\workshop\7_2selecsolutionboard.png
-src\assets\images\projects\workshop\7_3selectsolutiongroup.png
-src\assets\images\projects\workshop\haderws.jpg
-src\assets\visuals\cv
-src\assets\visuals\home
-src\assets\visuals\impactmeasurement
-src\assets\visuals\projects
-src\assets\visuals\researchops
-src\assets\visuals\strategicuxresearch
-src\assets\visuals\teamleadership
-src\assets\visuals\uxstrategy
-src\assets\visuals\cv\CVPreview.tsx
-src\assets\visuals\impactmeasurement\HeartFramework.tsx
-src\assets\visuals\impactmeasurement\ImpactMeasurementStoryVisual.tsx
-src\assets\visuals\impactmeasurement\McKinseyDesignIndexVisual.tsx
-src\assets\visuals\impactmeasurement\MeasurementGapVisual.tsx
-src\assets\visuals\impactmeasurement\UXKPIConstructionVisual.tsx
-src\assets\visuals\projects\CarInsurance
-src\assets\visuals\projects\ZooplusPricing
-src\assets\visuals\projects\CarInsurance\Neuer Ordner
-src\assets\visuals\projects\CarInsurance\BeforeAfter_Car.tsx
-src\assets\visuals\projects\CarInsurance\ImpactGrid_Car.tsx
-src\assets\visuals\projects\CarInsurance\JourneyMap_Car.tsx
-src\assets\visuals\projects\CarInsurance\PrototypeAnimationDetailed.tsx
-src\assets\visuals\projects\CarInsurance\WorkshopAnimation_Car.tsx
-src\assets\visuals\projects\ZooplusPricing\VisAWI.tsx
-src\assets\visuals\researchops\reopsData.ts
-src\assets\visuals\researchops\ReOpsWheel.tsx
-src\assets\visuals\researchops\ResearchOpsMaturityTimeline.tsx
-src\assets\visuals\strategicuxresearch\ResearchFramework.tsx
-src\assets\visuals\strategicuxresearch\ResearchOKRMap.tsx
-src\assets\visuals\strategicuxresearch\RITECycleChart.tsx
-src\assets\visuals\teamleadership\skillassessment
-src\assets\visuals\teamleadership\LeadershipFrameworkVisual.tsx
-src\assets\visuals\teamleadership\PersonaCard.tsx
-src\assets\visuals\teamleadership\RolesSpider.tsx
-src\assets\visuals\teamleadership\skillassessment\skillAssessmentData.ts
-src\assets\visuals\teamleadership\skillassessment\SkillmapChart.tsx
-src\assets\visuals\teamleadership\skillassessment\SkillmapColors.ts
-src\assets\visuals\teamleadership\skillassessment\SkillmapForm.tsx
-src\assets\visuals\teamleadership\skillassessment\SkillmapLegend.tsx
-src\assets\visuals\uxstrategy\ResearchinPD.tsx
-src\assets\visuals\uxstrategy\ResearchPrioritizationMatrix.tsx
-src\assets\visuals\uxstrategy\VennDiagram.tsx
-src\components\common
-src\components\layout
-src\components\sections
-src\components\ui
-src\components\common\ActionIcons.tsx
-src\components\common\Footer.tsx
-src\components\common\ImprintSection.tsx
-src\components\common\LanguageToggle.tsx
-src\components\common\Navbar.tsx
-src\components\common\PrivacySection.tsx
-src\components\common\SEO.tsx
-src\components\common\SEOPage.tsx
-src\components\common\ThemeToggle.tsx
-src\components\layout\PageLayout.tsx
-src\components\sections\cv
-src\components\sections\expertise
-src\components\sections\home
-src\components\sections\projects
-src\components\sections\cv\CVIntroSection.tsx
-src\components\sections\cv\index.ts
-src\components\sections\cv\PersonalExperienceSection.tsx
-src\components\sections\cv\ProfessionalExperienceSection.tsx
-src\components\sections\expertise\impactmeasurement
-src\components\sections\expertise\researchops
-src\components\sections\expertise\strategicuxresearch
-src\components\sections\expertise\TeamLeadership
-src\components\sections\expertise\uxstrategy
-src\components\sections\expertise\impactmeasurement\ImpactMeasurementHeartSection.tsx
-src\components\sections\expertise\impactmeasurement\ImpactMeasurementIntroSection.tsx
-src\components\sections\expertise\impactmeasurement\ImpactMeasurementResearchSection.tsx
-src\components\sections\expertise\impactmeasurement\ImpactMeasurementStoryVisual.tsx
-src\components\sections\expertise\impactmeasurement\ImpactMeasurementSummarySection.tsx
-src\components\sections\expertise\impactmeasurement\ImpactMeasurementUXSection.tsx
-src\components\sections\expertise\impactmeasurement\index.ts
-src\components\sections\expertise\researchops\index.ts
-src\components\sections\expertise\researchops\ResearchOpsFrameworkSection.tsx
-src\components\sections\expertise\researchops\ResearchOpsIntroSection.tsx
-src\components\sections\expertise\researchops\ResearchOpsLeadershipSection.tsx
-src\components\sections\expertise\researchops\ResearchOpsMaturitySection.tsx
-src\components\sections\expertise\researchops\ResearchOpsValueSection.tsx
-src\components\sections\expertise\strategicuxresearch\index.ts
-src\components\sections\expertise\strategicuxresearch\StrategicUXFrameworkSection.tsx
-src\components\sections\expertise\strategicuxresearch\StrategicUXIntroSection.tsx
-src\components\sections\expertise\strategicuxresearch\StrategicUXOKRSection.tsx
-src\components\sections\expertise\strategicuxresearch\StrategicUXRITESection.tsx
-src\components\sections\expertise\TeamLeadership\skillassessment
-src\components\sections\expertise\TeamLeadership\index.ts
-src\components\sections\expertise\TeamLeadership\TeamLeadershipPhilosophySection.tsx
-src\components\sections\expertise\TeamLeadership\TeamLeadershipRoleProfileSection.tsx
-src\components\sections\expertise\TeamLeadership\TeamLeadershipSkillsSection.tsx
-src\components\sections\expertise\TeamLeadership\UXRolesExplorer.tsx
-src\components\sections\expertise\TeamLeadership\skillassessment\compontents
-src\components\sections\expertise\TeamLeadership\skillassessment\index.ts
-src\components\sections\expertise\TeamLeadership\skillassessment\SkillAssessmentIntroSection.tsx
-src\components\sections\expertise\TeamLeadership\skillassessment\SkillAssessmentMappingSection.tsx
-src\components\sections\expertise\TeamLeadership\skillassessment\SkillAssessmentSummarySection.tsx
-src\components\sections\expertise\TeamLeadership\skillassessment\compontents\skillmap.tsx
-src\components\sections\expertise\uxstrategy\DiscoveryDelivery.tsx
-src\components\sections\expertise\uxstrategy\index.ts
-src\components\sections\expertise\uxstrategy\Prioritization.tsx
-src\components\sections\expertise\uxstrategy\ValueOfUXStrategy.tsx
-src\components\sections\expertise\uxstrategy\VisionAlignment.tsx
-src\components\sections\home\AboutSection.tsx
-src\components\sections\home\ContactFormSection.tsx
-src\components\sections\home\ContactSection.tsx
-src\components\sections\home\ExpertiseSection.tsx
-src\components\sections\home\index.ts
-src\components\sections\home\MetricsSection.tsx
-src\components\sections\home\ProjectsSection.tsx
-src\components\sections\projects\CarInsurance
-src\components\sections\projects\kanostrategy
-src\components\sections\projects\swisslife
-src\components\sections\projects\UXPortfolio
-src\components\sections\projects\workshop
-src\components\sections\projects\ZooplusPricing
-src\components\sections\projects\CarInsurance\CarInsuranceBLUFSection.tsx
-src\components\sections\projects\CarInsurance\CarInsuranceImpactSection.tsx
-src\components\sections\projects\CarInsurance\CarInsuranceProcessSection.tsx
-src\components\sections\projects\CarInsurance\index.ts
-src\components\sections\projects\kanostrategy\index.ts
-src\components\sections\projects\kanostrategy\KanoBLUFSection.tsx
-src\components\sections\projects\kanostrategy\KanoImpactSection.tsx
-src\components\sections\projects\kanostrategy\KanoProcessSection.tsx
-src\components\sections\projects\swisslife\brokerBLUFSection.tsx
-src\components\sections\projects\swisslife\brokerImpactSection.tsx
-src\components\sections\projects\swisslife\brokerProcessSection.tsx
-src\components\sections\projects\swisslife\index.ts
-src\components\sections\projects\UXPortfolio\index.ts
-src\components\sections\projects\UXPortfolio\Textdokument (neu).txt
-src\components\sections\projects\UXPortfolio\UXPortfolioBLUFSection.tsx
-src\components\sections\projects\UXPortfolio\UXPortfolioDesignSystemSection.tsx
-src\components\sections\projects\UXPortfolio\UXPortfolioImpactSection.tsx
-src\components\sections\projects\UXPortfolio\UXPortfolioProcessSection.tsx
-src\components\sections\projects\workshop\index.ts
-src\components\sections\projects\workshop\WorkshopBLUFSection.tsx
-src\components\sections\projects\workshop\WorkshopImpactSection.tsx
-src\components\sections\projects\workshop\WorkshopProcessSection.tsx
-src\components\sections\projects\ZooplusPricing\Neuer Ordner
-src\components\sections\projects\ZooplusPricing\index.ts
-src\components\sections\projects\ZooplusPricing\PricingBLUFSection.tsx
-src\components\sections\projects\ZooplusPricing\PricingImpactSection.tsx
-src\components\sections\projects\ZooplusPricing\PricingProcessSection.tsx
-src\components\sections\projects\ZooplusPricing\PricingUseCaseSection.tsx
-src\components\sections\projects\ZooplusPricing\Neuer Ordner\Background.tsx
-src\components\sections\projects\ZooplusPricing\Neuer Ordner\DiscussionGuide.tsx
-src\components\sections\projects\ZooplusPricing\Neuer Ordner\Findings.tsx
-src\components\sections\projects\ZooplusPricing\Neuer Ordner\Heatmap.tsx
-src\components\sections\projects\ZooplusPricing\Neuer Ordner\Hypotheses.tsx
-src\components\sections\projects\ZooplusPricing\Neuer Ordner\Impact.tsx
-src\components\sections\projects\ZooplusPricing\Neuer Ordner\Methods.tsx
-src\components\sections\projects\ZooplusPricing\Neuer Ordner\PricingFindingsSection.tsx
-src\components\sections\projects\ZooplusPricing\Neuer Ordner\SectionIcon.tsx
-src\components\sections\projects\ZooplusPricing\Neuer Ordner\UserJourney_Icons.tsx
-src\components\sections\projects\ZooplusPricing\Neuer Ordner\UserJourney_P.tsx
-src\components\ui\accordion.tsx
-src\components\ui\Badge.tsx
-src\components\ui\Button.tsx
-src\components\ui\FadeIn.tsx
-src\components\ui\index.ts
-src\components\ui\InfoTile.tsx
-src\components\ui\Section.tsx
-src\components\ui\SectionIntro.tsx
-src\components\ui\Tag.tsx
-src\components\ui\TextReveal.tsx
-src\components\ui\Tile.tsx
-src\components\ui\TileImage.tsx
-src\components\ui\Toggle.tsx
-src\components\ui\Tokens.tsx
-src\data\seo.ts
-src\data\skills.ts
-src\data\structuredData.ts
-src\data\uxRolesPersonas.ts
-src\hooks\useActivePhase.ts
-src\lib\SkillmapColors.ts
-src\lib\tagColors.ts
-src\lib\tokens.ts
-src\lib\utils.ts
-src\locales\de.json
-src\locales\en.json
-src\pages\cv
-src\pages\expertise
-src\pages\projects
-src\pages\shared
-src\pages\Home.tsx
-src\pages\NotFound.tsx
-src\pages\cv\index.tsx
-src\pages\expertise\ImpactMeasurement
-src\pages\expertise\ResearchOps
-src\pages\expertise\StrategicUXResearch
-src\pages\expertise\TeamLeadership
-src\pages\expertise\UXStrategy
-src\pages\expertise\ImpactMeasurement\index.tsx
-src\pages\expertise\ResearchOps\index.tsx
-src\pages\expertise\StrategicUXResearch\index.tsx
-src\pages\expertise\TeamLeadership\skillassessment
-src\pages\expertise\TeamLeadership\index.tsx
-src\pages\expertise\TeamLeadership\skillassessment\index.tsx
-src\pages\expertise\UXStrategy\index.tsx
-src\pages\projects\CarInsurance
-src\pages\projects\DeleteCase
-src\pages\projects\InsuranceBroker
-src\pages\projects\kanostrategy
-src\pages\projects\reopsimp
-src\pages\projects\UXPortfolio
-src\pages\projects\workshop
-src\pages\projects\ZooplusPricing
-src\pages\projects\ZooplusReOps
-src\pages\projects\CarInsurance\index.tsx
-src\pages\projects\DeleteCase\index.tsx
-src\pages\projects\InsuranceBroker\index.tsx
-src\pages\projects\kanostrategy\index.tsx
-src\pages\projects\reopsimp\index.tsx
-src\pages\projects\UXPortfolio\index.tsx
-src\pages\projects\workshop\index.tsx
-src\pages\projects\ZooplusPricing\index.tsx
-src\pages\projects\ZooplusReOps\index.tsx
-src\pages\shared\Imprint.tsx
-src\pages\shared\Privacy.tsx
-src\types\vite-imagetools.d.ts
-
-
-==== \package.json ====
-{
-  "name": "uxr-portfolio-felix",
-  "version": "1.0.0",
-  "private": true,
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
-    "preview": "vite preview",
-    "check:i18n": "node scripts/check-missing-translations.js",
-    "check:i18n:reverse": "node scripts/check-missing-translations-reverse.js",
-    "check:i18n:all": "npm run check:i18n && npm run check:i18n:reverse",
-    "translate:i18n": "node scripts/translate-missing-translations.js",
-    "translate:i18n:dry": "node scripts/translate-missing-translations-dryrun.js",
-    "translate:smart": "node scripts/smart-translate-optimize.js --target=de",
-    "translate:smart:en": "node scripts/smart-translate-optimize.js --target=en",
-    "translate:smart:dry": "node scripts/smart-translate-optimize.js --target=de --dry"
-  },
-  "dependencies": {
-    "@radix-ui/react-accordion": "^1.2.12",
-    "chart.js": "^4.5.0",
-    "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.1",
-    "framer-motion": "^12.23.24",
-    "i18next": "^23.16.8",
-    "jspdf": "^3.0.3",
-    "lucide-react": "^0.544.0",
-    "react": "^18.2.0",
-    "react-chartjs-2": "^5.3.0",
-    "react-dom": "^18.2.0",
-    "react-helmet-async": "^2.0.5",
-    "react-i18next": "^13.5.0",
-    "react-intersection-observer": "^9.16.0",
-    "react-router-dom": "^6.26.0",
-    "recharts": "^3.2.1",
-    "sharp": "^0.34.4",
-    "tailwind-merge": "^3.3.1",
-    "tailwindcss-animate": "^1.0.7"
-  },
-  "devDependencies": {
-    "@tailwindcss/postcss": "^4.0.0",
-    "@types/node": "^24.5.2",
-    "@types/react": "^18.2.66",
-    "@types/react-dom": "^18.2.22",
-    "@vitejs/plugin-react": "^4.3.4",
-    "autoprefixer": "^10.4.20",
-    "dotenv": "^16.4.5",
-    "openai": "^4.73.1",
-    "postcss": "^8.4.47",
-    "tailwindcss": "^4.0.0",
-    "typescript": "^5.4.0",
-    "vite": "^5.4.19",
-    "vite-imagetools": "^9.0.0"
-  }
-}
-
-
-==== \postcss.config.js ====
-export default {
-  plugins: {
-    "@tailwindcss/postcss": {},
-  },
-};
-
-
-==== \powershell Ordner struktur.txt ====
-# Root-Ordner
-$root = "C:\Users\felix\Documents\GitHub\felixbruckmeier.github.io"
-
-# Ausgabedatei
-$outFile = "$root\ordnerstruktur.txt"
-
-# Ordner, die ignoriert werden sollen
-$exclude = @("node_modules", ".git", ".github")
-
-# Vorherige Datei lˆschen, falls vorhanden
-if (Test-Path $outFile) { Remove-Item $outFile }
-
-# Root-Ordner einmal als ‹berschrift schreiben
-Add-Content -Path $outFile -Value (Split-Path $root -Leaf)
-
-# Inhalte rekursiv auflisten
-Get-ChildItem -Recurse -Force -Path $root |
-    Where-Object {
-        # Pr¸fen, ob einer der Ausschlussordner im Pfad steckt
-        -not ($_.FullName -match "\\(?:$($exclude -join '|'))(\\|$)")
-    } |
-    ForEach-Object {
-        # Relativer Pfad ab Root
-        $relative = $_.FullName.Substring($root.Length).TrimStart('\')
-        if ($relative) { Add-Content -Path $outFile -Value $relative }
-    }
-
-Write-Host "Ordnerstruktur gespeichert in: $outFile"
-
-
-==== \tailwind.config.js ====
-/**** Tailwind v4 minimal config ****/
-export default {
-  darkMode: "class",
-};
-
-
-==== \tsconfig.app.json ====
-{
-  "compilerOptions": {
-    "target": "ES2020",
-    "useDefineForClassFields": true,
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
-    "module": "ESNext",
-    "skipLibCheck": true,
-    "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
-    "isolatedModules": true,
-    "moduleDetection": "force",
-    "noEmit": true,
-    "jsx": "react-jsx",
-    "strict": false,
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["./src/*"]
-    }
-  },
-  "include": ["src"]
-}
-
-
-==== \tsconfig.json ====
-{
-  "compilerOptions": {
-    "target": "ES2020",
-    "useDefineForClassFields": true,
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
-    "module": "ESNext",
-    "skipLibCheck": true,
-    "moduleResolution": "bundler",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "react-jsx",
-    "esModuleInterop": true,
-
-    /* ‚úÖ Korrigiert f√ºr Vite + GitHub Actions Build */
-    "baseUrl": "./src",
-    "paths": {
-      "@/*": ["*"]
-    },
-
-    /* ‚úÖ Erg√§nzt: Typen f√ºr Node, Vite und Imagetools */
-    "types": ["vite/client", "node"]
-  },
-
-  /* ‚úÖ Wichtig: Typdefinitionen au√üerhalb von src einbinden */
-  "include": [
-    "src",
-    "types/vite-imagetools.d.ts",
-    "src/vite-env.d.ts"
-  ],
-
-  "references": [
-    {
-      "path": "./tsconfig.node.json"
-    }
-  ]
-}
-
-
-==== \tsconfig.node.json ====
-{
-  "compilerOptions": {
-    "composite": true,
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "skipLibCheck": true,
-    "allowSyntheticDefaultImports": true
-  },
-  "include": [
-    "vite.config.ts",
-    "vite.config.js",
-    "rollup-parseAst.d.ts"
-  ]
-}
-
-
-==== \vite.config.ts ====
-// vite.config.ts
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
-import { imagetools } from "vite-imagetools";
-import { fileURLToPath } from "node:url";
-import { dirname, resolve } from "node:path";
-
-// __dirname in ESM nachbauen
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-// Pr√ºfen, ob wir in GitHub Actions laufen
-const isActions = process.env.GITHUB_ACTIONS === "true";
-
-export default defineConfig({
-  plugins: [
-    react(),
-
-    /**
-     * üñº AUTOMATISCHE BILDOPTIMIERUNG
-     * --------------------------------
-     * Diese Default-Regeln sorgen daf√ºr, dass ALLE Importe mit ?as=picture:
-     * - in 6 responsive Gr√∂√üen generiert werden
-     * - WebP + JPG erzeugen
-     * - als <picture> mit srcset ausgeliefert werden
-     * ‚Üí massive Performance-Verbesserung ohne Code-√Ñnderungen
-     */
-    imagetools({
-      defaultDirectives: () =>
-        new URLSearchParams({
-          // mehrere responsive Bildgr√∂√üen
-          w: "2000;1400;1000;800;600;400",
-
-          // moderne + Fallback Formate
-          format: "webp;jpg",
-
-          // Ausgabe als <picture>
-          as: "picture",
-        }),
-    }),
-  ],
-
-  /**
-   * BASE PATH
-   * F√ºr GitHub Pages ‚Üí "/" (User/Org Pages)
-   */
-  base: "/",
-
-  /**
-   * BUILD OUTPUT FOLDER
-   * GitHub Actions ‚Üí dist
-   * Lokal ‚Üí docs
-   */
-  build: {
-    outDir: isActions ? "dist" : "docs",
-  },
-
-  /**
-   * ALIASE
-   * Erlaubt Importe wie "@/components/Button"
-   */
-  resolve: {
-    alias: {
-      "@": resolve(__dirname, "src"),
-    },
-  },
-
-  /**
-   * STELLE SICHER, DASS Vite DIE BILDER ERKENNT
-   */
-  assetsInclude: ["**/*.png", "**/*.jpg", "**/*.jpeg", "**/*.webp"],
-});
-
-
 ==== \public\404.html ====
 <!doctype html><html><head><meta charset="UTF-8"><meta http-equiv="refresh" content="0;url=/" /><script>sessionStorage.redirect=location.pathname+location.search</script><title>Redirecting‚Ä¶</title></head><body>Redirecting‚Ä¶</body></html>
-
-
-==== \public\manifest.webmanifest ====
-{
-  "name": "Felix Bruckmeier \u2014 UXR Portfolio",
-  "short_name": "FB UXR",
-  "start_url": "/",
-  "display": "standalone",
-  "icons": [
-    {
-      "src": "/favicon.svg",
-      "sizes": "64x64",
-      "type": "image/svg+xml"
-    }
-  ],
-  "theme_color": "#0b1220",
-  "background_color": "#ffffff"
-}
-
-
-==== \public\public.txt ====
-1. 404.html:
-<!doctype html><html><head><meta charset="UTF-8"><meta http-equiv="refresh" content="0;url=/" /><script>sessionStorage.redirect=location.pathname+location.search</script><title>Redirecting‚Ä¶</title></head><body>Redirecting‚Ä¶</body></html>
-
-2. favicon.png:
-âPNG
-
-   
-IHDR   @   @   %Êâ  IDATxúÌö?HQ«ﬂe$¢»ÀjJÑÜà
-Ajt*r-I›ä˛Ps5FC¥Èë≠aÿnÉÜ∏¢ã‡îVË“ix˛©ÂÇC˙'◊ã˚¸>‹rø«ÔÎ˚ﬁ›ªAÆ∑∑ü¸g∫†'¿
-
-@É–† 4( 
-@É–† 4( 
-@É–† 4›?ÉG~øØcJ(t∂ππ›±ÎÂÂUí§R©îÀÂ¢—´hÙJñeµ3˛@ÅøEØÔ—Î-}}ñââqüœõNßΩ^•Re…Ñ‹Bá„Ä1D›
-º'øV˚J•îÁ›˚˚{«Ωπ\≥îRQ’f*h∫¢(ûûÜR©•¢”È¨÷AñL¯∑–Û≥»“ÆÈCl6õ›Ó˘©©I•í…d Â2K¶:ÅH‰‚À˙Hµ˙§∂Î˛˛ayyU’>∂ÖÍı˙÷÷v°PdÃ0ç·˘ÓÓcé:û˜X,üØˆO{óÕ647«ﬂﬁî°ççıôôÈ_Œù¢Ò
-HíîH$VV÷⁄ãKKã,ô [(õÕ6
-Âvllî%
-ÊPNbB•î%
-@¿n∑ÂˆÒQ`I”T¿d29ùŒìì„ˆb2ôd…‘‚$˛Ó #Ñ¥Z≠@ »˘-$Ç«≥P,ﬁ±Ñh˙-$Àr≥ŸÑJ>üè≈‚ë»e≠VcÃ‰Ø¿† 4( 
-@É–† 4( 
-@É–† 4ˇ^‡
-Ñú‹ﬁ≈B    IENDÆB`Ç
-
-3. favicon.svg:
-<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='12' fill='#3b82f6'/><text x='50%' y='54%' dominant-baseline='middle' text-anchor='middle' font-size='32' font-family='Inter' fill='white'>F</text></svg>
-
-4. Felix_Bruckmeier_CV.pdf:
-%PDF-1.4\n1 0 obj<</Type/Catalog/Pages 2 0 R>>endobj\n2 0 obj<</Type/Pages/Count 1/Kids[3 0 R]>>endobj\n3 0 obj<</Type/Page/Parent 2 0 R/MediaBox[0 0 300 200]/Contents 4 0 R/Resources<</Font<</F1 5 0 R>>>>>>endobj\n4 0 obj<</Length 55>>stream\nBT /F1 18 Tf 72 120 Td (Replace with your real CV) Tj ET\nendstream endobj\n5 0 obj<</Type/Font/Subtype/Type1/Name/F1/BaseFont/Helvetica>>endobj\nxref\n0 6\n0000000000 65535 f\n0000000010 00000 n\n0000000053 00000 n\n0000000103 00000 n\n0000000290 00000 n\n0000000412 00000 n\ntrailer<</Size 6/Root 1 0 R>>\nstartxref\n520\n%%EOF
-
-5. manifest.webmanifest:
-{
-  "name": "Felix Bruckmeier \u2014 UXR Portfolio",
-  "short_name": "FB UXR",
-  "start_url": "/",
-  "display": "standalone",
-  "icons": [
-    {
-      "src": "/favicon.svg",
-      "sizes": "64x64",
-      "type": "image/svg+xml"
-    }
-  ],
-  "theme_color": "#0b1220",
-  "background_color": "#ffffff"
-}
-
-6. og-image.png:
-PNG PLACEHOLDER
-
-7. robots.txt:
-User-agent: *
-Allow: /
-Sitemap: https://felixbruckmeier.github.io/sitemap.xml
-
-
-8. sitemap.xml:
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://felixbruckmeier.github.io/</loc></url>
-  <url><loc>https://felixbruckmeier.github.io/about</loc></url>
-  <url><loc>https://felixbruckmeier.github.io/expertise</loc></url>
-  <url><loc>https://felixbruckmeier.github.io/projects</loc></url>
-  <url><loc>https://felixbruckmeier.github.io/craft</loc></url>
-  <url><loc>https://felixbruckmeier.github.io/contact</loc></url>
-  <url><loc>https://felixbruckmeier.github.io/imprint</loc></url>
-  <url><loc>https://felixbruckmeier.github.io/privacy</loc></url>
-</urlset>
-
-
-
-==== \public\robots.txt ====
-User-agent: *
-Allow: /
-Sitemap: https://felixbruckmeier.github.io/sitemap.xml
-
-
-==== \public\sitemap.xml ====
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-
-  <!-- Home -->
-  <url><loc>https://felixbruckmeier.github.io/</loc></url>
-
-  <!-- CV -->
-  <url><loc>https://felixbruckmeier.github.io/cv</loc></url>
-
-  <!-- Expertise -->
-  <url><loc>https://felixbruckmeier.github.io/expertise/ux-strategy</loc></url>
-  <url><loc>https://felixbruckmeier.github.io/expertise/strategic-ux-research</loc></url>
-  <url><loc>https://felixbruckmeier.github.io/expertise/researchops</loc></url>
-  <url><loc>https://felixbruckmeier.github.io/expertise/team-leadership</loc></url>
-  <url><loc>https://felixbruckmeier.github.io/expertise/team-leadership/skillassessment</loc></url>
-  <url><loc>https://felixbruckmeier.github.io/expertise/impact-measurement</loc></url>
-
-  <!-- Projects (only indexable ones) -->
-  <url><loc>https://felixbruckmeier.github.io/projects/car-insurance</loc></url>
-  <url><loc>https://felixbruckmeier.github.io/projects/zooplus-pricing</loc></url>
-  <url><loc>https://felixbruckmeier.github.io/projects/insurance-broker-discovery</loc></url>
-  <url><loc>https://felixbruckmeier.github.io/projects/workshop</loc></url>
-  <url><loc>https://felixbruckmeier.github.io/projects/kanostrategy</loc></url>
-  <url><loc>https://felixbruckmeier.github.io/projects/ux-portfolio</loc></url>
-
-  <!-- Legal -->
-  <url><loc>https://felixbruckmeier.github.io/imprint</loc></url>
-  <url><loc>https://felixbruckmeier.github.io/privacy</loc></url>
-
-</urlset>
-
-
-==== \src\components ====
-
-
-==== \src\hooks ====
-
-
-==== \src\locales ====
-
-
-==== \src\types ====
-
-
-==== \src\App.tsx ====
-// src/App.tsx
-import { Routes, Route, Navigate, useLocation } from "react-router-dom";
-import { useEffect } from "react";
-import AppLayout from "@/AppLayout";
-import Home from "@/pages/Home";
-import CVPage from "@/pages/cv";
-
-// üîπ Projektseiten
-import CarInsurance from "@/pages/projects/CarInsurance";
-import ZooplusReOps from "@/pages/projects/ZooplusReOps";
-import ZooplusPricing from "@/pages/projects/ZooplusPricing";
-import InsuranceBrokerDiscovery from "@/pages/projects/InsuranceBroker";
-import WorkshopPage from "@/pages/projects/workshop";
-import KanoStrategyPage from "@/pages/projects/kanostrategy";
-
-// üîπ NEU ‚Äì Dein UX Portfolio Projekt
-import UXPortfolioPage from "@/pages/projects/UXPortfolio";
-
-// üîπ Expertise-Seiten
-import UXStrategy from "@/pages/expertise/UXStrategy";
-import StrategicUXResearch from "@/pages/expertise/StrategicUXResearch";
-import ResearchOps from "@/pages/expertise/ResearchOps";
-import TeamLeadership from "@/pages/expertise/TeamLeadership";
-import ImpactMeasurement from "@/pages/expertise/ImpactMeasurement";
-import SkillAssessmentPage from "@/pages/expertise/TeamLeadership/skillassessment";
-
-// üîπ Footer-/Legal-Seiten
-import Imprint from "@/pages/shared/Imprint";
-import Privacy from "@/pages/shared/Privacy";
-
-/** ScrollToTop */
-function ScrollToTop() {
-  const { pathname } = useLocation();
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "instant" });
-  }, [pathname]);
-  return null;
-}
-
-/** ScrollToHash */
-function ScrollToHash() {
-  const location = useLocation();
-  useEffect(() => {
-    if (location.hash) {
-      setTimeout(() => {
-        const el = document.querySelector(location.hash);
-        if (el) {
-          el.scrollIntoView({ behavior: "smooth", block: "start" });
-        }
-      }, 120);
-    }
-  }, [location]);
-  return null;
-}
-
-export default function App() {
-  return (
-    <>
-      <ScrollToTop />
-      <ScrollToHash />
-
-      <Routes>
-        <Route path="/" element={<AppLayout />}>
-          {/* üîπ Hauptseiten */}
-          <Route index element={<Home />} />
-          <Route path="cv" element={<CVPage />} />
-
-          {/* üîπ Projektseiten */}
-          <Route path="projects/car-insurance" element={<CarInsurance />} />
-          <Route path="projects/zooplus-reops" element={<ZooplusReOps />} />
-          <Route path="projects/zooplus-pricing" element={<ZooplusPricing />} />
-          <Route
-            path="projects/insurance-broker-discovery"
-            element={<InsuranceBrokerDiscovery />}
-          />
-          <Route path="projects/workshop" element={<WorkshopPage />} />
-          <Route path="projects/kanostrategy" element={<KanoStrategyPage />} />
-
-          {/* üîπ NEU ‚Äì UX Portfolio Projekt */}
-          <Route path="projects/ux-portfolio" element={<UXPortfolioPage />} />
-
-          <Route path="projects" element={<Navigate to="/" replace />} />
-
-          {/* üîπ Expertise-Seiten */}
-          <Route path="expertise/ux-strategy" element={<UXStrategy />} />
-          <Route
-            path="expertise/strategic-ux-research"
-            element={<StrategicUXResearch />}
-          />
-          <Route path="expertise/researchops" element={<ResearchOps />} />
-          <Route path="expertise/team-leadership" element={<TeamLeadership />} />
-          <Route
-            path="expertise/team-leadership/skillassessment"
-            element={<SkillAssessmentPage />}
-          />
-          <Route path="expertise/impact-measurement" element={<ImpactMeasurement />} />
-
-          {/* üîπ Footer-/Legal-Seiten */}
-          <Route path="imprint" element={<Imprint />} />
-          <Route path="privacy" element={<Privacy />} />
-
-          {/* üîπ Fallback */}
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Route>
-      </Routes>
-    </>
-  );
-}
-
-
-==== \src\AppLayout.tsx ====
-// src/components/layout/AppLayout.tsx
-import { Outlet } from "react-router-dom";
-import Navbar from "@/components/common/Navbar";
-import Footer from "@/components/common/Footer";
-
-export default function AppLayout() {
-  return (
-    <div className="min-h-screen flex flex-col bg-background text-foreground overflow-x-clip">
-      <Navbar />
-      <main className="flex-1">
-        <Outlet />
-      </main>
-      <Footer />
-    </div>
-  );
-}
-
-
-==== \src\i18n.ts ====
-// src/i18n.ts
-import i18n from "i18next";
-import { initReactI18next, useTranslation } from "react-i18next";
-import de from "@/locales/de.json";
-import en from "@/locales/en.json";
-
-if (!i18n.isInitialized) {
-  void i18n.use(initReactI18next).init({
-    resources: { de: { translation: de }, en: { translation: en } },
-    lng: "en",
-    fallbackLng: "en",
-    interpolation: { escapeValue: false },
-  });
-}
-
-export type Lang = "de" | "en";
-export const useI18n = () => {
-  const { t, i18n } = useTranslation();
-  const lang: Lang = i18n.language?.startsWith("de") ? "de" : "en";
-  const setLang = (l: Lang) => i18n.changeLanguage(l);
-  return { t, i18n, lang, setLang };
-};
-
-export default i18n;
-
-
-==== \src\index.css ====
-@import "tailwindcss";
-@plugin "tailwindcss-animate";
-
-@custom-variant dark (&:is(.dark *));
-
-/* ================================
-   THEME TOKENS (vereinheitlicht)
-   ================================ */
-@theme {
-  --breakpoint-sm: 40rem;
-  --breakpoint-md: 48rem;
-  --breakpoint-lg: 64rem;
-  --breakpoint-xl: 80rem;
-  --breakpoint-2xl: 96rem;
-
-  /* Fonts */
-  --font-sans: "SF Pro Text", "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "SF Pro Display", "Inter", ui-sans-serif, system-ui, sans-serif;
-
-  /* Colors (Light) */
-  --color-background: #ffffff;
-  --color-foreground: #2f2f2f;          /* Einheitliches Grau f√ºr alle Texte */
-  --color-border: #e5e5e5;
-
-  --color-muted: #f3f3f3;
-  --color-muted-foreground: #2f2f2f;    /* identisch mit foreground */
-
-  --color-primary: #0a0a0a;
-  --color-primary-foreground: #ffffff;
-
-  --color-secondary: #4a5a6a;
-  --color-secondary-foreground: #ffffff;
-
-  --color-accent: #0094c6;
-  --color-accent-foreground: #ffffff;
-}
-
-/* ================================
-   DARK THEME OVERRIDES
-   ================================ */
-.dark {
-  --color-background: #0b0b0b;
-  --color-foreground: #c8c8c8;          /* Einheitliches Hellgrau f√ºr alle Texte */
-  --color-border: #2a2a2a;
-
-  --color-muted: #1a1a1a;
-  --color-muted-foreground: #d6d6d6;    /* identisch mit foreground */
-
-  --color-primary: #f8f8f8;
-  --color-primary-foreground: #0a0a0a;
-
-  --color-secondary: #607080;
-  --color-secondary-foreground: #ffffff;
-
-  --color-accent: #33bde5;
-  --color-accent-foreground: #0b0b0b;
-}
-
-:root {
-  color-scheme: light dark;
-}
-
-/* ================================
-   MAP CSS VARS ‚Üí UTILITIES
-   ================================ */
-@theme inline {
-  --color-card: var(--color-background);
-  --color-card-foreground: var(--color-foreground);
-  --color-popover: var(--color-background);
-  --color-popover-foreground: var(--color-foreground);
-}
-
-/* ================================
-   GLOBAL LAYOUT FIXES
-   ================================ */
-html,
-body {
-  margin: 0;
-  padding: 0;
-  overflow-y: scroll;
-  overflow-x: clip;
-  width: 100%;
-  background: var(--color-background);
-  color: var(--color-foreground);
-}
-
-/* ‚úÖ Weiches Scrollen aktivieren */
-html {
-  scroll-behavior: smooth;
-}
-
-/* ‚úÖ Normale Bilder & SVGs skalieren richtig */
-img:not([data-hero]),
-svg:not([data-hero]) {
-  max-width: 100%;
-  height: auto;
-  display: block;
-}
-
-/* ================================
-   COMPONENT UTILITIES
-   ================================ */
-@layer components {
-  .container-responsive {
-    @apply mx-auto max-w-6xl px-4 sm:px-6 lg:px-8;
-  }
-
-  .section {
-    @apply mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-20 space-y-8;
-  }
-
-  .card {
-    @apply rounded-2xl border border-border bg-card text-card-foreground;
-  }
-
-  /* Buttons */
-  .btn {
-    @apply inline-flex items-center justify-center 
-           rounded-2xl px-5 py-2.5 text-sm font-semibold 
-           border border-border transition-colors duration-200;
-  }
-
-  .btn-primary {
-    @apply bg-primary text-primary-foreground hover:opacity-90;
-  }
-
-  .btn-secondary {
-    @apply bg-muted text-foreground hover:bg-muted/70;
-  }
-
-  .btn-ghost {
-    @apply text-foreground hover:bg-muted/40;
-  }
-
-  /* Tiles */
-  .tile {
-    @apply rounded-xl border border-border bg-muted 
-           p-4 text-center text-sm text-foreground 
-           transition-colors duration-200 
-           hover:bg-muted/70;
-  }
-}
-
-/* ================================
-   TYPOGRAPHY BASE
-   ================================ */
-@layer base {
-  body {
-    @apply bg-background text-foreground font-sans;
-  }
-
-  h1 {
-    @apply font-display font-extrabold tracking-tight text-foreground;
-  }
-
-  h2 {
-    @apply font-display font-bold text-foreground;
-  }
-
-  h3 {
-    @apply font-display font-semibold text-foreground;
-  }
-
-  p {
-    @apply leading-relaxed text-foreground;
-  }
-
-  small {
-    @apply text-sm text-foreground;
-  }
-}
-
-/* ================================
-   DARK MODE ‚Äì IMAGE BRIGHTNESS (Klassenbasiert)
-   ================================ */
-.dark img:not(.no-dark-filter) {
-  filter: brightness(0.7);
-  transition: filter 0.3s ease-in-out;
-}
-==== \src\components\layout ====
-
-
-==== \src\components\ui ====
 
 
 ==== \src\components\layout\PageLayout.tsx ====
@@ -1410,12 +8,28 @@ import { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { sectionSpacing, typography } from "@/lib/tokens";
 
+type PictureLike = {
+  sources?: Array<{
+    srcset: string;
+    type: string;
+    sizes?: string;
+  }>;
+  img?: { src: string; width: number; height: number };
+};
+
 interface PageLayoutProps {
   title?: string;
   intro?: string;
-  headerImage?: string;
+  headerImage?: string | PictureLike; // ‚úÖ beides m√∂glich
   children: ReactNode;
   width?: "narrow" | "default" | "wide"; // bleibt f√ºr Kompatibilit√§t, wird aber nicht mehr genutzt
+}
+
+function getHeaderUrl(headerImage?: string | PictureLike) {
+  if (!headerImage) return undefined;
+  if (typeof headerImage === "string") return headerImage;
+  if (typeof headerImage === "object" && headerImage?.img?.src) return headerImage.img.src;
+  return undefined;
 }
 
 export default function PageLayout({
@@ -1424,14 +38,16 @@ export default function PageLayout({
   headerImage,
   children,
 }: PageLayoutProps) {
+  const headerUrl = getHeaderUrl(headerImage);
+
   return (
     <main className="flex flex-col items-stretch text-left">
       {/* ===== HERO ===== */}
-      {headerImage && (
+      {headerUrl && (
         <section
           className="relative w-full flex flex-col justify-center items-center text-center text-white overflow-hidden h-[60vh] bg-black/30"
           style={{
-            backgroundImage: `url(${headerImage})`,
+            backgroundImage: `url(${headerUrl})`,
             backgroundSize: "cover",
             backgroundPosition: "center center",
             backgroundRepeat: "no-repeat",
@@ -1473,12 +89,10 @@ export default function PageLayout({
       )}
 
       {/* ===== CONTENT ===== */}
-      {/* ‚ùó Kein Container-Limit mehr ‚Äì Sections steuern Breite selbst */}
       <div className={cn(sectionSpacing.lg, "space-y-32")}>{children}</div>
     </main>
   );
 }
-
 
 
 ==== \src\components\ui\accordion.tsx ====
@@ -2287,7 +901,7 @@ export default function TileImage({
   caption,
   className,
   ...props
-}) {
+}: any) {
   const isObject = typeof image === "object" && image?.img?.src;
 
   return (
@@ -2296,57 +910,57 @@ export default function TileImage({
         "group relative overflow-hidden aspect-[4/3]",
         radii.xl,
         transitions.default,
-
-        // üî• Die BOX skaliert wieder ‚Äì genau wie vorher
         hoverEffects.smoothLift,
-
         className
       )}
       {...props}
     >
-      {/* === IMAGE-LAYER (skaliert NICHT mit der Box!) === */}
+      {/* === IMAGE-LAYER === */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {isObject ? (
           <picture className="absolute inset-0">
             {Array.isArray(image.sources) &&
-              image.sources.map((s) => <source key={s.srcset} {...s} />)}
+              image.sources.map((s: any) => <source key={s.srcset} {...s} />)}
             <img
               src={image.img.src}
               alt={title || ""}
-              className="w-full h-full object-cover object-center 
-                         scale-[1.15] 
-                         transition-transform duration-500 ease-out"
+              className="w-full h-full object-cover object-center scale-[1.15] transition-transform duration-500 ease-out"
+              loading="lazy"
+              decoding="async"
             />
           </picture>
         ) : (
           <img
             src={image}
             alt={title || ""}
-            className="absolute inset-0 w-full h-full object-cover object-center 
-                       scale-[1.15] 
-                       transition-transform duration-500 ease-out"
+            className="absolute inset-0 w-full h-full object-cover object-center scale-[1.15] transition-transform duration-500 ease-out"
             loading="lazy"
+            decoding="async"
           />
         )}
       </div>
 
-      {/* === DARK OVERLAY === */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/45 via-black/35 to-black/60 pointer-events-none" />
-
-      {/* === TEXT-LAYER (bleibt 100% scharf, skaliert NIE) === */}
+      {/* === OVERLAY === */}
+      {/* Light: etwas weicher, Dark: st√§rker ‚Äî Text bleibt immer wei√ü */}
       <div
-        className="
-          relative z-20 flex flex-col h-full p-4 justify-end select-none 
-          transform-none will-change-auto
-        "
-      >
+        className={cn(
+          "absolute inset-0 pointer-events-none",
+          "bg-gradient-to-b from-black/35 via-black/25 to-black/55",
+          "dark:from-black/45 dark:via-black/35 dark:to-black/60"
+        )}
+      />
+
+      {/* === TEXT-LAYER === */}
+      <div className="relative z-20 flex flex-col h-full p-4 justify-end select-none">
         {title && (
-          <h3 className="text-xl font-semibold mb-1 text-gray-50 drop-shadow-[0_2px_8px_rgba(0,0,0,0.75)]">
+          <h3 className="text-xl font-semibold mb-1 text-white/85
+                         drop-shadow-[0_1px_3px_rgba(0,0,0,0.6)]">
             {title}
           </h3>
         )}
         {caption && (
-          <p className="text-base text-gray-100 leading-snug drop-shadow-[0_2px_6px_rgba(0,0,0,0.7)]">
+          <p className="text-base text-white/85 leading-snug
+                        drop-shadow-[0_1px_2px_rgba(0,0,0,0.55)]">
             {caption}
           </p>
         )}
@@ -2354,11 +968,12 @@ export default function TileImage({
 
       {/* === MOBILE ARROW === */}
       <div
-        className="absolute bottom-3 right-3 md:hidden z-20 
-                   w-9 h-9 rounded-full backdrop-blur-sm pointer-events-none
-                   bg-white/80 text-gray-900 dark:bg-black/70 dark:text-gray-100"
+        className="absolute bottom-3 right-3 md:hidden z-20 w-9 h-9 rounded-full backdrop-blur-sm pointer-events-none
+                   bg-white/80 text-gray-900 dark:bg-black/70 dark:text-gray-100
+                   flex items-center justify-center"
+        aria-hidden="true"
       >
-        <ArrowRight className="w-5 h-5" />
+        <ArrowRight className="w-5 h-5 translate-x-[0.5px]" />
       </div>
     </div>
   );
@@ -2928,3 +1543,3046 @@ declare module "*?*" {
 }
 
 
+==== \src\App.tsx ====
+// src/App.tsx
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { useEffect } from "react";
+import AppLayout from "@/AppLayout";
+import Home from "@/pages/Home";
+import CVPage from "@/pages/cv";
+
+// üîπ Projektseiten
+import CarInsurance from "@/pages/projects/CarInsurance";
+import ZooplusReOps from "@/pages/projects/ZooplusReOps";
+import ZooplusPricing from "@/pages/projects/ZooplusPricing";
+import InsuranceBrokerDiscovery from "@/pages/projects/InsuranceBroker";
+import WorkshopPage from "@/pages/projects/workshop";
+import KanoStrategyPage from "@/pages/projects/kanostrategy";
+
+// üîπ NEU ‚Äì Dein UX Portfolio Projekt
+import UXPortfolioPage from "@/pages/projects/UXPortfolio";
+
+// üîπ Expertise-Seiten
+import UXStrategy from "@/pages/expertise/UXStrategy";
+import StrategicUXResearch from "@/pages/expertise/StrategicUXResearch";
+import ResearchOps from "@/pages/expertise/ResearchOps";
+import TeamLeadership from "@/pages/expertise/TeamLeadership";
+import ImpactMeasurement from "@/pages/expertise/ImpactMeasurement";
+import SkillAssessmentPage from "@/pages/expertise/TeamLeadership/skillassessment";
+
+// üîπ Footer-/Legal-Seiten
+import Imprint from "@/pages/shared/Imprint";
+import Privacy from "@/pages/shared/Privacy";
+
+/** ScrollToTop */
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "instant" });
+  }, [pathname]);
+  return null;
+}
+
+/** ScrollToHash */
+function ScrollToHash() {
+  const location = useLocation();
+  useEffect(() => {
+    if (location.hash) {
+      setTimeout(() => {
+        const el = document.querySelector(location.hash);
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }, 120);
+    }
+  }, [location]);
+  return null;
+}
+
+export default function App() {
+  return (
+    <>
+      <ScrollToTop />
+      <ScrollToHash />
+
+      <Routes>
+        <Route path="/" element={<AppLayout />}>
+          {/* üîπ Hauptseiten */}
+          <Route index element={<Home />} />
+          <Route path="cv" element={<CVPage />} />
+
+          {/* üîπ Projektseiten */}
+          <Route path="projects/car-insurance" element={<CarInsurance />} />
+          <Route path="projects/zooplus-reops" element={<ZooplusReOps />} />
+          <Route path="projects/zooplus-pricing" element={<ZooplusPricing />} />
+          <Route
+            path="projects/insurance-broker-discovery"
+            element={<InsuranceBrokerDiscovery />}
+          />
+          <Route path="projects/workshop" element={<WorkshopPage />} />
+          <Route path="projects/kanostrategy" element={<KanoStrategyPage />} />
+
+          {/* üîπ NEU ‚Äì UX Portfolio Projekt */}
+          <Route path="projects/ux-portfolio" element={<UXPortfolioPage />} />
+
+          <Route path="projects" element={<Navigate to="/" replace />} />
+
+          {/* üîπ Expertise-Seiten */}
+          <Route path="expertise/ux-strategy" element={<UXStrategy />} />
+          <Route
+            path="expertise/strategic-ux-research"
+            element={<StrategicUXResearch />}
+          />
+          <Route path="expertise/researchops" element={<ResearchOps />} />
+          <Route path="expertise/team-leadership" element={<TeamLeadership />} />
+          <Route
+            path="expertise/team-leadership/skillassessment"
+            element={<SkillAssessmentPage />}
+          />
+          <Route path="expertise/impact-measurement" element={<ImpactMeasurement />} />
+
+          {/* üîπ Footer-/Legal-Seiten */}
+          <Route path="imprint" element={<Imprint />} />
+          <Route path="privacy" element={<Privacy />} />
+
+          {/* üîπ Fallback */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Route>
+      </Routes>
+    </>
+  );
+}
+
+
+==== \src\AppLayout.tsx ====
+// src/components/layout/AppLayout.tsx
+import { Outlet } from "react-router-dom";
+import Navbar from "@/components/common/Navbar";
+import Footer from "@/components/common/Footer";
+
+export default function AppLayout() {
+  return (
+    <div className="min-h-screen flex flex-col bg-background text-foreground overflow-x-clip">
+      <Navbar />
+      <main className="flex-1">
+        <Outlet />
+      </main>
+      <Footer />
+    </div>
+  );
+}
+
+
+==== \src\i18n.ts ====
+// src/i18n.ts
+import i18n from "i18next";
+import { initReactI18next, useTranslation } from "react-i18next";
+import de from "@/locales/de.json";
+import en from "@/locales/en.json";
+
+if (!i18n.isInitialized) {
+  void i18n.use(initReactI18next).init({
+    resources: { de: { translation: de }, en: { translation: en } },
+    lng: "en",
+    fallbackLng: "en",
+    interpolation: { escapeValue: false },
+  });
+}
+
+export type Lang = "de" | "en";
+export const useI18n = () => {
+  const { t, i18n } = useTranslation();
+  const lang: Lang = i18n.language?.startsWith("de") ? "de" : "en";
+  const setLang = (l: Lang) => i18n.changeLanguage(l);
+  return { t, i18n, lang, setLang };
+};
+
+export default i18n;
+
+
+==== \src\index.css ====
+@import "tailwindcss";
+@plugin "tailwindcss-animate";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ================================
+   THEME TOKENS (vereinheitlicht)
+   ================================ */
+@theme {
+  --breakpoint-sm: 40rem;
+  --breakpoint-md: 48rem;
+  --breakpoint-lg: 64rem;
+  --breakpoint-xl: 80rem;
+  --breakpoint-2xl: 96rem;
+
+  /* Fonts */
+  --font-sans: "SF Pro Text", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "SF Pro Display", "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  /* Colors (Light) */
+  --color-background: #ffffff;
+  --color-foreground: #2f2f2f;          /* Einheitliches Grau f√ºr alle Texte */
+  --color-border: #e5e5e5;
+
+  --color-muted: #f3f3f3;
+  --color-muted-foreground: #2f2f2f;    /* identisch mit foreground */
+
+  --color-primary: #0a0a0a;
+  --color-primary-foreground: #ffffff;
+
+  --color-secondary: #4a5a6a;
+  --color-secondary-foreground: #ffffff;
+
+  --color-accent: #0094c6;
+  --color-accent-foreground: #ffffff;
+}
+
+/* ================================
+   DARK THEME OVERRIDES
+   ================================ */
+.dark {
+  --color-background: #0b0b0b;
+  --color-foreground: #c8c8c8;          /* Einheitliches Hellgrau f√ºr alle Texte */
+  --color-border: #2a2a2a;
+
+  --color-muted: #1a1a1a;
+  --color-muted-foreground: #d6d6d6;    /* identisch mit foreground */
+
+  --color-primary: #f8f8f8;
+  --color-primary-foreground: #0a0a0a;
+
+  --color-secondary: #607080;
+  --color-secondary-foreground: #ffffff;
+
+  --color-accent: #33bde5;
+  --color-accent-foreground: #0b0b0b;
+}
+
+:root {
+  color-scheme: light dark;
+}
+
+/* ================================
+   MAP CSS VARS ‚Üí UTILITIES
+   ================================ */
+@theme inline {
+  --color-card: var(--color-background);
+  --color-card-foreground: var(--color-foreground);
+  --color-popover: var(--color-background);
+  --color-popover-foreground: var(--color-foreground);
+}
+
+/* ================================
+   GLOBAL LAYOUT FIXES
+   ================================ */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  overflow-y: scroll;
+  overflow-x: clip;
+  width: 100%;
+  background: var(--color-background);
+  color: var(--color-foreground);
+}
+
+/* ‚úÖ Weiches Scrollen aktivieren */
+html {
+  scroll-behavior: smooth;
+}
+
+/* ‚úÖ Normale Bilder & SVGs skalieren richtig */
+img:not([data-hero]),
+svg:not([data-hero]) {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ================================
+   COMPONENT UTILITIES
+   ================================ */
+@layer components {
+  .container-responsive {
+    @apply mx-auto max-w-6xl px-4 sm:px-6 lg:px-8;
+  }
+
+  .section {
+    @apply mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-20 space-y-8;
+  }
+
+  .card {
+    @apply rounded-2xl border border-border bg-card text-card-foreground;
+  }
+
+  /* Buttons */
+  .btn {
+    @apply inline-flex items-center justify-center 
+           rounded-2xl px-5 py-2.5 text-sm font-semibold 
+           border border-border transition-colors duration-200;
+  }
+
+  .btn-primary {
+    @apply bg-primary text-primary-foreground hover:opacity-90;
+  }
+
+  .btn-secondary {
+    @apply bg-muted text-foreground hover:bg-muted/70;
+  }
+
+  .btn-ghost {
+    @apply text-foreground hover:bg-muted/40;
+  }
+
+  /* Tiles */
+  .tile {
+    @apply rounded-xl border border-border bg-muted 
+           p-4 text-center text-sm text-foreground 
+           transition-colors duration-200 
+           hover:bg-muted/70;
+  }
+}
+
+/* ================================
+   TYPOGRAPHY BASE
+   ================================ */
+@layer base {
+  body {
+    @apply bg-background text-foreground font-sans;
+  }
+
+  h1 {
+    @apply font-display font-extrabold tracking-tight text-foreground;
+  }
+
+  h2 {
+    @apply font-display font-bold text-foreground;
+  }
+
+  h3 {
+    @apply font-display font-semibold text-foreground;
+  }
+
+  p {
+    @apply leading-relaxed text-foreground;
+  }
+
+  small {
+    @apply text-sm text-foreground;
+  }
+}
+
+/* ================================
+   DARK MODE ‚Äì IMAGE BRIGHTNESS (Klassenbasiert)
+   ================================ */
+.dark img:not(.no-dark-filter) {
+  filter: brightness(0.7);
+  transition: filter 0.3s ease-in-out;
+}
+
+
+==== \src\main.tsx ====
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { StrictMode } from "react";
+import { BrowserRouter } from "react-router-dom";
+import { HelmetProvider } from "react-helmet-async";   // ‚≠ê NEU
+import App from "@/App";
+import "@/i18n";
+import "./index.css";
+
+const redirect = sessionStorage.getItem("redirect");
+if (redirect) {
+  sessionStorage.removeItem("redirect");
+  const url = new URL(redirect, window.location.origin);
+  window.history.replaceState(null, "", url.pathname + url.search);
+}
+
+ReactDOM.createRoot(document.getElementById("root")!).render(
+  <StrictMode>
+    <HelmetProvider>        {/* ‚≠ê Helmet Provider Wrapper */}
+      <BrowserRouter
+        future={{
+          v7_startTransition: true,
+          v7_relativeSplatPath: true,
+        }}
+      >
+        <App />
+      </BrowserRouter>
+    </HelmetProvider>
+  </StrictMode>
+);
+
+
+==== \src\vite-env.d.ts ====
+/// <reference types="vite/client" />
+
+declare module "*.jpg" {
+  const value: string;
+  export default value;
+}
+
+declare module "*.jpeg" {
+  const value: string;
+  export default value;
+}
+
+declare module "*.png" {
+  const value: string;
+  export default value;
+}
+
+declare module "*.svg" {
+  const value: string;
+  export default value;
+}
+
+declare module "*.webp" {
+  const value: string;
+  export default value;
+}
+
+declare module "*.gif" {
+  const value: string;
+  export default value;
+}
+
+declare module "*.mp4" {
+  const value: string;
+  export default value;
+}
+
+/* ?? neu hinzuf¸gen */
+declare module '*&as=picture';
+declare module '*?*';
+
+
+==== \components.json ====
+{
+  "$schema": "https://ui.shadcn.com/schema.json",
+  "style": "new-york",
+  "rsc": false,
+  "tsx": true,
+  "tailwind": {
+    "config": "tailwind.config.js",
+    "css": "src/index.css",
+    "baseColor": "neutral",
+    "cssVariables": true,
+    "prefix": ""
+  },
+  "iconLibrary": "lucide",
+  "aliases": {
+    "components": "@/components",
+    "utils": "@/lib/utils",
+    "ui": "@/components/ui",
+    "lib": "@/lib",
+    "hooks": "@/hooks"
+  },
+  "registries": {}
+}
+
+
+==== \index.html ====
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <!-- Google Search Console Verification -->
+    <meta name="google-site-verification" content="N1hXubjj5xtLAOx0KP9jxDJ8QxkTfsFbM3ZNtaLwYNg" />
+
+    <!-- Primary Meta Description -->
+    <meta
+      name="description"
+      content="Portfolio of Felix Bruckmeier ‚Äì Senior UX Researcher driving qualitative & quantitative UX Research, UX strategy, mixed methods and ResearchOps in a Design Thinking, Lean UX and Agile UX approach."
+    />
+
+    <!-- ‚ùå REMOVED: Canonical (handled by SEOPage per route) -->
+    <!-- <link rel="canonical" href="https://felixbruckmeier.github.io/" /> -->
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Felix Bruckmeier ‚Äì Senior UX Researcher" />
+    <meta
+      property="og:description"
+      content="Specializing in qualitative & quantitative UX Research, UX strategy and ResearchOps."
+    />
+    <meta property="og:url" content="https://felixbruckmeier.github.io/" />
+    <meta property="og:image" content="https://felixbruckmeier.github.io/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Felix Bruckmeier ‚Äì Senior UX Researcher" />
+    <meta
+      name="twitter:description"
+      content="Specializing in qualitative & quantitative UX Research, UX strategy and ResearchOps."
+    />
+    <meta name="twitter:image" content="https://felixbruckmeier.github.io/og-image.png" />
+
+    <!-- Theme Bootstrapping -->
+    <script>
+      (() => {
+        try {
+          const stored = localStorage.getItem("theme");
+          const prefers =
+            window.matchMedia &&
+            window.matchMedia("(prefers-color-scheme: dark)").matches;
+          const theme = stored ?? (prefers ? "dark" : "light");
+          const root = document.documentElement;
+          if (theme === "dark") {
+            root.classList.add("dark");
+            root.style.colorScheme = "dark";
+          } else {
+            root.classList.remove("dark");
+            root.style.colorScheme = "light";
+          }
+        } catch {}
+      })();
+    </script>
+
+    <!-- Analytics -->
+    <script
+      data-goatcounter="https://felix.goatcounter.com/count"
+      async
+      src="//gc.zgo.at/count.js"
+    ></script>
+
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Felix Bruckmeier ‚Äì Senior UX Researcher</title>
+  </head>
+
+  <body class="min-h-screen bg-background text-foreground">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+
+
+==== \package.json ====
+{
+  "name": "uxr-portfolio-felix",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "check:i18n": "node scripts/check-missing-translations.js",
+    "check:i18n:reverse": "node scripts/check-missing-translations-reverse.js",
+    "check:i18n:all": "npm run check:i18n && npm run check:i18n:reverse",
+    "translate:i18n": "node scripts/translate-missing-translations.js",
+    "translate:i18n:dry": "node scripts/translate-missing-translations-dryrun.js",
+    "translate:smart": "node scripts/smart-translate-optimize.js --target=de",
+    "translate:smart:en": "node scripts/smart-translate-optimize.js --target=en",
+    "translate:smart:dry": "node scripts/smart-translate-optimize.js --target=de --dry"
+  },
+  "dependencies": {
+    "@radix-ui/react-accordion": "^1.2.12",
+    "chart.js": "^4.5.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "framer-motion": "^12.23.24",
+    "i18next": "^23.16.8",
+    "jspdf": "^3.0.3",
+    "lucide-react": "^0.544.0",
+    "react": "^18.2.0",
+    "react-chartjs-2": "^5.3.0",
+    "react-dom": "^18.2.0",
+    "react-helmet-async": "^2.0.5",
+    "react-i18next": "^13.5.0",
+    "react-intersection-observer": "^9.16.0",
+    "react-router-dom": "^6.26.0",
+    "recharts": "^3.2.1",
+    "sharp": "^0.34.4",
+    "tailwind-merge": "^3.3.1",
+    "tailwindcss-animate": "^1.0.7"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.0.0",
+    "@types/node": "^24.5.2",
+    "@types/react": "^18.2.66",
+    "@types/react-dom": "^18.2.22",
+    "@vitejs/plugin-react": "^4.3.4",
+    "autoprefixer": "^10.4.20",
+    "dotenv": "^16.4.5",
+    "openai": "^4.73.1",
+    "postcss": "^8.4.47",
+    "tailwindcss": "^4.0.0",
+    "typescript": "^5.4.0",
+    "vite": "^5.4.19",
+    "vite-imagetools": "^9.0.0"
+  }
+}
+
+
+==== \postcss.config.js ====
+export default {
+  plugins: {
+    "@tailwindcss/postcss": {},
+  },
+};
+
+
+==== \tailwind.config.js ====
+/**** Tailwind v4 minimal config ****/
+export default {
+  darkMode: "class",
+};
+
+
+==== \tsconfig.app.json ====
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "strict": false,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": ["src"]
+}
+
+
+==== \tsconfig.json ====
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "esModuleInterop": true,
+
+    /* ‚úÖ Korrigiert f√ºr Vite + GitHub Actions Build */
+    "baseUrl": "./src",
+    "paths": {
+      "@/*": ["*"]
+    },
+
+    /* ‚úÖ Erg√§nzt: Typen f√ºr Node, Vite und Imagetools */
+    "types": ["vite/client", "node"]
+  },
+
+  /* ‚úÖ Wichtig: Typdefinitionen au√üerhalb von src einbinden */
+  "include": [
+    "src",
+    "types/vite-imagetools.d.ts",
+    "src/vite-env.d.ts"
+  ],
+
+  "references": [
+    {
+      "path": "./tsconfig.node.json"
+    }
+  ]
+}
+
+
+==== \tsconfig.node.json ====
+{
+  "compilerOptions": {
+    "composite": true,
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "skipLibCheck": true,
+    "allowSyntheticDefaultImports": true
+  },
+  "include": [
+    "vite.config.ts",
+    "vite.config.js",
+    "rollup-parseAst.d.ts"
+  ]
+}
+
+
+==== \vite.config.d.ts ====
+declare const _default: import("vite").UserConfig;
+export default _default;
+
+
+==== \vite.config.js ====
+// vite.config.ts
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import { imagetools } from "vite-imagetools";
+import { fileURLToPath } from "node:url";
+import { dirname, resolve } from "node:path";
+// __dirname in ESM nachbauen
+var __filename = fileURLToPath(import.meta.url);
+var __dirname = dirname(__filename);
+// Pr√ºfen, ob wir in GitHub Actions laufen
+var isActions = process.env.GITHUB_ACTIONS === "true";
+export default defineConfig({
+    plugins: [
+        react(),
+        /**
+         * üñº AUTOMATISCHE BILDOPTIMIERUNG
+         * --------------------------------
+         * Diese Default-Regeln sorgen daf√ºr, dass ALLE Importe mit ?as=picture:
+         * - in 6 responsive Gr√∂√üen generiert werden
+         * - WebP + JPG erzeugen
+         * - als <picture> mit srcset ausgeliefert werden
+         * ‚Üí massive Performance-Verbesserung ohne Code-√Ñnderungen
+         */
+        imagetools({
+            defaultDirectives: function () {
+                return new URLSearchParams({
+                    // mehrere responsive Bildgr√∂√üen
+                    w: "2000;1400;1000;800;600;400",
+                    // moderne + Fallback Formate
+                    format: "webp;jpg",
+                    // Ausgabe als <picture>
+                    as: "picture",
+                });
+            },
+        }),
+    ],
+    /**
+     * BASE PATH
+     * F√ºr GitHub Pages ‚Üí "/" (User/Org Pages)
+     */
+    base: "/",
+    /**
+     * BUILD OUTPUT FOLDER
+     * GitHub Actions ‚Üí dist
+     * Lokal ‚Üí docs
+     */
+    build: {
+        outDir: isActions ? "dist" : "docs",
+    },
+    /**
+     * ALIASE
+     * Erlaubt Importe wie "@/components/Button"
+     */
+    resolve: {
+        alias: {
+            "@": resolve(__dirname, "src"),
+        },
+    },
+    /**
+     * STELLE SICHER, DASS Vite DIE BILDER ERKENNT
+     */
+    assetsInclude: ["**/*.png", "**/*.jpg", "**/*.jpeg", "**/*.webp"],
+});
+
+
+==== \vite.config.ts ====
+// vite.config.ts
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import { imagetools } from "vite-imagetools";
+import { fileURLToPath } from "node:url";
+import { dirname, resolve } from "node:path";
+
+// __dirname in ESM nachbauen
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+// Pr√ºfen, ob wir in GitHub Actions laufen
+const isActions = process.env.GITHUB_ACTIONS === "true";
+
+export default defineConfig({
+  plugins: [
+    react(),
+
+    /**
+     * üñº AUTOMATISCHE BILDOPTIMIERUNG
+     * --------------------------------
+     * Diese Default-Regeln sorgen daf√ºr, dass ALLE Importe mit ?as=picture:
+     * - in 6 responsive Gr√∂√üen generiert werden
+     * - WebP + JPG erzeugen
+     * - als <picture> mit srcset ausgeliefert werden
+     * ‚Üí massive Performance-Verbesserung ohne Code-√Ñnderungen
+     */
+    imagetools({
+      defaultDirectives: () =>
+        new URLSearchParams({
+          // mehrere responsive Bildgr√∂√üen
+          w: "2000;1400;1000;800;600;400",
+
+          // moderne + Fallback Formate
+          format: "webp;jpg",
+
+          // Ausgabe als <picture>
+          as: "picture",
+        }),
+    }),
+  ],
+
+  /**
+   * BASE PATH
+   * F√ºr GitHub Pages ‚Üí "/" (User/Org Pages)
+   */
+  base: "/",
+
+  /**
+   * BUILD OUTPUT FOLDER
+   * GitHub Actions ‚Üí dist
+   * Lokal ‚Üí docs
+   */
+  build: {
+    outDir: isActions ? "dist" : "docs",
+  },
+
+  /**
+   * ALIASE
+   * Erlaubt Importe wie "@/components/Button"
+   */
+  resolve: {
+    alias: {
+      "@": resolve(__dirname, "src"),
+    },
+  },
+
+  /**
+   * STELLE SICHER, DASS Vite DIE BILDER ERKENNT
+   */
+  assetsInclude: ["**/*.png", "**/*.jpg", "**/*.jpeg", "**/*.webp"],
+});
+
+
+==== \public\404.html ====
+<!doctype html><html><head><meta charset="UTF-8"><meta http-equiv="refresh" content="0;url=/" /><script>sessionStorage.redirect=location.pathname+location.search</script><title>Redirecting‚Ä¶</title></head><body>Redirecting‚Ä¶</body></html>
+
+
+==== \src\components\layout\PageLayout.tsx ====
+// src/components/layout/PageLayout.tsx
+import { ReactNode } from "react";
+import { cn } from "@/lib/utils";
+import { sectionSpacing, typography } from "@/lib/tokens";
+
+type PictureLike = {
+  sources?: Array<{
+    srcset: string;
+    type: string;
+    sizes?: string;
+  }>;
+  img?: { src: string; width: number; height: number };
+};
+
+interface PageLayoutProps {
+  title?: string;
+  intro?: string;
+  headerImage?: string | PictureLike; // ‚úÖ beides m√∂glich
+  children: ReactNode;
+  width?: "narrow" | "default" | "wide"; // bleibt f√ºr Kompatibilit√§t, wird aber nicht mehr genutzt
+}
+
+function getHeaderUrl(headerImage?: string | PictureLike) {
+  if (!headerImage) return undefined;
+  if (typeof headerImage === "string") return headerImage;
+  if (typeof headerImage === "object" && headerImage?.img?.src) return headerImage.img.src;
+  return undefined;
+}
+
+export default function PageLayout({
+  title,
+  intro,
+  headerImage,
+  children,
+}: PageLayoutProps) {
+  const headerUrl = getHeaderUrl(headerImage);
+
+  return (
+    <main className="flex flex-col items-stretch text-left">
+      {/* ===== HERO ===== */}
+      {headerUrl && (
+        <section
+          className="relative w-full flex flex-col justify-center items-center text-center text-white overflow-hidden h-[60vh] bg-black/30"
+          style={{
+            backgroundImage: `url(${headerUrl})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center center",
+            backgroundRepeat: "no-repeat",
+            transition: "background-size 0.6s ease-in-out",
+          }}
+        >
+          {/* Overlay f√ºr bessere Lesbarkeit */}
+          <div className="absolute inset-0 bg-black/50" />
+
+          {/* Titel & Intro zentral positioniert */}
+          <div className="relative z-10 max-w-3xl px-6">
+            {title && (
+              <h1
+                className={cn(
+                  typography.hero.font,
+                  typography.hero.size,
+                  typography.hero.weight,
+                  typography.hero.leading,
+                  "text-white drop-shadow-lg"
+                )}
+              >
+                {title}
+              </h1>
+            )}
+
+            {intro && (
+              <p
+                className={cn(
+                  typography.body.font,
+                  typography.body.size,
+                  "mt-6 text-gray-200 leading-relaxed drop-shadow-md"
+                )}
+              >
+                {intro}
+              </p>
+            )}
+          </div>
+        </section>
+      )}
+
+      {/* ===== CONTENT ===== */}
+      <div className={cn(sectionSpacing.lg, "space-y-32")}>{children}</div>
+    </main>
+  );
+}
+
+
+==== \src\components\ui\accordion.tsx ====
+// src/components/ui/accordion.tsx
+import * as React from "react";
+import * as AccordionPrimitive from "@radix-ui/react-accordion";
+import { ChevronDown } from "lucide-react";
+
+import { cn } from "@/lib/utils";
+import Tile from "@/components/ui/Tile";
+import {
+  typography,
+  colors,
+  radii,
+  transitions,
+  icon,
+  spacing,
+} from "@/lib/tokens";
+import { Subtitle, Body } from "@/components/ui/Tokens";
+
+const Accordion = AccordionPrimitive.Root;
+
+interface AccordionItemProps
+  extends React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Item> {
+  variant?: "default" | "tile" | "timeline";
+  title?: string;
+  subtitle?: string;
+  summary?: string; // <----- NEU
+}
+
+const AccordionItem = React.forwardRef<
+  React.ElementRef<typeof AccordionPrimitive.Item>,
+  AccordionItemProps
+>(({ className, children, variant = "default", title, subtitle, summary, ...props }, ref) => {
+  const timelineDot =
+    variant === "timeline" ? (
+      <span
+        className={cn(
+          "absolute left-0 top-6 -translate-x-1/2 h-2.5 w-2.5",
+          radii.full,
+          colors.muted.text
+        )}
+      />
+    ) : null;
+
+  const baseClasses = cn(
+    "border-b",
+    variant === "timeline" && cn("relative pl-6 border-none"),
+    variant === "tile" && "border-none",
+    className
+  );
+
+  return (
+    <AccordionPrimitive.Item ref={ref} className={baseClasses} {...props}>
+      {timelineDot}
+      {variant === "default" ? (
+        <>
+          <AccordionTrigger title={title} subtitle={subtitle} summary={summary} />
+          {children}
+        </>
+      ) : (
+        <Tile
+          className={cn(
+            "w-full text-left border-none",
+            colors.tile.bg,
+            colors.tile.text
+          )}
+        >
+          <AccordionTrigger title={title} subtitle={subtitle} summary={summary} />
+          {children}
+        </Tile>
+      )}
+    </AccordionPrimitive.Item>
+  );
+});
+AccordionItem.displayName = "AccordionItem";
+
+interface TriggerProps
+  extends React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Trigger> {
+  title?: string;
+  subtitle?: string;
+  summary?: string;
+}
+
+const AccordionTrigger = React.forwardRef<
+  React.ElementRef<typeof AccordionPrimitive.Trigger>,
+  TriggerProps
+>(({ className, children, title, subtitle, summary, ...props }, ref) => (
+  <AccordionPrimitive.Header className="flex w-full">
+    <AccordionPrimitive.Trigger
+      ref={ref}
+      className={cn(
+        "flex flex-col items-start w-full gap-1 text-left [&[data-state=open]>svg]:rotate-180] relative",
+        spacing.py4,
+        transitions.default,
+        typography.small.font,
+        typography.small.size,
+        typography.small.weight,
+        typography.small.leading,
+        className
+      )}
+      {...props}
+    >
+      {/* TITLE */}
+      {title && <Subtitle>{title}</Subtitle>}
+
+      {/* SUBTITLE */}
+      {subtitle && (
+        <Body className={colors.muted.text}>{subtitle}</Body>
+      )}
+
+      {/* SUMMARY ‚Äî wird IMMER angezeigt (collapsed UND expanded) */}
+      {summary && (
+        <Body className={cn(colors.muted.text, "text-sm mt-1")}>
+          {summary}
+        </Body>
+      )}
+
+      {/* ICON */}
+      <ChevronDown
+        className={cn(
+          "absolute right-0 top-1/2 -translate-y-1/2 transition-transform duration-200",
+          icon.md,
+          colors.muted.text
+        )}
+      />
+    </AccordionPrimitive.Trigger>
+  </AccordionPrimitive.Header>
+));
+AccordionTrigger.displayName = AccordionPrimitive.Trigger.displayName;
+
+const AccordionContent = React.forwardRef<
+  React.ElementRef<typeof AccordionPrimitive.Content>,
+  React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Content>
+>(({ className, children, ...props }, ref) => (
+  <AccordionPrimitive.Content
+    ref={ref}
+    className={cn(
+      "overflow-hidden data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down"
+    )}
+    {...props}
+  >
+    <Body className={cn(spacing.pb4, "pt-0 text-left", className)}>
+      {children}
+    </Body>
+  </AccordionPrimitive.Content>
+));
+AccordionContent.displayName = AccordionPrimitive.Content.displayName;
+
+export { Accordion, AccordionItem, AccordionTrigger, AccordionContent };
+
+
+==== \src\components\ui\Badge.tsx ====
+// src/components/ui/Badge.tsx
+import { HTMLAttributes } from "react";
+import { cn } from "@/lib/utils";
+import { colors, radii, transitions, type NotionColor } from "@/lib/tokens";
+import { TagText } from "@/components/ui/Tokens";
+
+interface BadgeProps extends Omit<HTMLAttributes<HTMLSpanElement>, "color"> {
+  variant?: "default" | "active";
+  color?: NotionColor;
+
+  /**
+   * pill  = bisheriges Verhalten (Tags, Labels)
+   * circle = echte Kreise (Mastery / Relevance)
+   */
+  shape?: "pill" | "circle";
+
+  /**
+   * nur f√ºr circle relevant
+   */
+  size?: "sm" | "md" | "lg";
+}
+
+const circleSizes = {
+  sm: "w-8 h-8 text-xs",
+  md: "w-9 h-9 text-sm",
+  lg: "w-10 h-10 text-base",
+} as const;
+
+export default function Badge({
+  variant = "default",
+  color = "default",
+  shape = "pill",
+  size = "md",
+  className,
+  children,
+  ...props
+}: BadgeProps) {
+  const set = colors.notion[color] ?? colors.notion.default;
+  const isCircle = shape === "circle";
+
+  return (
+    <span
+      className={cn(
+        // base
+        "inline-flex items-center justify-center select-none",
+        transitions.opacity,
+
+        // shape
+        isCircle
+          ? cn(
+              radii.full,
+              circleSizes[size],
+              "shrink-0",
+              "border border-border", // immer da ‚Üí kein Jitter
+              "transition-transform duration-150 ease-out",
+              "[transform:translateZ(0)] [backface-visibility:hidden] will-change-transform",
+              "hover:scale-[1.03] active:scale-[0.97]"
+            )
+          : cn(
+              "px-3 py-1.5",
+              radii.full
+            ),
+
+        // colors
+        set.bg,
+        set.text,
+
+        // active state
+        variant === "active" &&
+          (isCircle
+            ? "bg-accent text-accent-foreground border-transparent"
+            : "outline outline-2 outline-offset-2 outline-current"),
+
+        className
+      )}
+      {...props}
+    >
+      {isCircle ? children : <TagText>{children}</TagText>}
+    </span>
+  );
+}
+
+
+==== \src\components\ui\Button.tsx ====
+import { cn } from "@/lib/utils";
+import { ButtonHTMLAttributes } from "react";
+import { Link } from "react-router-dom";
+import { buttonVariants, buttonSizes, typography } from "@/lib/tokens";
+
+/**
+ * Universelle Button-Komponente.
+ * - `variant`: primary, secondary, ghost, ...
+ * - `size`: sm, md, lg
+ * - `asChild`: f√ºr Links (intern/extern)
+ * - `to`: interner Pfad (#hash oder /route)
+ * - `href`: externer oder statischer Link (z. B. https://... oder /downloads/...)
+ * - `download`: Dateiname f√ºr Downloads
+ */
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  variant?: keyof typeof buttonVariants;
+  size?: keyof typeof buttonSizes;
+  asChild?: boolean;
+  to?: string;
+  href?: string;
+  download?: string;
+}
+
+export default function Button({
+  variant = "primary",
+  size = "md",
+  className,
+  asChild = false,
+  to,
+  href,
+  download,
+  children,
+  ...props
+}: ButtonProps) {
+  const baseClasses = cn(
+    buttonVariants.base,
+    buttonVariants[variant],
+    buttonSizes[size],
+    typography.button.font,
+    typography.button.weight,
+    typography.button.leading,
+    className
+  );
+
+  // üîπ Externe oder statische Links (z. B. /downloads/CV.pdf)
+  if (href) {
+    const isExternal = href.startsWith("http");
+    return (
+      <a
+        href={href}
+        {...(download ? { download } : {})} // ‚úÖ download-Attribut weitergeben
+        target={isExternal ? "_blank" : undefined}
+        rel={isExternal ? "noopener noreferrer" : undefined}
+        className={baseClasses}
+      >
+        {children}
+      </a>
+    );
+  }
+
+  // üîπ Interne Links (Router oder Hash)
+  if (asChild && to) {
+    if (to.startsWith("#")) {
+      return (
+        <a href={to} className={baseClasses}>
+          {children}
+        </a>
+      );
+    }
+    return (
+      <Link to={to} className={baseClasses}>
+        {children}
+      </Link>
+    );
+  }
+
+  // üîπ Default ‚Üí echter Button
+  return (
+    <button type="button" className={baseClasses} {...props}>
+      {children}
+    </button>
+  );
+}
+
+
+==== \src\components\ui\FadeIn.tsx ====
+// src/components/ui/FadeIn.tsx
+import { motion, useAnimation } from "framer-motion";
+import { useInView } from "react-intersection-observer";
+import { useEffect } from "react";
+
+export default function FadeIn({
+  children,
+  delay = 0,
+}: {
+  children: React.ReactNode;
+  delay?: number;
+}) {
+  const controls = useAnimation();
+  const [ref, inView] = useInView({
+    triggerOnce: true,
+    threshold: 0.2, // etwas stabiler, verhindert fr√ºhzeitiges Springen
+  });
+
+  useEffect(() => {
+    if (inView) controls.start("visible");
+  }, [controls, inView]);
+
+  return (
+    <motion.div
+      ref={ref}
+      initial="hidden"
+      animate={controls}
+      variants={{
+        hidden: { opacity: 0, y: 20 },
+        visible: {
+          opacity: 1,
+          y: 0,
+          transition: { duration: 0.6, delay },
+        },
+      }}
+      style={{
+        display: "block", // ‚úÖ verhindert Layout-Verschiebung
+        width: "100%",    // ‚úÖ sorgt f√ºr gleiche Skalierung wie ohne FadeIn
+      }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+
+==== \src\components\ui\index.ts ====
+// ===============================================
+// üß© UI INDEX ‚Äî Centralized Component Exports
+// ===============================================
+
+// üé® Typography, Colors & Spacing Tokens
+export * from "./Tokens";
+
+// üß± Core layout
+export { default as Section } from "./Section";
+export { default as SectionIntro } from "./SectionIntro";
+
+// üß∞ Elements
+export { default as Badge } from "./Badge";
+export { default as Button } from "./Button";
+export { default as InfoTile } from "./InfoTile";
+export { default as Tag } from "./Tag";
+export { default as Tile } from "./Tile";
+export { default as TileImage } from "./TileImage";
+
+// ‚öôÔ∏è Interactivity & Motion
+export { default as FadeIn } from "./FadeIn";
+export { default as TextReveal } from "./TextReveal";
+export { Toggle } from "./Toggle";
+
+// üìÇ Accordion (mehrere named exports)
+export {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+} from "./accordion";
+
+
+==== \src\components\ui\InfoTile.tsx ====
+// src/components/ui/InfoTile.tsx
+import { ReactNode } from "react";
+import Tile from "@/components/ui/Tile";
+import { Subtitle, Body } from "@/components/ui/Tokens";
+import { cn } from "@/lib/utils";
+import { colors, layout, spacing, radii } from "@/lib/tokens";
+import { Link } from "react-router-dom";
+
+type InfoTileProps = {
+  title: string;
+  description: string;
+  icon?: ReactNode;
+  image?: string;
+  link?: string;
+  className?: string;
+};
+
+export default function InfoTile({
+  title,
+  description,
+  icon,
+  image,
+  link,
+  className,
+}: InfoTileProps) {
+  const content = (
+    <Tile
+      className={cn(
+        "cursor-pointer",
+        layout.flexCol,
+        layout.itemsStart,
+        layout.textLeft,
+        spacing.gap4,
+        layout.fullHeight,
+        className
+      )}
+    >
+      {icon && (
+        <div className={cn(spacing.p3, radii.full, colors.accent.bg)}>{icon}</div>
+      )}
+      {image && (
+        <img
+          src={image}
+          alt={title}
+          className={cn(layout.imageCover, radii.lg)}
+        />
+      )}
+
+      <Subtitle>{title}</Subtitle>
+      <Body className={colors.muted.text}>{description}</Body>
+    </Tile>
+  );
+
+  if (link) {
+    if (link.startsWith("http")) {
+      return (
+        <a href={link} target="_blank" rel="noopener" className={layout.block}>
+          {content}
+        </a>
+      );
+    }
+    return (
+      <Link to={link} className={layout.block}>
+        {content}
+      </Link>
+    );
+  }
+
+  return content;
+}
+
+
+==== \src\components\ui\Section.tsx ====
+// src/components/ui/Section.tsx
+import { ReactNode } from "react";
+import { cn } from "@/lib/utils";
+import {
+  sectionSpacing,
+  sectionInnerSpacing,
+  typography,
+} from "@/lib/tokens";
+
+/**
+ * üí† Section Component
+ * -----------------------------------------------------
+ * Einheitliche Breite & R√§nder f√ºr alle Inhaltsbereiche
+ * Dynamisch (ca. 94 vw, max. 1900 px)
+ * Headerbilder in PageLayout bleiben unber√ºhrt
+ */
+
+interface SectionProps {
+  id?: string;
+  title?: string;
+  subtitle?: string;
+  children: ReactNode;
+  center?: boolean;
+  borderTop?: boolean;
+  borderBottom?: boolean;
+  border?: boolean;
+  compact?: boolean;
+  spacing?: keyof typeof sectionSpacing;
+  className?: string;
+  fullWidth?: boolean;
+}
+
+export default function Section({
+  id,
+  title,
+  subtitle,
+  children,
+  center = false,
+  borderTop = false,
+  borderBottom = false,
+  border = false,
+  compact = false,
+  spacing = "md",
+  className,
+  fullWidth = false,
+}: SectionProps) {
+  // ‚úÖ Dynamische Container-Breite, identisch zu Navbar/Footer
+  const containerClass = fullWidth
+    ? "w-full"
+    : "mx-auto w-full max-w-[1400px] px-[3vw]";
+
+  return (
+    <section
+      id={id}
+      className={cn(
+        borderTop && "border-t border-border/20",
+        borderBottom && "border-b border-border/20",
+        border && "border-y border-border/20",
+        sectionSpacing[spacing],
+        compact && "py-4",
+        "w-full",
+        // üß© Fix: sorgt daf√ºr, dass beim Ankern die Section nicht unter der Navbar verschwindet
+        "scroll-mt-[80px]",
+        className
+      )}
+    >
+      <div className={cn(containerClass, center && "text-center")}>
+        {title && (
+          <h2
+            className={cn(
+              typography.sectionTitle.font,
+              typography.sectionTitle.size,
+              typography.sectionTitle.weight,
+              typography.sectionTitle.tracking,
+              typography.sectionTitle.leading,
+              sectionInnerSpacing.titleMargin
+            )}
+          >
+            {title}
+          </h2>
+        )}
+
+        {subtitle && (
+          <p
+            className={cn(
+              typography.subtitle.font,
+              typography.subtitle.size,
+              typography.subtitle.weight,
+              typography.subtitle.leading,
+              typography.subtitle.color,
+              sectionInnerSpacing.subtitleMargin,
+              center && "mx-auto"
+            )}
+          >
+            {subtitle}
+          </p>
+        )}
+
+        <div className="w-full">{children}</div>
+      </div>
+    </section>
+  );
+}
+
+
+
+==== \src\components\ui\SectionIntro.tsx ====
+// src/components/ui/SectionIntro.tsx
+import { ReactNode } from "react";
+import { cn } from "@/lib/utils";
+import {
+  typography,
+  colors,
+  sectionIntro,
+  sectionInnerSpacing,
+  spacing,
+} from "@/lib/tokens";
+
+interface SectionIntroProps {
+  children: ReactNode;
+  center?: boolean;
+  maxWidth?: "default" | "full";
+  className?: string;
+  full?: boolean; // ‚úÖ hinzugef√ºgt, um Build-Error zu beheben
+}
+
+/**
+ * SectionIntro
+ * -------------
+ * Einheitliche Typografie & Breite f√ºr alle Intro-Texte.
+ * - B√ºndig mit Section-Titel (Padding kommt aus Section.tsx)
+ * - Standardbreite: 75 % des Containers (max-w-4xl)
+ * - Optional: `full` erzwingt volle Breite (setzt maxWidth auf "full")
+ */
+export default function SectionIntro({
+  children,
+  center = false,
+  maxWidth = "default",
+  className,
+  full = false, // ‚úÖ neues optionales Prop
+}: SectionIntroProps) {
+  const effectiveWidth = full ? "full" : maxWidth;
+
+  return (
+    <div
+      data-section-intro
+      className={cn(
+        sectionIntro[effectiveWidth], // max-w-4xl oder volle Breite
+        typography.body.font,
+        typography.body.size,
+        typography.body.leading,
+        colors.foreground,
+        spacing.mb8,
+        sectionInnerSpacing.subtitleMargin,
+        center && "text-center mx-auto",
+        className
+      )}
+    >
+      {children}
+    </div>
+  );
+}
+
+
+==== \src\components\ui\Tag.tsx ====
+// src/components/ui/Tag.tsx
+import { ButtonHTMLAttributes } from "react";
+import { cn } from "@/lib/utils";
+import { colors, radii, transitions, type NotionColor } from "@/lib/tokens";
+import { TagText } from "@/components/ui/Tokens";
+
+interface TagProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  active?: boolean;
+  color?: NotionColor;
+}
+
+export default function Tag({
+  active = false,
+  color = "default",
+  className,
+  children,
+  ...props
+}: TagProps) {
+  const set = colors.notion[color] ?? colors.notion.default;
+
+  return (
+    <button
+      type="button"
+      className={cn(
+        "inline-flex items-center px-3 py-1.5",
+        set.bg,
+        set.text,
+        radii.full,
+        transitions.opacity,
+        active
+          ? "outline outline-2 outline-offset-2 outline-current"
+          : "hover:opacity-80",
+        className
+      )}
+      {...props}
+    >
+      <TagText>{children}</TagText>
+    </button>
+  );
+}
+
+
+==== \src\components\ui\TextReveal.tsx ====
+// src/components/ui/TextReveal.tsx
+import { motion, useAnimation } from "framer-motion";
+import { useInView } from "react-intersection-observer";
+import { useEffect } from "react";
+import { cn } from "@/lib/utils";
+
+type TextRevealProps = {
+  children: string;
+  delay?: number;
+  variant?: "word";
+  stagger?: number;
+  duration?: number;
+  ease?: "linear" | "easeOut" | "easeInOut";
+  className?: string;
+};
+
+export default function TextReveal({
+  children,
+  delay = 0,
+  variant = "word",
+  stagger = 0.04,
+  duration = 0.3,
+  ease = "easeOut",
+  className,
+}: TextRevealProps) {
+  const controls = useAnimation();
+  const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
+
+  useEffect(() => {
+    if (inView) controls.start("visible");
+  }, [controls, inView]);
+
+  // Text in W√∂rter + Leerzeichen aufteilen
+  const textParts = variant === "word" ? children.split(/(\s+)/) : [children];
+
+  const container = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { delay, staggerChildren: stagger },
+    },
+  };
+
+  const child = {
+    hidden: { opacity: 0, x: 8 },
+    visible: {
+      opacity: 1,
+      x: 0,
+      transition: { duration, ease },
+    },
+  };
+
+  return (
+    <motion.div
+      ref={ref}
+      variants={container}
+      initial="hidden"
+      animate={controls}
+      className={cn("inline-block leading-relaxed", className)}
+    >
+      {textParts.map((part, i) => (
+        <motion.span
+          key={i}
+          variants={child}
+          style={{
+            display: part.trim() ? "inline-block" : "inline",
+            whiteSpace: "pre-wrap",
+          }}
+        >
+          {part}
+        </motion.span>
+      ))}
+    </motion.div>
+  );
+}
+
+
+
+==== \src\components\ui\Tile.tsx ====
+// src/components/ui/Tile.tsx
+import { cn } from "@/lib/utils";
+import { colors, radii, transitions, spacing, hoverEffects } from "@/lib/tokens";
+import { ArrowRight } from "lucide-react";
+
+type TileProps = React.HTMLAttributes<HTMLDivElement> & {
+  variant?: "interactive" | "interactiveArrow" | "static" | "transparent";
+};
+
+export default function Tile({
+  variant = "interactive",
+  className,
+  children,
+  ...props
+}: TileProps) {
+  // üß± Basisstil f√ºr alle Tiles
+  const baseStyles = cn(
+    radii.lg,
+    spacing.p6,
+    transitions.default,
+    "relative flex flex-col justify-between h-full space-y-2",
+    className
+  );
+
+  // üé® Varianten ‚Äì komplett ohne Border & Shadow
+  const variantStyles =
+    variant === "interactive"
+      ? cn(
+          colors.tile.bg,
+          colors.tile.text,
+          "will-change-transform cursor-pointer group",
+          hoverEffects.smoothLift,
+          "text-left"
+        )
+      : variant === "interactiveArrow"
+      ? cn(
+          colors.tile.bg,
+          colors.tile.text,
+          "will-change-transform cursor-pointer group",
+          hoverEffects.smoothLift,
+          "text-left"
+        )
+      : variant === "transparent"
+      ? cn(
+          "bg-[#F3F4F6]/80 dark:bg-[#1C1C1C]/80 text-foreground/90",
+          "cursor-default transform-none transition-none",
+          "text-center items-center space-y-3"
+        )
+      : variant === "static"
+      ? cn(
+          "bg-[#F3F4F6] dark:bg-[#1C1C1C] text-foreground/90",
+          "cursor-default transition-none transform-none text-left"
+        )
+      : "";
+
+  return (
+    <div className={cn(baseStyles, variantStyles)} {...props}>
+      <div className="flex-1">{children}</div>
+
+      {variant === "interactiveArrow" && (
+        <div className="mt-4 flex justify-end">
+          <div
+            className="flex h-9 w-9 items-center justify-center rounded-full 
+                       bg-primary/10 text-primary dark:text-primary-foreground
+                       transition-transform duration-200 
+                       group-hover:translate-x-1 group-active:translate-x-1"
+          >
+            <ArrowRight className="h-5 w-5" strokeWidth={2} />
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+
+==== \src\components\ui\TileImage.tsx ====
+// src/components/ui/TileImage.tsx
+import { cn } from "@/lib/utils";
+import { hoverEffects, radii } from "@/lib/tokens";
+import { ArrowRight } from "lucide-react";
+
+export default function TileImage({
+  image,
+  title,
+  caption,
+  className,
+  ...props
+}: any) {
+  const isObject = typeof image === "object" && image?.img?.src;
+
+  return (
+    <div
+      className={cn(
+        "group relative overflow-hidden aspect-[4/3]",
+
+        // ‚úÖ GPU/Text-Stabilisierung (hilft gegen Jitter)
+        "[transform:translateZ(0)] [backface-visibility:hidden]",
+
+        radii.xl,
+
+        // ‚úÖ Apple-like: Container skaliert (in alle Richtungen)
+        // (kommt jetzt aus tokens.ts, dort ist scale klein + transition-transform)
+        hoverEffects.smoothLift,
+
+        className
+      )}
+      {...props}
+    >
+      {/* === IMAGE-LAYER === */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {isObject ? (
+          <picture className="absolute inset-0">
+            {Array.isArray(image.sources) &&
+              image.sources.map((s: any) => <source key={s.srcset} {...s} />)}
+            <img
+              src={image.img.src}
+              alt={title || ""}
+              className="w-full h-full object-cover object-center scale-[1.15] transition-transform duration-500 ease-out"
+              loading="lazy"
+              decoding="async"
+            />
+          </picture>
+        ) : (
+          <img
+            src={image}
+            alt={title || ""}
+            className="absolute inset-0 w-full h-full object-cover object-center scale-[1.15] transition-transform duration-500 ease-out"
+            loading="lazy"
+            decoding="async"
+          />
+        )}
+      </div>
+
+      {/* === OVERLAY === */}
+      <div
+        className={cn(
+          "absolute inset-0 pointer-events-none",
+          "bg-gradient-to-b from-black/35 via-black/25 to-black/55",
+          "dark:from-black/45 dark:via-black/35 dark:to-black/60"
+        )}
+      />
+
+      {/* === TEXT-LAYER === */}
+      {/* ‚úÖ Safe-Area rechts (immer), damit CTA-Kreis NIE √ºber Text liegt */}
+      <div className="relative z-20 flex flex-col h-full p-4 pr-16 justify-end select-none">
+        {title && (
+          <h3
+            className="text-xl font-semibold mb-1 text-white/85
+                       drop-shadow-[0_1px_3px_rgba(0,0,0,0.6)]"
+          >
+            {title}
+          </h3>
+        )}
+        {caption && (
+          <p
+            className="text-base text-white/85 leading-snug
+                       drop-shadow-[0_1px_2px_rgba(0,0,0,0.55)]"
+          >
+            {caption}
+          </p>
+        )}
+      </div>
+
+      {/* === MOBILE ARROW === */}
+      <div
+        className="absolute bottom-3 right-3 md:hidden z-20 w-9 h-9 rounded-full backdrop-blur-sm pointer-events-none
+                   bg-white/80 text-gray-900 dark:bg-black/70 dark:text-gray-100
+                   flex items-center justify-center"
+        aria-hidden="true"
+      >
+        <ArrowRight className="w-5 h-5 translate-x-[0.5px]" />
+      </div>
+    </div>
+  );
+}
+
+
+==== \src\components\ui\Toggle.tsx ====
+// src/components/ui/Toggle.tsx
+import { ButtonHTMLAttributes } from "react";
+import clsx from "clsx";
+import { Small } from "@/components/ui/Tokens";
+
+interface ToggleProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  pressed?: boolean;
+}
+
+export function Toggle({ pressed, className, children, ...props }: ToggleProps) {
+  return (
+    <button
+      aria-pressed={pressed}
+      className={clsx(
+        "px-3 py-1.5 rounded-lg transition",
+        pressed
+          ? "bg-neutral-900 text-white dark:bg-white dark:text-neutral-900"
+          : "border border-border hover:bg-muted/40",
+        className
+      )}
+      {...props}
+    >
+      <Small>{children}</Small>
+    </button>
+  );
+}
+
+
+==== \src\components\ui\Tokens.tsx ====
+import { cn } from "@/lib/utils";
+import {
+  typography,
+  colors,
+  radii,
+  transitions,
+  spacing,
+  sectionIntro,
+  buttonVariants,
+} from "@/lib/tokens";
+import { ReactNode } from "react";
+
+/**
+ * TYPOGRAPHY
+ */
+export function H1({ children, className = "" }: { children: ReactNode; className?: string }) {
+  return (
+    <h1
+      className={cn(
+        typography.hero.font,
+        typography.hero.size,
+        typography.hero.weight,
+        typography.hero.tracking,
+        typography.hero.leading,
+        className
+      )}
+    >
+      {children}
+    </h1>
+  );
+}
+
+export function H2({ children, className = "" }: { children: ReactNode; className?: string }) {
+  return (
+    <h2
+      className={cn(
+        typography.sectionTitle.font,
+        typography.sectionTitle.size,
+        typography.sectionTitle.weight,
+        typography.sectionTitle.tracking,
+        typography.sectionTitle.leading,
+        className
+      )}
+    >
+      {children}
+    </h2>
+  );
+}
+
+// ‚úÖ Alias f√ºr H2 ‚Äì kompatibel mit bisherigen Imports (z. B. Title)
+export const Title = H2;
+
+// ‚úÖ H3 nutzt subtitle-Typografie (muted)
+export function H3({ children, className = "" }: { children: ReactNode; className?: string }) {
+  return (
+    <h3
+      className={cn(
+        typography.subtitle.font,
+        typography.subtitle.size,
+        typography.subtitle.weight,
+        typography.subtitle.leading,
+        typography.subtitle.color,
+        className
+      )}
+    >
+      {children}
+    </h3>
+  );
+}
+
+// üÜï SectionHeading ‚Äì nutzt sectionHeading aus typography
+export function SectionHeading({
+  children,
+  className = "",
+}: {
+  children: ReactNode;
+  className?: string;
+}) {
+  return (
+    <h3
+      className={cn(
+        typography.sectionHeading.font,
+        typography.sectionHeading.size,
+        typography.sectionHeading.weight,
+        typography.sectionHeading.tracking,
+        typography.sectionHeading.leading,
+        typography.sectionHeading.color,
+        className
+      )}
+    >
+      {children}
+    </h3>
+  );
+}
+
+export function Body({ children, className = "" }: { children: ReactNode; className?: string }) {
+  return (
+    <p
+      className={cn(
+        typography.body.font,
+        typography.body.size,
+        typography.body.weight,
+        typography.body.leading,
+        className
+      )}
+    >
+      {children}
+    </p>
+  );
+}
+
+export function Small({ children, className = "" }: { children: ReactNode; className?: string }) {
+  return (
+    <small
+      className={cn(
+        typography.small.font,
+        typography.small.size,
+        typography.small.weight,
+        typography.small.leading,
+        typography.small.color,
+        className
+      )}
+    >
+      {children}
+    </small>
+  );
+}
+
+export function Subtitle({ children, className = "" }: { children: ReactNode; className?: string }) {
+  return (
+    <h4
+      className={cn(
+        typography.subtitle.font,
+        typography.subtitle.size,
+        typography.subtitle.weight,
+        typography.subtitle.leading,
+        typography.subtitle.color,
+        className
+      )}
+    >
+      {children}
+    </h4>
+  );
+}
+
+// üÜï Quote-Komponente ‚Äì DS-konform, ohne Balken
+export function Quote({ children, className = "" }: { children: ReactNode; className?: string }) {
+  return (
+    <blockquote
+      className={cn(
+        typography.quote.font,
+        typography.quote.size,
+        typography.quote.weight,
+        typography.quote.leading,
+        "italic text-foreground/90",
+        className
+      )}
+    >
+      {children}
+    </blockquote>
+  );
+}
+
+/**
+ * INTRO TEXT
+ */
+export function IntroText({
+  children,
+  className = "",
+  full = false,
+}: {
+  children: ReactNode;
+  className?: string;
+  full?: boolean;
+}) {
+  return (
+    <p
+      className={cn(
+        typography.body.font,
+        typography.body.size,
+        typography.body.weight,
+        typography.body.leading,
+        colors.muted.text,
+        full ? sectionIntro.full : sectionIntro.default,
+        spacing.mb6,
+        className
+      )}
+    >
+      {children}
+    </p>
+  );
+}
+
+/**
+ * COLORS
+ */
+export function BgPrimary({ children, className = "" }: { children: ReactNode; className?: string }) {
+  return <div className={cn(colors.primary.bg, colors.primary.text, className)}>{children}</div>;
+}
+
+export function BgSecondary({ children, className = "" }: { children: ReactNode; className?: string }) {
+  return <div className={cn(colors.secondary.bg, colors.secondary.text, className)}>{children}</div>;
+}
+
+export function BgAccent({ children, className = "" }: { children: ReactNode; className?: string }) {
+  return <div className={cn(colors.accent.bg, colors.accent.text, className)}>{children}</div>;
+}
+
+/**
+ * ‚úÖ MutedText (Fix f√ºr SkillmapForm)
+ */
+export function MutedText({
+  children,
+  className = "",
+  title,
+}: {
+  children: ReactNode;
+  className?: string;
+  title?: string;
+}) {
+  return (
+    <span className={cn(colors.muted.text, className)} title={title}>
+      {children}
+    </span>
+  );
+}
+
+export function TagText({ children, className = "" }: { children: ReactNode; className?: string }) {
+  return (
+    <span
+      className={cn(
+        typography.tag.font,
+        typography.tag.size,
+        typography.tag.weight,
+        typography.tag.leading,
+        className
+      )}
+    >
+      {children}
+    </span>
+  );
+}
+
+/**
+ * BUTTONS
+ */
+export function ButtonBase({ children, className = "" }: { children: ReactNode; className?: string }) {
+  return <button className={cn(buttonVariants.base, className)}>{children}</button>;
+}
+
+export function ButtonPrimary({ children, className = "" }: { children: ReactNode; className?: string }) {
+  return <button className={cn(buttonVariants.base, buttonVariants.primary, className)}>{children}</button>;
+}
+
+export function ButtonSecondary({ children, className = "" }: { children: ReactNode; className?: string }) {
+  return <button className={cn(buttonVariants.base, buttonVariants.secondary, className)}>{children}</button>;
+}
+
+export function ButtonGhost({ children, className = "" }: { children: ReactNode; className?: string }) {
+  return <button className={cn(buttonVariants.base, buttonVariants.ghost, className)}>{children}</button>;
+}
+
+/**
+ * CARDS / CONTAINERS
+ */
+export function Card({ children, className = "" }: { children: ReactNode; className?: string }) {
+  return <div className={cn(radii.lg, className)}>{children}</div>;
+}
+
+
+==== \src\hooks\useActivePhase.ts ====
+import { useEffect, useState } from "react";
+
+export function useActivePhase() {
+  const [active, setActive] = useState<"discover" | "define" | "develop" | "deliver">("discover");
+
+  useEffect(() => {
+    const sections = ["discover", "define", "develop", "deliver"];
+
+    const observers = sections.map((id) => {
+      const el = document.getElementById(id);
+      if (!el) return null;
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              setActive(id as typeof active);
+            }
+          });
+        },
+        { threshold: 0.3 } // aktiv wenn mind. 30% sichtbar
+      );
+
+      observer.observe(el);
+      return observer;
+    });
+
+    return () => {
+      observers.forEach((o) => o?.disconnect());
+    };
+  }, []);
+
+  return active;
+}
+
+
+==== \src\locales\de.json ====
+{
+  "nav": {
+    "about": "√úber mich",
+    "expertise": "Expertise",
+    "projects": "Projekte",
+    "cv": "Lebenslauf",
+    "craft": "Handwerk",
+    "contact": "Kontakt"
+  },
+  "hero": {
+    "claim": "UX Research Leadership mit Fokus auf Strategie, ResearchOps & Wirkungsmessung",
+    "intro": "Ich leite Research-Teams, skaliere ResearchOps und verankere die Nutzer:innen-Perspektive in der Produktstrategie. Mein Fokus: Entscheidungen beschleunigen, Wirkung belegen und nachhaltige Produkte gestalten."
+  },
+  "about": {
+    "title": "√úber mich",
+    "text": "UX Research Leader mit Hintergrund in √ñkonometrie & Produktentwicklung. Ich verbinde Qual & Quant, reduziere Risiko und verankere die Nutzer:innen-Perspektive in der Produktstrategie."
+  },
+  "expertise": {
+    "title": "Expertise",
+    "roof": "Nachhaltige Produkte",
+    "foundation": "Nutzerzentrierte Wertsch√∂pfung",
+    "valueProp": "Ich helfe Unternehmen, nachhaltige Produkte zu entwickeln, indem ich tiefe Nutzer:innen-Insights in umsetzbare Strategien √ºberf√ºhre. Mein Ziel: Die Stimme der Nutzer:innen skalieren und Organisationen bef√§higen, nutzerzentrierte Entscheidungen zu treffen.",
+    "pillars": [
+      {
+        "title": "Research Strategy",
+        "caption": "Discovery-Programme an Business-Zielen ausrichten"
+      },
+      {
+        "title": "Needs ‚Üí Product Strategy",
+        "caption": "Insights in Roadmaps √ºbersetzen"
+      },
+      {
+        "title": "Process & Tooling",
+        "caption": "Effiziente, skalierbare Praxis"
+      },
+      {
+        "title": "Team Leadership",
+        "caption": "Mentoring, Standards, Exzellenz"
+      },
+      {
+        "title": "Proving ROI",
+        "caption": "Wirkung messen & kommunizieren"
+      }
+    ],
+    "uxStrategy": "UX Strategy",
+    "strategicUxResearch": "Strategic UX Research",
+    "researchOps": "ResearchOps",
+    "teamLeadership": "Leadership & Mentoring",
+    "impactMeasurement": "Impact Measurement"
+  },
+  "projects": {
+    "title": "Projekte",
+
+    "carInsurance": {
+      "title": "Kfz-Versicherung",
+      "desc": "Weniger Reibung, bessere Conversion."
+    },
+    "reopsAgileUX": {
+      "title": "ResearchOps & Agile UX",
+      "desc": "Governance, Templates & Enablement auf Skalierungsebene."
+    },
+    "b2b2c": {
+      "title": "B2B2C-Optimierung",
+      "desc": "Qualitative & quantitative Insights an Gesch√§ftszielen ausgerichtet."
+    },
+    "pricing": {
+      "title": "Pricing Usability Testing",
+      "desc": "Klarheit in Preis-Komponenten und PDP-Details."
+    },
+    "deleteCase": {
+      "title": "Eine Mikrointeraktion, die viel Nutzerzeit spart",
+      "desc": "Vereinfachung wiederkehrender Workflows durch UX."
+    },
+    "atossReops": {
+      "title": "ReOps-Implementierung",
+      "desc": "UX-Teams durch ResearchOps-Grundlagen bef√§higen."
+    }
+  },
+  "cv": {
+    "title": "Lebenslauf",
+    "teaserTitle": "Kurzprofil & Stationen",
+    "teaserList": [
+      "Lead/Director UX Research ‚Äì Enterprise & B2C",
+      "ResearchOps Aufbau & Skalierung",
+      "OKR-verbundene Research-Roadmaps",
+      "Coaching & Enablement f√ºr Produktteams"
+    ],
+    "btn": "Zur CV-Seite",
+    "pageIntro": "Vollst√§ndiger Lebenslauf (als PDF eingebettet).",
+    "pdfAlt": "CV PDF"
+  },
+  "craft": {
+    "title": "Handwerk",
+    "text": "Research als Handwerk: wiederholbar, verbesserbar, mit hohen Qualit√§tsstandards."
+  },
+  "contact": {
+    "title": "Kontakt",
+    "cta": "üìû Kontaktiere mich ‚Äì ich freue mich auf deine Herausforderungen...",
+    "cta2": "Jetzt Termin buchen ‚Äì Discovery Call vereinbaren",
+    "cta3": "Buche ganz einfach einen 60-min√ºtigen Termin direkt in meinem Kalender."
+  }
+}
+
+
+==== \src\locales\en.json ====
+{
+  "nav": {
+    "about": "About",
+    "expertise": "Expertise",
+    "projects": "Projects",
+    "cv": "CV",
+    "craft": "Craft",
+    "contact": "Contact"
+  },
+  "hero": {
+    "claim": "UX Research Leadership with focus on Strategy, ResearchOps & Impact Measurement",
+    "intro": "I lead research teams, scale ResearchOps, and embed the user perspective into product strategy. My focus: accelerating decisions, proving impact, and building sustainable products."
+  },
+  "about": {
+    "title": "About",
+    "text": "UX Research leader with a background in econometrics and product development. I combine qual & quant to de-risk decisions and embed the user's voice into product strategy."
+  },
+  "expertise": {
+    "title": "Expertise",
+    "roof": "Sustainable Products",
+    "foundation": "User-Centered Value Creation",
+    "valueProp": "I help companies build sustainable products by transforming deep user insights into actionable strategies. My mission is to scale the user's voice and empower organizations to make user-centered decisions.",
+    "pillars": [
+      {
+      "title": "UX Strategy",
+      "caption": "I align UX Research insights with business direction."
+    },
+    {
+      "title": "Strategic UX Research",
+      "caption": "I translate real user needs into actionable product roadmaps."
+    },
+    {
+      "title": "ResearchOps",
+      "caption": "I build efficient, scalable, and insight-driven research operations."
+    },
+    {
+      "title": "Leadership & Mentoring",
+      "caption": "I empower teams through mentorship, alignment, and excellence in craft."
+    },
+    {
+      "title": "Impact Measurement",
+      "caption": "I measure and communicate UX impact across the organization."
+    }
+    ],
+    "uxStrategy": "UX Strategy",
+    "strategicUxResearch": "Strategic UX Research",
+    "researchOps": "ResearchOps",
+    "teamLeadership": "Leadership & Mentoring",
+    "impactMeasurement": "Impact Measurement"
+  },
+  "projects": {
+    "title": "Projects",
+
+    "carInsurance": {
+      "title": "Car Insurance",
+      "desc": "Reduced friction and improved conversion."
+    },
+    "reopsAgileUX": {
+      "title": "ResearchOps & Agile UX",
+      "desc": "Governance, templates & enablement at scale."
+    },
+    "b2b2c": {
+      "title": "B2B2C Optimization",
+      "desc": "Qual & quant insights aligned to business goals."
+    },
+    "pricing": {
+      "title": "Pricing Usability Testing",
+      "desc": "Clarity in pricing components and PDP details."
+    },
+    "deleteCase": {
+      "title": "A micro interaction that saves lots of user time",
+      "desc": "Simplifying repetitive workflows efficiently."
+    },
+    "atossReops": {
+      "title": "ReOps Implementation",
+      "desc": "Empowering UX teams through ResearchOps foundations."
+    }
+  },
+  "cv": {
+    "title": "CV",
+    "teaserTitle": "Snapshot & Roles",
+    "teaserList": [
+      "Lead/Director UX Research ‚Äì Enterprise & B2C",
+      "ResearchOps setup & scaling",
+      "OKR-linked research roadmaps",
+      "Coaching & enablement for product teams"
+    ],
+    "btn": "Go to CV page",
+    "pageIntro": "Full r√©sum√© (embedded PDF).",
+    "pdfAlt": "CV PDF"
+  },
+  "craft": {
+    "title": "Craft",
+    "text": "Research as craft: repeatable, improvable practice with strong quality standards."
+  },
+  "contact": {
+    "title": "Book a Call",
+    "cta": "Let‚Äôs talk about your UX research challenges.",
+    "cta2": "Book Your Call Now ‚Äî Schedule a Discovery Call",
+    "cta3": "Click to easily book a 60-minute call directly in my calendar."
+  }
+}
+
+
+==== \src\types\vite-imagetools.d.ts ====
+/* src/types/vite-imagetools.d.ts */
+
+declare module "*?*" {
+  const out: {
+    sources?: Array<{
+      srcset: string;
+      type: string;
+      sizes?: string;
+    }>;
+    img: { src: string; width: number; height: number };
+  };
+  export default out;
+}
+
+
+==== \src\App.tsx ====
+// src/App.tsx
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { useEffect } from "react";
+import AppLayout from "@/AppLayout";
+import Home from "@/pages/Home";
+import CVPage from "@/pages/cv";
+
+// üîπ Projektseiten
+import CarInsurance from "@/pages/projects/CarInsurance";
+import ZooplusReOps from "@/pages/projects/ZooplusReOps";
+import ZooplusPricing from "@/pages/projects/ZooplusPricing";
+import InsuranceBrokerDiscovery from "@/pages/projects/InsuranceBroker";
+import WorkshopPage from "@/pages/projects/workshop";
+import KanoStrategyPage from "@/pages/projects/kanostrategy";
+
+// üîπ NEU ‚Äì Dein UX Portfolio Projekt
+import UXPortfolioPage from "@/pages/projects/UXPortfolio";
+
+// üîπ Expertise-Seiten
+import UXStrategy from "@/pages/expertise/UXStrategy";
+import StrategicUXResearch from "@/pages/expertise/StrategicUXResearch";
+import ResearchOps from "@/pages/expertise/ResearchOps";
+import TeamLeadership from "@/pages/expertise/TeamLeadership";
+import ImpactMeasurement from "@/pages/expertise/ImpactMeasurement";
+import SkillAssessmentPage from "@/pages/expertise/TeamLeadership/skillassessment";
+
+// üîπ Footer-/Legal-Seiten
+import Imprint from "@/pages/shared/Imprint";
+import Privacy from "@/pages/shared/Privacy";
+
+/** ScrollToTop */
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "instant" });
+  }, [pathname]);
+  return null;
+}
+
+/** ScrollToHash */
+function ScrollToHash() {
+  const location = useLocation();
+  useEffect(() => {
+    if (location.hash) {
+      setTimeout(() => {
+        const el = document.querySelector(location.hash);
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }, 120);
+    }
+  }, [location]);
+  return null;
+}
+
+export default function App() {
+  return (
+    <>
+      <ScrollToTop />
+      <ScrollToHash />
+
+      <Routes>
+        <Route path="/" element={<AppLayout />}>
+          {/* üîπ Hauptseiten */}
+          <Route index element={<Home />} />
+          <Route path="cv" element={<CVPage />} />
+
+          {/* üîπ Projektseiten */}
+          <Route path="projects/car-insurance" element={<CarInsurance />} />
+          <Route path="projects/zooplus-reops" element={<ZooplusReOps />} />
+          <Route path="projects/zooplus-pricing" element={<ZooplusPricing />} />
+          <Route
+            path="projects/insurance-broker-discovery"
+            element={<InsuranceBrokerDiscovery />}
+          />
+          <Route path="projects/workshop" element={<WorkshopPage />} />
+          <Route path="projects/kanostrategy" element={<KanoStrategyPage />} />
+
+          {/* üîπ NEU ‚Äì UX Portfolio Projekt */}
+          <Route path="projects/ux-portfolio" element={<UXPortfolioPage />} />
+
+          <Route path="projects" element={<Navigate to="/" replace />} />
+
+          {/* üîπ Expertise-Seiten */}
+          <Route path="expertise/ux-strategy" element={<UXStrategy />} />
+          <Route
+            path="expertise/strategic-ux-research"
+            element={<StrategicUXResearch />}
+          />
+          <Route path="expertise/researchops" element={<ResearchOps />} />
+          <Route path="expertise/team-leadership" element={<TeamLeadership />} />
+          <Route
+            path="expertise/team-leadership/skillassessment"
+            element={<SkillAssessmentPage />}
+          />
+          <Route path="expertise/impact-measurement" element={<ImpactMeasurement />} />
+
+          {/* üîπ Footer-/Legal-Seiten */}
+          <Route path="imprint" element={<Imprint />} />
+          <Route path="privacy" element={<Privacy />} />
+
+          {/* üîπ Fallback */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Route>
+      </Routes>
+    </>
+  );
+}
+
+
+==== \src\AppLayout.tsx ====
+// src/components/layout/AppLayout.tsx
+import { Outlet } from "react-router-dom";
+import Navbar from "@/components/common/Navbar";
+import Footer from "@/components/common/Footer";
+
+export default function AppLayout() {
+  return (
+    <div className="min-h-screen flex flex-col bg-background text-foreground overflow-x-clip">
+      <Navbar />
+      <main className="flex-1">
+        <Outlet />
+      </main>
+      <Footer />
+    </div>
+  );
+}
+
+
+==== \src\i18n.ts ====
+// src/i18n.ts
+import i18n from "i18next";
+import { initReactI18next, useTranslation } from "react-i18next";
+import de from "@/locales/de.json";
+import en from "@/locales/en.json";
+
+if (!i18n.isInitialized) {
+  void i18n.use(initReactI18next).init({
+    resources: { de: { translation: de }, en: { translation: en } },
+    lng: "en",
+    fallbackLng: "en",
+    interpolation: { escapeValue: false },
+  });
+}
+
+export type Lang = "de" | "en";
+export const useI18n = () => {
+  const { t, i18n } = useTranslation();
+  const lang: Lang = i18n.language?.startsWith("de") ? "de" : "en";
+  const setLang = (l: Lang) => i18n.changeLanguage(l);
+  return { t, i18n, lang, setLang };
+};
+
+export default i18n;
+
+
+==== \src\index.css ====
+@import "tailwindcss";
+@plugin "tailwindcss-animate";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ================================
+   THEME TOKENS (vereinheitlicht)
+   ================================ */
+@theme {
+  --breakpoint-sm: 40rem;
+  --breakpoint-md: 48rem;
+  --breakpoint-lg: 64rem;
+  --breakpoint-xl: 80rem;
+  --breakpoint-2xl: 96rem;
+
+  /* Fonts */
+  --font-sans: "SF Pro Text", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "SF Pro Display", "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  /* Colors (Light) */
+  --color-background: #ffffff;
+  --color-foreground: #2f2f2f;          /* Einheitliches Grau f√ºr alle Texte */
+  --color-border: #e5e5e5;
+
+  --color-muted: #f3f3f3;
+  --color-muted-foreground: #2f2f2f;    /* identisch mit foreground */
+
+  --color-primary: #0a0a0a;
+  --color-primary-foreground: #ffffff;
+
+  --color-secondary: #4a5a6a;
+  --color-secondary-foreground: #ffffff;
+
+  --color-accent: #0094c6;
+  --color-accent-foreground: #ffffff;
+
+  /* semantischer Token */
+  --color-bold: var(--color-foreground);
+}
+
+/* ================================
+   DARK THEME OVERRIDES
+   ================================ */
+.dark {
+  --color-background: #0b0b0b;
+  --color-foreground: #c8c8c8;          /* Einheitliches Hellgrau f√ºr alle Texte */
+  --color-border: #2a2a2a;
+
+  --color-muted: #1a1a1a;
+  --color-muted-foreground: #d6d6d6;    /* identisch mit foreground */
+
+  --color-primary: #f8f8f8;
+  --color-primary-foreground: #0a0a0a;
+
+  --color-secondary: #607080;
+  --color-secondary-foreground: #ffffff;
+
+  --color-accent: #8ab0c2;
+  --color-accent-foreground: #0b0b0b;
+
+  /* üîµ Bold-Emphasis-Farbe im Dark Mode */
+  --color-bold: var(--color-accent);
+}
+
+:root {
+  color-scheme: light dark;
+}
+
+/* ================================
+   MAP CSS VARS ‚Üí UTILITIES
+   ================================ */
+@theme inline {
+  --color-card: var(--color-background);
+  --color-card-foreground: var(--color-foreground);
+  --color-popover: var(--color-background);
+  --color-popover-foreground: var(--color-foreground);
+}
+
+/* ================================
+   GLOBAL LAYOUT FIXES
+   ================================ */
+html,
+body {
+  margin: 0;
+  padding: 0;
+
+  /* ‚úÖ Apple-like: Scrollbar nur wenn n√∂tig (kein permanenter "Rand") */
+  overflow-y: auto;
+
+  overflow-x: clip;
+  width: 100%;
+  background: var(--color-background);
+  color: var(--color-foreground);
+}
+
+/* Optional: Layout-Stabilit√§t auf Windows ohne permanenten Scrollbar
+   (wenn du‚Äôs wirklich brauchst, sonst kannst du diese Zeile l√∂schen) */
+html {
+  scroll-behavior: smooth;
+  /* scrollbar-gutter: stable; */
+}
+
+/* ‚úÖ Normale Bilder & SVGs skalieren richtig */
+img:not([data-hero]),
+svg:not([data-hero]) {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ================================
+   COMPONENT UTILITIES
+   ================================ */
+@layer components {
+  .container-responsive {
+    @apply mx-auto max-w-6xl px-4 sm:px-6 lg:px-8;
+  }
+
+  .section {
+    @apply mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-20 space-y-8;
+  }
+
+  .card {
+    @apply rounded-2xl border border-border bg-card text-card-foreground;
+  }
+
+  /* Buttons */
+  .btn {
+    @apply inline-flex items-center justify-center
+           rounded-2xl px-5 py-2.5 text-sm font-semibold
+           border border-border transition-colors duration-200;
+  }
+
+  .btn-primary {
+    @apply bg-primary text-primary-foreground hover:opacity-90;
+  }
+
+  .btn-secondary {
+    @apply bg-muted text-foreground hover:bg-muted/70;
+  }
+
+  .btn-ghost {
+    @apply text-foreground hover:bg-muted/40;
+  }
+
+  /* Tiles */
+  .tile {
+    @apply rounded-xl border border-border bg-muted
+           p-4 text-center text-sm text-foreground
+           transition-colors duration-200
+           hover:bg-muted/70;
+  }
+}
+
+/* ================================
+   TYPOGRAPHY BASE
+   ================================ */
+@layer base {
+  body {
+    @apply bg-background text-foreground font-sans;
+  }
+
+  h1 {
+    @apply font-display font-extrabold tracking-tight text-foreground;
+  }
+
+  h2 {
+    @apply font-display font-bold text-foreground;
+  }
+
+  h3 {
+    @apply font-display font-semibold text-foreground;
+  }
+
+  p {
+    @apply leading-relaxed text-foreground;
+  }
+
+  small {
+    @apply text-sm text-foreground;
+  }
+
+  /* ================================
+     ‚úÖ BOLD EMPHASIS ‚Äì NUR IM MAIN-CONTENT
+     ================================ */
+
+  /* Strong/B im Flie√ütext (p/li) */
+  .dark main p strong,
+  .dark main p b,
+  .dark main li strong,
+  .dark main li b {
+    color: var(--color-bold);
+  }
+
+  /* ‚úÖ Strong/B auch in SectionIntro (DIV) */
+  .dark main [data-section-intro] strong,
+  .dark main [data-section-intro] b {
+    color: var(--color-bold);
+  }
+
+  /* Falls du Bold als Span-Klasse im Content nutzt */
+  .dark main span.font-semibold,
+  .dark main span.font-bold {
+    color: var(--color-bold);
+  }
+}
+
+/* ================================
+   DARK MODE ‚Äì IMAGE BRIGHTNESS (Klassenbasiert)
+   ================================ */
+.dark img:not(.no-dark-filter) {
+  filter: brightness(0.7);
+  transition: filter 0.3s ease-in-out;
+}
+
+
+==== \src\main.tsx ====
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { StrictMode } from "react";
+import { BrowserRouter } from "react-router-dom";
+import { HelmetProvider } from "react-helmet-async";   // ‚≠ê NEU
+import App from "@/App";
+import "@/i18n";
+import "./index.css";
+
+const redirect = sessionStorage.getItem("redirect");
+if (redirect) {
+  sessionStorage.removeItem("redirect");
+  const url = new URL(redirect, window.location.origin);
+  window.history.replaceState(null, "", url.pathname + url.search);
+}
+
+ReactDOM.createRoot(document.getElementById("root")!).render(
+  <StrictMode>
+    <HelmetProvider>        {/* ‚≠ê Helmet Provider Wrapper */}
+      <BrowserRouter
+        future={{
+          v7_startTransition: true,
+          v7_relativeSplatPath: true,
+        }}
+      >
+        <App />
+      </BrowserRouter>
+    </HelmetProvider>
+  </StrictMode>
+);
+
+
+==== \src\vite-env.d.ts ====
+/// <reference types="vite/client" />
+
+declare module "*.jpg" {
+  const value: string;
+  export default value;
+}
+
+declare module "*.jpeg" {
+  const value: string;
+  export default value;
+}
+
+declare module "*.png" {
+  const value: string;
+  export default value;
+}
+
+declare module "*.svg" {
+  const value: string;
+  export default value;
+}
+
+declare module "*.webp" {
+  const value: string;
+  export default value;
+}
+
+declare module "*.gif" {
+  const value: string;
+  export default value;
+}
+
+declare module "*.mp4" {
+  const value: string;
+  export default value;
+}
+
+/* ?? neu hinzuf¸gen */
+declare module '*&as=picture';
+declare module '*?*';
+
+
+==== \components.json ====
+{
+  "$schema": "https://ui.shadcn.com/schema.json",
+  "style": "new-york",
+  "rsc": false,
+  "tsx": true,
+  "tailwind": {
+    "config": "tailwind.config.js",
+    "css": "src/index.css",
+    "baseColor": "neutral",
+    "cssVariables": true,
+    "prefix": ""
+  },
+  "iconLibrary": "lucide",
+  "aliases": {
+    "components": "@/components",
+    "utils": "@/lib/utils",
+    "ui": "@/components/ui",
+    "lib": "@/lib",
+    "hooks": "@/hooks"
+  },
+  "registries": {}
+}
+
+
+==== \index.html ====
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <!-- Google Search Console Verification -->
+    <meta name="google-site-verification" content="N1hXubjj5xtLAOx0KP9jxDJ8QxkTfsFbM3ZNtaLwYNg" />
+
+    <!-- Primary Meta Description -->
+    <meta
+      name="description"
+      content="Portfolio of Felix Bruckmeier ‚Äì Senior UX Researcher driving qualitative & quantitative UX Research, UX strategy, mixed methods and ResearchOps in a Design Thinking, Lean UX and Agile UX approach."
+    />
+
+    <!-- ‚ùå REMOVED: Canonical (handled by SEOPage per route) -->
+    <!-- <link rel="canonical" href="https://felixbruckmeier.github.io/" /> -->
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Felix Bruckmeier ‚Äì Senior UX Researcher" />
+    <meta
+      property="og:description"
+      content="Specializing in qualitative & quantitative UX Research, UX strategy and ResearchOps."
+    />
+    <meta property="og:url" content="https://felixbruckmeier.github.io/" />
+    <meta property="og:image" content="https://felixbruckmeier.github.io/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Felix Bruckmeier ‚Äì Senior UX Researcher" />
+    <meta
+      name="twitter:description"
+      content="Specializing in qualitative & quantitative UX Research, UX strategy and ResearchOps."
+    />
+    <meta name="twitter:image" content="https://felixbruckmeier.github.io/og-image.png" />
+
+    <!-- Theme Bootstrapping -->
+    <script>
+      (() => {
+        try {
+          const stored = localStorage.getItem("theme");
+          const prefers =
+            window.matchMedia &&
+            window.matchMedia("(prefers-color-scheme: dark)").matches;
+          const theme = stored ?? (prefers ? "dark" : "light");
+          const root = document.documentElement;
+          if (theme === "dark") {
+            root.classList.add("dark");
+            root.style.colorScheme = "dark";
+          } else {
+            root.classList.remove("dark");
+            root.style.colorScheme = "light";
+          }
+        } catch {}
+      })();
+    </script>
+
+    <!-- Analytics -->
+    <script
+      data-goatcounter="https://felix.goatcounter.com/count"
+      async
+      src="//gc.zgo.at/count.js"
+    ></script>
+
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Felix Bruckmeier ‚Äì Senior UX Researcher</title>
+  </head>
+
+  <body class="min-h-screen bg-background text-foreground">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+
+
+==== \package.json ====
+{
+  "name": "uxr-portfolio-felix",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "check:i18n": "node scripts/check-missing-translations.js",
+    "check:i18n:reverse": "node scripts/check-missing-translations-reverse.js",
+    "check:i18n:all": "npm run check:i18n && npm run check:i18n:reverse",
+    "translate:i18n": "node scripts/translate-missing-translations.js",
+    "translate:i18n:dry": "node scripts/translate-missing-translations-dryrun.js",
+    "translate:smart": "node scripts/smart-translate-optimize.js --target=de",
+    "translate:smart:en": "node scripts/smart-translate-optimize.js --target=en",
+    "translate:smart:dry": "node scripts/smart-translate-optimize.js --target=de --dry"
+  },
+  "dependencies": {
+    "@radix-ui/react-accordion": "^1.2.12",
+    "chart.js": "^4.5.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "framer-motion": "^12.23.24",
+    "i18next": "^23.16.8",
+    "jspdf": "^3.0.3",
+    "lucide-react": "^0.544.0",
+    "react": "^18.2.0",
+    "react-chartjs-2": "^5.3.0",
+    "react-dom": "^18.2.0",
+    "react-helmet-async": "^2.0.5",
+    "react-i18next": "^13.5.0",
+    "react-intersection-observer": "^9.16.0",
+    "react-router-dom": "^6.26.0",
+    "recharts": "^3.2.1",
+    "sharp": "^0.34.4",
+    "tailwind-merge": "^3.3.1",
+    "tailwindcss-animate": "^1.0.7"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.0.0",
+    "@types/node": "^24.5.2",
+    "@types/react": "^18.2.66",
+    "@types/react-dom": "^18.2.22",
+    "@vitejs/plugin-react": "^4.3.4",
+    "autoprefixer": "^10.4.20",
+    "dotenv": "^16.4.5",
+    "openai": "^4.73.1",
+    "postcss": "^8.4.47",
+    "tailwindcss": "^4.0.0",
+    "typescript": "^5.4.0",
+    "vite": "^5.4.19",
+    "vite-imagetools": "^9.0.0"
+  }
+}
+
+
+==== \postcss.config.js ====
+export default {
+  plugins: {
+    "@tailwindcss/postcss": {},
+  },
+};
+
+
+==== \tailwind.config.js ====
+/**** Tailwind v4 minimal config ****/

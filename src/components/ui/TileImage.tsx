@@ -1,6 +1,6 @@
 // src/components/ui/TileImage.tsx
 import { cn } from "@/lib/utils";
-import { transitions, hoverEffects, radii } from "@/lib/tokens";
+import { hoverEffects, radii } from "@/lib/tokens";
 import { ArrowRight } from "lucide-react";
 
 export default function TileImage({
@@ -16,9 +16,16 @@ export default function TileImage({
     <div
       className={cn(
         "group relative overflow-hidden aspect-[4/3]",
+
+        // ✅ GPU/Text-Stabilisierung (hilft gegen Jitter)
+        "[transform:translateZ(0)] [backface-visibility:hidden]",
+
         radii.xl,
-        transitions.default,
+
+        // ✅ Apple-like: Container skaliert (in alle Richtungen)
+        // (kommt jetzt aus tokens.ts, dort ist scale klein + transition-transform)
         hoverEffects.smoothLift,
+
         className
       )}
       {...props}
@@ -49,7 +56,6 @@ export default function TileImage({
       </div>
 
       {/* === OVERLAY === */}
-      {/* Light: etwas weicher, Dark: stärker — Text bleibt immer weiß */}
       <div
         className={cn(
           "absolute inset-0 pointer-events-none",
@@ -59,16 +65,21 @@ export default function TileImage({
       />
 
       {/* === TEXT-LAYER === */}
-      <div className="relative z-20 flex flex-col h-full p-4 justify-end select-none">
+      {/* ✅ Safe-Area rechts (immer), damit CTA-Kreis NIE über Text liegt */}
+      <div className="relative z-20 flex flex-col h-full p-4 pr-16 justify-end select-none">
         {title && (
-          <h3 className="text-xl font-semibold mb-1 text-white/85
-                         drop-shadow-[0_1px_3px_rgba(0,0,0,0.6)]">
+          <h3
+            className="text-xl font-semibold mb-1 text-white/85
+                       drop-shadow-[0_1px_3px_rgba(0,0,0,0.6)]"
+          >
             {title}
           </h3>
         )}
         {caption && (
-          <p className="text-base text-white/85 leading-snug
-                        drop-shadow-[0_1px_2px_rgba(0,0,0,0.55)]">
+          <p
+            className="text-base text-white/85 leading-snug
+                       drop-shadow-[0_1px_2px_rgba(0,0,0,0.55)]"
+          >
             {caption}
           </p>
         )}

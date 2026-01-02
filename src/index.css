@@ -33,6 +33,9 @@
 
   --color-accent: #0094c6;
   --color-accent-foreground: #ffffff;
+
+  /* semantischer Token */
+  --color-bold: var(--color-foreground);
 }
 
 /* ================================
@@ -52,8 +55,11 @@
   --color-secondary: #607080;
   --color-secondary-foreground: #ffffff;
 
-  --color-accent: #33bde5;
+  --color-accent: #8ab0c2;
   --color-accent-foreground: #0b0b0b;
+
+  /* 🔵 Bold-Emphasis-Farbe im Dark Mode */
+  --color-bold: var(--color-accent);
 }
 
 :root {
@@ -77,16 +83,21 @@ html,
 body {
   margin: 0;
   padding: 0;
-  overflow-y: scroll;
+
+  /* ✅ Apple-like: Scrollbar nur wenn nötig (kein permanenter "Rand") */
+  overflow-y: auto;
+
   overflow-x: clip;
   width: 100%;
   background: var(--color-background);
   color: var(--color-foreground);
 }
 
-/* ✅ Weiches Scrollen aktivieren */
+/* Optional: Layout-Stabilität auf Windows ohne permanenten Scrollbar
+   (wenn du’s wirklich brauchst, sonst kannst du diese Zeile löschen) */
 html {
   scroll-behavior: smooth;
+  /* scrollbar-gutter: stable; */
 }
 
 /* ✅ Normale Bilder & SVGs skalieren richtig */
@@ -115,8 +126,8 @@ svg:not([data-hero]) {
 
   /* Buttons */
   .btn {
-    @apply inline-flex items-center justify-center 
-           rounded-2xl px-5 py-2.5 text-sm font-semibold 
+    @apply inline-flex items-center justify-center
+           rounded-2xl px-5 py-2.5 text-sm font-semibold
            border border-border transition-colors duration-200;
   }
 
@@ -134,9 +145,9 @@ svg:not([data-hero]) {
 
   /* Tiles */
   .tile {
-    @apply rounded-xl border border-border bg-muted 
-           p-4 text-center text-sm text-foreground 
-           transition-colors duration-200 
+    @apply rounded-xl border border-border bg-muted
+           p-4 text-center text-sm text-foreground
+           transition-colors duration-200
            hover:bg-muted/70;
   }
 }
@@ -167,6 +178,30 @@ svg:not([data-hero]) {
 
   small {
     @apply text-sm text-foreground;
+  }
+
+  /* ================================
+     ✅ BOLD EMPHASIS – NUR IM MAIN-CONTENT
+     ================================ */
+
+  /* Strong/B im Fließtext (p/li) */
+  .dark main p strong,
+  .dark main p b,
+  .dark main li strong,
+  .dark main li b {
+    color: var(--color-bold);
+  }
+
+  /* ✅ Strong/B auch in SectionIntro (DIV) */
+  .dark main [data-section-intro] strong,
+  .dark main [data-section-intro] b {
+    color: var(--color-bold);
+  }
+
+  /* Falls du Bold als Span-Klasse im Content nutzt */
+  .dark main span.font-semibold,
+  .dark main span.font-bold {
+    color: var(--color-bold);
   }
 }
 
