@@ -1,3 +1,5 @@
+// src/components/sections/home/AboutSection.tsx
+
 import Section from "@/components/ui/Section";
 import FadeIn from "@/components/ui/FadeIn";
 import Button from "@/components/ui/Button";
@@ -5,12 +7,17 @@ import { cn } from "@/lib/utils";
 import { colors } from "@/lib/tokens";
 import { motion } from "framer-motion";
 
-import profileImg from "@/assets/images/home/pb.png";
+// ✅ optimiert + responsive
+import profileImg from "@/assets/images/home/pb.png?w=400;800&format=webp;jpg&as=picture";
 
 export default function AboutSection() {
+  // ✅ BUGFIX: niemals .map() auf etwas, das kein Array ist
+  const anyImg = profileImg as any;
+  const sources = Array.isArray(anyImg?.sources) ? anyImg.sources : [];
+  const hasPicture = !!anyImg?.img?.src;
+
   return (
     <Section id="about" borderBottom>
-
       {/* Invisible SEO-H1 */}
       <h1 className="sr-only">
         Felix Bruckmeier – UX Research Lead & ResearchOps Specialist
@@ -23,8 +30,6 @@ export default function AboutSection() {
       >
         {/* === TEXT-BEREICH === */}
         <div className="text-block order-1 md:col-start-1 flex flex-col">
-
-          {/* ⭐ Modern Smooth Line Reveal Headline ⭐ */}
           <FadeIn delay={0.05}>
             <motion.h2
               initial="hidden"
@@ -34,22 +39,20 @@ export default function AboutSection() {
                 visible: {
                   opacity: 1,
                   y: 0,
-                  transition: { duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }
-                }
+                  transition: { duration: 0.6, ease: [0.25, 0.1, 0.25, 1] },
+                },
               }}
               className="text-left text-foreground font-bold text-5xl mb-8 relative overflow-hidden"
             >
               <span className="relative inline-block">
                 Hello!
-
-                {/* Smooth mask wipe */}
                 <motion.span
                   initial={{ x: "0%" }}
                   animate={{ x: "100%" }}
                   transition={{
                     duration: 0.8,
                     delay: 0.2,
-                    ease: [0.4, 0, 0.2, 1]
+                    ease: [0.4, 0, 0.2, 1],
                   }}
                   className="absolute left-0 top-0 bottom-0 w-full bg-background"
                 />
@@ -57,7 +60,6 @@ export default function AboutSection() {
             </motion.h2>
           </FadeIn>
 
-          {/* Mobile (kurz) */}
           <FadeIn delay={0.25}>
             <p className="text-left text-foreground font-semibold text-lg mb-4 md:hidden">
               I’m a UX Research Lead focused on understanding user needs and shaping
@@ -65,7 +67,6 @@ export default function AboutSection() {
             </p>
           </FadeIn>
 
-          {/* Desktop (ausführlicher) */}
           <FadeIn delay={0.25}>
             <p className="hidden md:block text-left text-foreground font-semibold text-lg mb-4">
               I’m a UX Research Lead focused on understanding user needs and shaping
@@ -74,7 +75,6 @@ export default function AboutSection() {
             </p>
           </FadeIn>
 
-          {/* CTA Desktop */}
           <div className="hidden md:flex flex-wrap gap-4 w-full mt-8">
             <FadeIn delay={0.65}>
               <Button asChild variant="secondary" size="lg">
@@ -99,15 +99,40 @@ export default function AboutSection() {
         {/* === BILD-BEREICH === */}
         <div className="image-block order-2 md:col-start-2">
           <FadeIn delay={0.2}>
-            <img
-              src={profileImg}
-              alt="Portrait of Felix Bruckmeier – UX Research Lead"
-              loading="lazy"
-              className={cn(
-                "rounded-2xl shadow-lg mx-auto w-[70%] md:w-[80%] object-cover object-[center_20%] aspect-[4/5]",
-                colors.border
-              )}
-            />
+            {hasPicture ? (
+              <picture>
+                {sources.map((s: any) => (
+                  <source
+                    key={s.srcset}
+                    {...s}
+                    sizes={s.sizes ?? "(max-width: 768px) 70vw, 420px"}
+                  />
+                ))}
+                <img
+                  src={anyImg.img.src}
+                  alt="Portrait of Felix Bruckmeier – UX Research Lead"
+                  loading="lazy"
+                  decoding="async"
+                  sizes="(max-width: 768px) 70vw, 420px"
+                  className={cn(
+                    "rounded-2xl shadow-lg mx-auto w-[70%] md:w-[80%] object-cover object-[center_20%] aspect-[4/5]",
+                    colors.border
+                  )}
+                />
+              </picture>
+            ) : (
+              // Fallback, falls imagetools kein picture-object liefert
+              <img
+                src={profileImg as any}
+                alt="Portrait of Felix Bruckmeier – UX Research Lead"
+                loading="lazy"
+                decoding="async"
+                className={cn(
+                  "rounded-2xl shadow-lg mx-auto w-[70%] md:w-[80%] object-cover object-[center_20%] aspect-[4/5]",
+                  colors.border
+                )}
+              />
+            )}
           </FadeIn>
         </div>
 
@@ -133,14 +158,12 @@ export default function AboutSection() {
         </div>
       </div>
 
-      {/* Zitat */}
       <FadeIn delay={1.0}>
         <blockquote className="mt-12 text-center text-muted-foreground italic text-sm md:text-base">
           “UX Research is not for perfectionists. We strive for something better than
           perfection — something real.”
         </blockquote>
       </FadeIn>
-
     </Section>
   );
 }

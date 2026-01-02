@@ -1,15 +1,40 @@
+// src/components/ui/PersonaCard.tsx
 import React from "react";
 import Tile from "@/components/ui/Tile";
 import Tag from "@/components/ui/Tag";
 import { Body, Small, Subtitle } from "@/components/ui/Tokens";
 import { colors } from "@/lib/tokens";
 
+/* =========================================================
+   Image helper – supports Vite + vite-imagetools outputs
+   ========================================================= */
+
+type PictureLike = {
+  sources?: Array<{
+    srcset: string;
+    type: string;
+    sizes?: string;
+  }>;
+  img?: { src: string; width: number; height: number };
+};
+
+type ImgLike = string | PictureLike;
+
+function imgUrl(img?: ImgLike): string | undefined {
+  if (!img) return undefined;
+  return typeof img === "string" ? img : img.img?.src;
+}
+
+/* =========================================================
+   Props
+   ========================================================= */
+
 interface PersonaCardProps {
   name: string;
   role?: string;
   level?: string;
   quote?: string;
-  imgSrc?: string;
+  imgSrc?: ImgLike; // ✅ string OR imagetools object
   description?: string;
   skills?: string[];
   needs?: string;
@@ -31,6 +56,8 @@ export default function PersonaCard({
   challenges,
   responsibilities = [],
 }: PersonaCardProps) {
+  const url = imgUrl(imgSrc);
+
   return (
     <div className="w-full flex justify-center">
       <Tile
@@ -41,17 +68,15 @@ export default function PersonaCard({
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full items-start text-left">
           {/* === LEFT COLUMN – Profile === */}
           <div className="flex flex-col h-full text-left">
-            <Tile
-              variant="transparent"
-              className="flex flex-col justify-between h-full text-left"
-            >
+            <Tile variant="transparent" className="flex flex-col justify-between h-full text-left">
               {/* Profile Image */}
               <div className="w-56 h-56 rounded-full overflow-hidden border border-border bg-muted mb-8">
-                {imgSrc ? (
+                {url ? (
                   <img
-                    src={imgSrc}
+                    src={url}
                     alt={name}
-                    className="w-full h-full object-cover rounded-full"
+                    className="w-full h-full object-cover rounded-full no-dark-filter"
+                    loading="lazy"
                   />
                 ) : (
                   <div className="flex items-center justify-center h-full text-3xl font-semibold text-muted-foreground">
@@ -62,9 +87,7 @@ export default function PersonaCard({
 
               {/* Name + Role */}
               <div className="space-y-2 mb-6 text-left">
-                <Subtitle className="text-left text-3xl md:text-4xl font-semibold">
-                  {name}
-                </Subtitle>
+                <Subtitle className="text-left text-3xl md:text-4xl font-semibold">{name}</Subtitle>
                 <Small className={`${colors.muted.text} text-left text-base md:text-lg`}>
                   {role} {level ? `· ${level}` : ""}
                 </Small>
@@ -82,29 +105,19 @@ export default function PersonaCard({
           {/* === MIDDLE COLUMN === */}
           <div className="flex flex-col gap-3 h-full text-left">
             {description && (
-              <Tile
-                variant="transparent"
-                className="flex-1 flex flex-col justify-between text-left"
-              >
+              <Tile variant="transparent" className="flex-1 flex flex-col justify-between text-left">
                 <Subtitle className="text-left text-lg md:text-xl font-semibold">
                   Role Overview
                 </Subtitle>
-                <Body
-                  className={`${colors.muted.text} text-left text-sm md:text-[15px] leading-snug`}
-                >
+                <Body className={`${colors.muted.text} text-left text-sm md:text-[15px] leading-snug`}>
                   {description}
                 </Body>
               </Tile>
             )}
 
             {skills.length > 0 && (
-              <Tile
-                variant="transparent"
-                className="flex-1 flex flex-col justify-between text-left"
-              >
-                <Subtitle className="text-left text-lg md:text-xl font-semibold">
-                  Key Skills
-                </Subtitle>
+              <Tile variant="transparent" className="flex-1 flex flex-col justify-between text-left">
+                <Subtitle className="text-left text-lg md:text-xl font-semibold">Key Skills</Subtitle>
                 <div className="flex flex-wrap gap-2 mt-2 text-left">
                   {skills.map((skill, i) => (
                     <Tag key={i} color="gray" className="text-xs md:text-sm px-2 py-1">
@@ -116,16 +129,11 @@ export default function PersonaCard({
             )}
 
             {responsibilities.length > 0 && (
-              <Tile
-                variant="transparent"
-                className="flex-1 flex flex-col justify-between text-left"
-              >
+              <Tile variant="transparent" className="flex-1 flex flex-col justify-between text-left">
                 <Subtitle className="text-left text-lg md:text-xl font-semibold">
                   Responsibilities
                 </Subtitle>
-                <Body
-                  className={`${colors.muted.text} text-left text-sm md:text-[15px] leading-snug`}
-                >
+                <Body className={`${colors.muted.text} text-left text-sm md:text-[15px] leading-snug`}>
                   <ul className="list-disc pl-5 space-y-1">
                     {responsibilities.map((r, i) => (
                       <li key={i}>{r}</li>
@@ -139,48 +147,27 @@ export default function PersonaCard({
           {/* === RIGHT COLUMN === */}
           <div className="flex flex-col gap-3 h-full text-left">
             {needs && (
-              <Tile
-                variant="transparent"
-                className="flex-1 flex flex-col justify-between text-left"
-              >
-                <Subtitle className="text-left text-lg md:text-xl font-semibold">
-                  Needs
-                </Subtitle>
-                <Body
-                  className={`${colors.muted.text} text-left text-sm md:text-[15px] leading-snug`}
-                >
+              <Tile variant="transparent" className="flex-1 flex flex-col justify-between text-left">
+                <Subtitle className="text-left text-lg md:text-xl font-semibold">Needs</Subtitle>
+                <Body className={`${colors.muted.text} text-left text-sm md:text-[15px] leading-snug`}>
                   {needs}
                 </Body>
               </Tile>
             )}
 
             {painPoints && (
-              <Tile
-                variant="transparent"
-                className="flex-1 flex flex-col justify-between text-left"
-              >
-                <Subtitle className="text-left text-lg md:text-xl font-semibold">
-                  Pain Points
-                </Subtitle>
-                <Body
-                  className={`${colors.muted.text} text-left text-sm md:text-[15px] leading-snug`}
-                >
+              <Tile variant="transparent" className="flex-1 flex flex-col justify-between text-left">
+                <Subtitle className="text-left text-lg md:text-xl font-semibold">Pain Points</Subtitle>
+                <Body className={`${colors.muted.text} text-left text-sm md:text-[15px] leading-snug`}>
                   {painPoints}
                 </Body>
               </Tile>
             )}
 
             {challenges && (
-              <Tile
-                variant="transparent"
-                className="flex-1 flex flex-col justify-between text-left"
-              >
-                <Subtitle className="text-left text-lg md:text-xl font-semibold">
-                  Challenges
-                </Subtitle>
-                <Body
-                  className={`${colors.muted.text} text-left text-sm md:text-[15px] leading-snug`}
-                >
+              <Tile variant="transparent" className="flex-1 flex flex-col justify-between text-left">
+                <Subtitle className="text-left text-lg md:text-xl font-semibold">Challenges</Subtitle>
+                <Body className={`${colors.muted.text} text-left text-sm md:text-[15px] leading-snug`}>
                   {challenges}
                 </Body>
               </Tile>

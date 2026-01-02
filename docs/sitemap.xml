@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <!-- Home -->
+  <url><loc>https://felixbruckmeier.github.io/</loc></url>
+
+  <!-- CV -->
+  <url><loc>https://felixbruckmeier.github.io/cv</loc></url>
+
+  <!-- Expertise -->
+  <url><loc>https://felixbruckmeier.github.io/expertise/ux-strategy</loc></url>
+  <url><loc>https://felixbruckmeier.github.io/expertise/strategic-ux-research</loc></url>
+  <url><loc>https://felixbruckmeier.github.io/expertise/researchops</loc></url>
+  <url><loc>https://felixbruckmeier.github.io/expertise/team-leadership</loc></url>
+  <url><loc>https://felixbruckmeier.github.io/expertise/team-leadership/skillassessment</loc></url>
+  <url><loc>https://felixbruckmeier.github.io/expertise/impact-measurement</loc></url>
+
+  <!-- Projects (only indexable ones) -->
+  <url><loc>https://felixbruckmeier.github.io/projects/car-insurance</loc></url>
+  <url><loc>https://felixbruckmeier.github.io/projects/zooplus-pricing</loc></url>
+  <url><loc>https://felixbruckmeier.github.io/projects/insurance-broker-discovery</loc></url>
+  <url><loc>https://felixbruckmeier.github.io/projects/workshop</loc></url>
+  <url><loc>https://felixbruckmeier.github.io/projects/kanostrategy</loc></url>
+  <url><loc>https://felixbruckmeier.github.io/projects/ux-portfolio</loc></url>
+
+  <!-- Legal -->
+  <url><loc>https://felixbruckmeier.github.io/imprint</loc></url>
+  <url><loc>https://felixbruckmeier.github.io/privacy</loc></url>
+
+</urlset>

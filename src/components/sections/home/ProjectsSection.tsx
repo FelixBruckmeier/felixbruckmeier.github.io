@@ -1,22 +1,25 @@
+// src/components/sections/home/ProjectsSection.tsx
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Section, SectionIntro, TextReveal, FadeIn, TileImage } from "@/components/ui";
+import { Section, SectionIntro, FadeIn, TileImage } from "@/components/ui";
 import { spacing, layout } from "@/lib/tokens";
 import { cn } from "@/lib/utils";
 import { Lock } from "lucide-react";
 
 // 📸 Projektbilder (optimiert via vite-imagetools)
-import carInsuranceImg from "@/assets/images/projects/carinsurance/CarInsurance.png?w=400;800&format=webp;png&as=picture";
-import reopsAgileImg from "@/assets/images/projects/reopsagile/ResearchOpsAgileUX.jpg?w=400;800&format=webp;png&as=picture";
-import insuranceBrokerImg from "@/assets/images/projects/b2b2c/B2B2COptimization.jpg?w=400;800&format=webp;png&as=picture";
-import pricingImg from "@/assets/images/projects/pricingtesting/PricingUsabilityTesting.jpg?w=400;800&format=webp;png&as=picture";
-import microinteractionImg from "@/assets/images/projects/amicrointeraction/optimize.jpg?w=400;800&format=webp;png&as=picture";
-import reopsImplImg from "@/assets/images/projects/reopsimplement/ReOpsimplementation.jpg?w=400;800&format=webp;png&as=picture";
-import workshopImg from "@/assets/images/projects/workshop/haderws.jpg?w=400;800&format=webp;png&as=picture";
-import kanoStrategyImg from "@/assets/images/projects/kanostrategy/headerkano.jpg?w=400;800&format=webp;png&as=picture";
+const tileParams = "?w=320;480;640&format=webp;jpg&q=60&as=picture";
+
+import carInsuranceImg from "@/assets/images/projects/carinsurance/CarInsurance.png?w=320;480;640&format=webp;jpg&q=60&as=picture";
+import reopsAgileImg from "@/assets/images/projects/reopsagile/ResearchOpsAgileUX.jpg?w=320;480;640&format=webp;jpg&q=60&as=picture";
+import insuranceBrokerImg from "@/assets/images/projects/b2b2c/B2B2COptimization.jpg?w=320;480;640&format=webp;jpg&q=60&as=picture";
+import pricingImg from "@/assets/images/projects/pricingtesting/PricingUsabilityTesting.jpg?w=320;480;640&format=webp;jpg&q=60&as=picture";
+import microinteractionImg from "@/assets/images/projects/amicrointeraction/optimize.jpg?w=320;480;640&format=webp;jpg&q=60&as=picture";
+import reopsImplImg from "@/assets/images/projects/reopsimplement/ReOpsimplementation.jpg?w=320;480;640&format=webp;jpg&q=60&as=picture";
+import workshopImg from "@/assets/images/projects/workshop/haderws.jpg?w=320;480;640&format=webp;jpg&q=60&as=picture";
+import kanoStrategyImg from "@/assets/images/projects/kanostrategy/headerkano.jpg?w=320;480;640&format=webp;jpg&q=60&as=picture";
 
 // 📸 NEU – UX Portfolio Projektbild
-import uxPortfolioImg from "@/assets/images/projects/uxportfolio/cover.png?w=400;800&format=webp;png&as=picture";
+import uxPortfolioImg from "@/assets/images/projects/uxportfolio/cover.png?w=320;480;640&format=webp;jpg&q=60&as=picture";
 
 export default function ProjectsSection() {
   const { t } = useTranslation();
@@ -90,20 +93,22 @@ export default function ProjectsSection() {
   return (
     <Section id="projects" title={t("projects.title")} spacing="lg">
       <SectionIntro>
-        <TextReveal
-          stagger={0.06}
-          duration={0.35}
-          delay={0.1}
-          ease="easeOut"
-          className="inherit"
-        >
-          I’m passionate about guiding teams through the entire spectrum of UX research —
-          from foundational discovery to evaluative testing. I combine qualitative and
-          quantitative methods, mixed-method and triangulation approaches, analytics, and
-          design thinking workshops to turn complex questions into meaningful insights.
-          My work connects agile UX, research-driven project management, and the integration
-          of AI into research and product development.
-        </TextReveal>
+        {/* ✅ normales FadeIn statt wortweiser Animation */}
+        <FadeIn delay={0.1}>
+  <p className="inherit">
+    I’m passionate about guiding teams through the entire spectrum of{" "}
+    <strong>UX research</strong> — from <strong>foundational discovery</strong>{" "}
+    to <strong>evaluative testing</strong>. I combine{" "}
+    <strong>qualitative and quantitative methods</strong>,{" "}
+    <strong>mixed-method and triangulation approaches</strong>,{" "}
+    <strong>analytics</strong>, and{" "}
+    <strong>design thinking workshops</strong> to turn complex questions into{" "}
+    <strong>meaningful insights</strong>. My work connects{" "}
+    <strong>agile UX</strong>,{" "}
+    <strong>research-driven project management</strong>, and the{" "}
+    <strong>integration of AI</strong> into research and product development.
+  </p>
+</FadeIn>
       </SectionIntro>
 
       <div
@@ -135,7 +140,7 @@ export default function ProjectsSection() {
                   />
                   <div className="absolute inset-0 bg-black/50 flex items-center justify-center rounded-xl">
                     <Lock
-                      className="text-white opacity-90 w-12 h-12 drop-shadow-lg transition-none"
+                      className="text-white opacity-40 w-12 h-12 drop-shadow-lg transition-none"
                       strokeWidth={1.5}
                     />
                   </div>

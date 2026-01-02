@@ -1,7 +1,8 @@
 import PageLayout from "@/components/layout/PageLayout";
-import SEOPage from "@/components/common/SEOPage"; 
+import SEOPage from "@/components/common/SEOPage";
 
-import headerImg from "@/assets/images/expertise/impactmeasurement/impact.jpg";
+// ✅ Header-Bild als picture (Full-Width Hero geeignet)
+import headerImg from "@/assets/images/expertise/impactmeasurement/impact.jpg?w=1920;2560&format=webp;jpg&q=80&as=picture";
 
 import {
   ImpactMeasurementIntroSection,
@@ -19,7 +20,6 @@ export default function ImpactMeasurementPage() {
       headerImage={headerImg}
       width="wide"
     >
-
       <SEOPage page="expertise_impactMeasurement" />
 
       <ImpactMeasurementIntroSection />

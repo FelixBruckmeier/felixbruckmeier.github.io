@@ -3,8 +3,8 @@
 import PageLayout from "@/components/layout/PageLayout";
 import SEOPage from "@/components/common/SEOPage";
 
-// ✅ richtiges Header-Bild (Portfolio Cover)
-import headerImg from "@/assets/images/projects/uxportfolio/cover.png";
+// ✅ Header-Bild als picture (Full-Width Hero optimiert)
+import headerImg from "@/assets/images/projects/uxportfolio/cover.png?w=1920;2560&format=webp;jpg&q=80&as=picture";
 
 import {
   UXPortfolioBLUFSection,

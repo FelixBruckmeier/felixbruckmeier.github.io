@@ -119,7 +119,7 @@ export default function McKinseyDesignIndexVisual() {
       <p className="text-xs text-muted-foreground mt-5">
         Source:{" "}
         <a
-          href="https://www.mckinsey.com/~/media/mckinsey/business%20functions/mckinsey%20design/our%20insights/the%20business%20value%20of%20design/the-business-value-of-design-report.pdf"
+          href="https://www.mckinsey.com/capabilities/tech-and-ai/our-insights/the-business-value-of-design"
           target="_blank"
           rel="noopener noreferrer"
           className="underline hover:text-foreground transition-colors"

@@ -31,20 +31,45 @@ import img7_1 from "@/assets/images/projects/workshop/7_1selectsolutionagenda.pn
 import img7_2 from "@/assets/images/projects/workshop/7_2selecsolutionboard.png";
 import img7_3 from "@/assets/images/projects/workshop/7_3selectsolutiongroup.png";
 
+/* =========================================================
+   Image helper – supports Vite + vite-imagetools outputs
+   ========================================================= */
+type PictureLike = {
+  sources?: Array<{
+    srcset: string;
+    type: string;
+    sizes?: string;
+  }>;
+  img?: { src: string; width: number; height: number };
+};
+
+type ImgLike = string | PictureLike;
+
+function imgUrl(img?: ImgLike): string | undefined {
+  if (!img) return undefined;
+  return typeof img === "string" ? img : img.img?.src;
+}
+
 export default function WorkshopProcessSection() {
-  const steps = [
+  const steps: Array<{
+    title: string;
+    caption?: string;
+    desc: React.ReactNode;
+    imgs?: ImgLike[];
+    reverse?: boolean;
+  }> = [
     {
       title: "Welcome & Overview",
       caption: "Setting the tone and purpose",
       desc: (
         <>
-          We began with a short <strong>welcome</strong> and a clear narrative
-          of <strong>why we were there</strong> — to take collective ownership of
-          <strong> UX Research Maturity</strong> and shape its evolution
-          together. I introduced the <strong>structure of the day</strong>,
-          illustrating how each phase would build on the previous one — from
-          <strong> understanding challenges</strong> to developing,
-          <strong> prioritizing</strong>, and selecting actionable solutions.
+          We began with a short <strong>welcome</strong> and a clear narrative of{" "}
+          <strong>why we were there</strong> — to take collective ownership of{" "}
+          <strong>UX Research Maturity</strong> and shape its evolution together. I
+          introduced the <strong>structure of the day</strong>, illustrating how
+          each phase would build on the previous one — from{" "}
+          <strong>understanding challenges</strong> to developing,{" "}
+          <strong>prioritizing</strong>, and selecting actionable solutions.
         </>
       ),
       imgs: [img1_welcome],
@@ -55,14 +80,15 @@ export default function WorkshopProcessSection() {
       caption: "Establishing clarity and alignment",
       desc: (
         <>
-          Before diving into the exercises, we reviewed the{" "}
-          <strong>agenda</strong>. The goal was{" "}
-          <strong>transparency and alignment</strong> — everyone should know
-          exactly where we were heading.{" "}
-          <strong>Problem → Goals → Prioritization → Ideation → Solution Selection</strong>:
-          a simple but powerful flow that guided our collaboration. We clarified{" "}
-          <strong>expectations, timeboxes, and roles</strong> to make the day
-          feel structured yet creative.
+          Before diving into the exercises, we reviewed the <strong>agenda</strong>.
+          The goal was <strong>transparency and alignment</strong> — everyone should
+          know exactly where we were heading.{" "}
+          <strong>
+            Problem → Goals → Prioritization → Ideation → Solution Selection
+          </strong>
+          : a simple but powerful flow that guided our collaboration. We clarified{" "}
+          <strong>expectations, timeboxes, and roles</strong> to make the day feel
+          structured yet creative.
         </>
       ),
       imgs: [img2_agenda],
@@ -73,14 +99,12 @@ export default function WorkshopProcessSection() {
       caption: "Exploring the current pain points",
       desc: (
         <>
-          The first phase focused on creating a{" "}
-          <strong>shared understanding</strong> of the current{" "}
-          <strong>problems</strong> surfaced during the assessment. Through{" "}
-          <strong>open discussion</strong> and visual mapping, we sharpened{" "}
-          <strong>problem statements</strong>, uncovering{" "}
-          <strong>root causes</strong> and hidden dependencies. Seeing everyone
-          nod in recognition — realizing they had been facing the same
-          challenges — was a powerful moment of{" "}
+          The first phase focused on creating a <strong>shared understanding</strong>{" "}
+          of the current <strong>problems</strong> surfaced during the assessment.
+          Through <strong>open discussion</strong> and visual mapping, we sharpened{" "}
+          <strong>problem statements</strong>, uncovering <strong>root causes</strong>{" "}
+          and hidden dependencies. Seeing everyone nod in recognition — realizing
+          they had been facing the same challenges — was a powerful moment of{" "}
           <strong>alignment and empathy</strong>.
         </>
       ),
@@ -95,8 +119,8 @@ export default function WorkshopProcessSection() {
           Once we had a clear picture of the challenges, we shifted the energy
           toward possibility. Each group translated their{" "}
           <strong>pain points into goals</strong> and{" "}
-          <strong>desired outcomes</strong> — what success would look like if
-          these issues were resolved. This phase turned{" "}
+          <strong>desired outcomes</strong> — what success would look like if these
+          issues were resolved. This phase turned{" "}
           <strong>frustration into constructive energy</strong>, transforming
           barriers into opportunity statements.
         </>
@@ -129,9 +153,8 @@ export default function WorkshopProcessSection() {
           <strong>creativity and collaboration</strong>. In small groups,
           participants brainstormed solutions for the top-priority goals,
           sketching, debating, and building on each other’s ideas. The walls
-          quickly filled with colorful notes, ranging from{" "}
-          <strong>quick wins</strong> to long-term structural improvements. The
-          excitement made it clear:{" "}
+          quickly filled with colorful notes, ranging from <strong>quick wins</strong>{" "}
+          to long-term structural improvements. The excitement made it clear:{" "}
           <strong>the team was co-creating its own future</strong>.
         </>
       ),
@@ -143,10 +166,10 @@ export default function WorkshopProcessSection() {
       caption: "From many ideas to actionable focus",
       desc: (
         <>
-          In the final phase, teams <strong>clustered and evaluated</strong>{" "}
-          their ideas based on <strong>value</strong> and{" "}
-          <strong>feasibility</strong>. Together, we refined them into a concise
-          list of <strong>prioritized initiatives</strong> — each with clear{" "}
+          In the final phase, teams <strong>clustered and evaluated</strong> their
+          ideas based on <strong>value</strong> and <strong>feasibility</strong>.
+          Together, we refined them into a concise list of{" "}
+          <strong>prioritized initiatives</strong> — each with clear{" "}
           <strong>ownership and next steps</strong>. What began as abstract
           discussions ended as a <strong>concrete roadmap for progress</strong>.
           The session closed with visible pride — everyone could see how their
@@ -171,7 +194,7 @@ export default function WorkshopProcessSection() {
 
       <div className={cn("flex flex-col space-y-40 md:space-y-52", spacing.mt12)}>
         {steps.map((step, i) => (
-          <div key={i} className="flex flex-col items-center text-center gap-14 md:gap-20">
+          <div key={i} className="flex flex-col items-center text-center gap-14 md:gap-20 w-full">
             <FadeIn delay={i * 0.08}>
               <div
                 className={cn(
@@ -189,24 +212,29 @@ export default function WorkshopProcessSection() {
               </div>
             </FadeIn>
 
-            {step.imgs?.length > 0 && (
+            {step.imgs?.length ? (
               <FadeIn delay={0.15}>
                 <div className="w-full md:w-5/6">
                   <div className={cn("grid grid-cols-1 sm:grid-cols-2", spacing.gap6)}>
-                    {step.imgs.map((src, idx) => (
-                      <div key={idx} className="w-full">
-                        <img
-                          src={src}
-                          alt={`${step.title} ${idx + 1}`}
-                          className="w-full h-auto rounded-2xl shadow-md object-contain border border-border"
-                          loading="lazy"
-                        />
-                      </div>
-                    ))}
+                    {step.imgs.map((img, idx) => {
+                      const url = imgUrl(img);
+                      return (
+                        <div key={idx} className="w-full">
+                          {url && (
+                            <img
+                              src={url}
+                              alt={`${step.title} ${idx + 1}`}
+                              className="w-full h-auto rounded-2xl shadow-md object-contain border border-border"
+                              loading="lazy"
+                            />
+                          )}
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
               </FadeIn>
-            )}
+            ) : null}
           </div>
         ))}
       </div>

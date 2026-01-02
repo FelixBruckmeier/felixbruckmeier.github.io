@@ -1,708 +1,1407 @@
+==== \.github ====
+
+
+==== \node_modules ====
+
+
+==== \public ====
+
+
+==== \src ====
+
+
+==== \.gitignore ====
+node_modules/
+dist/
+
+
+==== \all_code_clean.txt ====
+
+
+==== \components.json ====
+{
+  "$schema": "https://ui.shadcn.com/schema.json",
+  "style": "new-york",
+  "rsc": false,
+  "tsx": true,
+  "tailwind": {
+    "config": "tailwind.config.js",
+    "css": "src/index.css",
+    "baseColor": "neutral",
+    "cssVariables": true,
+    "prefix": ""
+  },
+  "iconLibrary": "lucide",
+  "aliases": {
+    "components": "@/components",
+    "utils": "@/lib/utils",
+    "ui": "@/components/ui",
+    "lib": "@/lib",
+    "hooks": "@/hooks"
+  },
+  "registries": {}
+}
+
+
+==== \export-code.ps1 ====
+# export-clean.ps1
+# Exportiert NUR Code-Dateien (kein .git, keine node_modules, keine PNG/JPG, keine Bin√§rdateien)
+# und schlie√üt definierte Dateien oder ganze Ordner aus (pr√§zise, ohne andere "components"-Dateien zu treffen).
+
+$projectPath = "C:\Users\felix\Documents\GitHub\felixbruckmeier.github.io"
+$outputFile = "$projectPath\all_code_clean.txt"
+
+if (Test-Path $outputFile) { Remove-Item $outputFile }
+
+$allowedExtensions = @("*.ts", "*.tsx", "*.css", "*.json", *.d.ts","*.html", "*.js", "*.md", "*.yml")
+
+$importantFiles = @(
+    "index.html",
+    "package.json",
+    "tsconfig.json",
+    "vite.config.ts",
+    "tailwind.config.js",
+    "postcss.config.js"
+)
+
+foreach ($file in $importantFiles) {
+    $path = Join-Path $projectPath $file
+    if (Test-Path $path -and $file -ne "package-lock.json") {
+        Add-Content $outputFile ("==== $file ====")
+        Get-Content $path | Add-Content $outputFile
+        Add-Content $outputFile "`n"
+    }
+}
+
+# Einzelne Dateien ausschlie√üen (exakte Muster)
+$excludedFilePatterns = @(
+    "\\src\\assets\\visuals\\impactmeasurement\\CostOfUX\.tsx",
+    "\\src\\assets\\visuals\\impactmeasurement\\HeartFramework\.tsx",
+    "\\src\\assets\\visuals\\researchops\\ReOpsWheel\.tsx",
+    "\\src\\assets\\visuals\\uxstrategy\\ResearchinPD\.tsx",
+    "\\src\\assets\\visuals\\uxstrategy\\ResearchPrioritizationMatrix\.tsx",
+    "\\src\\assets\\visuals\\uxstrategy\\VennDiagram\.tsx"
+)
+
+# Ganze Ordner (inkl. Unterordner & Dateien) ausschlie√üen
+$excludedFolderPatterns = @(
+    "\\src\\assets\\visuals($|\\.*)",
+"\\src\\components\\sections($|\\.*)",
+    "\\src\\components\\sections\\expertise\\researchops($|\\.*)",
+    "\\src\\components\\sections\\expertise\\impactmeasurement($|\\.*)",
+    "\\src\\components\\secti11:54 28.11.2025ons\\expertise\\strategicuxresearch($|\\.*)",
+    "\\src\\components\\sections\\expertise\\TeamLeadership($|\\.*)",
+    "\\src\\components\\projects($|\\.*)",
+  
+    "\\src\\lib($|\\.*)",
+    "\\src\\components\\common($|\\.*)",
+    "\\src\\data($|\\.*)",
+    "\\src\\pages($|\\.*)",
+    "\\src\\assets($|\\.*)",
+    "\\.git($|\\.*)",
+    "\\.github\\workflows($|\\.*)",
+    "\\docs($|\\.*)"
+)
+
+Get-ChildItem -Path $projectPath -Recurse -Include $allowedExtensions |
+    Where-Object {
+        $currentFile = $_
+        $currentFile.FullName -notmatch "\\node_modules\\" -and
+        $currentFile.FullName -notmatch "\\.git\\" -and
+        $currentFile.FullName -notmatch "\\docs\\" -and
+        $currentFile.FullName -notmatch "\\dist\\" -and
+        $currentFile.Name -ne "package-lock.json" -and
+        $currentFile.Extension -notmatch "\.png|\.jpg|\.jpeg|\.gif|\.svg|\.ico|\.pdf" -and
+        -not ($excludedFilePatterns | Where-Object { $currentFile.FullName -imatch $_ }) -and
+        -not ($excludedFolderPatterns | Where-Object { $currentFile.FullName -imatch $_ })
+    } |
+    ForEach-Object {
+        $currentFile = $_
+        Add-Content $outputFile ("==== " + $currentFile.FullName.Replace($projectPath, "") + " ====")
+        Get-Content $currentFile.FullName | Add-Content $outputFile
+        Add-Content $outputFile "`n"
+    }
+
+Write-Host "‚úÖ Export abgeschlossen: $outputFile"
+
+
+==== \export-code5.ps1 ====
+# export-files.ps1
+
+# Ordner, die eingelesen werden sollen
+$folders = @(
+  "C:\Users\felix\Documents\GitHub\felixbruckmeier.github.io\src\pages",
+  "C:\Users\felix\Documents\GitHub\felixbruckmeier.github.io\src\lib",
+  "C:\Users\felix\Documents\GitHub\felixbruckmeier.github.io\src\components\sections\home",
+  "C:\Users\felix\Documents\GitHub\felixbruckmeier.github.io\src\components\sections\expertise\uxstrategy",
+  "C:\Users\felix\Documents\GitHub\felixbruckmeier.github.io\src\components\artefacts",
+  "C:\Users\felix\Documents\GitHub\felixbruckmeier.github.io\src\components\ui"
+  "C:\Users\felix\Documents\GitHub\felixbruckmeier.github.io\src\locales"  
+"C:\Users\felix\Documents\GitHub\felixbruckmeier.github.io\src\components\layout"
+"C:\Users\felix\Documents\GitHub\felixbruckmeier.github.io\src\components\common"
+
+
+)
+
+# Ziel-Datei
+$outputFile = "all_code_export.txt"
+
+# Datei leeren/neu erstellen
+"" | Out-File -FilePath $outputFile -Encoding UTF8
+
+foreach ($folder in $folders) {
+    if (-Not (Test-Path $folder)) {
+        Write-Warning "Ordner nicht gefunden: $folder"
+        continue
+    }
+
+    # Nur Dateien direkt im Ordner (keine Unterordner)
+    $files = Get-ChildItem -Path $folder -File
+
+    foreach ($file in $files) {
+        $filePath = $file.FullName
+        $content = Get-Content $filePath -Raw
+
+        # Pfad + Code in die Export-Datei schreiben
+        "`n`n==============================" | Out-File -FilePath $outputFile -Append -Encoding UTF8
+        $filePath | Out-File -FilePath $outputFile -Append -Encoding UTF8
+        "==============================`n" | Out-File -FilePath $outputFile -Append -Encoding UTF8
+        $content | Out-File -FilePath $outputFile -Append -Encoding UTF8
+    }
+}
+
+Write-Host "‚úÖ Export fertig! Alles in $outputFile"
+
+
+==== \index.html ====
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <!-- Google Search Console Verification -->
+    <meta name="google-site-verification" content="N1hXubjj5xtLAOx0KP9jxDJ8QxkTfsFbM3ZNtaLwYNg" />
+
+    <!-- Primary Meta Description -->
+    <meta
+      name="description"
+      content="Portfolio of Felix Bruckmeier ‚Äì Senior UX Researcher driving qualitative & quantitative UX Research, UX strategy, mixed methods and ResearchOps in a Design Thinking, Lean UX and Agile UX approach."
+    />
+
+    <!-- ‚ùå REMOVED: Canonical (handled by SEOPage per route) -->
+    <!-- <link rel="canonical" href="https://felixbruckmeier.github.io/" /> -->
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Felix Bruckmeier ‚Äì Senior UX Researcher" />
+    <meta
+      property="og:description"
+      content="Specializing in qualitative & quantitative UX Research, UX strategy and ResearchOps."
+    />
+    <meta property="og:url" content="https://felixbruckmeier.github.io/" />
+    <meta property="og:image" content="https://felixbruckmeier.github.io/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Felix Bruckmeier ‚Äì Senior UX Researcher" />
+    <meta
+      name="twitter:description"
+      content="Specializing in qualitative & quantitative UX Research, UX strategy and ResearchOps."
+    />
+    <meta name="twitter:image" content="https://felixbruckmeier.github.io/og-image.png" />
+
+    <!-- Theme Bootstrapping -->
+    <script>
+      (() => {
+        try {
+          const stored = localStorage.getItem("theme");
+          const prefers =
+            window.matchMedia &&
+            window.matchMedia("(prefers-color-scheme: dark)").matches;
+          const theme = stored ?? (prefers ? "dark" : "light");
+          const root = document.documentElement;
+          if (theme === "dark") {
+            root.classList.add("dark");
+            root.style.colorScheme = "dark";
+          } else {
+            root.classList.remove("dark");
+            root.style.colorScheme = "light";
+          }
+        } catch {}
+      })();
+    </script>
+
+    <!-- Analytics -->
+    <script
+      data-goatcounter="https://felix.goatcounter.com/count"
+      async
+      src="//gc.zgo.at/count.js"
+    ></script>
+
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Felix Bruckmeier ‚Äì Senior UX Researcher</title>
+  </head>
+
+  <body class="min-h-screen bg-background text-foreground">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+
+
+==== \LICENSE ====
+MIT License
+
+Copyright (c) 2025 Felix Bruckmeier
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+
+==== \ordnerstruktur.txt ====
+felixbruckmeier.github.io
+public
+src
+.gitignore
+all_code_clean.txt
+components.json
+export-code.ps1
+export-code5.ps1
+index.html
+LICENSE
+ordnerstruktur.txt
+package-lock.json
+package.json
+postcss.config.js
+powershell Ordner struktur.txt
+tailwind.config.js
+tsconfig.app.json
+tsconfig.json
+tsconfig.node.json
+tsconfig.node.tsbuildinfo
+tsconfig.tsbuildinfo
+vite.config.ts
+public\404.html
+public\favicon.png
+public\favicon.svg
+public\manifest.webmanifest
+public\og-image.png
+public\public.txt
+public\robots.txt
+public\sitemap.xml
+public\uxr-social.png
+public\uxr-sodddcial.png
+src\assets
+src\components
+src\data
+src\hooks
+src\lib
+src\locales
+src\pages
+src\types
+src\App.tsx
+src\AppLayout.tsx
+src\i18n.ts
+src\index.css
+src\main.tsx
+src\vite-env.d.ts
+src\assets\images
+src\assets\visuals
+src\assets\images\expertise
+src\assets\images\headers
+src\assets\images\home
+src\assets\images\Navigation
+src\assets\images\projects
+src\assets\images\expertise\impactmeasurement
+src\assets\images\expertise\researchops
+src\assets\images\expertise\strategicuxresearch
+src\assets\images\expertise\teamleadership
+src\assets\images\expertise\uxstrategy
+src\assets\images\expertise\impactmeasurement\impact.jpg
+src\assets\images\expertise\researchops\plant.jpg
+src\assets\images\expertise\strategicuxresearch\1clarity.png
+src\assets\images\expertise\strategicuxresearch\2questions.png
+src\assets\images\expertise\strategicuxresearch\3focus.png
+src\assets\images\expertise\strategicuxresearch\4methods.png
+src\assets\images\expertise\strategicuxresearch\5analysis.png
+src\assets\images\expertise\strategicuxresearch\6present.png
+src\assets\images\expertise\strategicuxresearch\strategicuxr.jpg
+src\assets\images\expertise\teamleadership\personas
+src\assets\images\expertise\teamleadership\team.jpg
+src\assets\images\expertise\teamleadership\personas\accessibilityspecialist.png
+src\assets\images\expertise\teamleadership\personas\cxanalyst.png
+src\assets\images\expertise\teamleadership\personas\designmanager.png
+src\assets\images\expertise\teamleadership\personas\interactiondesigner.png
+src\assets\images\expertise\teamleadership\personas\journeymanager.png
+src\assets\images\expertise\teamleadership\personas\requirementsengineer.png
+src\assets\images\expertise\teamleadership\personas\servicedesigner.png
+src\assets\images\expertise\teamleadership\personas\uideveloper.png
+src\assets\images\expertise\teamleadership\personas\uivisualdesigner.png
+src\assets\images\expertise\teamleadership\personas\uxarchitect.png
+src\assets\images\expertise\teamleadership\personas\uxdesigner.png
+src\assets\images\expertise\teamleadership\personas\uxmanager.png
+src\assets\images\expertise\teamleadership\personas\uxresearcher.png
+src\assets\images\expertise\teamleadership\personas\uxstrategist.png
+src\assets\images\expertise\teamleadership\personas\uxwriter.png
+src\assets\images\expertise\uxstrategy\schach1.jpg
+src\assets\images\headers\home
+src\assets\images\headers\home\headerhome.jpg
+src\assets\images\home\pb.png
+src\assets\images\Navigation\logo1.png
+src\assets\images\projects\amicrointeraction
+src\assets\images\projects\b2b2c
+src\assets\images\projects\carinsurance
+src\assets\images\projects\kanostrategy
+src\assets\images\projects\pricingtesting
+src\assets\images\projects\reopsagile
+src\assets\images\projects\reopsimplement
+src\assets\images\projects\uxportfolio
+src\assets\images\projects\workshop
+src\assets\images\projects\amicrointeraction\optimize.jpg
+src\assets\images\projects\b2b2c\analyewall.png
+src\assets\images\projects\b2b2c\artefakt1.png
+src\assets\images\projects\b2b2c\artefakt2.png
+src\assets\images\projects\b2b2c\B2B2COptimization.jpg
+src\assets\images\projects\b2b2c\beratungsjourney.png
+src\assets\images\projects\b2b2c\dg.png
+src\assets\images\projects\b2b2c\locations.png
+src\assets\images\projects\b2b2c\nutzungsanforderungen.png
+src\assets\images\projects\carinsurance\CarInsurance.png
+src\assets\images\projects\carinsurance\discovery.png
+src\assets\images\projects\carinsurance\journey.png
+src\assets\images\projects\carinsurance\mapping.jpg
+src\assets\images\projects\carinsurance\proto.png
+src\assets\images\projects\carinsurance\testing.png
+src\assets\images\projects\carinsurance\Untitled.png
+src\assets\images\projects\carinsurance\ws.png
+src\assets\images\projects\kanostrategy\A56UN3iVPsZzo6kW.gif
+src\assets\images\projects\kanostrategy\analysis.png
+src\assets\images\projects\kanostrategy\c0R243Jnkygm1KGf.gif
+src\assets\images\projects\kanostrategy\DYD9Z208m0c0QhPr.gif
+src\assets\images\projects\kanostrategy\eC5IqXMpwn1uyeWQ.gif
+src\assets\images\projects\kanostrategy\Fbpw2aDKwmTYAdoB.png
+src\assets\images\projects\kanostrategy\fTFVmLhQ4e7tR6uR.gif
+src\assets\images\projects\kanostrategy\headerkano.jpg
+src\assets\images\projects\kanostrategy\kanotechnik.png
+src\assets\images\projects\kanostrategy\kDBRa28BbXdwTi8F.gif
+src\assets\images\projects\kanostrategy\NrwM2G5C5puInENi.gif
+src\assets\images\projects\kanostrategy\PuqbnZ6OMY5NWXKZ.gif
+src\assets\images\projects\kanostrategy\results.png
+src\assets\images\projects\kanostrategy\shws.png
+src\assets\images\projects\kanostrategy\wAqf8jxzWy6I7hwZ.gif
+src\assets\images\projects\kanostrategy\Xi7pzlYCdiztglmX.gif
+src\assets\images\projects\pricingtesting\findings.png
+src\assets\images\projects\pricingtesting\journey.png
+src\assets\images\projects\pricingtesting\PricingUsabilityTesting.jpg
+src\assets\images\projects\pricingtesting\protoype.png
+src\assets\images\projects\pricingtesting\Research Plan.png
+src\assets\images\projects\reopsagile\ResearchOpsAgileUX.jpg
+src\assets\images\projects\reopsimplement\ReOpsimplementation.jpg
+src\assets\images\projects\uxportfolio\cover.png
+src\assets\images\projects\workshop\1welcome.png
+src\assets\images\projects\workshop\2agenda.png
+src\assets\images\projects\workshop\3_1agendaproblem.png
+src\assets\images\projects\workshop\3_2problemstatement.png
+src\assets\images\projects\workshop\3_3problemgroupwork.png
+src\assets\images\projects\workshop\4_1goaldefinitionagenda.png
+src\assets\images\projects\workshop\4_2goaldefgroupwork.png
+src\assets\images\projects\workshop\4_3goaldefgroupwork2.png
+src\assets\images\projects\workshop\5_1goalprioagenda.png
+src\assets\images\projects\workshop\5_2goalpriogroupwork.png
+src\assets\images\projects\workshop\5_3goalgripboard.png
+src\assets\images\projects\workshop\5_break.png
+src\assets\images\projects\workshop\6_1ideateagenda.png
+src\assets\images\projects\workshop\6_2ideagroupwork.png
+src\assets\images\projects\workshop\6_3ideagroupwork2.png
+src\assets\images\projects\workshop\7_1selectsolutionagenda.png
+src\assets\images\projects\workshop\7_2selecsolutionboard.png
+src\assets\images\projects\workshop\7_3selectsolutiongroup.png
+src\assets\images\projects\workshop\haderws.jpg
+src\assets\visuals\cv
+src\assets\visuals\home
+src\assets\visuals\impactmeasurement
+src\assets\visuals\projects
+src\assets\visuals\researchops
+src\assets\visuals\strategicuxresearch
+src\assets\visuals\teamleadership
+src\assets\visuals\uxstrategy
+src\assets\visuals\cv\CVPreview.tsx
+src\assets\visuals\impactmeasurement\HeartFramework.tsx
+src\assets\visuals\impactmeasurement\ImpactMeasurementStoryVisual.tsx
+src\assets\visuals\impactmeasurement\McKinseyDesignIndexVisual.tsx
+src\assets\visuals\impactmeasurement\MeasurementGapVisual.tsx
+src\assets\visuals\impactmeasurement\UXKPIConstructionVisual.tsx
+src\assets\visuals\projects\CarInsurance
+src\assets\visuals\projects\ZooplusPricing
+src\assets\visuals\projects\CarInsurance\Neuer Ordner
+src\assets\visuals\projects\CarInsurance\BeforeAfter_Car.tsx
+src\assets\visuals\projects\CarInsurance\ImpactGrid_Car.tsx
+src\assets\visuals\projects\CarInsurance\JourneyMap_Car.tsx
+src\assets\visuals\projects\CarInsurance\PrototypeAnimationDetailed.tsx
+src\assets\visuals\projects\CarInsurance\WorkshopAnimation_Car.tsx
+src\assets\visuals\projects\ZooplusPricing\VisAWI.tsx
+src\assets\visuals\researchops\reopsData.ts
+src\assets\visuals\researchops\ReOpsWheel.tsx
+src\assets\visuals\researchops\ResearchOpsMaturityTimeline.tsx
+src\assets\visuals\strategicuxresearch\ResearchFramework.tsx
+src\assets\visuals\strategicuxresearch\ResearchOKRMap.tsx
+src\assets\visuals\strategicuxresearch\RITECycleChart.tsx
+src\assets\visuals\teamleadership\skillassessment
+src\assets\visuals\teamleadership\LeadershipFrameworkVisual.tsx
+src\assets\visuals\teamleadership\PersonaCard.tsx
+src\assets\visuals\teamleadership\RolesSpider.tsx
+src\assets\visuals\teamleadership\skillassessment\skillAssessmentData.ts
+src\assets\visuals\teamleadership\skillassessment\SkillmapChart.tsx
+src\assets\visuals\teamleadership\skillassessment\SkillmapColors.ts
+src\assets\visuals\teamleadership\skillassessment\SkillmapForm.tsx
+src\assets\visuals\teamleadership\skillassessment\SkillmapLegend.tsx
+src\assets\visuals\uxstrategy\ResearchinPD.tsx
+src\assets\visuals\uxstrategy\ResearchPrioritizationMatrix.tsx
+src\assets\visuals\uxstrategy\VennDiagram.tsx
+src\components\common
+src\components\layout
+src\components\sections
+src\components\ui
+src\components\common\ActionIcons.tsx
+src\components\common\Footer.tsx
+src\components\common\ImprintSection.tsx
+src\components\common\LanguageToggle.tsx
+src\components\common\Navbar.tsx
+src\components\common\PrivacySection.tsx
+src\components\common\SEO.tsx
+src\components\common\SEOPage.tsx
+src\components\common\ThemeToggle.tsx
+src\components\layout\PageLayout.tsx
+src\components\sections\cv
+src\components\sections\expertise
+src\components\sections\home
+src\components\sections\projects
+src\components\sections\cv\CVIntroSection.tsx
+src\components\sections\cv\index.ts
+src\components\sections\cv\PersonalExperienceSection.tsx
+src\components\sections\cv\ProfessionalExperienceSection.tsx
+src\components\sections\expertise\impactmeasurement
+src\components\sections\expertise\researchops
+src\components\sections\expertise\strategicuxresearch
+src\components\sections\expertise\TeamLeadership
+src\components\sections\expertise\uxstrategy
+src\components\sections\expertise\impactmeasurement\ImpactMeasurementHeartSection.tsx
+src\components\sections\expertise\impactmeasurement\ImpactMeasurementIntroSection.tsx
+src\components\sections\expertise\impactmeasurement\ImpactMeasurementResearchSection.tsx
+src\components\sections\expertise\impactmeasurement\ImpactMeasurementStoryVisual.tsx
+src\components\sections\expertise\impactmeasurement\ImpactMeasurementSummarySection.tsx
+src\components\sections\expertise\impactmeasurement\ImpactMeasurementUXSection.tsx
+src\components\sections\expertise\impactmeasurement\index.ts
+src\components\sections\expertise\researchops\index.ts
+src\components\sections\expertise\researchops\ResearchOpsFrameworkSection.tsx
+src\components\sections\expertise\researchops\ResearchOpsIntroSection.tsx
+src\components\sections\expertise\researchops\ResearchOpsLeadershipSection.tsx
+src\components\sections\expertise\researchops\ResearchOpsMaturitySection.tsx
+src\components\sections\expertise\researchops\ResearchOpsValueSection.tsx
+src\components\sections\expertise\strategicuxresearch\index.ts
+src\components\sections\expertise\strategicuxresearch\StrategicUXFrameworkSection.tsx
+src\components\sections\expertise\strategicuxresearch\StrategicUXIntroSection.tsx
+src\components\sections\expertise\strategicuxresearch\StrategicUXOKRSection.tsx
+src\components\sections\expertise\strategicuxresearch\StrategicUXRITESection.tsx
+src\components\sections\expertise\TeamLeadership\skillassessment
+src\components\sections\expertise\TeamLeadership\index.ts
+src\components\sections\expertise\TeamLeadership\TeamLeadershipPhilosophySection.tsx
+src\components\sections\expertise\TeamLeadership\TeamLeadershipRoleProfileSection.tsx
+src\components\sections\expertise\TeamLeadership\TeamLeadershipSkillsSection.tsx
+src\components\sections\expertise\TeamLeadership\UXRolesExplorer.tsx
+src\components\sections\expertise\TeamLeadership\skillassessment\compontents
+src\components\sections\expertise\TeamLeadership\skillassessment\index.ts
+src\components\sections\expertise\TeamLeadership\skillassessment\SkillAssessmentIntroSection.tsx
+src\components\sections\expertise\TeamLeadership\skillassessment\SkillAssessmentMappingSection.tsx
+src\components\sections\expertise\TeamLeadership\skillassessment\SkillAssessmentSummarySection.tsx
+src\components\sections\expertise\TeamLeadership\skillassessment\compontents\skillmap.tsx
+src\components\sections\expertise\uxstrategy\DiscoveryDelivery.tsx
+src\components\sections\expertise\uxstrategy\index.ts
+src\components\sections\expertise\uxstrategy\Prioritization.tsx
+src\components\sections\expertise\uxstrategy\ValueOfUXStrategy.tsx
+src\components\sections\expertise\uxstrategy\VisionAlignment.tsx
+src\components\sections\home\AboutSection.tsx
+src\components\sections\home\ContactFormSection.tsx
+src\components\sections\home\ContactSection.tsx
+src\components\sections\home\ExpertiseSection.tsx
+src\components\sections\home\index.ts
+src\components\sections\home\MetricsSection.tsx
+src\components\sections\home\ProjectsSection.tsx
+src\components\sections\projects\CarInsurance
+src\components\sections\projects\kanostrategy
+src\components\sections\projects\swisslife
+src\components\sections\projects\UXPortfolio
+src\components\sections\projects\workshop
+src\components\sections\projects\ZooplusPricing
+src\components\sections\projects\CarInsurance\CarInsuranceBLUFSection.tsx
+src\components\sections\projects\CarInsurance\CarInsuranceImpactSection.tsx
+src\components\sections\projects\CarInsurance\CarInsuranceProcessSection.tsx
+src\components\sections\projects\CarInsurance\index.ts
+src\components\sections\projects\kanostrategy\index.ts
+src\components\sections\projects\kanostrategy\KanoBLUFSection.tsx
+src\components\sections\projects\kanostrategy\KanoImpactSection.tsx
+src\components\sections\projects\kanostrategy\KanoProcessSection.tsx
+src\components\sections\projects\swisslife\brokerBLUFSection.tsx
+src\components\sections\projects\swisslife\brokerImpactSection.tsx
+src\components\sections\projects\swisslife\brokerProcessSection.tsx
+src\components\sections\projects\swisslife\index.ts
+src\components\sections\projects\UXPortfolio\index.ts
+src\components\sections\projects\UXPortfolio\Textdokument (neu).txt
+src\components\sections\projects\UXPortfolio\UXPortfolioBLUFSection.tsx
+src\components\sections\projects\UXPortfolio\UXPortfolioDesignSystemSection.tsx
+src\components\sections\projects\UXPortfolio\UXPortfolioImpactSection.tsx
+src\components\sections\projects\UXPortfolio\UXPortfolioProcessSection.tsx
+src\components\sections\projects\workshop\index.ts
+src\components\sections\projects\workshop\WorkshopBLUFSection.tsx
+src\components\sections\projects\workshop\WorkshopImpactSection.tsx
+src\components\sections\projects\workshop\WorkshopProcessSection.tsx
+src\components\sections\projects\ZooplusPricing\Neuer Ordner
+src\components\sections\projects\ZooplusPricing\index.ts
+src\components\sections\projects\ZooplusPricing\PricingBLUFSection.tsx
+src\components\sections\projects\ZooplusPricing\PricingImpactSection.tsx
+src\components\sections\projects\ZooplusPricing\PricingProcessSection.tsx
+src\components\sections\projects\ZooplusPricing\PricingUseCaseSection.tsx
+src\components\sections\projects\ZooplusPricing\Neuer Ordner\Background.tsx
+src\components\sections\projects\ZooplusPricing\Neuer Ordner\DiscussionGuide.tsx
+src\components\sections\projects\ZooplusPricing\Neuer Ordner\Findings.tsx
+src\components\sections\projects\ZooplusPricing\Neuer Ordner\Heatmap.tsx
+src\components\sections\projects\ZooplusPricing\Neuer Ordner\Hypotheses.tsx
+src\components\sections\projects\ZooplusPricing\Neuer Ordner\Impact.tsx
+src\components\sections\projects\ZooplusPricing\Neuer Ordner\Methods.tsx
+src\components\sections\projects\ZooplusPricing\Neuer Ordner\PricingFindingsSection.tsx
+src\components\sections\projects\ZooplusPricing\Neuer Ordner\SectionIcon.tsx
+src\components\sections\projects\ZooplusPricing\Neuer Ordner\UserJourney_Icons.tsx
+src\components\sections\projects\ZooplusPricing\Neuer Ordner\UserJourney_P.tsx
+src\components\ui\accordion.tsx
+src\components\ui\Badge.tsx
+src\components\ui\Button.tsx
+src\components\ui\FadeIn.tsx
+src\components\ui\index.ts
+src\components\ui\InfoTile.tsx
+src\components\ui\Section.tsx
+src\components\ui\SectionIntro.tsx
+src\components\ui\Tag.tsx
+src\components\ui\TextReveal.tsx
+src\components\ui\Tile.tsx
+src\components\ui\TileImage.tsx
+src\components\ui\Toggle.tsx
+src\components\ui\Tokens.tsx
+src\data\seo.ts
+src\data\skills.ts
+src\data\structuredData.ts
+src\data\uxRolesPersonas.ts
+src\hooks\useActivePhase.ts
+src\lib\SkillmapColors.ts
+src\lib\tagColors.ts
+src\lib\tokens.ts
+src\lib\utils.ts
+src\locales\de.json
+src\locales\en.json
+src\pages\cv
+src\pages\expertise
+src\pages\projects
+src\pages\shared
+src\pages\Home.tsx
+src\pages\NotFound.tsx
+src\pages\cv\index.tsx
+src\pages\expertise\ImpactMeasurement
+src\pages\expertise\ResearchOps
+src\pages\expertise\StrategicUXResearch
+src\pages\expertise\TeamLeadership
+src\pages\expertise\UXStrategy
+src\pages\expertise\ImpactMeasurement\index.tsx
+src\pages\expertise\ResearchOps\index.tsx
+src\pages\expertise\StrategicUXResearch\index.tsx
+src\pages\expertise\TeamLeadership\skillassessment
+src\pages\expertise\TeamLeadership\index.tsx
+src\pages\expertise\TeamLeadership\skillassessment\index.tsx
+src\pages\expertise\UXStrategy\index.tsx
+src\pages\projects\CarInsurance
+src\pages\projects\DeleteCase
+src\pages\projects\InsuranceBroker
+src\pages\projects\kanostrategy
+src\pages\projects\reopsimp
+src\pages\projects\UXPortfolio
+src\pages\projects\workshop
+src\pages\projects\ZooplusPricing
+src\pages\projects\ZooplusReOps
+src\pages\projects\CarInsurance\index.tsx
+src\pages\projects\DeleteCase\index.tsx
+src\pages\projects\InsuranceBroker\index.tsx
+src\pages\projects\kanostrategy\index.tsx
+src\pages\projects\reopsimp\index.tsx
+src\pages\projects\UXPortfolio\index.tsx
+src\pages\projects\workshop\index.tsx
+src\pages\projects\ZooplusPricing\index.tsx
+src\pages\projects\ZooplusReOps\index.tsx
+src\pages\shared\Imprint.tsx
+src\pages\shared\Privacy.tsx
+src\types\vite-imagetools.d.ts
+
+
+==== \package.json ====
+{
+  "name": "uxr-portfolio-felix",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "check:i18n": "node scripts/check-missing-translations.js",
+    "check:i18n:reverse": "node scripts/check-missing-translations-reverse.js",
+    "check:i18n:all": "npm run check:i18n && npm run check:i18n:reverse",
+    "translate:i18n": "node scripts/translate-missing-translations.js",
+    "translate:i18n:dry": "node scripts/translate-missing-translations-dryrun.js",
+    "translate:smart": "node scripts/smart-translate-optimize.js --target=de",
+    "translate:smart:en": "node scripts/smart-translate-optimize.js --target=en",
+    "translate:smart:dry": "node scripts/smart-translate-optimize.js --target=de --dry"
+  },
+  "dependencies": {
+    "@radix-ui/react-accordion": "^1.2.12",
+    "chart.js": "^4.5.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "framer-motion": "^12.23.24",
+    "i18next": "^23.16.8",
+    "jspdf": "^3.0.3",
+    "lucide-react": "^0.544.0",
+    "react": "^18.2.0",
+    "react-chartjs-2": "^5.3.0",
+    "react-dom": "^18.2.0",
+    "react-helmet-async": "^2.0.5",
+    "react-i18next": "^13.5.0",
+    "react-intersection-observer": "^9.16.0",
+    "react-router-dom": "^6.26.0",
+    "recharts": "^3.2.1",
+    "sharp": "^0.34.4",
+    "tailwind-merge": "^3.3.1",
+    "tailwindcss-animate": "^1.0.7"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.0.0",
+    "@types/node": "^24.5.2",
+    "@types/react": "^18.2.66",
+    "@types/react-dom": "^18.2.22",
+    "@vitejs/plugin-react": "^4.3.4",
+    "autoprefixer": "^10.4.20",
+    "dotenv": "^16.4.5",
+    "openai": "^4.73.1",
+    "postcss": "^8.4.47",
+    "tailwindcss": "^4.0.0",
+    "typescript": "^5.4.0",
+    "vite": "^5.4.19",
+    "vite-imagetools": "^9.0.0"
+  }
+}
+
+
+==== \postcss.config.js ====
+export default {
+  plugins: {
+    "@tailwindcss/postcss": {},
+  },
+};
+
+
+==== \powershell Ordner struktur.txt ====
+# Root-Ordner
+$root = "C:\Users\felix\Documents\GitHub\felixbruckmeier.github.io"
+
+# Ausgabedatei
+$outFile = "$root\ordnerstruktur.txt"
+
+# Ordner, die ignoriert werden sollen
+$exclude = @("node_modules", ".git", ".github")
+
+# Vorherige Datei lˆschen, falls vorhanden
+if (Test-Path $outFile) { Remove-Item $outFile }
+
+# Root-Ordner einmal als ‹berschrift schreiben
+Add-Content -Path $outFile -Value (Split-Path $root -Leaf)
+
+# Inhalte rekursiv auflisten
+Get-ChildItem -Recurse -Force -Path $root |
+    Where-Object {
+        # Pr¸fen, ob einer der Ausschlussordner im Pfad steckt
+        -not ($_.FullName -match "\\(?:$($exclude -join '|'))(\\|$)")
+    } |
+    ForEach-Object {
+        # Relativer Pfad ab Root
+        $relative = $_.FullName.Substring($root.Length).TrimStart('\')
+        if ($relative) { Add-Content -Path $outFile -Value $relative }
+    }
+
+Write-Host "Ordnerstruktur gespeichert in: $outFile"
+
+
+==== \tailwind.config.js ====
+/**** Tailwind v4 minimal config ****/
+export default {
+  darkMode: "class",
+};
+
+
+==== \tsconfig.app.json ====
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "strict": false,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": ["src"]
+}
+
+
+==== \tsconfig.json ====
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "esModuleInterop": true,
+
+    /* ‚úÖ Korrigiert f√ºr Vite + GitHub Actions Build */
+    "baseUrl": "./src",
+    "paths": {
+      "@/*": ["*"]
+    },
+
+    /* ‚úÖ Erg√§nzt: Typen f√ºr Node, Vite und Imagetools */
+    "types": ["vite/client", "node"]
+  },
+
+  /* ‚úÖ Wichtig: Typdefinitionen au√üerhalb von src einbinden */
+  "include": [
+    "src",
+    "types/vite-imagetools.d.ts",
+    "src/vite-env.d.ts"
+  ],
+
+  "references": [
+    {
+      "path": "./tsconfig.node.json"
+    }
+  ]
+}
+
+
+==== \tsconfig.node.json ====
+{
+  "compilerOptions": {
+    "composite": true,
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "skipLibCheck": true,
+    "allowSyntheticDefaultImports": true
+  },
+  "include": [
+    "vite.config.ts",
+    "vite.config.js",
+    "rollup-parseAst.d.ts"
+  ]
+}
+
+
+==== \vite.config.ts ====
+// vite.config.ts
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import { imagetools } from "vite-imagetools";
+import { fileURLToPath } from "node:url";
+import { dirname, resolve } from "node:path";
+
+// __dirname in ESM nachbauen
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+// Pr√ºfen, ob wir in GitHub Actions laufen
+const isActions = process.env.GITHUB_ACTIONS === "true";
+
+export default defineConfig({
+  plugins: [
+    react(),
+
+    /**
+     * üñº AUTOMATISCHE BILDOPTIMIERUNG
+     * --------------------------------
+     * Diese Default-Regeln sorgen daf√ºr, dass ALLE Importe mit ?as=picture:
+     * - in 6 responsive Gr√∂√üen generiert werden
+     * - WebP + JPG erzeugen
+     * - als <picture> mit srcset ausgeliefert werden
+     * ‚Üí massive Performance-Verbesserung ohne Code-√Ñnderungen
+     */
+    imagetools({
+      defaultDirectives: () =>
+        new URLSearchParams({
+          // mehrere responsive Bildgr√∂√üen
+          w: "2000;1400;1000;800;600;400",
+
+          // moderne + Fallback Formate
+          format: "webp;jpg",
+
+          // Ausgabe als <picture>
+          as: "picture",
+        }),
+    }),
+  ],
+
+  /**
+   * BASE PATH
+   * F√ºr GitHub Pages ‚Üí "/" (User/Org Pages)
+   */
+  base: "/",
+
+  /**
+   * BUILD OUTPUT FOLDER
+   * GitHub Actions ‚Üí dist
+   * Lokal ‚Üí docs
+   */
+  build: {
+    outDir: isActions ? "dist" : "docs",
+  },
+
+  /**
+   * ALIASE
+   * Erlaubt Importe wie "@/components/Button"
+   */
+  resolve: {
+    alias: {
+      "@": resolve(__dirname, "src"),
+    },
+  },
+
+  /**
+   * STELLE SICHER, DASS Vite DIE BILDER ERKENNT
+   */
+  assetsInclude: ["**/*.png", "**/*.jpg", "**/*.jpeg", "**/*.webp"],
+});
+
+
 ==== \public\404.html ====
 <!doctype html><html><head><meta charset="UTF-8"><meta http-equiv="refresh" content="0;url=/" /><script>sessionStorage.redirect=location.pathname+location.search</script><title>Redirecting‚Ä¶</title></head><body>Redirecting‚Ä¶</body></html>
 
 
-==== \src\components\common\ActionIcons.tsx ====
-// src/components/ui/ActionIcons.tsx
-import React from "react";
-import { colors } from "@/lib/tokens";
-import { cn } from "@/lib/utils";
-
-interface IconProps {
-  width?: number;
-  height?: number;
-  className?: string;
-}
-
-interface BadgeIconProps extends IconProps {
-  badgeColor?: "success" | "danger" | "accent";
-  badgeText?: string;
-}
-
-export function IconRealizeProblem({ width = 80, height = 60, className, badgeColor = "danger", badgeText = "!" }: BadgeIconProps) {
-  const fill = badgeColor === "danger" ? colors.notion.red.bg : colors.notion.green.bg;
-  return (
-    <div className={cn("flex justify-center", className)}>
-      <svg width={width} height={height} viewBox="0 0 80 60" fill="none">
-        <rect x="5" y="15" width="60" height="30" rx="6" fill={colors.notion.gray.bg} stroke={colors.notion.gray.text} strokeWidth="2" />
-        <text x="15" y="35" fontSize="12" fill={colors.notion.gray.text}>Text...</text>
-        <circle cx="65" cy="40" r="8" fill={fill} />
-        <text
-          x="65"
-          y="40"
-          fontSize="12"
-          fill={colors.background.text}
-          fontWeight="bold"
-          textAnchor="middle"
-          dominantBaseline="central"
-        >
-          {badgeText}
-        </text>
-      </svg>
-    </div>
-  );
-}
-
-export function IconWorkaround({ width = 120, height = 60, className }: IconProps) {
-  return (
-    <div className={cn("flex justify-center", className)}>
-      <svg width={width} height={height} viewBox="0 0 120 60" fill="none">
-        <rect x="10" y="18" width="100" height="24" rx="12" fill={colors.background.bg} stroke={colors.notion.blue.text} strokeWidth="2" />
-        <text x="20" y="34" fontSize="12" fill={colors.muted.text}>google search‚Ä¶</text>
-        <circle cx="96" cy="30" r="7" stroke={colors.notion.blue.text} strokeWidth="2" />
-        <line x1="100" y1="34" x2="108" y2="42" stroke={colors.notion.blue.text} strokeWidth="2" />
-      </svg>
-    </div>
-  );
-}
-
-export function IconManualDelete({ width = 80, height = 60, className }: IconProps) {
-  return (
-    <div className={cn("flex justify-center", className)}>
-      <svg width={width} height={height} viewBox="0 0 80 60" fill="none">
-        <rect x="5" y="15" width="70" height="30" rx="6" fill={colors.notion.gray.bg} stroke={colors.notion.gray.text} strokeWidth="2" />
-        <rect x="15" y="28" width="40" height="6" fill={colors.notion.blue.bg} />
-        <line x1="55" y1="25" x2="55" y2="45" stroke={colors.notion.blue.text} strokeWidth="3" markerEnd="url(#arrow)" />
-        <defs>
-          <marker id="arrow" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
-            <path d="M0,0 L0,6 L6,3 z" fill={colors.notion.blue.text} />
-          </marker>
-        </defs>
-      </svg>
-    </div>
-  );
-}
-
-export function IconEmptyField({ width = 80, height = 60, className, badgeColor = "success", badgeText = "‚úì" }: BadgeIconProps) {
-  const fill = badgeColor === "success" ? colors.notion.green.bg : colors.notion.red.bg;
-  return (
-    <div className={cn("flex justify-center", className)}>
-      <svg width={width} height={height} viewBox="0 0 80 60" fill="none">
-        <rect x="5" y="15" width="60" height="30" rx="6" fill={colors.notion.gray.bg} stroke={colors.notion.gray.text} strokeWidth="2" />
-        <text x="15" y="35" fontSize="12" fill={colors.notion.gray.text}>Text...</text>
-        <circle cx="65" cy="40" r="8" fill={fill} />
-        <text
-          x="65"
-          y="40"
-          fontSize="12"
-          fill={colors.background.text}
-          fontWeight="bold"
-          textAnchor="middle"
-          dominantBaseline="central"
-        >
-          {badgeText}
-        </text>
-      </svg>
-    </div>
-  );
-}
-
-
-==== \src\components\common\Footer.tsx ====
-import { Link } from "react-router-dom";
-import Section from "@/components/ui/Section";
-import { typography, colors } from "@/lib/tokens";
-import { cn } from "@/lib/utils";
-
-export default function Footer() {
-  const year = new Date().getFullYear();
-
-  return (
-    <footer className={cn("border-t border-border")}>
-      {/* ‚úÖ Section √ºbernimmt bereits die einheitliche Breite */}
-      <Section id="footer" spacing="sm" className="py-6" fullWidth>
-        <div className="mx-auto w-full max-w-[1900px] px-[3vw] flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p
-            className={cn(
-              typography.small.font,
-              typography.small.size,
-              typography.small.weight,
-              typography.small.leading,
-              colors.muted.text
-            )}
-          >
-            ¬© {year} Felix Bruckmeier ‚Äî All rights reserved.
-          </p>
-
-          <nav
-            className={cn(
-              "flex items-center gap-4",
-              typography.small.font,
-              typography.small.size,
-              typography.small.leading
-            )}
-          >
-            <Link
-              to="/imprint"
-              className={cn(colors.muted.text, "hover:underline hover:opacity-80")}
-            >
-              Imprint
-            </Link>
-            <Link
-              to="/privacy"
-              className={cn(colors.muted.text, "hover:underline hover:opacity-80")}
-            >
-              Privacy
-            </Link>
-          </nav>
-        </div>
-      </Section>
-    </footer>
-  );
-}
-
-
-==== \src\components\common\ImprintSection.tsx ====
-import Section from "@/components/ui/Section";
-import Tile from "@/components/ui/Tile";
-import { Subtitle, Body } from "@/components/ui/Tokens";
-import { User, Mail, Info } from "lucide-react";
-
-export default function ImprintSection() {
-  return (
-    <Section id="imprint" spacing="md" fullWidth={false} title="Imprint">
-      <div className="grid gap-6 md:grid-cols-2">
-        {/* Responsible */}
-        <Tile variant="static">
-          <div className="flex items-center gap-2 mb-3">
-            <User className="w-5 h-5 text-muted-foreground" />
-            <Subtitle>Responsible for this Website</Subtitle>
-          </div>
-          <Body>
-            Felix Bruckmeier
-            <br />
-            Munich, Germany
-          </Body>
-        </Tile>
-
-        {/* Contact */}
-        <Tile variant="static">
-          <div className="flex items-center gap-2 mb-3">
-            <Mail className="w-5 h-5 text-muted-foreground" />
-            <Subtitle>Contact</Subtitle>
-          </div>
-          <Body>
-            <a
-              href="mailto:felixbruckmeier@googlemail.com"
-              className="text-accent hover:underline"
-            >
-              felixbruckmeier@googlemail.com
-            </a>
-          </Body>
-        </Tile>
-
-        {/* Legal Note */}
-        <Tile variant="static" className="md:col-span-2">
-          <div className="flex items-center gap-2 mb-3">
-            <Info className="w-5 h-5 text-muted-foreground" />
-            <Subtitle>Legal Notice</Subtitle>
-          </div>
-          <Body>
-            This website is a private, non-commercial portfolio project. It is
-            not intended for business purposes, but serves solely to present
-            selected work and expertise.
-          </Body>
-        </Tile>
-      </div>
-    </Section>
-  );
-}
-
-
-==== \src\components\common\LanguageToggle.tsx ====
-import { useTranslation } from "react-i18next";
-
-export default function LanguageToggle() {
-  const { i18n } = useTranslation();
-  const curr = i18n.language.startsWith("de") ? "de" : "en";
-  const next = curr === "de" ? "en" : "de";
-  return (
-    <button
-      className="px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-700
-                 hover:bg-muted transition text-sm
-                 text-neutral-700 dark:text-neutral-300"
-      onClick={() => i18n.changeLanguage(next)}
-      aria-label="Toggle language"
-      title={curr === "de" ? "Switch to English" : "Auf Deutsch umschalten"}
-    >
-      {curr.toUpperCase()}
-    </button>
-  );
-}
-
-
-==== \src\components\common\Navbar.tsx ====
-// src/components/common/NavBar.tsx
-import { Link, useLocation } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
-import { useTranslation } from "react-i18next";
-import ThemeToggle from "@/components/common/ThemeToggle";
-import { typography } from "@/lib/tokens";
-import { cn } from "@/lib/utils";
-import { Lock, Menu, X } from "lucide-react";
-
-type NavItem = {
-  id: string;
-  link?: string;
-  children?: { id: string; label: string; locked?: boolean }[];
-};
-
-const NAV: NavItem[] = [
-  {
-    id: "expertise",
-    children: [
-      { id: "expertise/ux-strategy", label: "UX Strategy" },
-      { id: "expertise/strategic-ux-research", label: "Strategic UX Research" },
-      { id: "expertise/researchops", label: "ResearchOps" },
-      { id: "expertise/team-leadership", label: "Team Leadership" },
-      { id: "expertise/impact-measurement", label: "Impact Measurement" },
-    ],
-  },
-  {
-    id: "projects",
-    children: [
-      { id: "projects/car-insurance", label: "Car Insurance" },
-      { id: "projects/zooplus-reops", label: "ResearchOps & Agile UX", locked: true },
-      {
-        id: "projects/insurance-broker-discovery",
-        label: "Insurance Broker Discovery Research",
-      },
-      { id: "projects/zooplus-pricing", label: "Pricing Usability Testing" },
-      {
-        id: "projects/workshop",
-        label: "UX Research Maturity Workshop",
-      },
-      {
-        id: "projects/kanostrategy",
-        label: "UX Strategy with the Kano Model", // ‚úÖ NEU
-      },
-      { id: "projects/delete-case", label: "Micro Interaction", locked: true },
-      { id: "projects/atoss-reops", label: "ReOps Implementation", locked: true },
-    ],
-  },
-  { id: "cv", link: "/cv" },
-  { id: "contact" },
-];
-
-export default function NavBar() {
-  const { t } = useTranslation();
-  const { pathname, hash } = useLocation();
-  const onHome = pathname === "/";
-  const [active, setActive] = useState<string>("");
-  const [open, setOpen] = useState(false);
-
-  useEffect(() => {
-    const prev = document.documentElement.style.scrollBehavior;
-    document.documentElement.style.scrollBehavior = "smooth";
-    return () => {
-      document.documentElement.style.scrollBehavior = prev;
-    };
-  }, []);
-
-  const observerRef = useRef<IntersectionObserver | null>(null);
-  useEffect(() => {
-    if (!onHome) return;
-    const sections = NAV.flatMap((nav) =>
-      [nav.id, ...(nav.children?.map((c) => c.id) ?? [])]
-        .map((id) => document.getElementById(id))
-        .filter(Boolean)
-    ) as HTMLElement[];
-    if (observerRef.current) observerRef.current.disconnect();
-    observerRef.current = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const id = entry.target.getAttribute("id") || "";
-            setActive(id);
-            history.replaceState(null, "", `#${id}`);
-          }
-        });
-      },
-      { threshold: 0.5, rootMargin: "-20% 0px -50% 0px" }
-    );
-    sections.forEach((s) => observerRef.current?.observe(s));
-    return () => observerRef.current?.disconnect();
-  }, [onHome]);
-
-  const hrefFor = (nav: NavItem) =>
-    nav.link ?? (nav.id.includes("/") ? `/${nav.id}` : `/#${nav.id}`);
-
-  useEffect(() => setActive(hash.replace("#", "")), [hash]);
-  useEffect(() => setOpen(false), [hash, pathname]);
-
-  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, nav: NavItem) => {
-    if (!onHome && !nav.link && !nav.id.includes("/")) {
-      e.preventDefault();
-      window.location.assign(`/#${nav.id}`);
+==== \public\manifest.webmanifest ====
+{
+  "name": "Felix Bruckmeier \u2014 UXR Portfolio",
+  "short_name": "FB UXR",
+  "start_url": "/",
+  "display": "standalone",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "64x64",
+      "type": "image/svg+xml"
     }
-  };
+  ],
+  "theme_color": "#0b1220",
+  "background_color": "#ffffff"
+}
 
+
+==== \public\public.txt ====
+1. 404.html:
+<!doctype html><html><head><meta charset="UTF-8"><meta http-equiv="refresh" content="0;url=/" /><script>sessionStorage.redirect=location.pathname+location.search</script><title>Redirecting‚Ä¶</title></head><body>Redirecting‚Ä¶</body></html>
+
+2. favicon.png:
+âPNG
+
+   
+IHDR   @   @   %Êâ  IDATxúÌö?HQ«ﬂe$¢»ÀjJÑÜà
+Ajt*r-I›ä˛Ps5FC¥Èë≠aÿnÉÜ∏¢ã‡îVË“ix˛©ÂÇC˙'◊ã˚¸>‹rø«ÔÎ˚ﬁ›ªAÆ∑∑ü¸g∫†'¿
+
+@É–† 4( 
+@É–† 4( 
+@É–† 4›?ÉG~øØcJ(t∂ππ›±ÎÂÂUí§R©îÀÂ¢—´hÙJñeµ3˛@ÅøEØÔ—Î-}}ñââqüœõNßΩ^•Re…Ñ‹Bá„Ä1D›
+º'øV˚J•îÁ›˚˚{«Ωπ\≥îRQ’f*h∫¢(ûûÜR©•¢”È¨÷AñL¯∑–Û≥»“ÆÈCl6õ›Ó˘©©I•í…d Â2K¶:ÅH‰‚À˙Hµ˙§∂Î˛˛ayyU’>∂ÖÍı˙÷÷v°PdÃ0ç·˘ÓÓcé:û˜X,üØˆO{óÕ647«ﬂﬁî°ççıôôÈ_Œù¢Ò
+HíîH$VV÷⁄ãKKã,ô [(õÕ6
+Âvllî%
+ÊPNbB•î%
+@¿n∑ÂˆÒQ`I”T¿d29ùŒìì„ˆb2ôd…‘‚$˛Ó #Ñ¥Z≠@ »˘-$Ç«≥P,ﬁ±Ñh˙-$Àr≥ŸÑJ>üè≈‚ë»e≠VcÃ‰Ø¿† 4( 
+@É–† 4( 
+@É–† 4ˇ^‡
+Ñú‹ﬁ≈B    IENDÆB`Ç
+
+3. favicon.svg:
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='12' fill='#3b82f6'/><text x='50%' y='54%' dominant-baseline='middle' text-anchor='middle' font-size='32' font-family='Inter' fill='white'>F</text></svg>
+
+4. Felix_Bruckmeier_CV.pdf:
+%PDF-1.4\n1 0 obj<</Type/Catalog/Pages 2 0 R>>endobj\n2 0 obj<</Type/Pages/Count 1/Kids[3 0 R]>>endobj\n3 0 obj<</Type/Page/Parent 2 0 R/MediaBox[0 0 300 200]/Contents 4 0 R/Resources<</Font<</F1 5 0 R>>>>>>endobj\n4 0 obj<</Length 55>>stream\nBT /F1 18 Tf 72 120 Td (Replace with your real CV) Tj ET\nendstream endobj\n5 0 obj<</Type/Font/Subtype/Type1/Name/F1/BaseFont/Helvetica>>endobj\nxref\n0 6\n0000000000 65535 f\n0000000010 00000 n\n0000000053 00000 n\n0000000103 00000 n\n0000000290 00000 n\n0000000412 00000 n\ntrailer<</Size 6/Root 1 0 R>>\nstartxref\n520\n%%EOF
+
+5. manifest.webmanifest:
+{
+  "name": "Felix Bruckmeier \u2014 UXR Portfolio",
+  "short_name": "FB UXR",
+  "start_url": "/",
+  "display": "standalone",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "64x64",
+      "type": "image/svg+xml"
+    }
+  ],
+  "theme_color": "#0b1220",
+  "background_color": "#ffffff"
+}
+
+6. og-image.png:
+PNG PLACEHOLDER
+
+7. robots.txt:
+User-agent: *
+Allow: /
+Sitemap: https://felixbruckmeier.github.io/sitemap.xml
+
+
+8. sitemap.xml:
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://felixbruckmeier.github.io/</loc></url>
+  <url><loc>https://felixbruckmeier.github.io/about</loc></url>
+  <url><loc>https://felixbruckmeier.github.io/expertise</loc></url>
+  <url><loc>https://felixbruckmeier.github.io/projects</loc></url>
+  <url><loc>https://felixbruckmeier.github.io/craft</loc></url>
+  <url><loc>https://felixbruckmeier.github.io/contact</loc></url>
+  <url><loc>https://felixbruckmeier.github.io/imprint</loc></url>
+  <url><loc>https://felixbruckmeier.github.io/privacy</loc></url>
+</urlset>
+
+
+
+==== \public\robots.txt ====
+User-agent: *
+Allow: /
+Sitemap: https://felixbruckmeier.github.io/sitemap.xml
+
+
+==== \public\sitemap.xml ====
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <!-- Home -->
+  <url><loc>https://felixbruckmeier.github.io/</loc></url>
+
+  <!-- CV -->
+  <url><loc>https://felixbruckmeier.github.io/cv</loc></url>
+
+  <!-- Expertise -->
+  <url><loc>https://felixbruckmeier.github.io/expertise/ux-strategy</loc></url>
+  <url><loc>https://felixbruckmeier.github.io/expertise/strategic-ux-research</loc></url>
+  <url><loc>https://felixbruckmeier.github.io/expertise/researchops</loc></url>
+  <url><loc>https://felixbruckmeier.github.io/expertise/team-leadership</loc></url>
+  <url><loc>https://felixbruckmeier.github.io/expertise/team-leadership/skillassessment</loc></url>
+  <url><loc>https://felixbruckmeier.github.io/expertise/impact-measurement</loc></url>
+
+  <!-- Projects (only indexable ones) -->
+  <url><loc>https://felixbruckmeier.github.io/projects/car-insurance</loc></url>
+  <url><loc>https://felixbruckmeier.github.io/projects/zooplus-pricing</loc></url>
+  <url><loc>https://felixbruckmeier.github.io/projects/insurance-broker-discovery</loc></url>
+  <url><loc>https://felixbruckmeier.github.io/projects/workshop</loc></url>
+  <url><loc>https://felixbruckmeier.github.io/projects/kanostrategy</loc></url>
+  <url><loc>https://felixbruckmeier.github.io/projects/ux-portfolio</loc></url>
+
+  <!-- Legal -->
+  <url><loc>https://felixbruckmeier.github.io/imprint</loc></url>
+  <url><loc>https://felixbruckmeier.github.io/privacy</loc></url>
+
+</urlset>
+
+
+==== \src\components ====
+
+
+==== \src\hooks ====
+
+
+==== \src\locales ====
+
+
+==== \src\types ====
+
+
+==== \src\App.tsx ====
+// src/App.tsx
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { useEffect } from "react";
+import AppLayout from "@/AppLayout";
+import Home from "@/pages/Home";
+import CVPage from "@/pages/cv";
+
+// üîπ Projektseiten
+import CarInsurance from "@/pages/projects/CarInsurance";
+import ZooplusReOps from "@/pages/projects/ZooplusReOps";
+import ZooplusPricing from "@/pages/projects/ZooplusPricing";
+import InsuranceBrokerDiscovery from "@/pages/projects/InsuranceBroker";
+import WorkshopPage from "@/pages/projects/workshop";
+import KanoStrategyPage from "@/pages/projects/kanostrategy";
+
+// üîπ NEU ‚Äì Dein UX Portfolio Projekt
+import UXPortfolioPage from "@/pages/projects/UXPortfolio";
+
+// üîπ Expertise-Seiten
+import UXStrategy from "@/pages/expertise/UXStrategy";
+import StrategicUXResearch from "@/pages/expertise/StrategicUXResearch";
+import ResearchOps from "@/pages/expertise/ResearchOps";
+import TeamLeadership from "@/pages/expertise/TeamLeadership";
+import ImpactMeasurement from "@/pages/expertise/ImpactMeasurement";
+import SkillAssessmentPage from "@/pages/expertise/TeamLeadership/skillassessment";
+
+// üîπ Footer-/Legal-Seiten
+import Imprint from "@/pages/shared/Imprint";
+import Privacy from "@/pages/shared/Privacy";
+
+/** ScrollToTop */
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "instant" });
+  }, [pathname]);
+  return null;
+}
+
+/** ScrollToHash */
+function ScrollToHash() {
+  const location = useLocation();
+  useEffect(() => {
+    if (location.hash) {
+      setTimeout(() => {
+        const el = document.querySelector(location.hash);
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }, 120);
+    }
+  }, [location]);
+  return null;
+}
+
+export default function App() {
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-md supports-[backdrop-filter]:bg-background/80">
-        <nav className="mx-auto w-full max-w-[1900px] px-[3vw] flex h-20 items-center justify-between">
-          {/* === Logo === */}
-          <Link
-            to="/"
-            onClick={(e) => {
-              if (window.location.pathname === "/") {
-                e.preventDefault();
-                window.scrollTo({ top: 0, behavior: "smooth" });
-              }
-            }}
-            className="flex flex-col items-start text-foreground"
-          >
-            <span className="text-2xl font-bold leading-tight">Felix</span>
-            <span className="text-2xl font-bold leading-tight">Bruckmeier</span>
-            <div className="mt-1 w-full border-b border-border" />
-          </Link>
+      <ScrollToTop />
+      <ScrollToHash />
 
-          {/* === Desktop Navigation === */}
-          <ul className="hidden md:flex items-center gap-8">
-            {NAV.map((nav) => (
-              <li key={nav.id} className="relative group">
-                <a
-                  href={hrefFor(nav)}
-                  onClick={(e) => handleNavClick(e, nav)}
-                  aria-current={active === nav.id ? "page" : undefined}
-                  className={cn(
-                    typography.subtitle.font,
-                    typography.subtitle.size,
-                    typography.subtitle.weight,
-                    "underline underline-offset-4 decoration-transparent transition",
-                    active === nav.id
-                      ? "text-primary decoration-current"
-                      : "text-muted-foreground hover:text-foreground hover:decoration-current"
-                  )}
-                >
-                  {t(`nav.${nav.id}`, nav.id.charAt(0).toUpperCase() + nav.id.slice(1))}
-                </a>
+      <Routes>
+        <Route path="/" element={<AppLayout />}>
+          {/* üîπ Hauptseiten */}
+          <Route index element={<Home />} />
+          <Route path="cv" element={<CVPage />} />
 
-                {/* === Dropdown === */}
-                {nav.children && (
-                  <ul className="absolute left-0 top-full hidden group-hover:flex flex-col bg-background border border-border rounded-lg shadow-lg min-w-[260px] py-2 opacity-0 group-hover:opacity-100 transition-opacity duration-150">
-                    {nav.children.map((child) => (
-                      <li key={child.id}>
-                        {child.locked ? (
-                          <div
-                            className={cn(
-                              typography.subtitle.font,
-                              "flex items-center justify-between px-4 py-2 text-sm text-muted-foreground cursor-not-allowed opacity-70"
-                            )}
-                          >
-                            <span>{child.label}</span>
-                            <Lock size={15} className="opacity-80" />
-                          </div>
-                        ) : (
-                          <Link
-                            to={`/${child.id}`}
-                            className={cn(
-                              typography.subtitle.font,
-                              "block px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 transition"
-                            )}
-                          >
-                            {child.label}
-                          </Link>
-                        )}
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </li>
-            ))}
-            <li>
-              <ThemeToggle />
-            </li>
-          </ul>
+          {/* üîπ Projektseiten */}
+          <Route path="projects/car-insurance" element={<CarInsurance />} />
+          <Route path="projects/zooplus-reops" element={<ZooplusReOps />} />
+          <Route path="projects/zooplus-pricing" element={<ZooplusPricing />} />
+          <Route
+            path="projects/insurance-broker-discovery"
+            element={<InsuranceBrokerDiscovery />}
+          />
+          <Route path="projects/workshop" element={<WorkshopPage />} />
+          <Route path="projects/kanostrategy" element={<KanoStrategyPage />} />
 
-          {/* === Mobile Burger Button === */}
-          <button
-            onClick={() => setOpen(!open)}
-            className="md:hidden text-foreground focus:outline-none"
-            aria-label="Toggle menu"
-          >
-            {open ? <X size={26} /> : <Menu size={26} />}
-          </button>
-        </nav>
+          {/* üîπ NEU ‚Äì UX Portfolio Projekt */}
+          <Route path="projects/ux-portfolio" element={<UXPortfolioPage />} />
 
-        {/* === Mobile Menu === */}
-        {open && (
-          <div className="md:hidden bg-background border-t border-border/40">
-            <ul className="flex flex-col items-start p-4 space-y-4">
-              {NAV.map((nav) => (
-                <li key={nav.id}>
-                  <a
-                    href={hrefFor(nav)}
-                    onClick={(e) => handleNavClick(e, nav)}
-                    className={cn(
-                      typography.subtitle.font,
-                      typography.subtitle.size,
-                      typography.subtitle.weight,
-                      "block text-muted-foreground hover:text-foreground transition"
-                    )}
-                  >
-                    {t(`nav.${nav.id}`, nav.id.charAt(0).toUpperCase() + nav.id.slice(1))}
-                  </a>
+          <Route path="projects" element={<Navigate to="/" replace />} />
 
-                  {nav.children && (
-                    <ul className="pl-4 mt-1 space-y-2">
-                      {nav.children.map((child) => (
-                        <li key={child.id}>
-                          {child.locked ? (
-                            <span className="flex items-center gap-2 text-sm text-muted-foreground opacity-70">
-                              <Lock size={14} />
-                              {child.label}
-                            </span>
-                          ) : (
-                            <Link
-                              to={`/${child.id}`}
-                              className="block text-sm text-muted-foreground hover:text-foreground"
-                            >
-                              {child.label}
-                            </Link>
-                          )}
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </li>
-              ))}
-              <li>
-                <ThemeToggle />
-              </li>
-            </ul>
-          </div>
-        )}
-      </header>
-      <div className="h-20" />
+          {/* üîπ Expertise-Seiten */}
+          <Route path="expertise/ux-strategy" element={<UXStrategy />} />
+          <Route
+            path="expertise/strategic-ux-research"
+            element={<StrategicUXResearch />}
+          />
+          <Route path="expertise/researchops" element={<ResearchOps />} />
+          <Route path="expertise/team-leadership" element={<TeamLeadership />} />
+          <Route
+            path="expertise/team-leadership/skillassessment"
+            element={<SkillAssessmentPage />}
+          />
+          <Route path="expertise/impact-measurement" element={<ImpactMeasurement />} />
+
+          {/* üîπ Footer-/Legal-Seiten */}
+          <Route path="imprint" element={<Imprint />} />
+          <Route path="privacy" element={<Privacy />} />
+
+          {/* üîπ Fallback */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Route>
+      </Routes>
     </>
   );
 }
 
 
-==== \src\components\common\PrivacySection.tsx ====
-import Section from "@/components/ui/Section";
-import Tile from "@/components/ui/Tile";
-import { Subtitle, Body } from "@/components/ui/Tokens";
-import { Mail, Shield, Server, Eye } from "lucide-react";
+==== \src\AppLayout.tsx ====
+// src/components/layout/AppLayout.tsx
+import { Outlet } from "react-router-dom";
+import Navbar from "@/components/common/Navbar";
+import Footer from "@/components/common/Footer";
 
-export default function PrivacySection() {
+export default function AppLayout() {
   return (
-    <Section id="privacy" title="Privacy" spacing="md" fullWidth={false}>
-      <div className="grid gap-6 md:grid-cols-2">
-        {/* General Info */}
-        <Tile variant="static">
-          <div className="flex items-center gap-2 mb-3">
-            <Shield className="w-5 h-5 text-muted-foreground" />
-            <Subtitle>General Information</Subtitle>
-          </div>
-          <Body>
-            This website is operated as a private, non-commercial portfolio
-            project. No personal data is actively collected.
-          </Body>
-        </Tile>
-
-        {/* Contact */}
-        <Tile variant="static">
-          <div className="flex items-center gap-2 mb-3">
-            <Mail className="w-5 h-5 text-muted-foreground" />
-            <Subtitle>Contact</Subtitle>
-          </div>
-          <Body>
-            If you contact me by email, your data will be used solely to process
-            your request.
-          </Body>
-          <Body className="mt-2">
-            <a
-              href="mailto:felixbruckmeier@googlemail.com"
-              className="text-accent hover:underline"
-            >
-              felixbruckmeier@googlemail.com
-            </a>
-          </Body>
-        </Tile>
-
-        {/* Hosting */}
-        <Tile variant="static">
-          <div className="flex items-center gap-2 mb-3">
-            <Server className="w-5 h-5 text-muted-foreground" />
-            <Subtitle>Hosting</Subtitle>
-          </div>
-          <Body>
-            This website is hosted on GitHub Pages. Technical information (such
-            as IP address, browser type, operating system) may be logged
-            automatically for delivery and security purposes.
-          </Body>
-          <Body className="mt-2">
-            <a
-              href="https://docs.github.com/en/site-policy/privacy-policies/github-privacy-statement"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-accent hover:underline"
-            >
-              GitHub Privacy Policy
-            </a>
-          </Body>
-        </Tile>
-
-        {/* No Tracking */}
-        <Tile variant="static">
-          <div className="flex items-center gap-2 mb-3">
-            <Eye className="w-5 h-5 text-muted-foreground" />
-            <Subtitle>No Tracking</Subtitle>
-          </div>
-          <Body>
-            This website does not use cookies, analytics tools, or tracking
-            technologies.
-          </Body>
-        </Tile>
-      </div>
-
-      {/* Rights of Data Subjects */}
-      <div className="mt-10">
-        <Subtitle className="mb-3">Rights of Data Subjects</Subtitle>
-        <Body>
-          You have the right to request information about the personal data
-          stored about you, as well as the right to correction, deletion, and
-          restriction of processing in accordance with applicable data
-          protection laws.
-        </Body>
-      </div>
-    </Section>
+    <div className="min-h-screen flex flex-col bg-background text-foreground overflow-x-clip">
+      <Navbar />
+      <main className="flex-1">
+        <Outlet />
+      </main>
+      <Footer />
+    </div>
   );
 }
 
 
-==== \src\components\common\SEO.tsx ====
-import { Helmet } from "react-helmet-async";
-import { createStructuredData } from "@/data/structuredData";
+==== \src\i18n.ts ====
+// src/i18n.ts
+import i18n from "i18next";
+import { initReactI18next, useTranslation } from "react-i18next";
+import de from "@/locales/de.json";
+import en from "@/locales/en.json";
 
-interface SEOProps {
-  title: string;
-  description: string;
-  image?: string;
-  url?: string;
-  noindex?: boolean;
-  structuredKey?: string;
+if (!i18n.isInitialized) {
+  void i18n.use(initReactI18next).init({
+    resources: { de: { translation: de }, en: { translation: en } },
+    lng: "en",
+    fallbackLng: "en",
+    interpolation: { escapeValue: false },
+  });
 }
 
-export default function SEO({
-  title,
-  description,
-  image,
-  url,
-  noindex,
-  structuredKey,
-}: SEOProps) {
-  // OG fallback image ‚Üí Social Banner
-  const fullImage = image ?? "https://felixbruckmeier.github.io/og-image.png";
+export type Lang = "de" | "en";
+export const useI18n = () => {
+  const { t, i18n } = useTranslation();
+  const lang: Lang = i18n.language?.startsWith("de") ? "de" : "en";
+  const setLang = (l: Lang) => i18n.changeLanguage(l);
+  return { t, i18n, lang, setLang };
+};
 
-  // Structured Data (Person/Article/WebPage ‚Ä¶)
-  const jsonLd = structuredKey ? createStructuredData(structuredKey as any) : null;
+export default i18n;
 
-  return (
-    <Helmet>
-      {/* SEO Meta */}
-      <title>{title}</title>
-      <meta name="description" content={description} />
 
-      {/* Canonical */}
-      {url && !noindex && <link rel="canonical" href={url} />}
+==== \src\index.css ====
+@import "tailwindcss";
+@plugin "tailwindcss-animate";
 
-      {/* Robots */}
-      {noindex && <meta name="robots" content="noindex,nofollow" />}
+@custom-variant dark (&:is(.dark *));
 
-      {/* Open Graph */}
-      <meta property="og:type" content="website" />
-      {url && <meta property="og:url" content={url} />}
-      <meta property="og:title" content={title} />
-      <meta property="og:description" content={description} />
-      <meta property="og:image" content={fullImage} />
+/* ================================
+   THEME TOKENS (vereinheitlicht)
+   ================================ */
+@theme {
+  --breakpoint-sm: 40rem;
+  --breakpoint-md: 48rem;
+  --breakpoint-lg: 64rem;
+  --breakpoint-xl: 80rem;
+  --breakpoint-2xl: 96rem;
 
-      {/* Twitter */}
-      <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:title" content={title} />
-      <meta name="twitter:description" content={description} />
-      <meta name="twitter:image" content={fullImage} />
+  /* Fonts */
+  --font-sans: "SF Pro Text", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "SF Pro Display", "Inter", ui-sans-serif, system-ui, sans-serif;
 
-      {/* JSON-LD */}
+  /* Colors (Light) */
+  --color-background: #ffffff;
+  --color-foreground: #2f2f2f;          /* Einheitliches Grau f√ºr alle Texte */
+  --color-border: #e5e5e5;
 
-      {jsonLd && (
-        <script type="application/ld+json">
-          {JSON.stringify(jsonLd)}
-        </script>
-      )}
-    </Helmet>
-  );
+  --color-muted: #f3f3f3;
+  --color-muted-foreground: #2f2f2f;    /* identisch mit foreground */
+
+  --color-primary: #0a0a0a;
+  --color-primary-foreground: #ffffff;
+
+  --color-secondary: #4a5a6a;
+  --color-secondary-foreground: #ffffff;
+
+  --color-accent: #0094c6;
+  --color-accent-foreground: #ffffff;
 }
 
+/* ================================
+   DARK THEME OVERRIDES
+   ================================ */
+.dark {
+  --color-background: #0b0b0b;
+  --color-foreground: #c8c8c8;          /* Einheitliches Hellgrau f√ºr alle Texte */
+  --color-border: #2a2a2a;
 
-==== \src\components\common\SEOPage.tsx ====
-import SEO from "./SEO";
-import { seo, SEOKey } from "@/data/seo";
+  --color-muted: #1a1a1a;
+  --color-muted-foreground: #d6d6d6;    /* identisch mit foreground */
 
-export default function SEOPage({
-  page,
-  noindex,
-}: {
-  page: SEOKey;   // <-- einzig richtige L√∂sung
-  noindex?: boolean;
-}) {
-  return (
-    <SEO
-      {...seo[page]}
-      noindex={noindex}
-      structuredKey={noindex ? undefined : page}
-    />
-  );
+  --color-primary: #f8f8f8;
+  --color-primary-foreground: #0a0a0a;
+
+  --color-secondary: #607080;
+  --color-secondary-foreground: #ffffff;
+
+  --color-accent: #33bde5;
+  --color-accent-foreground: #0b0b0b;
 }
 
-
-==== \src\components\common\ThemeToggle.tsx ====
-import { useEffect, useState } from "react";
-import { Moon, Sun } from "lucide-react";
-import Button from "@/components/ui/Button";
-
-type Mode = "light" | "dark";
-
-function getInitialTheme(): Mode {
-  const stored = localStorage.getItem("theme");
-  if (stored === "light" || stored === "dark") return stored;
-  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+:root {
+  color-scheme: light dark;
 }
 
-export default function ThemeToggle() {
-  const [theme, setTheme] = useState<Mode>(getInitialTheme());
-
-  useEffect(() => {
-    const root = document.documentElement;
-    if (theme === "dark") {
-      root.classList.add("dark");
-      root.style.colorScheme = "dark";
-    } else {
-      root.classList.remove("dark");
-      root.style.colorScheme = "light";
-    }
-    localStorage.setItem("theme", theme);
-  }, [theme]);
-
-  return (
-    <Button
-      variant="secondary"
-      size="sm" // ‚öôÔ∏è war "icon" ‚Üí ersetzt durch sm + custom sizing
-      aria-label="Toggle theme"
-      onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-      title={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
-      className="w-9 h-9 p-0 transition-colors flex items-center justify-center"
-    >
-      {theme === "dark" ? (
-        <Sun className="h-5 w-5 text-foreground" />
-      ) : (
-        <Moon className="h-5 w-5 text-foreground" />
-      )}
-    </Button>
-  );
+/* ================================
+   MAP CSS VARS ‚Üí UTILITIES
+   ================================ */
+@theme inline {
+  --color-card: var(--color-background);
+  --color-card-foreground: var(--color-foreground);
+  --color-popover: var(--color-background);
+  --color-popover-foreground: var(--color-foreground);
 }
+
+/* ================================
+   GLOBAL LAYOUT FIXES
+   ================================ */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  overflow-y: scroll;
+  overflow-x: clip;
+  width: 100%;
+  background: var(--color-background);
+  color: var(--color-foreground);
+}
+
+/* ‚úÖ Weiches Scrollen aktivieren */
+html {
+  scroll-behavior: smooth;
+}
+
+/* ‚úÖ Normale Bilder & SVGs skalieren richtig */
+img:not([data-hero]),
+svg:not([data-hero]) {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ================================
+   COMPONENT UTILITIES
+   ================================ */
+@layer components {
+  .container-responsive {
+    @apply mx-auto max-w-6xl px-4 sm:px-6 lg:px-8;
+  }
+
+  .section {
+    @apply mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-20 space-y-8;
+  }
+
+  .card {
+    @apply rounded-2xl border border-border bg-card text-card-foreground;
+  }
+
+  /* Buttons */
+  .btn {
+    @apply inline-flex items-center justify-center 
+           rounded-2xl px-5 py-2.5 text-sm font-semibold 
+           border border-border transition-colors duration-200;
+  }
+
+  .btn-primary {
+    @apply bg-primary text-primary-foreground hover:opacity-90;
+  }
+
+  .btn-secondary {
+    @apply bg-muted text-foreground hover:bg-muted/70;
+  }
+
+  .btn-ghost {
+    @apply text-foreground hover:bg-muted/40;
+  }
+
+  /* Tiles */
+  .tile {
+    @apply rounded-xl border border-border bg-muted 
+           p-4 text-center text-sm text-foreground 
+           transition-colors duration-200 
+           hover:bg-muted/70;
+  }
+}
+
+/* ================================
+   TYPOGRAPHY BASE
+   ================================ */
+@layer base {
+  body {
+    @apply bg-background text-foreground font-sans;
+  }
+
+  h1 {
+    @apply font-display font-extrabold tracking-tight text-foreground;
+  }
+
+  h2 {
+    @apply font-display font-bold text-foreground;
+  }
+
+  h3 {
+    @apply font-display font-semibold text-foreground;
+  }
+
+  p {
+    @apply leading-relaxed text-foreground;
+  }
+
+  small {
+    @apply text-sm text-foreground;
+  }
+}
+
+/* ================================
+   DARK MODE ‚Äì IMAGE BRIGHTNESS (Klassenbasiert)
+   ================================ */
+.dark img:not(.no-dark-filter) {
+  filter: brightness(0.7);
+  transition: filter 0.3s ease-in-out;
+}
+==== \src\components\layout ====
+
+
+==== \src\components\ui ====
 
 
 ==== \src\components\layout\PageLayout.tsx ====
@@ -1582,123 +2281,82 @@ import { cn } from "@/lib/utils";
 import { transitions, hoverEffects, radii } from "@/lib/tokens";
 import { ArrowRight } from "lucide-react";
 
-type PictureSource = {
-  srcset: string;
-  type: string;
-  sizes?: string;
-};
-
-type PictureObject = {
-  img: { src: string; width: number; height: number };
-  sources?: PictureSource[];
-};
-
-type TileImageProps = React.HTMLAttributes<HTMLDivElement> & {
-  image: string | PictureObject;
-  title?: string;
-  caption?: string;
-  variant?: "default" | "hoverLift";
-};
-
 export default function TileImage({
   image,
   title,
   caption,
-  variant = "hoverLift",
   className,
   ...props
-}: TileImageProps) {
+}) {
+  const isObject = typeof image === "object" && image?.img?.src;
+
   return (
     <div
       className={cn(
         "group relative overflow-hidden aspect-[4/3]",
         radii.xl,
         transitions.default,
-        variant === "hoverLift" && hoverEffects.smoothLift,
+
+        // üî• Die BOX skaliert wieder ‚Äì genau wie vorher
+        hoverEffects.smoothLift,
+
         className
       )}
       {...props}
     >
-      {/* === Hintergrundbild (unterst√ºtzt imagetools picture oder normalen String) === */}
-      <div className="absolute inset-0 bg-black">
-        {typeof image === "string" ? (
+      {/* === IMAGE-LAYER (skaliert NICHT mit der Box!) === */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {isObject ? (
+          <picture className="absolute inset-0">
+            {Array.isArray(image.sources) &&
+              image.sources.map((s) => <source key={s.srcset} {...s} />)}
+            <img
+              src={image.img.src}
+              alt={title || ""}
+              className="w-full h-full object-cover object-center 
+                         scale-[1.15] 
+                         transition-transform duration-500 ease-out"
+            />
+          </picture>
+        ) : (
           <img
             src={image}
             alt={title || ""}
+            className="absolute inset-0 w-full h-full object-cover object-center 
+                       scale-[1.15] 
+                       transition-transform duration-500 ease-out"
             loading="lazy"
-            className={cn(
-              "absolute inset-0 w-full h-full object-cover object-center scale-[1.15]",
-              "transition-transform duration-500 ease-out will-change-transform"
-            )}
           />
-        ) : (
-          <picture className="absolute inset-0">
-            {Array.isArray(image.sources) &&
-              image.sources.map((source) => (
-                <source key={source.srcset} {...source} />
-              ))}
-            <img
-              src={image.img?.src || ""}
-              alt={title || ""}
-              width={image.img?.width}
-              height={image.img?.height}
-              loading="lazy"
-              className={cn(
-                "absolute inset-0 w-full h-full object-cover object-center scale-[1.15]",
-                "transition-transform duration-500 ease-out will-change-transform"
-              )}
-            />
-          </picture>
         )}
       </div>
 
-      {/* === Overlay === */}
-      <div
-        className={cn(
-          "absolute inset-0",
-          "bg-gradient-to-b from-black/55 via-black/45 to-black/60",
-          "dark:from-black/60 dark:via-black/50 dark:to-black/70",
-          "transition-opacity duration-300 group-hover:from-black/60 group-hover:to-black/70"
-        )}
-      />
+      {/* === DARK OVERLAY === */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/45 via-black/35 to-black/60 pointer-events-none" />
 
-      {/* === Text === */}
+      {/* === TEXT-LAYER (bleibt 100% scharf, skaliert NIE) === */}
       <div
-        className={cn(
-          "relative z-10 flex flex-col h-full p-4",
-          "justify-start md:justify-end"
-        )}
+        className="
+          relative z-20 flex flex-col h-full p-4 justify-end select-none 
+          transform-none will-change-auto
+        "
       >
         {title && (
-          <h3
-            className={cn(
-              "text-xl font-semibold mb-1 text-gray-50",
-              "drop-shadow-[0_2px_8px_rgba(0,0,0,0.75)]"
-            )}
-          >
+          <h3 className="text-xl font-semibold mb-1 text-gray-50 drop-shadow-[0_2px_8px_rgba(0,0,0,0.75)]">
             {title}
           </h3>
         )}
         {caption && (
-          <p
-            className={cn(
-              "text-base text-gray-100 leading-snug",
-              "drop-shadow-[0_2px_6px_rgba(0,0,0,0.7)]"
-            )}
-          >
+          <p className="text-base text-gray-100 leading-snug drop-shadow-[0_2px_6px_rgba(0,0,0,0.7)]">
             {caption}
           </p>
         )}
       </div>
 
-      {/* === Mobile CTA === */}
+      {/* === MOBILE ARROW === */}
       <div
-        className={cn(
-          "absolute bottom-3 right-3 md:hidden z-20 flex items-center justify-center",
-          "w-9 h-9 rounded-full backdrop-blur-sm pointer-events-none",
-          "bg-white/80 text-gray-900 dark:bg-black/70 dark:text-gray-100",
-          "shadow-md transition-transform duration-300 group-hover:scale-105"
-        )}
+        className="absolute bottom-3 right-3 md:hidden z-20 
+                   w-9 h-9 rounded-full backdrop-blur-sm pointer-events-none
+                   bg-white/80 text-gray-900 dark:bg-black/70 dark:text-gray-100"
       >
         <ArrowRight className="w-5 h-5" />
       </div>
@@ -2007,810 +2665,6 @@ export function Card({ children, className = "" }: { children: ReactNode; classN
 }
 
 
-==== \src\data\seo.ts ====
-export const seo = {
-  // -----------------------------------
-  // HOME & CV
-  // -----------------------------------
-  home: {
-    title: "Felix Bruckmeier ‚Äì Senior UX Researcher",
-    description:
-      "Senior UX Researcher specializing in qualitative & quantitative methods, UX strategy, ResearchOps and mixed-method insights.",
-    url: "https://felixbruckmeier.github.io/",
-    image: "https://felixbruckmeier.github.io/felix-bruckmeier.jpg", // ‚≠ê UPDATED
-  },
-
-  cv: {
-    title: "CV ‚Äì Felix Bruckmeier ¬∑ Senior UX Researcher",
-    description:
-      "Professional experience, education, skills and leadership history of Senior UX Researcher Felix Bruckmeier.",
-    url: "https://felixbruckmeier.github.io/cv",
-    image: "https://felixbruckmeier.github.io/og-image.png",
-  },
-
-  // -----------------------------------
-  // EXPERTISE ROOT PAGES
-  // -----------------------------------
-  expertise_impactMeasurement: {
-    title: "Impact Measurement ‚Äì UX KPIs & Decision-Making",
-    description:
-      "Using HEART, UX KPIs, design maturity and measurement systems to drive strategic product impact.",
-    url: "https://felixbruckmeier.github.io/expertise/impact-measurement",
-    image:
-      "https://felixbruckmeier.github.io/assets/images/expertise/impactmeasurement/impact.jpg",
-  },
-
-  expertise_researchOps: {
-    title: "ResearchOps ‚Äì Systems, Governance & Enablement",
-    description:
-      "Scaling UX Research with systems, maturity frameworks, governance, recruitment and enablement.",
-    url: "https://felixbruckmeier.github.io/expertise/researchops",
-    image:
-      "https://felixbruckmeier.github.io/assets/images/expertise/researchops/plant.jpg",
-  },
-
-  expertise_strategicUXResearch: {
-    title: "Strategic UX Research ‚Äì Frameworks & OKRs",
-    description:
-      "Strategic UX research including OKR mapping, question refinement, RITE testing and structured evidence generation.",
-    url: "https://felixbruckmeier.github.io/expertise/strategic-ux-research",
-    image:
-      "https://felixbruckmeier.github.io/assets/images/expertise/strategicuxresearch/strategicuxr.jpg",
-  },
-
-  expertise_teamLeadership: {
-    title: "UX Team Leadership ‚Äì Roles & Skills",
-    description:
-      "Leadership philosophy, role clarity, collaboration and building high-performing UX teams.",
-    url: "https://felixbruckmeier.github.io/expertise/team-leadership",
-    image:
-      "https://felixbruckmeier.github.io/assets/images/expertise/teamleadership/team.jpg",
-  },
-
-  expertise_uxStrategy: {
-    title: "UX Strategy ‚Äì Research, Vision & Prioritization",
-    description:
-      "UX Strategy frameworks for vision alignment, prioritization and connecting discovery with delivery.",
-    url: "https://felixbruckmeier.github.io/expertise/ux-strategy",
-    image: "https://felixbruckmeier.github.io/og-image.png",
-  },
-
-  // -----------------------------------
-  // EXPERTISE SUBPAGE
-  // -----------------------------------
-  expertise_teamLeadership_skillassessment: {
-    title: "UX Skill Assessment Center ‚Äì UX Team Leadership",
-    description:
-      "A structured skill assessment framework to visualize strengths, learning paths and team capabilities.",
-    url: "https://felixbruckmeier.github.io/expertise/team-leadership/skillassessment",
-    image:
-      "https://felixbruckmeier.github.io/assets/images/expertise/teamleadership/team.jpg",
-  },
-
-  // -----------------------------------
-  // PROJECTS ‚Äî LIVE
-  // -----------------------------------
-  project_carInsurance: {
-    title: "Car Insurance UX Case Study",
-    description:
-      "Discovery, journey mapping, prototyping and usability testing for car insurance products.",
-    url: "https://felixbruckmeier.github.io/projects/car-insurance",
-    image:
-      "https://felixbruckmeier.github.io/assets/images/projects/carinsurance/CarInsurance.png",
-  },
-
-  project_insuranceBroker: {
-    title: "Insurance Broker Discovery Research",
-    description:
-      "Discovery research, journey mapping and user needs exploration for the insurance broker experience.",
-    url: "https://felixbruckmeier.github.io/projects/insurance-broker-discovery",
-    image:
-      "https://felixbruckmeier.github.io/assets/images/projects/b2b2c/B2B2COptimization.jpg",
-  },
-
-  project_pricing: {
-    title: "Zooplus Pricing UX Research",
-    description:
-      "Mixed-methods pricing research including usability testing, heatmapping and product impact.",
-    url: "https://felixbruckmeier.github.io/projects/zooplus-pricing",
-    image:
-      "https://felixbruckmeier.github.io/assets/images/projects/pricingtesting/PricingUsabilityTesting.jpg",
-  },
-
-  project_uxPortfolio: {
-    title: "UX Portfolio Case Study",
-    description:
-      "A UX case study focusing on portfolio structure, design system, animations and research storytelling.",
-    url: "https://felixbruckmeier.github.io/projects/ux-portfolio",
-    image:
-      "https://felixbruckmeier.github.io/assets/images/projects/uxportfolio/cover.png",
-  },
-
-  project_workshop: {
-    title: "UX Research Maturity Workshop",
-    description:
-      "Workshop design, alignment exercises and collaborative UX maturity sessions.",
-    url: "https://felixbruckmeier.github.io/projects/workshop",
-    image:
-      "https://felixbruckmeier.github.io/assets/images/projects/workshop/haderws.jpg",
-  },
-
-  project_kanostrategy: {
-    title: "Kano Model UX Strategy Case Study",
-    description:
-      "Using the Kano model to prioritize features, increase product value and drive customer satisfaction.",
-    url: "https://felixbruckmeier.github.io/projects/kanostrategy",
-    image:
-      "https://felixbruckmeier.github.io/assets/images/projects/kanostrategy/headerkano.jpg",
-  },
-
-  // -----------------------------------
-  // WIP ‚Äî NOINDEX
-  // -----------------------------------
-  project_deleteCase: {
-    title: "Micro Interaction Case Study ‚Äì Delete Flow",
-    description:
-      "Optimizing a sensitive micro interaction with research, prototyping and usability validation.",
-    url: "https://felixbruckmeier.github.io/projects/delete-case",
-    image: "https://felixbruckmeier.github.io/og-image.png",
-  },
-
-  project_reopsimplementation: {
-    title: "ResearchOps Implementation (Work in Progress)",
-    description:
-      "Establishing scalable ResearchOps foundations including governance, workflows and enablement.",
-    url: "https://felixbruckmeier.github.io/projects/reopsimp",
-    image:
-      "https://felixbruckmeier.github.io/assets/images/projects/reopsimplement/ReOpsimplementation.jpg",
-  },
-
-  project_zooplusreops: {
-    title: "Zooplus ResearchOps & Agile UX (Work in Progress)",
-    description:
-      "Building ResearchOps structures for prioritization, enablement and research transparency.",
-    url: "https://felixbruckmeier.github.io/projects/zooplus-reops",
-    image:
-      "https://felixbruckmeier.github.io/assets/images/projects/reopsagile/ResearchOpsAgileUX.jpg",
-  },
-
-  // -----------------------------------
-  // LEGAL
-  // -----------------------------------
-  page_imprint: {
-    title: "Imprint ‚Äì Felix Bruckmeier",
-    description: "Legal imprint and required contact information.",
-    url: "https://felixbruckmeier.github.io/imprint",
-    image: "https://felixbruckmeier.github.io/og-image.png",
-  },
-
-  page_privacy: {
-    title: "Privacy Policy ‚Äì Felix Bruckmeier",
-    description:
-      "Privacy policy and data protection information for this website.",
-    url: "https://felixbruckmeier.github.io/privacy",
-    image: "https://felixbruckmeier.github.io/og-image.png",
-  },
-} as const;
-
-export type SEOKey = keyof typeof seo;
-
-
-==== \src\data\skills.ts ====
-export const skills = [
-  { theme: "Coordination & Data Management", skill: "Data Capture" },
-  { theme: "Coordination & Data Management", skill: "Well-Managed Data" },
-
-  { theme: "Evaluative Testing", skill: "Heuristic Analysis" },
-  { theme: "Evaluative Testing", skill: "Usability Test" },
-  { theme: "Evaluative Testing", skill: "Information Architecture Study" },
-  { theme: "Evaluative Testing", skill: "Concept Test" },
-  { theme: "Evaluative Testing", skill: "Bug & Defect Tracking" },
-
-  { theme: "Debrief & Analysis", skill: "Interview Debrief" },
-  { theme: "Debrief & Analysis", skill: "Video Analysis" },
-  { theme: "Debrief & Analysis", skill: "Affinity Map" },
-  { theme: "Debrief & Analysis", skill: "Data Wall" },
-
-  { theme: "Interview Planning & Execution", skill: "Study Plan" },
-  { theme: "Interview Planning & Execution", skill: "Participant Segments & Screening" },
-  { theme: "Interview Planning & Execution", skill: "User Interview" },
-  { theme: "Interview Planning & Execution", skill: "Field Interview" },
-  { theme: "Interview Planning & Execution", skill: "Experience Sample / Diary Study" },
-  { theme: "Interview Planning & Execution", skill: "Interview Protocol" },
-  { theme: "Interview Planning & Execution", skill: "Actionable Research Question" },
-
-  { theme: "Basic Quantitative Work", skill: "Surveys & Questionnaires" },
-  { theme: "Basic Quantitative Work", skill: "Exploratory Quantitative Analysis" },
-  { theme: "Basic Quantitative Work", skill: "Product Analytics" },
-
-  { theme: "Synthesis", skill: "Exploratory Research" },
-  { theme: "Synthesis", skill: "Exploratory Qualitative Analysis" },
-  { theme: "Synthesis", skill: "Journey Map" },
-  { theme: "Synthesis", skill: "Sensemaking Workshop" },
-  { theme: "Synthesis", skill: "Conceptual Model" },
-
-  { theme: "Stakeholder Engagement", skill: "Stakeholder Interview" },
-  { theme: "Stakeholder Engagement", skill: "Stakeholder Assumption Workshop" },
-
-  { theme: "Structured Modeling", skill: "Service Blueprint" },
-  { theme: "Structured Modeling", skill: "User Personas" },
-  { theme: "Structured Modeling", skill: "Jobs to be Done" },
-
-  { theme: "Integration in Service Delivery", skill: "Research-Driven Design Project" },
-  { theme: "Integration in Service Delivery", skill: "A/B Test" },
-  { theme: "Integration in Service Delivery", skill: "Beta Test" },
-  { theme: "Integration in Service Delivery", skill: "Development Cycle Coupling" },
-  { theme: "Integration in Service Delivery", skill: "Design Sprint" },
-  { theme: "Integration in Service Delivery", skill: "Cadenced User Studies" },
-
-  { theme: "Broadcasting", skill: "Effective Reporting" },
-  { theme: "Broadcasting", skill: "Research Evangelization" },
-
-  { theme: "Business Alignment", skill: "Customer Advisory Council" },
-  { theme: "Business Alignment", skill: "Front-Line Collaboration" },
-
-  { theme: "Amplify the Practice", skill: "Research Training" },
-  { theme: "Amplify the Practice", skill: "Public Project Index" },
-
-  { theme: "Strategic Direction", skill: "Product Roadmap" },
-  { theme: "Strategic Direction", skill: "User Needs Inception" },
-  { theme: "Strategic Direction", skill: "Product & Design Strategy" },
-];
-
-export const themeColors: Record<string, string> = {
-  "Coordination & Data Management": "#E8ECF7",
-  "Evaluative Testing": "#EAF7F1",
-  "Debrief & Analysis": "#FFF3E6",
-  "Interview Planning & Execution": "#E9F2FF",
-  "Basic Quantitative Work": "#F9E8EE",
-  "Synthesis": "#F2F0FA",
-  "Stakeholder Engagement": "#FFD6E0",
-  "Structured Modeling": "#E0F7FA",
-  "Integration in Service Delivery": "#FCE4EC",
-  "Broadcasting": "#FFF9C4",
-  "Business Alignment": "#DCEDC8",
-  "Amplify the Practice": "#D1C4E9",
-  "Strategic Direction": "#B3E5FC",
-};
-
-
-==== \src\data\structuredData.ts ====
-import { seo } from "@/data/seo";
-
-/** 
- * Das Portrait NUR f√ºr Google SERP (nicht f√ºr Social Media).
- * Muss im public/ Ordner liegen.
- */
-const PERSON_IMAGE = "https://felixbruckmeier.github.io/felix-bruckmeier.jpg";
-
-export function createStructuredData(key: keyof typeof seo) {
-  const item = seo[key];
-  if (!item) return null;
-
-  // Ohne OG image ‚Üí kein JSON-LD
-  if (!item.image) return null;
-
-  // üîπ Default: WebPage Schema (f√ºr alles au√üer Home, CV, Project/Expertise)
-  const base = {
-    "@context": "https://schema.org",
-    "@type": "WebPage",
-    name: item.title,
-    description: item.description,
-    url: item.url,
-    image: item.image, // ‚Üê OG-Image f√ºr Social Media (Banner)
-  };
-
-  // üîπ Homepage ‚Üí Website + Person
-  if (key === "home") {
-    return [
-      {
-        "@context": "https://schema.org",
-        "@type": "WebSite",
-        name: item.title,
-        url: item.url,
-      },
-      {
-        "@context": "https://schema.org",
-        "@type": "Person",
-        name: "Felix Bruckmeier",
-        jobTitle: "UX Research Lead",
-        url: item.url,
-        image: PERSON_IMAGE, // ‚Üê Portrait NUR f√ºr Google SERP
-      },
-    ];
-  }
-
-  // üîπ CV ‚Üí nur Person Schema
-  if (key === "cv") {
-    return {
-      "@context": "https://schema.org",
-      "@type": "Person",
-      name: "Felix Bruckmeier",
-      description: item.description,
-      url: item.url,
-      image: PERSON_IMAGE, // ‚Üê Portrait NUR f√ºr Google SERP
-    };
-  }
-
-  // üîπ Expertise- & Projektseiten ‚Üí Article Schema
-  if (key.startsWith("project_") || key.startsWith("expertise_")) {
-    return {
-      "@context": "https://schema.org",
-      "@type": "Article",
-      headline: item.title,
-      description: item.description,
-      image: item.image, // ‚Üê OG-Image bleibt Banner
-      url: item.url,
-      author: {
-        "@type": "Person",
-        name: "Felix Bruckmeier",
-      },
-    };
-  }
-
-  return base;
-}
-
-
-==== \src\data\uxRolesPersonas.ts ====
-// src/data/uxRolesPersonas.ts
-
-// ‚úÖ Import images for all roles
-import accessibilityspecialist from "@/assets/images/expertise/teamleadership/personas/accessibilityspecialist.png";
-import cxanalyst from "@/assets/images/expertise/teamleadership/personas/cxanalyst.png";
-import designmanager from "@/assets/images/expertise/teamleadership/personas/designmanager.png";
-import journeymanager from "@/assets/images/expertise/teamleadership/personas/journeymanager.png";
-import requirementsengineer from "@/assets/images/expertise/teamleadership/personas/requirementsengineer.png";
-import servicedesigner from "@/assets/images/expertise/teamleadership/personas/servicedesigner.png";
-import uideveloper from "@/assets/images/expertise/teamleadership/personas/uideveloper.png";
-import uivisualdesigner from "@/assets/images/expertise/teamleadership/personas/uivisualdesigner.png";
-import uxarchitect from "@/assets/images/expertise/teamleadership/personas/uxarchitect.png";
-import uxdesigner from "@/assets/images/expertise/teamleadership/personas/uxdesigner.png";
-import uxmanager from "@/assets/images/expertise/teamleadership/personas/uxmanager.png";
-import uxresearcher from "@/assets/images/expertise/teamleadership/personas/uxresearcher.png";
-import uxstrategist from "@/assets/images/expertise/teamleadership/personas/uxstrategist.png";
-import uxwriter from "@/assets/images/expertise/teamleadership/personas/uxwriter.png";
-import interactiondesigner from "@/assets/images/expertise/teamleadership/personas/interactiondesigner.png";
-
-
-
-export const UX_ROLES_PERSONAS = {
-  AccessibilitySpecialist: {
-    id: "AccessibilitySpecialist",
-    name: "Ava Reach",
-    role: "Accessibility Specialist",
-    imgSrc: accessibilityspecialist,
-    quote:
-      "Accessibility is not an add-on ‚Äî it‚Äôs the foundation of inclusive design.",
-    description:
-      "Ensures digital products are accessible and usable for all users, particularly those with disabilities. Translates accessibility standards into actionable design and development practices.",
-    skills: [
-      "Accessibility Testing (WCAG, EN 301 549)",
-      "Assistive Technology Expertise",
-      "Inclusive Design",
-      "Collaboration with Developers",
-    ],
-    responsibilities: [
-      "Assess accessibility of digital products",
-      "Support teams in implementing accessible solutions",
-      "Train colleagues on accessibility best practices",
-      "Advocate inclusion and awareness company-wide",
-    ],
-    needs:
-      "Early involvement in product discussions to ensure accessibility is considered from the start. Requires clear internal standards and collaboration between design, dev, and QA teams.",
-    painPoints:
-      "Accessibility often treated as a late-stage fix or low priority. Lacks structured processes and tools for continuous accessibility testing.",
-    challenges:
-      "Scaling accessibility knowledge across large teams and ensuring design systems evolve with accessibility in mind.",
-  },
-
-  CXAnalyst: {
-    id: "CXAnalyst",
-    name: "Noah Trace",
-    role: "CX Analyst",
-    imgSrc: cxanalyst,
-    quote:
-      "Every metric tells a story ‚Äî my job is to turn data into empathy and action.",
-    description:
-      "Measures and analyzes customer experiences across touchpoints to identify friction and improvement opportunities. Bridges qualitative and quantitative signals to build holistic understanding.",
-    skills: [
-      "Data Analysis & Visualization",
-      "Customer Journey Measurement",
-      "Survey Design & NPS",
-      "Cross-Department Collaboration",
-    ],
-    responsibilities: [
-      "Collect and analyze feedback from touchpoints",
-      "Identify experience gaps and opportunities",
-      "Develop dashboards and CX metrics",
-      "Collaborate with Journey Managers and UX teams",
-    ],
-    needs:
-      "Reliable access to customer data and consistent KPI definitions across teams. Seeks early collaboration with product managers to connect insights to strategy.",
-    painPoints:
-      "Fragmented data ownership and siloed tools make it hard to form a complete view. Insights often underutilized due to unclear accountability.",
-    challenges:
-      "Translating data findings into prioritized actions that resonate with both business and design teams.",
-  },
-
-  DesignManager: {
-    id: "DesignManager",
-    name: "Clara Guide",
-    role: "Design Manager",
-    imgSrc: designmanager,
-    quote:
-      "Good design leadership means creating the conditions for others to succeed.",
-    description:
-      "Leads and develops design teams, ensuring design quality, process maturity, and alignment with business strategy. Balances creative freedom with consistency and execution.",
-    skills: [
-      "Design Strategy & Leadership",
-      "Process Management",
-      "Team Coaching & Mentoring",
-      "Stakeholder Management",
-    ],
-    responsibilities: [
-      "Coordinate design activities across teams",
-      "Develop design strategies and guidelines",
-      "Ensure consistency across products and channels",
-      "Mentor designers and foster creative excellence",
-    ],
-    needs:
-      "Strong executive sponsorship for design strategy and the autonomy to shape processes. Needs structured career paths to retain and grow design talent.",
-    painPoints:
-      "Pressure to deliver short-term results can limit focus on long-term design quality. Struggles with uneven stakeholder understanding of design value.",
-    challenges:
-      "Maintaining consistency and morale in distributed teams while scaling impact across multiple initiatives.",
-  },
-
-  InteractionDesigner: {
-    id: "InteractionDesigner",
-    name: "Theo Flux",
-    role: "Interaction Designer",
-    imgSrc: interactiondesigner,
-    quote:
-      "Interaction design is the art of making technology feel natural and effortless.",
-    description:
-      "Designs digital interactions that make complex systems intuitive. Translates user flows and mental models into smooth, meaningful interactions that enhance usability.",
-    skills: [
-      "Information Architecture",
-      "Interaction Patterns & Animation",
-      "Prototyping & Wireframing",
-      "Usability Testing",
-    ],
-    responsibilities: [
-      "Create user flows and interaction concepts",
-      "Collaborate with designers and developers",
-      "Ensure intuitive, accessible interactions",
-      "Validate designs through testing and iteration",
-    ],
-    needs:
-      "Clear problem framing and early exposure to user research insights. Benefits from cross-functional critique and shared design standards.",
-    painPoints:
-      "Ambiguous requirements and limited time for iteration reduce design depth. Handoff between design and dev often introduces inconsistencies.",
-    challenges:
-      "Maintaining innovation within structured design systems and ensuring transitions feel seamless across contexts.",
-  },
-
-  JourneyManager: {
-    id: "JourneyManager",
-    name: "Mara Path",
-    role: "Journey Manager",
-    imgSrc: journeymanager,
-    quote:
-      "A journey is only as strong as its weakest touchpoint ‚Äî that‚Äôs where improvement begins.",
-    description:
-      "Connects data, research, and operations to visualize and improve end-to-end user and customer journeys. Advocates cross-team accountability for experience outcomes.",
-    skills: [
-      "Journey Mapping & Blueprinting",
-      "Cross-Team Facilitation",
-      "Process Analysis",
-      "CX Measurement",
-    ],
-    responsibilities: [
-      "Visualize and manage journeys across touchpoints",
-      "Identify friction and improvement opportunities",
-      "Align stakeholders on journey priorities",
-      "Monitor journey metrics and satisfaction levels",
-    ],
-    needs:
-      "Access to unified CX data and sponsorship to coordinate improvements across silos. Requires collaboration with product, service, and analytics teams.",
-    painPoints:
-      "Journey ownership often fragmented, making systemic improvements difficult. Limited visibility into post-launch results.",
-    challenges:
-      "Maintaining journey alignment when teams focus narrowly on local KPIs rather than shared experience outcomes.",
-  },
-
-  RequirementsEngineer: {
-    id: "RequirementsEngineer",
-    name: "Elias Logic",
-    role: "Requirements Engineer",
-    imgSrc: requirementsengineer,
-    quote:
-      "Clarity is my currency ‚Äî I make sure user needs become actionable requirements.",
-    description:
-      "Bridges product vision, user goals, and technical feasibility. Creates transparent documentation that drives shared understanding and effective prioritization.",
-    skills: [
-      "Requirements Specification (UML, BPMN)",
-      "Stakeholder Management",
-      "Documentation & Transparency",
-      "Backlog Management",
-    ],
-    responsibilities: [
-      "Gather and specify requirements from stakeholders",
-      "Translate research insights into user stories",
-      "Support backlog prioritization and validation",
-      "Ensure traceability from need to implementation",
-    ],
-    needs:
-      "Direct collaboration with UX researchers to translate insights accurately. Needs a clear feedback loop between requirements and delivered outcomes.",
-    painPoints:
-      "Frequent changes to business priorities disrupt requirements clarity. Documentation often deprioritized under delivery pressure.",
-    challenges:
-      "Maintaining alignment between evolving user needs and rapidly changing technical roadmaps.",
-  },
-
-  ServiceDesigner: {
-    id: "ServiceDesigner",
-    name: "Elise Bridge",
-    role: "Service Designer",
-    imgSrc: servicedesigner,
-    quote:
-      "Designing services means designing relationships ‚Äî between people, systems, and value.",
-    description:
-      "Improves how people experience services by aligning frontstage and backstage processes. Ensures coherent experiences across digital and human touchpoints.",
-    skills: [
-      "Service Blueprinting",
-      "Journey Mapping",
-      "Prototyping & Testing",
-      "Workshop Facilitation",
-    ],
-    responsibilities: [
-      "Analyze user needs and service processes",
-      "Develop service concepts and blueprints",
-      "Test and iterate service improvements",
-      "Facilitate collaboration across departments",
-    ],
-    needs:
-      "Visibility into internal processes and data to connect touchpoints effectively. Needs leadership support to address cross-departmental friction.",
-    painPoints:
-      "Service ownership often unclear, slowing implementation of improvements. Limited understanding of service design in product-focused teams.",
-    challenges:
-      "Turning holistic service concepts into tangible, actionable changes in complex organizations.",
-  },
-
-  VisualDesigner: {
-    id: "VisualDesigner",
-    name: "Fiona Hue",
-    role: "UI / Visual Designer",
-    imgSrc: uivisualdesigner,
-    quote:
-      "Visual design isn‚Äôt decoration ‚Äî it‚Äôs storytelling through color, type, and rhythm.",
-    description:
-      "Shapes visual systems and interfaces that communicate clearly and feel consistent across platforms. Blends aesthetic craft with functional clarity.",
-    skills: [
-      "Visual Design & Layout",
-      "Typography & Color Theory",
-      "Design Systems",
-      "Accessibility Awareness",
-    ],
-    responsibilities: [
-      "Create and refine visual interfaces and elements",
-      "Collaborate with UX Designers and Developers",
-      "Maintain style guides and design systems",
-      "Ensure consistency with brand identity",
-    ],
-    needs:
-      "Clear brand guidelines and consistent feedback from stakeholders. Appreciates collaboration with writers and motion designers for cohesive storytelling.",
-    painPoints:
-      "Design critique often focuses on taste rather than intent. Inconsistent use of design tokens across platforms causes rework.",
-    challenges:
-      "Preserving creative expression while scaling a unified design language across diverse products.",
-  },
-
-  UIDeveloper: {
-    id: "UIDeveloper",
-    name: "Max Forge",
-    role: "UI Developer",
-    imgSrc: uideveloper,
-    quote:
-      "I turn pixels into performance ‚Äî bridging design vision and code reality.",
-    description:
-      "Implements user interfaces that are performant, accessible, and maintainable. Works closely with design teams to bring prototypes to production fidelity.",
-    skills: [
-      "Frontend Development (HTML, CSS, JS)",
-      "Accessibility Implementation",
-      "Responsive Design",
-      "Code Optimization",
-    ],
-    responsibilities: [
-      "Translate designs into functional interfaces",
-      "Ensure accessibility and responsiveness",
-      "Collaborate with UX and Product teams",
-      "Optimize performance and maintain UI consistency",
-    ],
-    needs:
-      "Early access to design specifications and reusable component libraries. Needs collaboration tools that streamline handoffs and feedback cycles.",
-    painPoints:
-      "Last-minute design changes and inconsistent documentation cause rework. Balancing visual precision with technical constraints is demanding.",
-    challenges:
-      "Maintaining scalability and accessibility while meeting tight release schedules.",
-  },
-
-  UXArchitect: {
-    id: "UXArchitect",
-    name: "Nora Frame",
-    role: "UX Architect",
-    imgSrc: uxarchitect,
-    quote:
-      "I connect dots ‚Äî from research to structure to meaningful experience.",
-    description:
-      "Designs holistic experience architectures across systems, ensuring coherence and usability. Aligns interaction frameworks with business and technical strategy.",
-    skills: [
-      "Information Architecture",
-      "Interaction Frameworks",
-      "Prototyping",
-      "UX Evaluation",
-    ],
-    responsibilities: [
-      "Define experience structures and flows",
-      "Collaborate across UX, Dev, and PM",
-      "Ensure cross-platform coherence",
-      "Integrate UX strategy with design execution",
-    ],
-    needs:
-      "Cross-disciplinary collaboration and visibility into technical constraints. Requires clear ownership of the overall user experience structure.",
-    painPoints:
-      "Fragmented design ownership across products leads to inconsistent journeys. Architectural documentation often undervalued.",
-    challenges:
-      "Balancing innovation with scalability in complex, multi-system environments.",
-  },
-
-  UXDesigner: {
-    id: "UXDesigner",
-    name: "Lina Flow",
-    role: "UX Designer",
-    imgSrc: uxdesigner,
-    quote: "Design is how empathy becomes tangible.",
-    description:
-      "Creates intuitive digital experiences by combining research insights, design systems, and business context. Ensures usability, accessibility, and emotional resonance.",
-    skills: [
-      "Prototyping & Interaction Design",
-      "Information Architecture",
-      "Design Systems",
-      "User Testing",
-    ],
-    responsibilities: [
-      "Design and iterate on user flows and interfaces",
-      "Collaborate with researchers, PMs, and devs",
-      "Ensure accessibility and consistency across screens",
-      "Contribute to design system evolution",
-    ],
-    needs:
-      "Access to user insights early in the process and shared understanding of product goals. Values iterative feedback from both users and peers.",
-    painPoints:
-      "Competing priorities and changing requirements disrupt design continuity. Limited user exposure in some development cycles.",
-    challenges:
-      "Balancing design quality, speed, and stakeholder expectations in agile teams.",
-  },
-
-  UXManager: {
-    id: "UXManager",
-    name: "Julian North",
-    role: "UX Manager",
-    imgSrc: uxmanager,
-    quote:
-      "My job is to turn UX from a craft into an organizational capability.",
-    description:
-      "Builds and scales UX as a strategic discipline. Defines processes, grows teams, and ensures UX maturity across the organization through structure and culture.",
-    skills: [
-      "Leadership & Coaching",
-      "UX Strategy & Governance",
-      "Process Management",
-      "Stakeholder Alignment",
-    ],
-    responsibilities: [
-      "Establish UX vision and processes",
-      "Develop and mentor UX teams",
-      "Advocate user-centered decision-making",
-      "Measure and communicate UX impact",
-    ],
-    needs:
-      "Strong executive sponsorship and clear KPIs that demonstrate UX impact. Needs room to invest in team development and ResearchOps foundations.",
-    painPoints:
-      "UX maturity varies widely across departments, leading to inconsistent expectations. Leadership alignment often depends on individual advocates.",
-    challenges:
-      "Embedding UX as a measurable, strategic function without losing creative culture.",
-  },
-
-  UXResearcher: {
-    id: "UXResearcher",
-    name: "Rhea Insight",
-    role: "UX Researcher",
-    imgSrc: uxresearcher,
-    quote:
-      "I turn user behavior into clarity ‚Äî transforming questions into confident product decisions.",
-    description:
-      "Explores user needs, motivations, and contexts through mixed-method research. Translates findings into insights that inform product and strategic decisions.",
-    skills: [
-      "User Interviews & Testing",
-      "Data Analysis & Synthesis",
-      "ResearchOps",
-      "Insight Storytelling",
-    ],
-    responsibilities: [
-      "Plan and execute research studies",
-      "Translate findings into design recommendations",
-      "Collaborate across disciplines for evidence-based design",
-      "Maintain repositories and templates",
-    ],
-    needs:
-      "Early involvement in product discussions and clear research questions. Requires transparency about how insights influence decisions.",
-    painPoints:
-      "Tight timelines often limit the depth of exploration. Insights can lose impact without clear ownership in the product process.",
-    challenges:
-      "Balancing methodological rigor with speed while maintaining influence on design and strategy.",
-  },
-
-  UXStrategist: {
-    id: "UXStrategist",
-    name: "Eli Vision",
-    role: "UX Strategist",
-    imgSrc: uxstrategist,
-    quote:
-      "Strategy connects user value with business outcomes ‚Äî that‚Äôs where UX proves its worth.",
-    description:
-      "Defines how UX drives measurable impact. Connects insights, metrics, and design strategy to guide long-term product vision and portfolio priorities.",
-    skills: [
-      "UX Strategy & Roadmapping",
-      "Workshop Facilitation",
-      "Metrics & KPIs",
-      "Stakeholder Management",
-    ],
-    responsibilities: [
-      "Develop UX strategies and frameworks",
-      "Facilitate workshops to align vision",
-      "Connect UX outcomes with business goals",
-      "Evaluate maturity and recommend improvements",
-    ],
-    needs:
-      "Access to leadership and decision data to connect UX work to measurable outcomes. Needs organizational readiness for evidence-based strategy.",
-    painPoints:
-      "Difficulty proving ROI of UX due to disconnected measurement frameworks. Strategic alignment often fades during delivery phases.",
-    challenges:
-      "Translating long-term UX vision into actionable steps in fast-moving, execution-driven environments.",
-  },
-
-  UXWriter: {
-    id: "UXWriter",
-    name: "Maya Lex",
-    role: "UX Writer",
-    imgSrc: uxwriter,
-    quote:
-      "Words are design elements ‚Äî every sentence shapes the user‚Äôs experience.",
-    description:
-      "Crafts clear, inclusive language that helps users understand, navigate, and succeed within digital products. Aligns content strategy with design intent and accessibility.",
-    skills: [
-      "Microcopy & UX Writing",
-      "Content Strategy",
-      "Localization & Accessibility",
-      "Voice & Tone",
-    ],
-    responsibilities: [
-      "Write clear and inclusive interface copy",
-      "Collaborate with designers and PMs",
-      "Maintain and evolve content guidelines",
-      "Ensure consistency across touchpoints",
-    ],
-    needs:
-      "Early collaboration in design cycles to align voice and UX intent. Requires a shared language system and documentation standards.",
-    painPoints:
-      "Being included too late limits the ability to shape tone and clarity. Content work often underestimated compared to visual design.",
-    challenges:
-      "Advocating for language as part of UX strategy while managing consistency across products and locales.",
-  },
-};
-
-
 ==== \src\hooks\useActivePhase.ts ====
 import { useEffect, useState } from "react";
 
@@ -2845,470 +2699,6 @@ export function useActivePhase() {
   }, []);
 
   return active;
-}
-
-
-==== \src\lib\SkillmapColors.ts ====
-// src/lib/SkillmapColors.ts
-import { colors } from "@/lib/tokens";
-
-/**
- * Skillmap-Farben (Design-System-konform)
- * bg ‚Üí blasse Variante (f√ºr Fl√§chen / Legende)
- * strong ‚Üí kr√§ftige Variante (f√ºr Punkte im Chart)
- */
-export const themeColors: Record<
-  string,
-  { bg: string; strong: string; hex: string }
-> = {
-  "Coordination & Data Management": {
-    bg: colors.notion.gray.bg,
-    strong: colors.notion.gray.text,
-    hex: "#6B7280",
-  },
-  "Evaluative Testing": {
-    bg: colors.notion.orange.bg,
-    strong: colors.notion.orange.text,
-    hex: "#F59E0B",
-  },
-  "Debrief & Analysis": {
-    bg: colors.notion.brown.bg,
-    strong: colors.notion.brown.text,
-    hex: "#92400E",
-  },
-  "Interview Planning & Execution": {
-    bg: colors.notion.blue.bg,
-    strong: colors.notion.blue.text,
-    hex: "#3B82F6",
-  },
-  "Basic Quantitative Work": {
-    bg: colors.notion.yellow.bg,
-    strong: colors.notion.yellow.text,
-    hex: "#EAB308",
-  },
-  Synthesis: {
-    bg: colors.notion.purple.bg,
-    strong: colors.notion.purple.text,
-    hex: "#8B5CF6",
-  },
-  "Stakeholder Engagement": {
-    bg: colors.notion.pink.bg,
-    strong: colors.notion.pink.text,
-    hex: "#EC4899",
-  },
-  "Structured Modeling": {
-    bg: colors.notion.green.bg,
-    strong: colors.notion.green.text,
-    hex: "#10B981",
-  },
-  "Integration in Service Delivery": {
-    bg: colors.notion.default.bg,
-    strong: colors.notion.default.text,
-    hex: "#4B5563",
-  },
-  Broadcasting: {
-    bg: colors.notion.red.bg,
-    strong: colors.notion.red.text,
-    hex: "#EF4444",
-  },
-  "Business Alignment": {
-    bg: colors.notion.yellow.bg,
-    strong: colors.notion.yellow.text,
-    hex: "#EAB308",
-  },
-  "Amplify the Practice": {
-    bg: colors.notion.purple.bg,
-    strong: colors.notion.purple.text,
-    hex: "#8B5CF6",
-  },
-  "Strategic Direction": {
-    bg: colors.notion.orange.bg,
-    strong: colors.notion.orange.text,
-    hex: "#F59E0B",
-  },
-};
-
-
-==== \src\lib\tagColors.ts ====
-import { NotionColor } from "@/lib/tokens";
-
-export const tagColorMap: Record<string, NotionColor> = {
-  Leadership: "blue",
-  Quant: "yellow",
-  Consulting: "green",
-  ResearchOps: "purple",
-  Insurance: "red",
-  "E-commerce": "orange",
-  B2B: "brown",
-  B2C: "pink",
-  B2B2C: "blue",
-  Experiments: "purple",
-  Enterprise: "gray",
-};
-
-
-==== \src\lib\tokens.ts ====
-// ================================
-// üé® COLORS
-// ================================
-export const palette = {
-  notion: {
-    default: { text: "text-[#4A4846] dark:text-[#D4D4D4]", bg: "bg-[#F7F7F7] dark:bg-[#191919]" },
-    gray: { text: "text-[#4A4846] dark:text-[#D4D4D4]", bg: "bg-[#F1F1EF] dark:bg-[#252525]" },
-    brown: { text: "text-[#976D57] dark:text-[#A27763]", bg: "bg-[#F3EEEE] dark:bg-[#2E2724]" },
-    orange: { text: "text-[#CC782F] dark:text-[#CB7B37]", bg: "bg-[#F8ECDF] dark:bg-[#36291F]" },
-    yellow: { text: "text-[#C29343] dark:text-[#C19138]", bg: "bg-[#FAF3DD] dark:bg-[#372E20]" },
-    green: { text: "text-[#548164] dark:text-[#4F9768]", bg: "bg-[#EEF3ED] dark:bg-[#242B26]" },
-    blue: { text: "text-[#487CA5] dark:text-[#447ACB]", bg: "bg-[#E9F3F7] dark:bg-[#1F282D]" },
-    purple: { text: "text-[#8A67AB] dark:text-[#865DBB]", bg: "bg-[#F6F3F8] dark:bg-[#2A2430]" },
-    pink: { text: "text-[#B35488] dark:text-[#BA4A78]", bg: "bg-[#F9F2F5] dark:bg-[#2E2328]" },
-    red: { text: "text-[#C4554D] dark:text-[#BE524B]", bg: "bg-[#FAECEC] dark:bg-[#332523]" },
-  },
-} as const;
-
-export const colors = {
-  background: { bg: "bg-background", text: "text-foreground" },
-  border: "border-border",
-  primary: { bg: "bg-primary", text: "text-primary-foreground" },
-  secondary: { bg: "bg-secondary", text: "text-secondary-foreground" },
-  accent: { bg: "bg-accent", text: "text-accent-foreground" },
-  muted: { bg: "bg-muted", text: "text-muted-foreground" },
-  notion: palette.notion,
-  tile: {
-    bg: "bg-[#F9F9F9] dark:bg-[#1C1C1C]",
-    text: "text-muted-foreground",
-  },
-  success: { bg: "bg-green-500", text: "text-green-50" },
-  warning: { bg: "bg-yellow-500", text: "text-yellow-900" },
-  error: { bg: "bg-red-500", text: "text-red-50" },
-  info: { bg: "bg-blue-500", text: "text-blue-50" },
-  overlay: { bg: "bg-black/50" },
-  foreground: "text-foreground",
-} as const;
-
-export type NotionColor = keyof typeof palette.notion;
-
-// ================================
-// ‚úçÔ∏è TYPOGRAPHY
-// ================================
-export const typography = {
-  hero: {
-    font: "[font-family:var(--font-display)]",
-    size: "text-5xl md:text-7xl",
-    weight: "font-extrabold",
-    tracking: "tracking-tight",
-    leading: "leading-tight",
-  },
-    sectionTitle: {
-    font: "[font-family:var(--font-display)]",
-    size: "text-3xl md:text-5xl",
-    weight: "font-bold",
-    tracking: "tracking-tight",
-    leading: "leading-snug",
-  },
-  sectionHeading: {
-    font: "[font-family:var(--font-display)]",
-    size: "text-2xl md:text-3xl",
-    weight: "font-semibold",
-    tracking: "tracking-tight",
-    leading: "leading-snug",
-    color: "text-foreground",
-  },
-  subtitle: {
-    font: "[font-family:var(--font-sans)]",
-    size: "text-lg",
-    weight: "font-semibold",
-    leading: "leading-relaxed",
-    color: "text-foreground/90",
-  },
-  body: {
-    font: "[font-family:var(--font-sans)]",
-    size: "text-base md:text-lg",
-    weight: "font-normal",
-    leading: "leading-relaxed",
-  },
-  small: {
-    font: "[font-family:var(--font-sans)]",
-    size: "text-sm",
-    weight: "font-medium",
-    leading: "leading-normal",
-    color: "text-muted-foreground",
-  },
-  tag: {
-    font: "[font-family:var(--font-sans)]",
-    size: "text-xs",
-    weight: "font-medium",
-    leading: "leading-tight",
-  },
-  caption: {
-    font: "[font-family:var(--font-sans)]",
-    size: "text-xs",
-    weight: "font-normal",
-    leading: "leading-snug",
-    color: "text-muted-foreground",
-  },
-  quote: {
-    font: "[font-family:var(--font-serif)]",
-    size: "text-xl md:text-2xl",
-    weight: "font-medium",
-    leading: "leading-relaxed",
-    color: "text-foreground italic",
-  },
-  code: {
-    font: "font-mono",
-    size: "text-sm",
-    weight: "font-normal",
-    leading: "leading-snug",
-    color: "text-accent-foreground",
-  },
-  button: {
-    font: "[font-family:var(--font-sans)]",
-    size: "text-sm",
-    weight: "font-medium",
-    leading: "leading-normal",
-  },
-} as const;
-
-// ================================
-// üìñ SECTION INTRO
-// ================================
-export const sectionIntro = {
-  default: "max-w-4xl",
-  full: "max-w-none",
-} as const;
-
-// ================================
-// üìê SPACING & LAYOUT
-// ================================
-export const sectionSpacing = {
-  sm: "py-8",
-  md: "py-16",
-  lg: "py-24",
-  xl: "py-32",
-} as const;
-
-export const sectionInnerSpacing = {
-  titleMargin: "mb-12",
-  subtitleMargin: "mb-8",
-} as const;
-
-export const spacing = {
-  mt2: "mt-2",
-  mt3: "mt-3",
-  mt4: "mt-4",
-  mt5: "mt-5",
-  mt6: "mt-6",
-  mt8: "mt-8",
-  mt10: "mt-10",
-  mt12: "mt-12",
-  mt14: "mt-14",
-  mt16: "mt-16",
-  mt20: "mt-20",
-  mt24: "mt-24",
-  mtLg: "mt-10",
-  mb2: "mb-2",
-  mb3: "mb-3",
-  mb4: "mb-4",
-  mb6: "mb-6",
-  mb8: "mb-8",
-  mb10: "mb-10",
-  mb12: "mb-12",
-  mb14: "mb-14",
-  mb16: "mb-16",
-  mb20: "mb-20",
-  mb24: "mb-24",
-  pt4: "pt-4",
-  pt6: "pt-6",
-  pb4: "pb-4",
-  pb6: "pb-6",
-  pl4: "pl-4",
-  pl8: "pl-8",
-  p3: "p-3",
-  p4: "p-4",
-  p6: "p-6",
-  p8: "p-8",
-  py4: "py-4",
-  py8: "py-8",
-  py12: "py-12",
-  pxSection: "px-6 md:px-8",
-  pxCard: "px-4 md:px-6",
-  gap2: "gap-2",
-  gap3: "gap-3",
-  gap4: "gap-4",
-  gap6: "gap-6",
-  gap8: "gap-8",
-  gap10: "gap-10",
-  stackXs: "space-y-1",
-  stackSm: "space-y-2",
-  stackMd: "space-y-4",
-  stackLg: "space-y-6",
-  blockGapSm: "space-y-6",
-  blockGapMd: "space-y-10",
-  blockGapLg: "space-y-16",
-} as const;
-
-// ‚úÖ layout mit dynamischer Breite (f√ºr 4K, WQHD usw.)
-export const layout = {
- containerDynamic: "mx-auto w-full max-w-[1900px] px-[3vw]", // üîπ NEU: responsive Container
-  containerNarrow: "mx-auto max-w-[1100px] px-4 sm:px-6 lg:px-8",
-  containerDefault: "mx-auto max-w-[1280px] px-6 lg:px-8",
-  containerWide: "mx-auto max-w-[1440px] px-8 lg:px-10",
-  container: "mx-auto max-w-6xl px-4 sm:px-6 lg:px-8",
-
-  gridGap: spacing.gap6,
-  gridCols2: "grid md:grid-cols-2",
-  gridCols3: "grid sm:grid-cols-2 lg:grid-cols-3",
-  gridCols4: "grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4",
-  gridHero: "md:grid-cols-[1.1fr_0.9fr]",
-  flexCenter: "flex items-center justify-center",
-  flexBetween: "flex items-center justify-between",
-  flexColCenter: "flex flex-col items-center justify-center",
-  flexCol: "flex flex-col",
-  itemsStart: "items-start",
-  textLeft: "text-left",
-  block: "block",
-  imageCover: "w-full max-h-40 object-cover",
-  stickyBelowNav: "sticky top-24 md:top-28",
-  stickyTop: "sticky top-0",
-  fullWidth: "w-full",
-  maxWidthText: "max-w-5xl mx-auto",
-  fullHeight: "h-full",
-  scrollOffset: "scroll-mt-36 md:scroll-mt-40",
-} as const;
-
-// ================================
-// üî∫ RADII & SHADOWS
-// ================================
-export const radii = {
-  none: "rounded-none",
-  sm: "rounded-md",
-  md: "rounded-lg",
-  lg: "rounded-xl",
-  xl: "rounded-2xl",
-  xxl: "rounded-3xl",
-  full: "rounded-full",
-} as const;
-
-export const shadows = {
-  none: "shadow-none",
-  sm: "shadow-sm",
-  md: "shadow-md",
-  lg: "shadow-lg",
-  xl: "shadow-xl",
-  inner: "shadow-inner",
-} as const;
-
-// ================================
-// üîò BUTTON VARIANTS + SIZES
-// ================================
-export const buttonVariants = {
-  base: "inline-flex items-center justify-center rounded-3xl px-5 py-2.5 transition-colors duration-200",
-  primary: "bg-primary text-primary-foreground hover:bg-neutral-900 dark:hover:bg-neutral-200",
- secondary: "bg-gray-100 dark:bg-neutral-900 border border-border text-foreground hover:bg-gray-200 dark:hover:bg-neutral-800",
-  ghost: "text-foreground hover:bg-neutral-200 dark:hover:bg-neutral-700",
-  danger: "bg-red-600 text-white hover:bg-red-700",
-  success: "bg-green-600 text-white hover:bg-green-700",
-  link: "bg-transparent text-primary underline-offset-2 hover:underline",
-  minimal: "bg-transparent text-foreground hover:bg-neutral-200 dark:hover:bg-neutral-600",
-} as const;
-
-export const buttonSizes = {
-  sm: "px-3 py-1.5 text-sm",
-  md: "px-5 py-2.5 text-base",
-  lg: "px-6 py-3 text-lg",
-} as const;
-
-// ================================
-// üñ± HOVER EFFECTS
-// ================================
-export const hoverEffects = {
-  subtleOpacity: "transition-opacity duration-200 hover:opacity-80",
-  lift: "transition-transform duration-300 hover:-translate-y-0.5 hover:scale-[1.01]",
-  bgAccent: "hover:bg-accent/80",
-  scale: "transition-transform duration-200 hover:scale-105",
-  rotate: "transition-transform duration-200 hover:rotate-6",
-  slide: "transition-all duration-300 ease-in-out",
-  smoothLift:
-    "transition-all duration-300 ease-in-out hover:scale-[1.01] hover:bg-neutral-200 dark:hover:bg-neutral-800",
-} as const;
-
-// ================================
-// üé¨ TRANSITIONS
-// ================================
-export const transitions = {
-  default: "transition duration-200 ease-in-out",
-  shadow: "transition-shadow duration-200",
-  opacity: "transition-opacity duration-200",
-} as const;
-
-// ================================
-// üìä Z-INDEX
-// ================================
-export const zIndex = {
-  nav: "z-50",
-  modal: "z-40",
-  dropdown: "z-30",
-  tooltip: "z-60",
-  banner: "z-20",
-  sticky: "z-10",
-} as const;
-
-// ================================
-// ‚öôÔ∏è ICON SIZES
-// ================================
-export const icon = {
-  sm: "h-4 w-4",
-  md: "h-6 w-6",
-  lg: "h-12 w-12",
-  xl: "h-16 w-16",
-} as const;
-
-// ================================
-// üî∑ REOPS COLOR MAPPING
-// ================================
-export const reopsColors = {
-  governance: "#E8ECF7",
-  knowledge: "#EAF7F1",
-  participant: "#FFF3E6",
-  tools: "#E9F2FF",
-  enablement: "#F2F9E8",
-  culture: "#F9E8EE",
-} as const;
-
-// ================================
-// üé® NOTION HEX COLOR MAP
-// ================================
-export const notionHexMap = {
-  default: { text: "#373530", bg: "#F7F7F7" },
-  gray: { text: "#787774", bg: "#F1F1EF" },
-  brown: { text: "#976D57", bg: "#F3EEEE" },
-  orange: { text: "#CC782F", bg: "#F8ECDF" },
-  yellow: { text: "#C29343", bg: "#FAF3DD" },
-  green: { text: "#548164", bg: "#EEF3ED" },
-  blue: { text: "#487CA5", bg: "#E9F3F7" },
-  purple: { text: "#8A67AB", bg: "#F6F3F8" },
-  pink: { text: "#B35488", bg: "#F9F2F5" },
-  red: { text: "#C4554D", bg: "#FAECEC" },
-} as const;
-
-// ================================
-// üìä CHART TOKEN HELPERS
-// ================================
-export const chartTokens = {
-  fontFamily: "'Inter', 'Helvetica Neue', Arial, sans-serif",
-  fontSize: { sm: 12, md: 16, lg: 20, xl: 24 },
-  labelColor: notionHexMap.default.text,
-  gridColor: "#E5E7EB",
-  angleColor: "#E2E8F0",
-};
-
-
-==== \src\lib\utils.ts ====
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
 }
 
 
@@ -3522,696 +2912,6 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 
-==== \src\pages\cv\index.tsx ====
-import PageLayout from "@/components/layout/PageLayout";
-import SEOPage from "@/components/common/SEOPage";
-
-import CVIntroSection from "@/components/sections/cv/CVIntroSection";
-import ProfessionalExperienceSection from "@/components/sections/cv/ProfessionalExperienceSection";
-import PersonalExperienceSection from "@/components/sections/cv/PersonalExperienceSection";
-
-export default function CVPage() {
-  return (
-    <PageLayout
-      title="Curriculum Vitae"
-      intro="Highlights of my professional background and foundational experience."
-    >
-
-      <SEOPage page="cv" />
-
-      <ProfessionalExperienceSection />
-      <PersonalExperienceSection />
-      <CVIntroSection />
-    </PageLayout>
-  );
-}
-
-
-==== \src\pages\expertise\ImpactMeasurement\index.tsx ====
-import PageLayout from "@/components/layout/PageLayout";
-import SEOPage from "@/components/common/SEOPage"; 
-
-import headerImg from "@/assets/images/expertise/impactmeasurement/impact.jpg";
-
-import {
-  ImpactMeasurementIntroSection,
-  ImpactMeasurementResearchSection,
-  ImpactMeasurementUXSection,
-  ImpactMeasurementHeartSection,
-  ImpactMeasurementSummarySection,
-} from "@/components/sections/expertise/impactmeasurement";
-
-export default function ImpactMeasurementPage() {
-  return (
-    <PageLayout
-      title="Impact Measurement"
-      intro="Measuring, proving, and communicating UX impact."
-      headerImage={headerImg}
-      width="wide"
-    >
-
-      <SEOPage page="expertise_impactMeasurement" />
-
-      <ImpactMeasurementIntroSection />
-      <ImpactMeasurementResearchSection />
-      <ImpactMeasurementUXSection />
-      <ImpactMeasurementHeartSection />
-      <ImpactMeasurementSummarySection />
-    </PageLayout>
-  );
-}
-
-
-==== \src\pages\expertise\ResearchOps\index.tsx ====
-import PageLayout from "@/components/layout/PageLayout";
-import SEOPage from "@/components/common/SEOPage"; 
-
-import headerImg from "@/assets/images/expertise/researchops/plant.jpg";
-
-import {
-  ResearchOpsIntroSection,
-  ResearchOpsFrameworkSection,
-  ResearchOpsMaturitySection,
-  ResearchOpsValueSection,
-  ResearchOpsLeadershipSection,
-} from "@/components/sections/expertise/researchops";
-
-export default function ResearchOpsPage() {
-  return (
-    <PageLayout
-      title="ResearchOps"
-      intro="Building the systems that make research scalable."
-      headerImage={headerImg}
-      width="wide"
-    >
-
-      <SEOPage page="expertise_researchOps" />
-
-      <ResearchOpsIntroSection />
-      <ResearchOpsFrameworkSection />
-      <ResearchOpsMaturitySection />
-      <ResearchOpsValueSection />
-      <ResearchOpsLeadershipSection />
-    </PageLayout>
-  );
-}
-
-
-==== \src\pages\expertise\StrategicUXResearch\index.tsx ====
-import PageLayout from "@/components/layout/PageLayout";
-import SEOPage from "@/components/common/SEOPage"; 
-
-import headerImg from "@/assets/images/expertise/strategicuxresearch/strategicuxr.jpg";
-
-import {
-  StrategicUXIntroSection,
-  StrategicUXFrameworkSection,
-  StrategicUXRITESection,
-  StrategicUXOKRSection,
-} from "@/components/sections/expertise/strategicuxresearch";
-
-export default function StrategicUXResearchPage() {
-  return (
-    <PageLayout
-      title="Strategic UX Research"
-      intro="Turning UX Research into a strategic system."
-      headerImage={headerImg}
-      width="wide"
-    >
-
-      <SEOPage page="expertise_strategicUXResearch" />
-
-      <StrategicUXIntroSection />
-      <StrategicUXFrameworkSection />
-      <StrategicUXRITESection />
-      <StrategicUXOKRSection />
-    </PageLayout>
-  );
-}
-
-
-==== \src\pages\expertise\TeamLeadership\skillassessment\index.tsx ====
-import PageLayout from "@/components/layout/PageLayout";
-import SEOPage from "@/components/common/SEOPage";
-
-import {
-  SkillAssessmentIntroSection,
-  SkillAssessmentSummarySection,
-} from "@/components/sections/expertise/TeamLeadership/skillassessment";
-
-export default function SkillAssessmentPage() {
-  return (
-    <PageLayout
-      title="Skill Assessment Center"
-      intro="Reflect on strengths and team capabilities."
-    >
-
-      <SEOPage page="expertise_teamLeadership_skillassessment" />
-
-      <SkillAssessmentIntroSection />
-      <SkillAssessmentSummarySection />
-    </PageLayout>
-  );
-}
-
-
-==== \src\pages\expertise\TeamLeadership\index.tsx ====
-import PageLayout from "@/components/layout/PageLayout";
-import SEOPage from "@/components/common/SEOPage"; 
-
-import headerImg from "@/assets/images/expertise/teamleadership/team.jpg";
-
-import {
-  TeamLeadershipPhilosophySection,
-  TeamLeadershipRoleProfileSection,
-  TeamLeadershipSkillsSection,
-} from "@/components/sections/expertise/TeamLeadership";
-
-import UXRolesExplorer from "@/components/sections/expertise/TeamLeadership/UXRolesExplorer";
-
-export default function TeamLeadershipPage() {
-  return (
-    <PageLayout
-      title="Team Leadership & Mentoring"
-      intro="Building high-performing UX teams."
-      headerImage={headerImg}
-      width="wide"
-    >
-
-      <SEOPage page="expertise_teamLeadership" />
-
-      <TeamLeadershipPhilosophySection />
-      <TeamLeadershipSkillsSection />
-      <UXRolesExplorer />
-      <TeamLeadershipRoleProfileSection />
-    </PageLayout>
-  );
-}
-
-
-==== \src\pages\expertise\UXStrategy\index.tsx ====
-import PageLayout from "@/components/layout/PageLayout";
-import SEOPage from "@/components/common/SEOPage"; 
-
-import headerImg from "@/assets/images/expertise/uxstrategy/schach1.jpg";
-
-import {
-  ValueOfUXStrategy,
-  VisionAlignment,
-  DiscoveryDelivery,
-  Prioritization,
-} from "@/components/sections/expertise/uxstrategy";
-
-export default function UXStrategyPage() {
-  return (
-    <PageLayout
-      title="UX Strategy"
-      intro="How evidence-based UX Research informs decisions."
-      headerImage={headerImg}
-      width="wide"
-    >
-
-      <SEOPage page="expertise_uxStrategy" />
-
-      <ValueOfUXStrategy />
-      <VisionAlignment />
-      <DiscoveryDelivery />
-      <Prioritization />
-    </PageLayout>
-  );
-}
-
-
-==== \src\pages\projects\CarInsurance\index.tsx ====
-import PageLayout from "@/components/layout/PageLayout";
-import SEOPage from "@/components/common/SEOPage";
-
-import headerImg from "@/assets/images/projects/carinsurance/CarInsurance.png";
-
-import {
-  CarInsuranceBLUFSection,
-  CarInsuranceProcessSection,
-} from "@/components/sections/projects/CarInsurance";
-
-export default function CarInsurancePage() {
-  return (
-    <PageLayout
-      title="ADAC ‚Äì Car Insurance Redesign"
-      intro="From apologies to confidence."
-      headerImage={headerImg}
-      width="wide"
-    >
-
-      <SEOPage page="project_carInsurance" />
-
-      <CarInsuranceBLUFSection />
-      <CarInsuranceProcessSection />
-    </PageLayout>
-  );
-}
-
-
-==== \src\pages\projects\DeleteCase\index.tsx ====
-import PageLayout from "@/components/layout/PageLayout";
-import SEOPage from "@/components/common/SEOPage";
-
-/**
- * Micro Interaction ‚Äì Delete Case (WIP)
- * --------------------------------------------
- * This page is not final and must NOT be indexed.
- * ‚Üí noindex = true prevents canonical + JSON-LD
- */
-export default function DeleteCasePage() {
-  return (
-    <PageLayout
-      title="Micro Interaction ‚Äì Delete Case"
-      intro="A small change with a massive cumulative impact. (Work in progress)"
-      width="wide"
-    >
-      {/* ‚≠ê SEO ‚Äì noindex ‚Üí no canonical, no JSON-LD */}
-      <SEOPage page="project_deleteCase" noindex />
-
-      {/* Placeholder content */}
-      <div className="py-24 text-center text-muted-foreground">
-        <h2 className="text-xl font-semibold mb-2">Work in progress</h2>
-        <p>More content will follow soon.</p>
-      </div>
-    </PageLayout>
-  );
-}
-
-
-==== \src\pages\projects\InsuranceBroker\index.tsx ====
-import PageLayout from "@/components/layout/PageLayout";
-import SEOPage from "@/components/common/SEOPage";
-
-import headerImg from "@/assets/images/projects/b2b2c/B2B2COptimization.jpg";
-
-import {
-  BrokerBLUFSection,
-  BrokerProcessSection,
-  BrokerImpactSection,
-} from "@/components/sections/projects/swisslife";
-
-export default function InsuranceBrokerDiscovery() {
-  return (
-    <PageLayout
-      title="Insurance Broker Discovery Research"
-      intro="Understanding advisory workflows and friction points."
-      headerImage={headerImg}
-      width="wide"
-    >
-
-      <SEOPage page="project_insuranceBroker" />
-
-      <BrokerBLUFSection />
-      <BrokerProcessSection />
-      <BrokerImpactSection />
-    </PageLayout>
-  );
-}
-
-
-==== \src\pages\projects\kanostrategy\index.tsx ====
-import PageLayout from "@/components/layout/PageLayout";
-import SEOPage from "@/components/common/SEOPage";
-
-import headerImg from "@/assets/images/projects/kanostrategy/headerkano.jpg";
-
-import {
-  KanoBLUFSection,
-  KanoProcessSection,
-  KanoImpactSection,
-} from "@/components/sections/projects/kanostrategy";
-
-export default function KanoStrategyPage() {
-  return (
-    <PageLayout
-      title="A Winning UX Strategy Using the Kano Model"
-      intro="Turning scattered ideas into strategic clarity ‚Äî identifying which features truly drive customer satisfaction."
-      headerImage={headerImg}
-      width="wide"
-    >
-      {/* ‚≠ê SEO (Meta, OG, Twitter, Canonical) */}
-      <SEOPage page="project_kanostrategy" />
-
-      <KanoBLUFSection />
-      <KanoProcessSection />
-      <KanoImpactSection />
-    </PageLayout>
-  );
-}
-
-
-
-==== \src\pages\projects\reopsimp\index.tsx ====
-// src/pages/projects/reopsimp/index.tsx
-
-import PageLayout from "@/components/layout/PageLayout";
-import SEOPage from "@/components/common/SEOPage";
-
-/**
- * ResearchOps Implementation ‚Äì Work in Progress
- * --------------------------------------------
- * This page is under construction and should NOT be indexed.
- * It serves as a placeholder for locked / WIP projects.
- */
-export default function ReOpsImplementationPage() {
-  return (
-    <PageLayout
-      title="ResearchOps Implementation"
-      intro="Establishing scalable ResearchOps foundations ‚Äî governance, tooling, workflows and enablement. (Work in progress)"
-      width="wide"
-    >
-
-      {/* ‚≠ê SEO ‚Äì noindex, no canonical, no JSON-LD */}
-      <SEOPage page="project_reopsimplementation" noindex />
-
-      {/* Minimal placeholder */}
-      <div className="py-24 text-center text-muted-foreground">
-        <h2 className="text-xl font-semibold mb-3">Work in progress</h2>
-        <p className="max-w-xl mx-auto">
-          This project page is currently being prepared.
-          More content and visual assets will follow soon.
-        </p>
-      </div>
-    </PageLayout>
-  );
-}
-
-
-==== \src\pages\projects\UXPortfolio\index.tsx ====
-// src/pages/projects/UXPortfolio/index.tsx
-
-import PageLayout from "@/components/layout/PageLayout";
-import SEOPage from "@/components/common/SEOPage";
-
-import headerImg from "@/assets/images/headers/home/headerhome.jpg";
-
-import {
-  UXPortfolioBLUFSection,
-  UXPortfolioProcessSection,
-  UXPortfolioDesignSystemSection,
-  UXPortfolioImpactSection,
-} from "@/components/sections/projects/UXPortfolio";
-
-/**
- * UX Portfolio Project Page
- * --------------------------------------------
- * Treated as a case study with design system documentation.
- * JSON-LD is handled automatically via SEOPage.
- */
-export default function UXPortfolioPage() {
-  return (
-    <PageLayout
-      title="UX Portfolio & Design System"
-      intro="How I turned my personal portfolio into a small product: structured around positioning, a lean design system, and a maintainable content model for projects and expertise."
-      headerImage={headerImg}
-      width="wide"
-    >
-
-      {/* ‚≠ê SEO ‚Äì structured data + canonical */}
-      <SEOPage page="project_uxPortfolio" />
-
-      <UXPortfolioBLUFSection />
-      <UXPortfolioProcessSection />
-      <UXPortfolioDesignSystemSection />
-      <UXPortfolioImpactSection />
-    </PageLayout>
-  );
-}
-
-
-==== \src\pages\projects\workshop\index.tsx ====
-// src/pages/projects/workshop/index.tsx
-
-import PageLayout from "@/components/layout/PageLayout";
-import SEOPage from "@/components/common/SEOPage";
-
-import headerImg from "@/assets/images/projects/workshop/haderws.jpg";
-
-import {
-  WorkshopBLUFSection,
-  WorkshopProcessSection,
-} from "@/components/sections/projects/workshop";
-
-/**
- * Team UX Research Culture Kickstart
- * --------------------------------------------
- * Co-creation workshop to align teams and drive UX Research Maturity.
- * JSON-LD is automatically handled by SEOPage.
- */
-export default function WorkshopPage() {
-  return (
-    <PageLayout
-      title="Team UX Research Culture Kickstart"
-      intro="From assessment to alignment ‚Äî co-creating actionable solutions to advance UX Research maturity."
-      headerImage={headerImg}
-      width="wide"
-    >
-
-      {/* ‚≠ê SEO (Meta, OG, Twitter, Canonical, JSON-LD) */}
-      <SEOPage page="project_workshop" />
-
-      <WorkshopBLUFSection />
-      <WorkshopProcessSection />
-    </PageLayout>
-  );
-}
-
-
-==== \src\pages\projects\ZooplusPricing\index.tsx ====
-// src/pages/projects/ZooplusPricing/index.tsx
-
-import PageLayout from "@/components/layout/PageLayout";
-import SEOPage from "@/components/common/SEOPage";
-
-import headerImg from "@/assets/images/projects/pricingtesting/PricingUsabilityTesting.jpg";
-
-import {
-  PricingBLUFSection,
-  PricingUseCaseSection,
-  PricingImpactSection,
-} from "@/components/sections/projects/ZooplusPricing";
-
-/**
- * Pricing Usability Testing Case Study
- * --------------------------------------------
- * JSON-LD + Metadata are automatically handled by SEOPage.
- */
-export default function PricingPage() {
-  return (
-    <PageLayout
-      title="Pricing Usability Testing"
-      intro="From hesitation to trust ‚Äî clarifying how prices are perceived, understood, and believed."
-      headerImage={headerImg}
-      width="wide"
-    >
-      {/* ‚≠ê SEO ‚Äì auto JSON-LD + canonical */}
-      <SEOPage page="project_pricing" />
-
-      <div className="space-y-28 md:space-y-36">
-        <PricingBLUFSection />
-        <PricingUseCaseSection />
-        <PricingImpactSection />
-      </div>
-    </PageLayout>
-  );
-}
-
-
-==== \src\pages\projects\ZooplusReOps\index.tsx ====
-// src/pages/projects/ZooplusReOps/index.tsx
-
-import PageLayout from "@/components/layout/PageLayout";
-import SEOPage from "@/components/common/SEOPage";
-
-/**
- * ResearchOps & Agile UX ‚Äì Work in Progress
- * --------------------------------------------
- * This page is still under construction and should NOT be indexed.
- */
-export default function ZooplusReOpsPage() {
-  return (
-    <PageLayout
-      title="ResearchOps & Agile UX"
-      intro="Establishing structures for scalable, efficient UX Research. (Work in progress)"
-      width="wide"
-    >
-      {/* ‚≠ê SEO ‚Äì noindex, no canonical, no JSON-LD */}
-      <SEOPage page="project_zooplusreops" noindex />
-
-      {/* Minimal placeholder */}
-      <div className="py-24 text-center text-muted-foreground">
-        <h2 className="text-xl font-semibold mb-2">Work in progress</h2>
-        <p>More content will follow soon.</p>
-      </div>
-    </PageLayout>
-  );
-}
-
-
-==== \src\pages\shared\Imprint.tsx ====
-// src/pages/shared/Imprint.tsx
-
-import PageLayout from "@/components/layout/PageLayout";
-import SEOPage from "@/components/common/SEOPage";
-import ImprintSection from "@/components/common/ImprintSection";
-import { Helmet } from "react-helmet-async";
-
-export default function ImprintPage() {
-  return (
-    <PageLayout title="Imprint">
-
-      {/* ‚≠ê SEO ‚Äì indexed + canonical */}
-      <SEOPage 
-        page="page_imprint"
-      />
-
-      {/* ‚≠ê Custom JSON-LD for legal imprint */}
-      <Helmet>
-        <script type="application/ld+json">
-          {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "LegalService",
-            "name": "Imprint ‚Äì Felix Bruckmeier",
-            "url": "https://felixbruckmeier.github.io/imprint",
-            "areaServed": "Worldwide",
-            "provider": {
-              "@type": "Person",
-              "name": "Felix Bruckmeier",
-              "jobTitle": "Senior UX Researcher",
-              "url": "https://felixbruckmeier.github.io/",
-              "image": "https://felixbruckmeier.github.io/og-image.png"
-            },
-            "publisher": {
-              "@type": "Organization",
-              "name": "Felix Bruckmeier UX Research",
-              "logo": {
-                "@type": "ImageObject",
-                "url": "https://felixbruckmeier.github.io/og-image.png"
-              }
-            }
-          })}
-        </script>
-      </Helmet>
-
-      <ImprintSection />
-    </PageLayout>
-  );
-}
-
-
-==== \src\pages\shared\Privacy.tsx ====
-// src/pages/shared/Privacy.tsx
-
-import { Helmet } from "react-helmet-async";
-import PageLayout from "@/components/layout/PageLayout";
-import SEOPage from "@/components/common/SEOPage";
-import PrivacySection from "@/components/common/PrivacySection";
-
-export default function PrivacyPage() {
-  return (
-    <PageLayout title="Privacy Policy">
-
-      {/* ‚≠ê SEO ‚Äì privacy page MUST be indexed + canonical */}
-      <SEOPage page="page_privacy" />
-
-      {/* ‚≠ê Custom JSON-LD specifically for this page */}
-      <Helmet>
-        <script type="application/ld+json">
-          {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "PrivacyPolicy",
-            "name": "Privacy Policy ‚Äì Felix Bruckmeier",
-            "url": "https://felixbruckmeier.github.io/privacy",
-            "publisher": {
-              "@type": "Person",
-              "name": "Felix Bruckmeier",
-              "url": "https://felixbruckmeier.github.io"
-            }
-          })}
-        </script>
-      </Helmet>
-
-      <PrivacySection />
-    </PageLayout>
-  );
-}
-
-
-==== \src\pages\Home.tsx ====
-import PageLayout from "@/components/layout/PageLayout";
-import SEOPage from "@/components/common/SEOPage";  
-
-import {
-  AboutSection,
-  ExpertiseSection,
-  ProjectsSection,
-  ContactSection,
-  ContactFormSection,
-} from "@/components/sections/home";
-
-import MetricsSection from "@/components/sections/home/MetricsSection";
-
-export default function Home() {
-  return (
-    <PageLayout>
-
-      <SEOPage page="home" />
-
-      <AboutSection />
-      <MetricsSection />
-      <ExpertiseSection />
-      <ProjectsSection />
-      <ContactSection />
-      <ContactFormSection />
-    </PageLayout>
-  );
-}
-
-
-==== \src\pages\NotFound.tsx ====
-// src/pages/NotFound.tsx
-
-import { Helmet } from "react-helmet-async";
-import Button from "@/components/ui/Button";
-import { cn } from "@/lib/utils";
-import { colors, spacing } from "@/lib/tokens";
-
-export default function NotFound() {
-  return (
-    <>
-      {/* ‚≠ê SEO for 404 pages */}
-      <Helmet>
-        <title>404 ‚Äì Page Not Found</title>
-        <meta name="robots" content="noindex, nofollow" />
-      </Helmet>
-
-      <main
-        className={cn(
-          "min-h-[60vh] grid place-items-center px-6",
-          colors.background.text
-        )}
-      >
-        <div className="text-center">
-          <h1 className="text-3xl font-bold">404 ‚Äî Not Found</h1>
-          <p className={cn(spacing.mt2, colors.muted.text)}>
-            Sorry, this page does not exist. Back to the homepage?
-          </p>
-
-          <div className={spacing.mt4}>
-            <Button asChild variant="secondary">
-              <a href="/">Home</a>
-            </Button>
-          </div>
-        </div>
-      </main>
-    </>
-  );
-}
-
-
 ==== \src\types\vite-imagetools.d.ts ====
 /* src/types/vite-imagetools.d.ts */
 
@@ -4226,713 +2926,5 @@ declare module "*?*" {
   };
   export default out;
 }
-
-
-==== \src\App.tsx ====
-// src/App.tsx
-import { Routes, Route, Navigate, useLocation } from "react-router-dom";
-import { useEffect } from "react";
-import AppLayout from "@/AppLayout";
-import Home from "@/pages/Home";
-import CVPage from "@/pages/cv";
-
-// üîπ Projektseiten
-import CarInsurance from "@/pages/projects/CarInsurance";
-import ZooplusReOps from "@/pages/projects/ZooplusReOps";
-import ZooplusPricing from "@/pages/projects/ZooplusPricing";
-import InsuranceBrokerDiscovery from "@/pages/projects/InsuranceBroker";
-import WorkshopPage from "@/pages/projects/workshop";
-import KanoStrategyPage from "@/pages/projects/kanostrategy";
-
-// üîπ NEU ‚Äì Dein UX Portfolio Projekt
-import UXPortfolioPage from "@/pages/projects/UXPortfolio";
-
-// üîπ Expertise-Seiten
-import UXStrategy from "@/pages/expertise/UXStrategy";
-import StrategicUXResearch from "@/pages/expertise/StrategicUXResearch";
-import ResearchOps from "@/pages/expertise/ResearchOps";
-import TeamLeadership from "@/pages/expertise/TeamLeadership";
-import ImpactMeasurement from "@/pages/expertise/ImpactMeasurement";
-import SkillAssessmentPage from "@/pages/expertise/TeamLeadership/skillassessment";
-
-// üîπ Footer-/Legal-Seiten
-import Imprint from "@/pages/shared/Imprint";
-import Privacy from "@/pages/shared/Privacy";
-
-/** ScrollToTop */
-function ScrollToTop() {
-  const { pathname } = useLocation();
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "instant" });
-  }, [pathname]);
-  return null;
-}
-
-/** ScrollToHash */
-function ScrollToHash() {
-  const location = useLocation();
-  useEffect(() => {
-    if (location.hash) {
-      setTimeout(() => {
-        const el = document.querySelector(location.hash);
-        if (el) {
-          el.scrollIntoView({ behavior: "smooth", block: "start" });
-        }
-      }, 120);
-    }
-  }, [location]);
-  return null;
-}
-
-export default function App() {
-  return (
-    <>
-      <ScrollToTop />
-      <ScrollToHash />
-
-      <Routes>
-        <Route path="/" element={<AppLayout />}>
-          {/* üîπ Hauptseiten */}
-          <Route index element={<Home />} />
-          <Route path="cv" element={<CVPage />} />
-
-          {/* üîπ Projektseiten */}
-          <Route path="projects/car-insurance" element={<CarInsurance />} />
-          <Route path="projects/zooplus-reops" element={<ZooplusReOps />} />
-          <Route path="projects/zooplus-pricing" element={<ZooplusPricing />} />
-          <Route
-            path="projects/insurance-broker-discovery"
-            element={<InsuranceBrokerDiscovery />}
-          />
-          <Route path="projects/workshop" element={<WorkshopPage />} />
-          <Route path="projects/kanostrategy" element={<KanoStrategyPage />} />
-
-          {/* üîπ NEU ‚Äì UX Portfolio Projekt */}
-          <Route path="projects/ux-portfolio" element={<UXPortfolioPage />} />
-
-          <Route path="projects" element={<Navigate to="/" replace />} />
-
-          {/* üîπ Expertise-Seiten */}
-          <Route path="expertise/ux-strategy" element={<UXStrategy />} />
-          <Route
-            path="expertise/strategic-ux-research"
-            element={<StrategicUXResearch />}
-          />
-          <Route path="expertise/researchops" element={<ResearchOps />} />
-          <Route path="expertise/team-leadership" element={<TeamLeadership />} />
-          <Route
-            path="expertise/team-leadership/skillassessment"
-            element={<SkillAssessmentPage />}
-          />
-          <Route path="expertise/impact-measurement" element={<ImpactMeasurement />} />
-
-          {/* üîπ Footer-/Legal-Seiten */}
-          <Route path="imprint" element={<Imprint />} />
-          <Route path="privacy" element={<Privacy />} />
-
-          {/* üîπ Fallback */}
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Route>
-      </Routes>
-    </>
-  );
-}
-
-
-==== \src\AppLayout.tsx ====
-// src/components/layout/AppLayout.tsx
-import { Outlet } from "react-router-dom";
-import Navbar from "@/components/common/Navbar";
-import Footer from "@/components/common/Footer";
-
-export default function AppLayout() {
-  return (
-    <div className="min-h-screen flex flex-col bg-background text-foreground overflow-x-clip">
-      <Navbar />
-      <main className="flex-1">
-        <Outlet />
-      </main>
-      <Footer />
-    </div>
-  );
-}
-
-
-==== \src\i18n.ts ====
-// src/i18n.ts
-import i18n from "i18next";
-import { initReactI18next, useTranslation } from "react-i18next";
-import de from "@/locales/de.json";
-import en from "@/locales/en.json";
-
-if (!i18n.isInitialized) {
-  void i18n.use(initReactI18next).init({
-    resources: { de: { translation: de }, en: { translation: en } },
-    lng: "en",
-    fallbackLng: "en",
-    interpolation: { escapeValue: false },
-  });
-}
-
-export type Lang = "de" | "en";
-export const useI18n = () => {
-  const { t, i18n } = useTranslation();
-  const lang: Lang = i18n.language?.startsWith("de") ? "de" : "en";
-  const setLang = (l: Lang) => i18n.changeLanguage(l);
-  return { t, i18n, lang, setLang };
-};
-
-export default i18n;
-
-
-==== \src\index.css ====
-@import "tailwindcss";
-@plugin "tailwindcss-animate";
-
-@custom-variant dark (&:is(.dark *));
-
-/* ================================
-   THEME TOKENS (vereinheitlicht)
-   ================================ */
-@theme {
-  --breakpoint-sm: 40rem;
-  --breakpoint-md: 48rem;
-  --breakpoint-lg: 64rem;
-  --breakpoint-xl: 80rem;
-  --breakpoint-2xl: 96rem;
-
-  /* Fonts */
-  --font-sans: "SF Pro Text", "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "SF Pro Display", "Inter", ui-sans-serif, system-ui, sans-serif;
-
-  /* Colors (Light) */
-  --color-background: #ffffff;
-  --color-foreground: #2f2f2f;          /* Einheitliches Grau f√ºr alle Texte */
-  --color-border: #e5e5e5;
-
-  --color-muted: #f3f3f3;
-  --color-muted-foreground: #2f2f2f;    /* identisch mit foreground */
-
-  --color-primary: #0a0a0a;
-  --color-primary-foreground: #ffffff;
-
-  --color-secondary: #4a5a6a;
-  --color-secondary-foreground: #ffffff;
-
-  --color-accent: #0094c6;
-  --color-accent-foreground: #ffffff;
-}
-
-/* ================================
-   DARK THEME OVERRIDES
-   ================================ */
-.dark {
-  --color-background: #0b0b0b;
-  --color-foreground: #c8c8c8;          /* Einheitliches Hellgrau f√ºr alle Texte */
-  --color-border: #2a2a2a;
-
-  --color-muted: #1a1a1a;
-  --color-muted-foreground: #d6d6d6;    /* identisch mit foreground */
-
-  --color-primary: #f8f8f8;
-  --color-primary-foreground: #0a0a0a;
-
-  --color-secondary: #607080;
-  --color-secondary-foreground: #ffffff;
-
-  --color-accent: #33bde5;
-  --color-accent-foreground: #0b0b0b;
-}
-
-:root {
-  color-scheme: light dark;
-}
-
-/* ================================
-   MAP CSS VARS ‚Üí UTILITIES
-   ================================ */
-@theme inline {
-  --color-card: var(--color-background);
-  --color-card-foreground: var(--color-foreground);
-  --color-popover: var(--color-background);
-  --color-popover-foreground: var(--color-foreground);
-}
-
-/* ================================
-   GLOBAL LAYOUT FIXES
-   ================================ */
-html,
-body {
-  margin: 0;
-  padding: 0;
-  overflow-y: scroll;
-  overflow-x: clip;
-  width: 100%;
-  background: var(--color-background);
-  color: var(--color-foreground);
-}
-
-/* ‚úÖ Weiches Scrollen aktivieren */
-html {
-  scroll-behavior: smooth;
-}
-
-/* ‚úÖ Normale Bilder & SVGs skalieren richtig */
-img:not([data-hero]),
-svg:not([data-hero]) {
-  max-width: 100%;
-  height: auto;
-  display: block;
-}
-
-/* ================================
-   COMPONENT UTILITIES
-   ================================ */
-@layer components {
-  .container-responsive {
-    @apply mx-auto max-w-6xl px-4 sm:px-6 lg:px-8;
-  }
-
-  .section {
-    @apply mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-20 space-y-8;
-  }
-
-  .card {
-    @apply rounded-2xl border border-border bg-card text-card-foreground;
-  }
-
-  /* Buttons */
-  .btn {
-    @apply inline-flex items-center justify-center 
-           rounded-2xl px-5 py-2.5 text-sm font-semibold 
-           border border-border transition-colors duration-200;
-  }
-
-  .btn-primary {
-    @apply bg-primary text-primary-foreground hover:opacity-90;
-  }
-
-  .btn-secondary {
-    @apply bg-muted text-foreground hover:bg-muted/70;
-  }
-
-  .btn-ghost {
-    @apply text-foreground hover:bg-muted/40;
-  }
-
-  /* Tiles */
-  .tile {
-    @apply rounded-xl border border-border bg-muted 
-           p-4 text-center text-sm text-foreground 
-           transition-colors duration-200 
-           hover:bg-muted/70;
-  }
-}
-
-/* ================================
-   TYPOGRAPHY BASE
-   ================================ */
-@layer base {
-  body {
-    @apply bg-background text-foreground font-sans;
-  }
-
-  h1 {
-    @apply font-display font-extrabold tracking-tight text-foreground;
-  }
-
-  h2 {
-    @apply font-display font-bold text-foreground;
-  }
-
-  h3 {
-    @apply font-display font-semibold text-foreground;
-  }
-
-  p {
-    @apply leading-relaxed text-foreground;
-  }
-
-  small {
-    @apply text-sm text-foreground;
-  }
-}
-
-/* ================================
-   DARK MODE ‚Äì IMAGE BRIGHTNESS (Klassenbasiert)
-   ================================ */
-.dark img:not(.no-dark-filter) {
-  filter: brightness(0.7);
-  transition: filter 0.3s ease-in-out;
-}
-
-
-==== \src\main.tsx ====
-import React from "react";
-import ReactDOM from "react-dom/client";
-import { StrictMode } from "react";
-import { BrowserRouter } from "react-router-dom";
-import { HelmetProvider } from "react-helmet-async";   // ‚≠ê NEU
-import App from "@/App";
-import "@/i18n";
-import "./index.css";
-
-const redirect = sessionStorage.getItem("redirect");
-if (redirect) {
-  sessionStorage.removeItem("redirect");
-  const url = new URL(redirect, window.location.origin);
-  window.history.replaceState(null, "", url.pathname + url.search);
-}
-
-ReactDOM.createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <HelmetProvider>        {/* ‚≠ê Helmet Provider Wrapper */}
-      <BrowserRouter
-        future={{
-          v7_startTransition: true,
-          v7_relativeSplatPath: true,
-        }}
-      >
-        <App />
-      </BrowserRouter>
-    </HelmetProvider>
-  </StrictMode>
-);
-
-
-==== \src\vite-env.d.ts ====
-/// <reference types="vite/client" />
-
-declare module "*.jpg" {
-  const value: string;
-  export default value;
-}
-
-declare module "*.jpeg" {
-  const value: string;
-  export default value;
-}
-
-declare module "*.png" {
-  const value: string;
-  export default value;
-}
-
-declare module "*.svg" {
-  const value: string;
-  export default value;
-}
-
-declare module "*.webp" {
-  const value: string;
-  export default value;
-}
-
-declare module "*.gif" {
-  const value: string;
-  export default value;
-}
-
-declare module "*.mp4" {
-  const value: string;
-  export default value;
-}
-
-/* ?? neu hinzuf¸gen */
-declare module '*&as=picture';
-declare module '*?*';
-
-
-==== \components.json ====
-{
-  "$schema": "https://ui.shadcn.com/schema.json",
-  "style": "new-york",
-  "rsc": false,
-  "tsx": true,
-  "tailwind": {
-    "config": "tailwind.config.js",
-    "css": "src/index.css",
-    "baseColor": "neutral",
-    "cssVariables": true,
-    "prefix": ""
-  },
-  "iconLibrary": "lucide",
-  "aliases": {
-    "components": "@/components",
-    "utils": "@/lib/utils",
-    "ui": "@/components/ui",
-    "lib": "@/lib",
-    "hooks": "@/hooks"
-  },
-  "registries": {}
-}
-
-
-==== \index.html ====
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-
-    <!-- Google Search Console Verification -->
-    <meta name="google-site-verification" content="N1hXubjj5xtLAOx0KP9jxDJ8QxkTfsFbM3ZNtaLwYNg" />
-
-    <!-- Primary Meta Description -->
-    <meta
-      name="description"
-      content="Portfolio of Felix Bruckmeier ‚Äì Senior UX Researcher driving qualitative & quantitative UX Research, UX strategy, mixed methods and ResearchOps in a Design Thinking, Lean UX and Agile UX approach."
-    />
-
-    <!-- ‚ùå REMOVED: Canonical (handled by SEOPage per route) -->
-    <!-- <link rel="canonical" href="https://felixbruckmeier.github.io/" /> -->
-
-    <!-- Open Graph -->
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content="Felix Bruckmeier ‚Äì Senior UX Researcher" />
-    <meta
-      property="og:description"
-      content="Specializing in qualitative & quantitative UX Research, UX strategy and ResearchOps."
-    />
-    <meta property="og:url" content="https://felixbruckmeier.github.io/" />
-    <meta property="og:image" content="https://felixbruckmeier.github.io/og-image.png" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-
-    <!-- Twitter -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Felix Bruckmeier ‚Äì Senior UX Researcher" />
-    <meta
-      name="twitter:description"
-      content="Specializing in qualitative & quantitative UX Research, UX strategy and ResearchOps."
-    />
-    <meta name="twitter:image" content="https://felixbruckmeier.github.io/og-image.png" />
-
-    <!-- Theme Bootstrapping -->
-    <script>
-      (() => {
-        try {
-          const stored = localStorage.getItem("theme");
-          const prefers =
-            window.matchMedia &&
-            window.matchMedia("(prefers-color-scheme: dark)").matches;
-          const theme = stored ?? (prefers ? "dark" : "light");
-          const root = document.documentElement;
-          if (theme === "dark") {
-            root.classList.add("dark");
-            root.style.colorScheme = "dark";
-          } else {
-            root.classList.remove("dark");
-            root.style.colorScheme = "light";
-          }
-        } catch {}
-      })();
-    </script>
-
-    <!-- Analytics -->
-    <script
-      data-goatcounter="https://felix.goatcounter.com/count"
-      async
-      src="//gc.zgo.at/count.js"
-    ></script>
-
-    <link rel="icon" type="image/png" href="/favicon.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-    <title>Felix Bruckmeier ‚Äì Senior UX Researcher</title>
-  </head>
-
-  <body class="min-h-screen bg-background text-foreground">
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
-</html>
-
-
-==== \package.json ====
-{
-  "name": "uxr-portfolio-felix",
-  "version": "1.0.0",
-  "private": true,
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
-    "preview": "vite preview",
-    "check:i18n": "node scripts/check-missing-translations.js",
-    "check:i18n:reverse": "node scripts/check-missing-translations-reverse.js",
-    "check:i18n:all": "npm run check:i18n && npm run check:i18n:reverse",
-    "translate:i18n": "node scripts/translate-missing-translations.js",
-    "translate:i18n:dry": "node scripts/translate-missing-translations-dryrun.js",
-    "translate:smart": "node scripts/smart-translate-optimize.js --target=de",
-    "translate:smart:en": "node scripts/smart-translate-optimize.js --target=en",
-    "translate:smart:dry": "node scripts/smart-translate-optimize.js --target=de --dry"
-  },
-  "dependencies": {
-    "@radix-ui/react-accordion": "^1.2.12",
-    "chart.js": "^4.5.0",
-    "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.1",
-    "framer-motion": "^12.23.24",
-    "i18next": "^23.16.8",
-    "jspdf": "^3.0.3",
-    "lucide-react": "^0.544.0",
-    "react": "^18.2.0",
-    "react-chartjs-2": "^5.3.0",
-    "react-dom": "^18.2.0",
-    "react-helmet-async": "^2.0.5",
-    "react-i18next": "^13.5.0",
-    "react-intersection-observer": "^9.16.0",
-    "react-router-dom": "^6.26.0",
-    "recharts": "^3.2.1",
-    "sharp": "^0.34.4",
-    "tailwind-merge": "^3.3.1",
-    "tailwindcss-animate": "^1.0.7"
-  },
-  "devDependencies": {
-    "@tailwindcss/postcss": "^4.0.0",
-    "@types/node": "^24.5.2",
-    "@types/react": "^18.2.66",
-    "@types/react-dom": "^18.2.22",
-    "@vitejs/plugin-react": "^4.3.4",
-    "autoprefixer": "^10.4.20",
-    "dotenv": "^16.4.5",
-    "openai": "^4.73.1",
-    "postcss": "^8.4.47",
-    "tailwindcss": "^4.0.0",
-    "typescript": "^5.4.0",
-    "vite": "^5.4.19",
-    "vite-imagetools": "^9.0.0"
-  }
-}
-
-
-==== \postcss.config.js ====
-export default {
-  plugins: {
-    "@tailwindcss/postcss": {},
-  },
-};
-
-
-==== \tailwind.config.js ====
-/**** Tailwind v4 minimal config ****/
-export default {
-  darkMode: "class",
-};
-
-
-==== \tsconfig.app.json ====
-{
-  "compilerOptions": {
-    "target": "ES2020",
-    "useDefineForClassFields": true,
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
-    "module": "ESNext",
-    "skipLibCheck": true,
-    "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
-    "isolatedModules": true,
-    "moduleDetection": "force",
-    "noEmit": true,
-    "jsx": "react-jsx",
-    "strict": false,
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["./src/*"]
-    }
-  },
-  "include": ["src"]
-}
-
-
-==== \tsconfig.json ====
-{
-  "compilerOptions": {
-    "target": "ES2020",
-    "useDefineForClassFields": true,
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
-    "module": "ESNext",
-    "skipLibCheck": true,
-    "moduleResolution": "bundler",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "react-jsx",
-    "esModuleInterop": true,
-
-    /* ‚úÖ Korrigiert f√ºr Vite + GitHub Actions Build */
-    "baseUrl": "./src",
-    "paths": {
-      "@/*": ["*"]
-    },
-
-    /* ‚úÖ Erg√§nzt: Typen f√ºr Node, Vite und Imagetools */
-    "types": ["vite/client", "node"]
-  },
-
-  /* ‚úÖ Wichtig: Typdefinitionen au√üerhalb von src einbinden */
-  "include": [
-    "src",
-    "types/vite-imagetools.d.ts",
-    "src/vite-env.d.ts"
-  ],
-
-  "references": [
-    {
-      "path": "./tsconfig.node.json"
-    }
-  ]
-}
-
-
-==== \tsconfig.node.json ====
-{
-  "compilerOptions": {
-    "composite": true,
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "skipLibCheck": true,
-    "allowSyntheticDefaultImports": true
-  },
-  "include": [
-    "vite.config.ts",
-    "vite.config.js",
-    "rollup-parseAst.d.ts"
-  ]
-}
-
-
-==== \vite.config.ts ====
-// vite.config.ts
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
-import { imagetools } from "vite-imagetools";
-import { fileURLToPath } from "node:url";
-import { dirname, resolve } from "node:path";
-
-// __dirname in ESM nachbauen
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-// Pr√ºfen, ob wir in GitHub Actions laufen
-const isActions = process.env.GITHUB_ACTIONS === "true";
-
-export default defineConfig({
-  plugins: [
-    react(),
-    imagetools(), // üÜï automatisches Bild-Optimierungs-Plugin
-  ],
-  base: "/", // User/Org Pages: Root
-  build: {
-    outDir: isActions ? "dist" : "docs", // Actions ‚Üí dist, lokal ‚Üí docs
-  },
-  resolve: {
-    alias: {
-      "@": resolve(__dirname, "src"),
-    },
-  },
-  // Optional: sorgt daf√ºr, dass WebP & PNG sauber importiert werden
-  assetsInclude: ["**/*.png", "**/*.jpg", "**/*.jpeg", "**/*.webp"],
-});
 
 

@@ -1,19 +1,18 @@
 import { Section } from "@/components/ui";
 import SectionIntro from "@/components/ui/SectionIntro";
 import FadeIn from "@/components/ui/FadeIn";
-import TextReveal from "@/components/ui/TextReveal";
 import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
 import { spacing, layout } from "@/lib/tokens";
 import { Link } from "react-router-dom";
 import TileImage from "@/components/ui/TileImage";
 
-// 🖼️ Expertise-Bilder (optimiert)
-import uxStrategyImg from "@/assets/images/expertise/uxstrategy/schach1.jpg?w=400;800&format=webp;png&as=picture";
-import strategicUxImg from "@/assets/images/expertise/strategicuxresearch/strategicuxr.jpg?w=400;800&format=webp;png&as=picture";
-import researchOpsImg from "@/assets/images/expertise/researchops/plant.jpg?w=400;800&format=webp;png&as=picture";
-import leadershipImg from "@/assets/images/expertise/teamleadership/team.jpg?w=400;800&format=webp;png&as=picture";
-import impactImg from "@/assets/images/expertise/impactmeasurement/impact.jpg?w=400;800&format=webp;png&as=picture";
+// 🖼️ Expertise-Bilder (optimiert via vite-imagetools)
+import uxStrategyImg from "@/assets/images/expertise/uxstrategy/schach2.jpg?w=320;480;640&format=webp;jpg&q=60&as=picture";
+import strategicUxImg from "@/assets/images/expertise/strategicuxresearch/strategicuxr2.jpg?w=320;480;640&format=webp;jpg&q=60&as=picture";
+import researchOpsImg from "@/assets/images/expertise/researchops/plant2.jpg?w=320;480;640&format=webp;jpg&q=60&as=picture";
+import leadershipImg from "@/assets/images/expertise/teamleadership/team2.jpg?w=320;480;640&format=webp;jpg&q=60&as=picture";
+import impactImg from "@/assets/images/expertise/impactmeasurement/impact2.jpg?w=320;480;640&format=webp;jpg&q=60&as=picture";
 
 export default function ExpertiseSection() {
   const { t } = useTranslation();
@@ -42,26 +41,26 @@ export default function ExpertiseSection() {
 
   return (
     <Section id="expertise" title={t("expertise.title")} spacing="lg">
-      {/* --- Intro Text --- */}
+      {/* --- Intro Text (FadeIn wie Projects) --- */}
       <SectionIntro>
-        <TextReveal
-          stagger={0.06}
-          duration={0.35}
-          delay={0.1}
-          ease="easeOut"
-          className="inherit"
-        >
-          These areas of expertise reflect what I’ve learned — and continue to
-          learn — about transforming deep user insights into strategy,
-          structure, and measurable impact. Over the years, I’ve seen how
-          empathy and evidence can shape not only better products but also
-          stronger teams and processes. I help organizations build sustainable,
-          user-centered products, make confident, evidence-based decisions, and
-          continuously grow their UX maturity.
-        </TextReveal>
+        <FadeIn delay={0.1}>
+          <p className="inherit">
+            These areas of expertise reflect what I’ve learned — and continue to
+            learn — about transforming{" "}
+            <strong>deep user insights</strong> into{" "}
+            <strong>strategy</strong>, <strong>structure</strong>, and{" "}
+            <strong>measurable impact</strong>. Over the years, I’ve seen how{" "}
+            <strong>empathy</strong> and <strong>evidence</strong> can shape not
+            only <strong>better products</strong> but also{" "}
+            <strong>stronger teams and processes</strong>. I help organizations{" "}
+            <strong>build sustainable, user-centered products</strong>, make{" "}
+            <strong>confident, evidence-based decisions</strong>, and{" "}
+            <strong>continuously grow their UX maturity</strong>.
+          </p>
+        </FadeIn>
       </SectionIntro>
 
-      {/* --- Expertise Tiles (3 pro Zeile Desktop) --- */}
+      {/* --- Expertise Tiles --- */}
       <div
         className={cn(
           "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3",
@@ -72,6 +71,7 @@ export default function ExpertiseSection() {
         {pillars.slice(0, 5).map((p, i) => {
           const to = routesByIndex[i] ?? "expertise";
           const image = images[i];
+
           return (
             <FadeIn key={i} delay={0.2 + i * 0.1}>
               <Link to={to}>

@@ -1,13 +1,16 @@
+// src/components/sections/expertise/strategicuxresearch/StrategicUXFrameworkSection.tsx
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+
 import { Section } from "@/components/ui";
 import SectionIntro from "@/components/ui/SectionIntro";
 import { Subtitle, Body } from "@/components/ui/Tokens";
 import Button from "@/components/ui/Button";
-import { spacing, layout, radii, shadows } from "@/lib/tokens";
+
+import { spacing } from "@/lib/tokens";
 import { cn } from "@/lib/utils";
 
-// Illustrationen
+// ✅ Illustrationen
 import clarity from "@/assets/images/expertise/strategicuxresearch/1clarity.png";
 import questions from "@/assets/images/expertise/strategicuxresearch/2questions.png";
 import focus from "@/assets/images/expertise/strategicuxresearch/3focus.png";
@@ -15,7 +18,32 @@ import methods from "@/assets/images/expertise/strategicuxresearch/4methods.png"
 import analysis from "@/assets/images/expertise/strategicuxresearch/5analysis.png";
 import integration from "@/assets/images/expertise/strategicuxresearch/6present.png";
 
-const story = [
+/* =========================================================
+   Image helper – supports Vite + vite-imagetools
+   ========================================================= */
+type PictureLike = {
+  sources?: Array<{
+    srcset: string;
+    type: string;
+    sizes?: string;
+  }>;
+  img?: { src: string; width: number; height: number };
+};
+
+type ImgLike = string | PictureLike;
+
+function imgUrl(img?: ImgLike): string | undefined {
+  if (!img) return undefined;
+  return typeof img === "string" ? img : img.img?.src;
+}
+
+const story: Array<{
+  title: string;
+  subtitle: string;
+  text: string;
+  image: ImgLike;
+  quote: string;
+}> = [
   {
     title: "Clarity – Defining Purpose and Alignment",
     subtitle: "Understanding why the research exists.",
@@ -67,38 +95,34 @@ export default function StrategicUXFrameworkSection() {
   const next = () => setIndex((i) => (i < story.length - 1 ? i + 1 : 0));
   const prev = () => setIndex((i) => (i > 0 ? i - 1 : story.length - 1));
 
+  const sceneImgUrl = imgUrl(scene.image);
+
   return (
     <Section id="framework" title="My Research Planning Framework — Creating Clarity" spacing="lg">
       <SectionIntro>
-        Solid UX Research starts with the right questions.
-        My research planning framework, inspired by Erika Hall, helps teams move from assumptions
-        to focus — defining what decisions need evidence and how to generate it. This ensures every
-        study directly contributes to strategic intent.
+        Solid UX Research starts with the right questions. My research planning framework, inspired by Erika Hall,
+        helps teams move from assumptions to focus — defining what decisions need evidence and how to generate it.
+        This ensures every study directly contributes to strategic intent.
       </SectionIntro>
 
       <div className={cn("flex flex-col items-center w-full", spacing.mtLg)}>
-        <div
-          className={cn(
-            "relative w-full flex flex-col md:flex-row md:items-center gap-8",
-            layout.container,
-            radii.xxl,
-            shadows.lg,
-            "pb-12 md:pb-0"
-          )}
-        >
+        {/* ✅ NO “tile/card” look: no shadow, no rounded wrapper */}
+        <div className="w-full md:w-5/6 flex flex-col md:flex-row md:items-center gap-10 text-left">
           {/* IMAGE */}
           <div className="relative flex-1 w-full">
             <AnimatePresence mode="wait">
-              <motion.img
-                key={scene.image}
-                src={scene.image}
-                alt={scene.title}
-                initial={{ opacity: 0, scale: 1.05 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.98 }}
-                transition={{ duration: 0.8 }}
-                className="w-full h-auto max-h-[65vh] object-contain rounded-2xl"
-              />
+              {sceneImgUrl && (
+                <motion.img
+                  key={sceneImgUrl}
+                  src={sceneImgUrl}
+                  alt={scene.title}
+                  initial={{ opacity: 0, scale: 1.05 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.98 }}
+                  transition={{ duration: 0.8 }}
+                  className="w-full h-auto max-h-[65vh] object-contain rounded-2xl no-dark-filter"
+                />
+              )}
             </AnimatePresence>
 
             {/* Buttons unter dem Bild auf Mobile */}
@@ -118,7 +142,7 @@ export default function StrategicUXFrameworkSection() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
-            className={cn("flex-1 text-left md:pl-8")}
+            className="flex-1"
           >
             <Subtitle>{`${index + 1}. ${scene.title}`}</Subtitle>
             <Body className="italic text-[--color-muted] mb-2">{scene.subtitle}</Body>

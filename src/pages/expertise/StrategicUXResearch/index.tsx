@@ -1,7 +1,8 @@
 import PageLayout from "@/components/layout/PageLayout";
-import SEOPage from "@/components/common/SEOPage"; 
+import SEOPage from "@/components/common/SEOPage";
 
-import headerImg from "@/assets/images/expertise/strategicuxresearch/strategicuxr.jpg";
+// ✅ Header-Bild als picture (Full-Width Hero optimiert)
+import headerImg from "@/assets/images/expertise/strategicuxresearch/strategicuxr.jpg?w=1920;2560&format=webp;jpg&q=80&as=picture";
 
 import {
   StrategicUXIntroSection,
@@ -18,7 +19,6 @@ export default function StrategicUXResearchPage() {
       headerImage={headerImg}
       width="wide"
     >
-
       <SEOPage page="expertise_strategicUXResearch" />
 
       <StrategicUXIntroSection />

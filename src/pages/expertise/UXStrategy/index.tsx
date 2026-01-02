@@ -1,10 +1,10 @@
 import PageLayout from "@/components/layout/PageLayout";
-import SEOPage from "@/components/common/SEOPage"; 
+import SEOPage from "@/components/common/SEOPage";
 
-import headerImg from "@/assets/images/expertise/uxstrategy/schach1.jpg";
+// ✅ Header-Bild als picture (Full-Width Hero optimiert)
+import headerImg from "@/assets/images/expertise/uxstrategy/schach1.jpg?w=1920;2560&format=webp;jpg&q=80&as=picture";
 
 import {
-  
   VisionAlignment,
   DiscoveryDelivery,
   Prioritization,
@@ -18,14 +18,11 @@ export default function UXStrategyPage() {
       headerImage={headerImg}
       width="wide"
     >
-
       <SEOPage page="expertise_uxStrategy" />
-
 
       <VisionAlignment />
       <DiscoveryDelivery />
       <Prioritization />
-
     </PageLayout>
   );
 }

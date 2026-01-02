@@ -1,7 +1,8 @@
 import PageLayout from "@/components/layout/PageLayout";
 import SEOPage from "@/components/common/SEOPage";
 
-import headerImg from "@/assets/images/projects/carinsurance/CarInsurance.png";
+// ✅ Header-Bild als picture (Full-Width Hero optimiert)
+import headerImg from "@/assets/images/projects/carinsurance/CarInsurance.png?w=1920;2560&format=webp;jpg&q=80&as=picture";
 
 import {
   CarInsuranceBLUFSection,
@@ -16,7 +17,6 @@ export default function CarInsurancePage() {
       headerImage={headerImg}
       width="wide"
     >
-
       <SEOPage page="project_carInsurance" />
 
       <CarInsuranceBLUFSection />

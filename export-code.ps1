@@ -7,7 +7,7 @@ $outputFile = "$projectPath\all_code_clean.txt"
 
 if (Test-Path $outputFile) { Remove-Item $outputFile }
 
-$allowedExtensions = @("*.ts", "*.tsx", "*.css", "*.json", "*.html", "*.js", "*.md", "*.yml")
+$allowedExtensions = @("*.ts", "*.tsx", "*.css", "*.json", *.d.ts","*.html", "*.js", "*.md", "*.yml")
 
 $importantFiles = @(
     "index.html",
@@ -47,7 +47,10 @@ $excludedFolderPatterns = @(
     "\\src\\components\\sections\\expertise\\TeamLeadership($|\\.*)",
     "\\src\\components\\projects($|\\.*)",
   
-    "\\src\\pages\\projects\\AtossReOps($|\\.*)",
+    "\\src\\lib($|\\.*)",
+    "\\src\\components\\common($|\\.*)",
+    "\\src\\data($|\\.*)",
+    "\\src\\pages($|\\.*)",
     "\\src\\assets($|\\.*)",
     "\\.git($|\\.*)",
     "\\.github\\workflows($|\\.*)",

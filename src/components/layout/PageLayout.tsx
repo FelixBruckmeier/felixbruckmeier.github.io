@@ -3,12 +3,28 @@ import { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { sectionSpacing, typography } from "@/lib/tokens";
 
+type PictureLike = {
+  sources?: Array<{
+    srcset: string;
+    type: string;
+    sizes?: string;
+  }>;
+  img?: { src: string; width: number; height: number };
+};
+
 interface PageLayoutProps {
   title?: string;
   intro?: string;
-  headerImage?: string;
+  headerImage?: string | PictureLike; // ✅ beides möglich
   children: ReactNode;
   width?: "narrow" | "default" | "wide"; // bleibt für Kompatibilität, wird aber nicht mehr genutzt
+}
+
+function getHeaderUrl(headerImage?: string | PictureLike) {
+  if (!headerImage) return undefined;
+  if (typeof headerImage === "string") return headerImage;
+  if (typeof headerImage === "object" && headerImage?.img?.src) return headerImage.img.src;
+  return undefined;
 }
 
 export default function PageLayout({
@@ -17,14 +33,16 @@ export default function PageLayout({
   headerImage,
   children,
 }: PageLayoutProps) {
+  const headerUrl = getHeaderUrl(headerImage);
+
   return (
     <main className="flex flex-col items-stretch text-left">
       {/* ===== HERO ===== */}
-      {headerImage && (
+      {headerUrl && (
         <section
           className="relative w-full flex flex-col justify-center items-center text-center text-white overflow-hidden h-[60vh] bg-black/30"
           style={{
-            backgroundImage: `url(${headerImage})`,
+            backgroundImage: `url(${headerUrl})`,
             backgroundSize: "cover",
             backgroundPosition: "center center",
             backgroundRepeat: "no-repeat",
@@ -66,9 +84,7 @@ export default function PageLayout({
       )}
 
       {/* ===== CONTENT ===== */}
-      {/* ❗ Kein Container-Limit mehr – Sections steuern Breite selbst */}
       <div className={cn(sectionSpacing.lg, "space-y-32")}>{children}</div>
     </main>
   );
 }
-

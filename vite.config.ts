@@ -15,17 +15,58 @@ const isActions = process.env.GITHUB_ACTIONS === "true";
 export default defineConfig({
   plugins: [
     react(),
-    imagetools(), // 🆕 automatisches Bild-Optimierungs-Plugin
+
+    /**
+     * 🖼 AUTOMATISCHE BILDOPTIMIERUNG
+     * --------------------------------
+     * Diese Default-Regeln sorgen dafür, dass ALLE Importe mit ?as=picture:
+     * - in 6 responsive Größen generiert werden
+     * - WebP + JPG erzeugen
+     * - als <picture> mit srcset ausgeliefert werden
+     * → massive Performance-Verbesserung ohne Code-Änderungen
+     */
+    imagetools({
+      defaultDirectives: () =>
+        new URLSearchParams({
+          // mehrere responsive Bildgrößen
+          w: "2000;1400;1000;800;600;400",
+
+          // moderne + Fallback Formate
+          format: "webp;jpg",
+
+          // Ausgabe als <picture>
+          as: "picture",
+        }),
+    }),
   ],
-  base: "/", // User/Org Pages: Root
+
+  /**
+   * BASE PATH
+   * Für GitHub Pages → "/" (User/Org Pages)
+   */
+  base: "/",
+
+  /**
+   * BUILD OUTPUT FOLDER
+   * GitHub Actions → dist
+   * Lokal → docs
+   */
   build: {
-    outDir: isActions ? "dist" : "docs", // Actions → dist, lokal → docs
+    outDir: isActions ? "dist" : "docs",
   },
+
+  /**
+   * ALIASE
+   * Erlaubt Importe wie "@/components/Button"
+   */
   resolve: {
     alias: {
       "@": resolve(__dirname, "src"),
     },
   },
-  // Optional: sorgt dafür, dass WebP & PNG sauber importiert werden
+
+  /**
+   * STELLE SICHER, DASS Vite DIE BILDER ERKENNT
+   */
   assetsInclude: ["**/*.png", "**/*.jpg", "**/*.jpeg", "**/*.webp"],
 });

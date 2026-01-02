@@ -6,7 +6,7 @@ export default function WorkshopImpactSection() {
   return (
     <Section
       id="workshop-impact"
-      title="From shared understanding to actionable outcomes"
+      title="Impact - From shared understanding to actionable outcomes"
       spacing="lg"
     >
       <SectionIntro>

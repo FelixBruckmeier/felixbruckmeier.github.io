@@ -3,7 +3,7 @@ import { Section } from "@/components/ui";
 import SectionIntro from "@/components/ui/SectionIntro";
 import { SectionHeading, Body } from "@/components/ui/Tokens";
 import FadeIn from "@/components/ui/FadeIn";
-import { spacing, layout } from "@/lib/tokens";
+import { spacing } from "@/lib/tokens";
 import { cn } from "@/lib/utils";
 
 // 📸 Images
@@ -13,11 +13,34 @@ import artefact2Img from "@/assets/images/projects/b2b2c/artefakt2.png";
 import journeyImg from "@/assets/images/projects/b2b2c/beratungsjourney.png";
 import locationsImg from "@/assets/images/projects/b2b2c/locations.png";
 import needsImg from "@/assets/images/projects/b2b2c/nutzungsanforderungen.png";
-// ✅ Neu: Discussion-Guide-Bild
 import dgImg from "@/assets/images/projects/b2b2c/dg.png";
 
+/* =========================================================
+   Image helper – supports Vite + vite-imagetools outputs
+   ========================================================= */
+type PictureLike = {
+  sources?: Array<{
+    srcset: string;
+    type: string;
+    sizes?: string;
+  }>;
+  img?: { src: string; width: number; height: number };
+};
+
+type ImgLike = string | PictureLike;
+
+function imgUrl(img?: ImgLike): string | undefined {
+  if (!img) return undefined;
+  return typeof img === "string" ? img : img.img?.src;
+}
+
 export default function BrokerProcessSection() {
-  const steps = [
+  const steps: Array<{
+    title: string;
+    caption: string;
+    desc: React.ReactNode;
+    img?: ImgLike;
+  }> = [
     {
       title: "Contextual Interviews",
       caption: "Real advisory conversations in broker environments",
@@ -32,8 +55,6 @@ export default function BrokerProcessSection() {
       ),
       img: locationsImg,
     },
-
-    // ✅ Eingefügter Schritt (nur dieser Block ist neu)
     {
       title: "Discussion Guide (before synthesis)",
       caption: "Structured prompts to probe needs, language, and constraints",
@@ -46,7 +67,6 @@ export default function BrokerProcessSection() {
       ),
       img: dgImg,
     },
-
     {
       title: "Synthesis (Grounded Theory)",
       caption: "From notes to themes, from themes to opportunity areas",
@@ -118,40 +138,47 @@ export default function BrokerProcessSection() {
         prioritized roadmap — so brokers can focus on people, not on fighting their tools.
       </SectionIntro>
 
-      <div className={cn("flex flex-col items-center space-y-40 md:space-y-52 text-center", spacing.mt12)}>
-        {steps.map((step, i) => (
-          <div key={i} className="flex flex-col items-center text-center gap-14 md:gap-20 w-full md:w-5/6">
-            <FadeIn delay={i * 0.1}>
-              <div
-                className={cn(
-                  "flex flex-col md:flex-row items-start text-left gap-10",
-                  i % 2 === 1 && "md:flex-row-reverse"
-                )}
-              >
-                <div className="w-full md:w-1/2 space-y-4">
-                  <SectionHeading>{step.title}</SectionHeading>
-                  <Body>{step.desc}</Body>
-                </div>
-                <div className="w-full md:w-1/2 flex items-center justify-center">
-                  <p className="italic text-sm opacity-70">{step.caption}</p>
-                </div>
-              </div>
-            </FadeIn>
+      <div className={cn("flex flex-col space-y-40 md:space-y-52", spacing.mt12)}>
+        {steps.map((step, i) => {
+          const url = imgUrl(step.img);
 
-            {step.img && (
-              <FadeIn delay={0.2}>
-                <div className="w-full md:w-5/6 flex justify-center">
-                  <img
-                    src={step.img}
-                    alt={step.title}
-                    className="w-full h-auto max-w-5xl rounded-2xl shadow-md object-contain"
-                    loading="lazy"
-                  />
+          return (
+            <div
+              key={i}
+              className="flex flex-col items-center text-center gap-14 md:gap-20 w-full"
+            >
+              <FadeIn delay={i * 0.1}>
+                <div
+                  className={cn(
+                    "w-full md:w-3/4 flex flex-col md:flex-row items-start text-left gap-10",
+                    i % 2 === 1 && "md:flex-row-reverse"
+                  )}
+                >
+                  <div className="w-full md:w-1/2 space-y-4">
+                    <SectionHeading>{step.title}</SectionHeading>
+                    <Body>{step.desc}</Body>
+                  </div>
+                  <div className="w-full md:w-1/2 flex items-center justify-center">
+                    <p className="italic text-sm opacity-70">{step.caption}</p>
+                  </div>
                 </div>
               </FadeIn>
-            )}
-          </div>
-        ))}
+
+              {url && (
+                <FadeIn delay={0.2}>
+                  <div className="w-full md:w-5/6 flex justify-center">
+                    <img
+                      src={url}
+                      alt={step.title}
+                      className="w-full h-auto max-w-5xl rounded-2xl shadow-md object-contain"
+                      loading="lazy"
+                    />
+                  </div>
+                </FadeIn>
+              )}
+            </div>
+          );
+        })}
       </div>
     </Section>
   );
