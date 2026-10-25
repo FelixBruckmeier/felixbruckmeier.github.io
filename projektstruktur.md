@@ -1,0 +1,124 @@
+﻿# Projektstruktur
+
+Verzeichnis- und Dateiliste von felixbruckmeier-site (ohne node_modules, .git, dist, build).
+
+```text
+felixbruckmeier-site/
+- .github/
+  - workflows/
+    - deploy.yml
+  - copilot-instructions.md
+- .vscode/
+  - settings.json
+  - tasks.json
+- ai/
+  - CONTENT.md
+- input/
+  - content-package/
+    - cases.ts
+    - config.ts
+    - cv.ts
+    - DelegationMatrix.tsx
+    - home.ts
+    - legal.ts
+  - portfolio-analysis-content-package.md
+- public/
+  - cases/
+    - adac-kfz-versicherung/
+      - affinity-map.jpg
+      - customer-journey.png
+      - delivery-artifact.png
+      - prototype.png
+      - sketchnote.png
+      - sketchnote-en.png
+      - stakeholder-workshop.png
+      - usability-test.png
+    - barrierefreiheit-digitaler-arbeitsplatz/
+      - .gitkeep
+      - sketchnote.png
+      - sketchnote-en.png
+    - co-creation/
+      - .gitkeep
+    - insurance-broker-discovery/
+      - advisory-journey.png
+      - analysis-wall.png
+      - broker-needs.png
+      - decision-artifact-01.png
+      - decision-artifact-02.png
+      - discussion-guide.png
+      - sketchnote.png
+      - sketchnote-en.png
+    - kano/
+      - .gitkeep
+      - sketchnote.png
+      - sketchnote-en.png
+    - researchops/
+      - .gitkeep
+      - sketchnote.png
+      - sketchnote-en.png
+    - vom-problem-zum-agenten/
+      - george-2-3.png
+      - power-bi-dashboard.png
+      - sketchnote.png
+      - sketchnote-en.png
+    - zielgruppen-agent/
+      - sketchnote.png
+      - sketchnote-en.png
+  - cv/
+    - portrait.jpg
+  - .nojekyll
+  - favicon.svg
+  - felix-bruckmeier.png
+- scripts/
+  - content-check.mjs
+- src/
+  - components/
+    - cv/
+      - ContactGrid.tsx
+      - CV.tsx
+      - ExperienceItem.tsx
+      - ImpactCard.tsx
+      - PageOne.tsx
+      - PageTwo.tsx
+      - SkillGroup.tsx
+    - BookingButton.tsx
+    - CaseTeaser.tsx
+    - ContactForm.tsx
+    - DelegationMatrix.tsx
+    - Footer.tsx
+    - Header.tsx
+    - ScrollManager.tsx
+    - Section.tsx
+  - content/
+    - cases.ts
+    - config.ts
+    - cv.ts
+    - home.ts
+    - legal.ts
+  - hooks/
+    - useTitle.ts
+  - pages/
+    - CasePage.tsx
+    - CvPage.tsx
+    - HomePage.tsx
+    - LegalPage.tsx
+    - NotFoundPage.tsx
+  - styles/
+    - cv.css
+    - global.css
+    - tokens.css
+  - App.tsx
+  - main.tsx
+  - vite-env.d.ts
+- .gitignore
+- export-content.ps1
+- export-project-docs.ps1
+- index.html
+- package.json
+- package-lock.json
+- README.md
+- tsconfig.json
+- tsconfig.tsbuildinfo
+- vite.config.ts
+- website-content.md
+```

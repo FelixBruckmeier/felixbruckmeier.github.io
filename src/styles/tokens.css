@@ -1,0 +1,37 @@
+/* Design-Tokens – Variante A „Ruhig & editorial“
+   Kontraste geprüft (WCAG AA ≥ 4,5:1):
+   accent/bg 4,77 · accent/white 5,06 · muted/bg 6,46 */
+:root {
+  --color-bg: #faf8f4;
+  --color-surface: #ffffff;
+  --color-raised: #f3efe8;
+  --color-ink: #1f1e1c;
+  --color-muted: #5e5a53;
+  --color-line: #e3ded5;
+  --color-accent: #b5502e;
+  --color-accent-hover: #963f22;
+  --color-accent-soft: #f6e6df;
+
+  --font-serif: 'Fraunces Variable', Georgia, serif;
+  --font-sans: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --fs-body: 1.125rem;      /* 18px */
+  --fs-small: 0.9375rem;    /* 15px */
+  --fs-xs: 0.8125rem;       /* 13px */
+  --fs-h3: 1.1875rem;
+  --fs-h2: clamp(1.75rem, 3vw + 0.5rem, 2.375rem);
+  --fs-h1: clamp(2.25rem, 4.5vw + 0.75rem, 3.5rem);
+  --fs-metric: clamp(2.5rem, 4vw + 1rem, 3.5rem);
+
+  --space-1: 0.5rem;
+  --space-2: 1rem;
+  --space-3: 1.5rem;
+  --space-4: 2rem;
+  --space-5: 3rem;
+  --space-6: 4.5rem;
+  --space-7: 6rem;
+
+  --radius: 8px;
+  --measure: 68ch;
+  --container: 72rem;
+}

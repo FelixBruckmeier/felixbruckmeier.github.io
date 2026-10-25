@@ -1,37 +1,16 @@
 {
   "compilerOptions": {
     "target": "ES2020",
-    "useDefineForClassFields": true,
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "module": "ESNext",
-    "skipLibCheck": true,
     "moduleResolution": "bundler",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
     "jsx": "react-jsx",
-    "esModuleInterop": true,
-
-    /* ✅ Korrigiert für Vite + GitHub Actions Build */
-    "baseUrl": "./src",
-    "paths": {
-      "@/*": ["*"]
-    },
-
-    /* ✅ Ergänzt: Typen für Node, Vite und Imagetools */
-    "types": ["vite/client", "node"]
+    "strict": true,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true
   },
-
-  /* ✅ Wichtig: Typdefinitionen außerhalb von src einbinden */
-  "include": [
-    "src",
-    "types/vite-imagetools.d.ts",
-    "src/vite-env.d.ts"
-  ],
-
-  "references": [
-    {
-      "path": "./tsconfig.node.json"
-    }
-  ]
+  "include": ["src"]
 }

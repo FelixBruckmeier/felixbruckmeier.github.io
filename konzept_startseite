@@ -1,0 +1,190 @@
+# Konzept Startseite: UX Manager, neu ausgerichtet
+
+
+Stand: 23.10.2026 · Arbeitsgrundlage für die Überarbeitung von `src/content/home.ts`, `HomePage.tsx`, `DelegationMatrix.tsx` und `global.css`
+
+
+---
+
+
+## 1. Grundidee
+
+
+Die Startseite zeigt **eine Rolle und drei Anstöße**, die sie verändert haben.
+
+
+- **Das Dach ist die Rolle UX Manager.** Es gibt keinen neuen Kunstbegriff als Titel.
+- **Drei Anstöße:** Jeder ist ein Problem, das ich erlebt habe. Aus jedem ist ein Teil meiner heutigen Rolle entstanden.
+- **Der Engpass ist der erste Anstoß, nicht der einzige.** Damit wirkt die Veränderung nicht monokausal.
+
+
+**Kernbotschaft**
+
+
+> Ich bin UX Manager. Drei Erfahrungen haben verändert, was diese Rolle für mich heißt.
+
+
+**Roter Faden über alle drei Anstöße**
+
+
+> Was gleich bleibt: Ich gehe von den Menschen aus, nicht von der Technik.
+
+
+---
+
+
+## 2. Die drei Anstöße
+
+
+| | **1 · Bauen, um zu verstehen** | **2 · Agenten in Wirkung bringen** | **3 · Fragen erforschen, bevor sie drängen** |
+|---|---|---|---|
+| **Anstoß (Problem)** | Lösungen sind billig geworden, Probleme sind teuer. Ein Prototyp entsteht mit KI in Stunden. Teuer wird es, wenn das falsche Problem gelöst wird. | Agenten zu bauen ist einfach, sie in Wirkung zu bringen ist schwer. Menschen vertrauen zu viel oder zu wenig, Verantwortung ist unklar, rechtliche Fragen bremsen. | Die wichtigen Fragen sind noch nicht da. Wenn ein Problem offensichtlich ist, ist es meist zu spät. Strategische Themen betreffen viele Bereiche und lassen sich nicht in einem Produktteam lösen. |
+| **Was sich an meiner Rolle verändert hat** | Ich baue selbst, um schneller zu lernen, nicht um Entwicklung zu ersetzen. | Ich gestalte die Zusammenarbeit von Mensch und Agent, nicht nur die Oberfläche. | Ich forsche früh und ebenenübergreifend, nicht erst, wenn ein Team fragt. |
+| **Was ich konkret tue** | Problem klären, Prototyp oder Agent bauen, mit echten Nutzer:innen testen, Wirkung messen | Aufgaben mit der Delegationsmatrix aufteilen, Verantwortung und Freigaben festlegen, Betroffene früh einbinden, Teams befähigen | Zukunftsthemen erkennen, mit Fachbereichen, IT, Management und Betroffenen austauschen, Entscheidungen vorbereiten |
+| **Ergebnis** | Eine belegte Entscheidung: weitermachen, ändern oder stoppen | Ein Agent, der genutzt wird, mit klarer Aufteilung und Freigabepunkten | Ein Thema ist entscheidungsreif, bevor es dringend wird |
+| **Rollenbild dahinter** | AI Experience Architect / Builder | Arbeit zwischen Mensch und Agent gestalten | Fachlich starke Rolle mit strategischer Research |
+| **Sketchnote** | Wenn die Lösung billig wird, wird das Problem wertvoll | Arbeit zwischen Mensch und Agent gestalten | Eine fachlich starke IC-Rolle |
+
+
+**Dramaturgie:** Die Reihenfolge ist eine Steigerung der Wirkung, vom einzelnen Prototyp (1) über die Einführung im Team (2) bis zur strategischen Ebene (3).
+
+
+---
+
+
+## 3. Aufbau der Startseite
+
+
+| # | Sektion | Inhalt |
+|---|---|---|
+| 1 | **Hero** | „Ich gestalte Arbeit mit KI so, dass Entscheidungen belastbar, Übergaben klar und Wirkung messbar werden.“ (bleibt) |
+| 2 | **Was meine Rolle verändert hat** | Einleitung, roter Faden, drei Anstöße als Spalten mit je einer Sketchnote |
+| 3 | **Vertiefung Anstoß 1** | Engpass-Satz („Der Engpass ist nicht mehr Entwicklung, sondern Problemerkenntnis und Entscheidungsqualität.“) und die Kacheln 01 bis 04 als Vorgehen |
+| 4 | **Vertiefung Anstoß 2** | Problemtext „Warum KI-Lösungen ihre Wirkung nicht entfalten“ und die Delegationsmatrix |
+| 5 | **Vertiefung Anstoß 3** | Kurzer Text mit konkreten Beispielthemen |
+| 6 | **Fallstudien** | Mit Tags 1 / 2 / 3 |
+| 7 | **Holt mich, wenn …** | Drei Einstiegspunkte und Kontakt |
+
+
+Die bisherige Sektion „So arbeite ich“ (6 Phasen) entfällt oder wird zu einer schmalen Prozesslinie in Sektion 3. Die bisherigen vier Angebotsformate entfallen auf der Startseite.
+
+
+---
+
+
+## 4. Vertiefung Anstoß 2: Delegationsmatrix
+
+
+### Problemtext (Entwurf)
+
+
+**Warum KI-Lösungen ihre Wirkung nicht entfalten**
+
+
+Einen Agenten einzuführen ist heute einfach. Ihn in Wirkung zu bringen ist schwer. Das liegt selten am Modell, sondern an allem, was um ihn herum passiert:
+
+
+- **Das Problem stimmt nicht.** Der Agent wird eingesetzt, weil er möglich ist, nicht weil er gebraucht wird, oder er soll alles auf einmal können.
+- **Die Arbeitsteilung ist ungeklärt.** Er übernimmt zu viel, wo er nur vorschlagen sollte, oder zu wenig, und die Arbeit bleibt, wie sie war. Wer verantwortlich ist und was rechtlich gilt, entscheidet niemand ausdrücklich.
+- **Das Vertrauen passt nicht.** Menschen prüfen alles doppelt oder übernehmen Ergebnisse ungeprüft, die nur plausibel klingen. Und wer nur noch freigibt, verlernt das eigene Urteil.
+- **Die Wirkung bleibt unsichtbar.** Der Agent sitzt neben dem Arbeitsablauf statt darin, lernt nicht aus Korrekturen, und niemand kann sagen, ob er sich lohnt. Die Leute greifen zu eigenen Tools.
+
+
+Für die Arbeitsteilung nutze ich ein einfaches Modell: Für jede Aufgabe einzeln entscheiden. Wie offen ist sie? Was kostet ein Fehler? Daraus ergibt sich, was der Agent allein erledigt, wo er vorschlägt und wo ein Mensch entscheidet. Eine Grenze gilt immer: Nicht umkehrbare oder rechtlich relevante Aktionen gehen nie ohne menschliche Freigabe raus.
+
+
+Diese Aufteilung kläre ich mit den Menschen, die später mit dem Agenten arbeiten, denn sie entscheiden am Ende, ob er genutzt wird.
+
+
+### Inhaltliche Leitlinien für die Matrix
+
+
+- **Nicht unter „So arbeite ich“**, denn die Matrix beschreibt die spätere Arbeit von Mensch und Agent, nicht mein Vorgehen. Sie ist das **Ergebnis** meiner Arbeit.
+- **Achsen als Fragen:** „Wie offen ist die Aufgabe?“ (klar bis offen) und „Was kostet ein Fehler?“ (gering bis hoch), jeweils mit Endpunkten.
+- **Zonen in Alltagssprache:**
+  - Agent macht es allein, ich schaue stichprobenartig drauf
+  - Agent schlägt vor, ich wähle aus
+  - Agent bereitet vor, ich gebe frei
+  - Ich entscheide, der Agent liefert zu
+- **Pro Zone eine echte Aufgabe** aus den eigenen Agenten-Fallstudien (George, Zielgruppen-Agent), jeweils verlinkt
+- **Feste Grenze sichtbar**, als Band über der Matrix, nicht nur im Fließtext
+- **Brückensatz:** „So habe ich die Arbeit bei meinen eigenen Research-Agenten aufgeteilt. Dasselbe Vorgehen nutze ich, wenn Teams einen Agenten einführen.“
+- **Ehrlich rahmen:** Die Matrix löst die Probleme nicht allein, sie sorgt dafür, dass sie bewusst entschieden werden, bevor der Agent live geht.
+
+
+### Visuelle Leitlinien für die Matrix
+
+
+- Farbe codiert nur den Grad menschlicher Beteiligung (hell bis dunkel), mit Legende
+- Akzentfarbe bleibt für Aktionen reserviert
+- Zonentitel mindestens 17 px, Achsenbeschriftung nicht gedreht
+- Optional: Klick auf eine Zone öffnet ein Detailfeld mit Beispiel und Verweis auf die Fallstudie
+- Messsignale und Zonenwechsel höchstens als ein Satz, Details fürs Gespräch
+
+
+---
+
+
+## 5. Holt mich, wenn …
+
+
+- … ihr eine KI-Idee habt und nicht wisst, ob sie ein echtes Problem löst. *(Anstoß 1)*
+- … ihr einen Agenten einführt und er nicht genutzt wird. *(Anstoß 2)*
+- … ein Thema auf euch zukommt, das noch niemand richtig greifen kann. *(Anstoß 3)*
+
+
+---
+
+
+## 6. Fallstudien mit Tags
+
+
+Nicht jedes Vorhaben braucht alles. Manchmal reicht ein Anstoß, bei Agenten braucht es meist alle drei.
+
+
+Zuordnung vorläufig, aus den Ordnernamen abgeleitet, **bitte prüfen**:
+
+
+| Fallstudie | 1 | 2 | 3 |
+|---|---|---|---|
+| Vom Problem zum Agenten (George) | ● | ● | |
+| Zielgruppen-Agent | ● | ● | |
+| Barrierefreiheit digitaler Arbeitsplatz | | | ● |
+| Versicherungsmakler-Discovery | ● | | |
+| ADAC Kfz-Versicherung | ● | | |
+| ResearchOps | | | ● |
+| Kano | ● | | |
+| Co-Creation | | ● | |
+
+
+---
+
+
+## 7. Kritische Punkte und offene Fragen
+
+
+1. **Anstoß 3 braucht Belege.** „Probleme erforschen, die noch nicht da sind“ klingt schnell vage. Mindestens ein Beispiel namentlich nennen, z. B. Langzeitstudie Laptop-Erfahrung (16 Monate), Barrierefreiheit am digitalen Arbeitsplatz oder Sustainable IT.
+2. **Den Begriff „IC-Rolle“ nicht auf der Seite verwenden.** IC heißt Individual Contributor und steht im Kontrast zu „Manager“. Besser: „Strategische Research“ oder „Fachliche Tiefe“.
+3. **Glaubwürdigkeit der Geschichte.** „Drei Anstöße“ nur, wenn es zeitlich so passiert ist. Sonst „drei Erkenntnisse“.
+4. **Grenze beim Bauen.** Prototypen und Agenten zum Lernen und für den internen Einsatz, keine Produktivsysteme. Das passt zum bestehenden Satz „nicht als Ersatz für Produktentwicklung“.
+5. **Eigenes Erlebnis.** Mindestens ein Problem aus Anstoß 2 mit eigener Erfahrung belegen, z. B. aus der Arbeit mit George.
+6. **Wirkungsbelege im Hero.** Die Belege sollten Wirkung zeigen, nicht nur Output. Idealerweise ein Human-AI-Fall.
+
+
+---
+
+
+## 8. Technische Umsetzung
+
+
+| Datei | Änderung |
+|---|---|
+| `src/content/home.ts` | Neue Sektionen (Anstöße, Vertiefungen, Einstiegspunkte), Zonen in Alltagssprache, doppeltes „Ergebnis:“ entfernen |
+| `src/pages/HomePage.tsx` | Neue Sektionsstruktur rendern |
+| `src/components/DelegationMatrix.tsx` | Legende, feste Grenze als Band, Beispiele pro Zone |
+| `src/content/cases.ts` | Tags 1 / 2 / 3 pro Fallstudie |
+| `src/styles/global.css` | Spaltenlayout Anstöße, Matrix-Styles, Tags |
+| `src/content/cv.ts` | Interne Begriffe anonymisieren (unabhängig vom Konzept) |
+
+
+Für die Komponenten werden `HomePage.tsx` und `DelegationMatrix.tsx` als `.txt` benötigt, damit das Markup erhalten bleibt.
